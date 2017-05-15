@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="essoadocument">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="essoadocument-interfaces-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/essoadocument-interfaces/essoadocument-interfaces">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="flyingsoft-platform-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/flyingsoft-platform/flyingsoft-platform">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="essoadocument-services-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/essoadocument-services/essoadocument-services">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="essoaadmin-entity-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/essoaadmin-entity/essoaadmin-entity">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="essoaadmin-restInterface-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/essoaadmin-restInterface/essoaadmin-restInterface">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="essoaapp-entity-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/essoaapp-entity/essoaapp-entity">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="essoaapp-restInterface-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/essoaapp-restInterface/essoaapp-restInterface">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="essoaapp-utils-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/essoaapp-utils/essoaapp-utils">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="essoadocument"/>
+        <property name="java-output-path" value="/essoadocument/target/classes"/>
+    </wb-module>
+</project-modules>
