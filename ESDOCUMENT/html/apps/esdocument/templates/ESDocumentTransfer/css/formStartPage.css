@@ -1,0 +1,290 @@
+.formStartPage {
+	width:760px;
+	height:460px;
+}
+
+.formStartPage .topTBar {
+	padding-top:4px;
+	padding-bottom:4px;
+	background-color:#FFF;
+	position: relative;
+	border: 1px solid #ccc;
+	border-top: 0px;
+	overflow: hidden;
+}
+.formStartPage .topTBar div.tbarDiv {
+	float: left;
+	clear: both;
+	padding: 1px;
+}
+.formStartPage .topTBar div.tbarDiv div.tbarButton {
+	float: left;
+	display: block;
+	cursor: pointer;
+	padding: 1px;
+	background-color: rgb(74, 139, 194);
+	margin-left:5px;
+	color:#FFF;
+	border: 0px none;
+    outline: 0px none;
+}
+.formStartPage .topTBar div.tbarDiv div.tbarButton:hover,.formStartPage .topTBar div.tbarDiv div.tbarButton.fbOver {
+	border: 0px none;
+    outline: 0px none;
+	background-color: #41b3e5;
+}
+.formStartPage .topTBar div.tbarDiv div.tbarButton div {
+	float: left;
+	padding: 1px 3px;
+}
+.formStartPage .topTBar div.tbarDiv div.tbarButton span {
+	float: left;
+	display: block;
+	padding: 3px;
+}
+.formStartPage .topTBar div.tbarDiv div.tbarButton .add {
+	background: url(img/tbar/add.png) no-repeat center left;
+}
+.formStartPage .topTBar div.tbarDiv div.tbarButton .edit {
+	background: url(img/tbar/edit.jpg) no-repeat center left;
+}
+.formStartPage .topTBar div.tbarDiv div.tbarButton .delete {
+	background: url(img/tbar/delete.png) no-repeat center left;
+}
+
+.formStartPage .formBuilderDiv {
+	width: 100%;
+	display: block;
+}
+
+.formStartPage .formBuilderDiv .formBuilderPanelDiv {
+	width: 100%;
+	height:425px;
+	MARGIN-RIGHT: auto;
+	MARGIN-LEFT: auto; 
+	overflow-y:visible;
+	overflow-x:hidden; 
+}
+
+.formStartPage .formBuilderFiles,.formBuilderDatas,.formBuilderMsgs {
+	width:100%;
+	MARGIN-RIGHT: auto;
+	MARGIN-LEFT: auto; 
+	display: none;
+}
+
+.formStartPage .formBuilderFiles .filesDiv {
+	width:100%;
+	height: 374px;
+	overflow:hidden;
+	float:left;
+}
+
+.formStartPage .formBuilderDatas .formStart_grid {
+	width:100%;
+	height: 374px;
+	overflow:hidden;
+	float:left;
+}
+
+.formStartPage .formBuilderDiv .floatLeft {
+	float: left;
+	padding: 0 0 0 25px;
+}
+.formStartPage .formBuilderDiv .allowFloat {
+	clear: none !important;
+}
+.formStartPage .formBuilderDiv .stopFloat {
+	clear: both !important;
+}
+
+.formStartPage .tabpanel{ width:100%; height:35px; float:left; padding-top:10px; overflow:hidden;}
+.formStartPage .tabpanel .subnav{width:100%; height:30px; float:left; padding-left:10px; border-bottom: 5px solid #133959;}
+.formStartPage .tabpanel .subnav li{ line-height:30px; color:#fff; float:left; padding:0 10px; margin-right:5px; background: #6f6e81; cursor:pointer; border-radius:5px 5px 0 0;}
+.formStartPage .tabpanel .subnav .defalutTagOpen{ background: #133959;}
+.formStartPage .tabpanel .subnav .not-allowed{color:#ffffff; cursor:not-allowed;}
+.formStartPage .Tags{ float:left; height:auto; overflow:hidden;}
+
+.formStartPage .buttoncss { width:100%; height:35px; float:left;padding-left:5px;padding-top:5px; border-bottom:1px solid #ccc;}
+.formStartPage .buttoncss div {
+	float: left;
+	display: block;
+	cursor: pointer;
+	float: left;
+	padding: 1px 3px;
+	background-color: #6f6e81;
+	margin-left:5px;
+	color:#FFF;
+	border: 0px none;
+    outline: 0px none;
+}
+.formStartPage .buttoncss div:hover,.formStartPage .buttoncss div.fbOver {
+	border: 0px none;
+    outline: 0px none;
+	background-color: #133959;
+}
+.formStartPage .buttoncss div span {
+	float: left;
+	display: block;
+	padding: 3px;
+}
+
+.formStartPage .buttoncss .add {
+	background: url(../img/add.png) no-repeat center left;
+}
+.formStartPage .buttoncss .edit {
+	background: url(../img/edit.png) no-repeat center left;
+}
+.formStartPage .buttoncss .delete {
+	background: url(../img/del.png) no-repeat center left;
+}
+
+.formStartHanderForm{width:400px;overflow-y:hidden;overflow-x:hidden}
+.formStartHanderForm ul{width: 380px;text-align:center;}
+.formStartHanderForm ul li{width:380px;margin-left:10px;float:left;margin-top:10px;color:#000000;}
+.formStartHanderForm span{width:80px;height:30px;line-height:30px;text-align:left;float:left;}
+.formStartHanderForm ul li input{float:left;line-height:20px;}
+.formStartHanderForm ul li label{float:left;margin-top: 5px;}
+.formStartHanderForm ul li select{width:165px;height:25px;float:left;line-height:25px;}
+.formStartHanderForm .esbottom{width:100%;float:left;margin-top:20px;}
+
+#showStepOwnerWin {
+	width: 400px;
+}
+#showStepOwnerWin .nextStepOwners{
+	padding:5px;
+	width:380px;
+}
+#showStepOwnerWin .nextStepOwners fieldset{
+	margin: 0px !important;
+}
+#showStepOwnerWin .nextStepOwners legend{
+	margin: 0px 0px 0px 0px !important;
+	line-height:20px;
+}
+#showStepOwnerWin .nextStepOwners input{
+	margin-top:4px;
+	float: left;
+}
+#showStepOwnerWin .nextStepOwners label{
+	float: left;
+	margin-right:5px;
+}
+
+.formBuilderMsgs .mainMsg{
+	width:100%;
+	background-color:#F2F5F8;
+}
+
+.formBuilderMsgs .mainMsg .msgTypeRadioGroup{
+	height:26px;
+	padding-left:10px;
+	margin-top:5px;
+	margin-bottom:2px;
+	text-align:left;
+	background-color:#FFFFFF;
+}
+
+.formBuilderMsgs .mainMsg .msgTypeRadioGroup input {
+	float:left;
+}
+
+.formBuilderMsgs .mainMsg .msgTypeRadioGroup span {
+	float:left;
+}
+
+.formBuilderMsgs .mainMsg .msgTypeRadioGroup label {
+	float:left;
+}
+
+.formBuilderMsgs .mainMsg .msgTypeRadioGroup input{
+	margin-top:5px;
+}
+.formBuilderMsgs .mainMsg .msgTypeRadioGroup label{
+	margin-right:5px;
+}
+
+.formBuilderMsgs .mainMsg .msgTypeRadioGroup .radioDiv{
+	float:left;
+}
+
+.formBuilderMsgs .mainMsg .msgBody{
+	text-align:left;
+	margin-top:2px;
+	padding:2px 10px 5px 10px;
+	background-color:#FFFFFF;
+	height:375px;
+	overflow: auto;
+}
+
+.formBuilderMsgs .mainMsg .msgBody .displaynone{
+	display: none;
+}
+.formBuilderMsgs .mainMsg .msgBody .link {display:inline-block; width:16px; height:16px; background:url(../img/file.png) no-repeat no-repeat; cursor:pointer;margin-left:5px;}
+
+.formForwardMain{width:500px;overflow-y:hidden;overflow-x:hidden}
+.formForwardMain dl{width:480px;margin-left:10px;float:left;margin-top:10px;color:#000000;}
+.formForwardMain dl input{float:left;line-height:20px;margin-top:0px;}
+.formForwardMain dl label{float:left;margin-top: 5px;margin-right: 10px;}
+.formForwardMain dl select{width:165px;height:25px;float:left;line-height:25px;}
+.formForwardMain a{ cursor: pointer;}
+
+.selectForwardUsers{
+	width:100%;
+	height:200px;
+}
+
+.userFromOrg{
+	width:700px;
+	height:400px;
+	float:left;
+}
+
+.userFromOrg .leftTree{
+	width:200px;
+	height:400px;
+	float:left;
+	overflow:auto;
+}
+
+.userFromOrg .rightGrid{
+	width:500px;
+	height:400px;
+	float:left;
+	overflow:auto;
+}
+
+.userFromRole{
+	width:500px;
+	height:500px;
+	float:left;
+}
+
+.userFromRole .topGrid{
+	width:500px;
+	height:250px;
+	float:left;
+}
+
+.userFromRole .bottomGrid{
+	width:500px;
+	height:250px;
+	float:left;
+}
+
+table .fileicon {
+	float:left;
+	width:16px;
+	height:16px;
+	margin-top:2px;
+	margin-left:5px;
+	background: url(../img/file.png) no-repeat center left;
+}
+
+.ztree li a span{
+	color:#444;
+}
+
+.linkFile{width:800px; height: 400px;}
+.linkFile .linkLeft{float:left;width:25%;height:100%; overflow: auto;}
+.linkFile .linkRight{float:left; width:75%; height:100%;}	

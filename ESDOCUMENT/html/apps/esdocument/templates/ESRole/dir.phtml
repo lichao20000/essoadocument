@@ -1,0 +1,97 @@
+<div class='public'>
+	<h2>角色信息</h2>
+	<div class='other'>
+		<span>角色名称：</span>
+		<input id='name' readonly='readonly' />
+	</div>
+	<h2>目录授权</h2>
+	<div class='other'>
+		<span class='span'>目录菜单：</span>
+		<select id='mode'>
+			<option value='1'>按阶段</option>
+			<option value='2'>按部门</option>
+			<option value='3'>按装置</option>
+		</select>
+	</div> 
+	<div class='tree'>
+		<div id='zTree' class='ztree'><span class='loading'></span></div>
+	</div>
+</div>
+<div class='mask-child' id="dirRight" style="padding-left:10px;padding-top:5px;border-left:solid 1px #CCCCCC">
+		<label><span style="font-weight: bold;">默认权限设置：</span></label>
+		<label style="margin-left: 10px;" for='dircheckedAll'><input type="checkbox" id='dircheckedAll' disabled="disabled"/><span style="color: red">全选/全取消</span></label>
+		<label style="margin-left: 10px;" for='diritemRead'><input type="checkbox" id='diritemRead' simpleValue="DR" disabled="disabled" /><span>条目浏览(DR)</span></label>
+		<label style="margin-left: 10px;" for='diritemEdit'><input type="checkbox" id='diritemEdit' simpleValue="DU" disabled="disabled"/><span>条目编辑(DU)</span></label>
+		<label style="margin-left: 10px;" for='diritemDelete'><input type="checkbox" id='diritemDelete' simpleValue="DD" disabled="disabled"/><span>条目删除(DD)</span></label>
+		<label style="margin-left: 10px;" for='dirfileRead'><input type="checkbox" id='dirfileRead' simpleValue="FR" disabled="disabled"/><span>文件浏览(FR)</span></label>
+		<label style="margin-left: 10px;" for='dirfileDownload'><input type="checkbox" id='dirfileDownload' simpleValue="FD" disabled="disabled"/><span>文件下载(FD)</span></label>
+		<label style="margin-left: 10px;" for='dirfilePrint'><input type="checkbox" id='dirfilePrint' simpleValue="FP" disabled="disabled"/><span>文件打印(FP)</span></label>
+</div>
+<script type="text/javascript">
+(function(){
+	/** xiaoxiong 20140804 全选复选框处理方法 **/
+	$('#dirRight input').live('click',function(){
+		var node = $.fn.zTree.getZTreeObj("zTree").getSelectedNodes()[0] ;
+		var selectNode = $(node);
+		var realname = selectNode.attr('realname') ;
+		if($(this).attr('id') == 'dircheckedAll'){
+			if($(this).attr('checked')=='checked'){
+				$('#dirRight input').attr('checked','checked');
+				selectNode.attr('rights', 'DR,DU,DD,FR,FD,FP');
+				selectNode.attr('name', realname+'[DR,DU,DD,FR,FD,FP]');
+			} else {
+				$('#dirRight input').removeAttr('checked');
+				selectNode.attr('rights', '');
+				selectNode.attr('name', realname);
+			}
+		} else {
+			if($(this).attr('checked')=='checked'){
+				if(selectNode.attr('rights') == ''){
+					selectNode.attr('rights', $(this).attr('simpleValue'));
+					selectNode.attr('name', realname);
+				} else {
+					var oldSimpleValue = ','+selectNode.attr('rights')+','+$(this).attr('simpleValue')+',' ;
+					var newSimpleValue = '' ;
+					if(oldSimpleValue.indexOf(',DR,')>-1)newSimpleValue+=',DR';
+					if(oldSimpleValue.indexOf(',DU,')>-1)newSimpleValue+=',DU';
+					if(oldSimpleValue.indexOf(',DD,')>-1)newSimpleValue+=',DD';
+					if(oldSimpleValue.indexOf(',FR,')>-1)newSimpleValue+=',FR';
+					if(oldSimpleValue.indexOf(',FD,')>-1)newSimpleValue+=',FD';
+					if(oldSimpleValue.indexOf(',FP,')>-1)newSimpleValue+=',FP';
+					newSimpleValue = newSimpleValue.substring(1) ;
+					selectNode.attr('rights', newSimpleValue);
+					selectNode.attr('name', realname+'['+newSimpleValue+']');
+				}
+			} else {
+				if(selectNode.attr('rights') == $(this).attr('simpleValue')){
+					selectNode.attr('rights', '');
+					selectNode.attr('name', realname);
+				} else {
+					var oldSimpleValue = selectNode.attr('rights') ;
+					var array = oldSimpleValue.split(',') ;
+					var simpleValue = $(this).attr('simpleValue') ;
+					var newSimpleValue = '' ;
+					for(var i=0; i<array.length; i++){
+						if(array[i] != simpleValue){
+							newSimpleValue += ','+array[i] ;
+						}
+					}
+					newSimpleValue = newSimpleValue.substring(1) ;
+					selectNode.attr('rights', newSimpleValue);
+					if(newSimpleValue == ''){
+						selectNode.attr('name', realname);
+					} else {
+						selectNode.attr('name', realname+'['+newSimpleValue+']');
+					}
+				}
+			}
+		}
+		$.fn.zTree.getZTreeObj("zTree").updateNode(node);
+	});
+})();
+</script>
+<style>
+.ztree li span{
+	color:#444;
+}
+</style>

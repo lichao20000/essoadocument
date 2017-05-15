@@ -1,0 +1,24 @@
+<form id="editConfigForm" action="" method="post">
+	<div class="configItem">
+		<ul>
+			<li>
+				<input name="id" type="hidden" value="<?php echo $id;?>">
+				<span>应用名称<font color="red" size="3">*</font></span>
+				<input name="applyappid" type="hidden" value="<?php echo $applyappid;?>">
+				<input name="appnamecn" type="text" readonly="readonly" value="<?php echo $appnamecn;?>">
+			</li>
+			<li>
+				<span>同步类型<font color="red" size="3">*</font></span>
+				<input name="synctype" type="text" readonly="readonly" value="<?php echo $synctype;?>">
+			</li>
+			<li>
+				<span>接口名称<font color="red" size="3">*</font></span>
+				<input type="text" id="restfullclassname" name="restfullclassname" value="<?php echo $restfullclassname;?>" verify="text/128/1/0">
+			</li>
+			<li>
+				<span>方法名称<font color="red" size="3">*</font></span>
+				<input type="text" id="functionname" name="functionname" value="<?php echo $functionname;?>" verify="text/64/1/0">
+			</li>
+		</ul>
+	</div>
+</form>

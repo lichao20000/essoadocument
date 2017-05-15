@@ -1,0 +1,270 @@
+
+<div class='statisticsClass'>
+	<div class="statisticsTitle">
+		<span class="title">统计的数据:</span>
+		<select class='selectSta' id="selectSta">
+			<?php 
+			  echo $options;
+			?>
+		</select>
+		<span class='button setCondition' id='setCondition'>设置统计条件</span>
+		<span class='button clickStatistics' id='clickStatistics'>统计</span>
+	</div>
+	<hr style="width: 780px;margin: 0px 10px 10px 10px;">
+	<div id="statisticsContent">
+	
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	var type = '<?php echo $type;?>';
+//  	$('#setCondition').click(function (){
+ 	$("#setCondition").die().live('click',function (){
+		if($('#selectSta').val()=='EMPTY'){
+			$.dialog.notice({content: '请选择统计的数据！', icon: 'warning', time:2});
+			return;
+		}else{
+			$.post(
+				$.appClient.generateUrl({ESLog:'setStatisticsCondition'},'x'),
+				{selectSa:$('#selectSta').val(),type:type},
+				function (htm){
+					$.dialog({
+						title: '设置统计条件',
+						padding: '0px',
+						content: htm,
+						okVal: '确定',
+						cancelVal: '关闭',
+						cancel: true,
+						ok: function (){
+							var ulDom = document.getElementById('condition').children;
+							var leng = ulDom.length;
+							
+							var  logType = _tree.clickNode.type;
+							var condition = "";
+							for(var i=0; i<leng; i++){
+								
+								var key = ulDom[i].children[0].children[0];
+								
+								if(key.value === 'EMPTY') continue; // 没选择就跳出该次
+									
+								var comparison = ulDom[i].children[1].children[0];
+								var value = ulDom[i].children[2].children[0];
+								var relation = ulDom[i].children[3].children[0];
+								
+								var keytmp = key.value;
+								var valuetmp = value.value;
+								if(!(keytmp && valuetmp)){
+									$.dialog.notice({content:'请输入完整的条件!',icon:'error',time:3});
+									return;
+								}
+								if(condition){
+									condition = condition +"★■◆●" +keytmp +"●◆■★" + comparison.value + "●◆■★" + valuetmp +"●◆■★" +relation.value;
+								}else{
+									condition = keytmp +"●◆■★" + comparison.value + "●◆■★" + valuetmp +"●◆■★" +relation.value;
+								}
+							}
+							if(!condition) return;
+							
+							var url = $.appClient.generateUrl({ESLog:'getStatisticData'},'x');
+							$.post(
+									url,
+									{query: {condition:condition,type:type,selectSe:$('#selectSta').val()}},
+									function (result){
+										var chart;
+								        var colors = Highcharts.getOptions().colors,
+								        categories = [],
+							            name = '日志统计情况';
+							            var i=0;
+							            var data=[];
+							            var t=[];
+							            if(result){
+								    		for(key in result){
+												categories.push(key);
+												var temp=parseFloat (result[key].percent);
+												data.push({y: temp,color: colors[i%10]});
+												i++;
+											}
+										}
+							            /** guolanrui 20140916 增加是否显示滚动条的标识和显示的一页显示的数量BUGID:129 **/
+										var isShowScroll = false;
+										var showNum = i-1;
+										if(i>10){
+											isShowScroll =true;
+											showNum = 9;
+										}	
+							            chart = new Highcharts.Chart({
+							                chart: {
+							                    renderTo: 'statisticsContent',
+							                    type: 'column'
+							                },
+							                title: {
+							                    text: '日志统计情况'
+							                },
+							                subtitle: {
+							                    text: ''
+							                },
+							                xAxis: {
+							                    categories: categories,
+							                    labels: {
+// 							                    	align:"right",
+// 							                    	style:{
+// 							                    		color: '#6D869F',
+// 							                    		fontWeight: 'bold'
+// 							                    	},
+							                        rotation:-50
+							                    },
+							                    min:0,
+							                    max:showNum
+							                },
+							                scrollbar:{
+							                	enabled:isShowScroll //是否产生滚动条
+							                },
+							                yAxis: {
+							                    title: {
+							                        text: '日志统计情况'
+							                    }
+							                },
+							                plotOptions: {
+							                    column: {
+							                        dataLabels: {
+							                            enabled: true,
+							                            color: colors[1],
+							                            style: {
+							                                fontWeight: 'bold'
+							                            },
+							                            formatter: function() {
+							                                return this.y +'%';
+							                            }
+							                        }
+							                    }
+							                },
+							                tooltip: {
+							                    formatter: function() {
+							                         return '<b>'+ this.x +'</b>: '+ parseInt(result[this.x].num)+'份文件' ;
+							                    }
+							                  
+							                },
+							                series: [{
+							                    name: name,
+							                    data: data,
+							                    color: 'red'
+							                }],
+							                exporting: {
+							                    enabled: false
+							                }
+							            });
+										
+									},'json'
+							);
+						}
+					});
+				}
+			);
+		}
+ 	});
+//  	$("#clickStatistics").click(function(){
+	$("#clickStatistics").die().live('click',function (){
+		if($('#selectSta').val()=='EMPTY'){
+			$.dialog.notice({content: '请选择统计的数据！', icon: 'warning', time:2});
+			return;
+		}else{
+	 		var url = $.appClient.generateUrl({ESLog:'getStatisticData'},'x');
+			$.post(
+					url,
+					{query: {type:type,selectSe:$('#selectSta').val()}},
+					function (result){
+						var chart;
+				        var colors = Highcharts.getOptions().colors,
+				        categories = [],
+			            name = '日志统计情况';
+			            var i=0;
+			            var data=[];
+			            var t=[];
+	// 		            var rlength = result.length;
+	// 		            alert(rlength); 
+			            if(result){
+				    		for(key in result){
+								categories.push(key);
+								var temp=parseFloat (result[key].percent);
+								data.push({y: temp,color: colors[i%10]});
+								i++;
+							}
+						}
+						/** guolanrui 20140916 增加是否显示滚动条的标识和显示的一页显示的数量BUGID:129 **/
+						var isShowScroll = false;
+						var showNum = i-1;
+						if(i>10){
+							isShowScroll =true;
+							showNum = 9;
+						}	
+			            chart = new Highcharts.Chart({
+			                chart: {
+			                    renderTo: 'statisticsContent',
+			                    type: 'column'
+			                },
+			                title: {
+			                    text: '日志统计情况'
+			                },
+			                subtitle: {
+			                    text: ''
+			                },
+			                xAxis: {
+			                    categories: categories,
+			                    labels: {
+// 			                    	step:4,	
+// 			                    	align:"right",
+// 			                    	style:{
+// 			                    		color: '#6D869F',
+// 			                    		fontWeight: 'bold'
+// 			                    	},
+			                        rotation:-50
+			                    },
+			                    min:0,
+			                    max:showNum
+			                },
+			                scrollbar:{
+			                	enabled:isShowScroll //是否产生滚动条
+			                },
+			                yAxis: {
+			                    title: {
+			                        text: '日志统计情况'
+			                    }
+			                },
+			                plotOptions: {
+			                    column: {
+			                        dataLabels: {
+			                            enabled: true,
+			                            color: colors[1],
+			                            style: {
+			                                fontWeight: 'bold'
+			                            },
+			                            formatter: function() {
+			                                return this.y +'%';
+			                            }
+			                        }
+			                    }
+			                },
+			                tooltip: {
+			                    formatter: function() {
+			                         return '<b>'+ this.x +'</b>: '+ parseInt(result[this.x].num)+'个' ;
+			                    }
+			                  
+			                },
+			                series: [{
+			                    name: name,
+			                    data: data,
+			                    color: 'red'
+			                }],
+			                
+			                exporting: {
+			                    enabled: false
+			                }
+			            });
+						
+					},'json'
+				);
+			}
+	 });
+});
+
+</script>

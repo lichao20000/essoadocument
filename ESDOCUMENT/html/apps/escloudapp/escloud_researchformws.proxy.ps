@@ -1,0 +1,240 @@
+<?php
+class ProxyEscloudappEscloud_researchformws extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_researchformws";
+  
+  
+  /**
+   * @author ldm
+   * 档案编研获取数据
+   * @param unknown_type $start
+   * @param unknown_type $limit
+   * @param unknown_type $condition
+   * @return Ambigous <return_type, mixed, string>
+   */
+  public function findResearchFormList($param)
+  {
+  	return $this->post(self::SERVICE_NAME, "findResearchFormList",$param,'application/json;charset=UTF-8');
+  }
+  
+  /**
+   * 筛选
+   * @author ldm
+   * @param unknown_type $id
+   * @param unknown_type $param
+   */
+  public function findListByCondition($param){
+  	return $this->post(self::SERVICE_NAME, "findListByCondition",$param,'application/json;charset=UTF-8');
+  }
+
+  /**
+   * 批量删除
+   * @author ldm
+   * @param unknown_type $folderId
+   * @param unknown_type $files
+   */
+  public function deleteBatchResearchForm($userId,$ids)
+  {
+  	$ip = $_SERVER['REMOTE_ADDR'];
+  	$urlParam = array('deleteBatchResearchForm',$userId,$ip);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $ids,'application/json;charset=UTF-8');
+  }
+  /**
+   * 添加，编辑的保存
+   * @author ldm
+   * @param unknown_type $param
+   */
+  public function saveOrUpdateResearchForm($param){
+  	$ip = $_SERVER['REMOTE_ADDR'];
+  	$urlParam = array('saveOrUpdateResearchForm',$ip);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 获取一条记录的详细信息
+   * @author ldm
+   */
+  public function findResearchFormById($id,$orgid){
+  	$urlParam = array('findResearchFormById',$id,$orgid);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 获取目标主机Ip
+   * @author ldm
+   */
+  public function getServiceIP(){
+  	$urlParam = array('getServiceIP');
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 插入编研解析
+   * @author ldm
+   */
+  public function insertResearch($param){
+  	$urlParam = array('insertResearch');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,'application/json;charset=UTF-8');
+  }
+
+  /**
+   * 上传文件
+   * @author ldm
+   */
+  public function uploadFile($param){
+  	$urlParam = array('uploadFile');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 插入档案解析
+   * @author ldm
+   */
+  public function insertFile($params){
+  	$appToken = $this->getAppToken();
+  	$appId = $this->getAppId();
+  	$params['appId'] = $appId;
+  	$params['appToken']=$appToken;
+  	$params = json_encode($params);
+  	$urlParam = array('insertFile');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $params,'application/json;charset=UTF-8');
+  }
+  /**
+   * 获取Path下的档案
+   * @author ldm
+   */
+  public function getPdfId($path){
+  	$urlParam = array('getPdfId');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $path,'application/json;charset=UTF-8');
+  }
+  /**
+   * 20130730
+   * 提交时调用的方法
+   * @author ldm
+   */
+  public function startProcessInstanceAndSubmitResearchByKey($processDefinitionKey,$businessKey,$userId,$param,$approveUserId){
+  	$ip = $_SERVER['REMOTE_ADDR'];
+  	$appId = $this->getAppId();
+  	$appToken = $this->getAppToken();
+  	$urlParam = array('startProcessInstanceAndSubmitResearchByKey',$appId,$appToken,$processDefinitionKey,$businessKey,$userId,$ip,$approveUserId);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 获取表单某条记录的详细信息
+   * @author ldm
+   */
+  public function listTaskDetail($workid,$taskid,$orgid){
+  	$appId = $this->getAppId();
+  	$urlParam = array('listTaskDetail',$appId,$workid,$taskid,$orgid);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 编研流程
+   * @author ldm
+   */
+  public function taskOperation($taskId,$userId,$operation,$localval,$param){
+  	$appId = $this->getAppId();
+  	$appToken=$this->getAppToken();
+  	$urlParam = array('taskOperation',$appId,$appToken,$taskId,$userId,$operation,$localval);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 20130730
+   * 申请人再次提交的操作
+   * @author ldm
+   */
+  public function taskOperationSubmit($taskId,$userId,$operation,$localval,$param,$approveUserId){
+  	$appId = $this->getAppId();
+  	$appToken=$this->getAppToken();
+  	$urlParam = array('taskOperationSubmit',$appId,$appToken,$taskId,$userId,$operation,$localval,$approveUserId);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 已发和已办一条详细信息
+   * @author ldm
+   */
+  public function findTodoDetail($workid,$orgid){
+  	$appId = $this->getAppId();
+  	$apptoken = $this->getAppToken();
+  	$urlParam = array('findTodoDetail',$appId,$apptoken,$workid,$orgid);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 下载
+   * @author ldm
+   */
+  public function download($path){
+  	$urlParam = array('download');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $path,'application/json;charset=UTF-8');
+  }
+  /**
+   * 下载
+   * @author ldm
+   */
+  public function downLoadFile($param){
+  	$urlParam = array('downLoadFile');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 只显示编研待办数据
+   * @author ldm
+   */
+  public function listTasksResearch($start,$size,$sort,$order,$param){
+  	$appId = $this->getAppId();
+  	$appToken = $this->getAppToken();
+  	$urlParam = array('listTasksResearch',$appId,$appToken,$start,$size,$sort,$order);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 电子阅览室编研数据显示
+   * @author ldm
+   */
+  public function editParseHtml($address,$orgId){
+  	$urlParam = array('editParseHtml',$address,$orgId);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  
+  /**
+   * 删除档案编研添加的附件
+   * @author niyang at 2013-10-30
+   * @return bool
+   */
+  public function delFile($param) {
+   	$urlParam = array('deleteUploadFile');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  
+  /**
+   * @author wanghongchen
+   * 发布档案编研数据
+   */
+  public function publish($param)
+  {
+  	return $this->post(self::SERVICE_NAME, "publish",$param,'application/json;charset=UTF-8');
+  }
+  
+  /**
+   * @author yanghuiqiang
+   * 取消发布编研数据
+   * 
+   */
+  public function unPublish($param)
+  {
+  	return $this->post(self::SERVICE_NAME, "unPublish",$param,'application/json;charset=UTF-8');
+  }
+  
+}

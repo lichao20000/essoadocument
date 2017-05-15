@@ -1,0 +1,200 @@
+<style type="text/css">
+.quote_Model {
+	width: 1000px;
+	height: 514px;
+	margin: 0;
+	border: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.quote_model_tree {
+	width: 230px;
+	height: 514px;
+	overflow: auto;
+	overflow: hidden;
+	float: left;
+	padding: 0 5px 0 5px;
+}
+
+.quoteModel-box-title {
+	width: 230px;
+	line-height: 24px;
+	text-indent: 24px;
+	float: left;
+	background: #eee url(../../public/img/list.png) no-repeat 5px center;
+}
+
+.quote_model_grid {
+	width: 760px;
+	height: auto;
+	overflow: hidden;
+	float: left;
+}
+
+.quote_model_tbl {
+	width: 670px;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.tree-quote-model {
+	width: 230px;
+	height: 100%;
+	float: left;
+	overflow: auto;
+	padding: 0;
+}
+
+.tree-quote-model .flexigrid {
+	width: 780px;
+}
+
+.ztree li a span{
+	color:#444;
+}
+</style>
+<div id="quoteModel" class="quote_Model">
+	<div id="quoteModelTree" class="quote_model_tree">
+		<ul id="quoteModelTreeDemo" class="ztree tree-quote-model"></ul>
+	</div>
+	<div id="quoteMdeolGrid" class="quote_model_grid"></div>
+</div>
+<script type="text/javascript">
+//geid列表
+$(function(){
+$('#quoteMdeolGrid').html('<table id="quote_model_tbl"></table>');
+var modelId = $('#treeChange').val();
+$("#quote_model_tbl").flexigrid({
+	url :  $.appClient.generateUrl({ESTemplate :'getModelByTreeNode',treeNodeId:'1'},'x'),
+	dataType : 'json',
+	editable:true,
+	colModel : [
+	             {display: '行号', name:'line', width: 50, align: 'center'},
+			        {display: '<input type="checkbox" id="checkAll" >', name:'cb', width: 20, align: 'center'},
+	   				{display:'节点名称', name:'nodeTitle',editable:false, width:130, align:'center'},
+	   				{display:'模板名称', name:'modelName', editable:true, width:130, align:'center'},
+	   				{display:'业务名称', name:'business', editable:true, width:130, align:'center'},
+	   				{display:'模板类型', name:'modelType',editable:false, width:130, align:'center'},
+	   				{display:'模板描述', name:'modelDescribe', editable:true, width:155, align:'center'},
+	   				{display:'节点id', name:'nodeId', editable:true, width:155, align:'center',hide:true},
+	   				{display:'结构id', name:'structureId', editable:true, width:155, align:'center',hide:true}
+	],
+	buttons : [
+		{name : '引用', bclass : 'add', onpress : ajax_add }
+	],
+	usepager : true,
+	title : '结构模板',
+	useRp : true,
+	width : _size.tbl.width,
+	height : _size.tbl.height,
+	rp : 20,
+	height:400,
+	width:750,
+	nomsg : "没有数据",
+	pagetext : '第',
+	outof : '页 /共',
+	procmsg : '刷新中，请稍等...',
+	pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条'
+});
+
+//目录树
+var quoteSetting = {
+		view : {
+			dblClickExpand : true,
+			showLine : false
+		},
+		data: {
+		simpleData: {
+		enable: true ,
+		 idKey:"id", 
+		 pIdKey:"pId" 
+		} 
+		} 
+		,async: {
+		enable: true, 
+		url:$.appClient.generateUrl({ESTemplate:'getChildTree'},'x'), 
+		autoParam:["id"], 
+		 type:"get",
+		dataFilter: filter //异步返回后经过Filter 
+		} 
+		,callback:{
+		onClick:showStructureModel
+		} 
+		};
+	function filter(treeId, parentNode, childNodes) { 
+		if (!childNodes) return null; 
+		for (var i=0, l=childNodes.zNodes.length; i<l; i++) { 
+			childNodes.zNodes[i].name = childNodes.zNodes[i].name.replace('',''); 
+		} 
+		return childNodes.zNodes; 
+	} 
+	//var zNode =[ 
+	//{ id:1, pId:0, name:"北京东方飞扬软件股份有限公司", open:true,isParent:true,sId:0} 
+	//]; 
+	//$.fn.zTree.init($("#quoteModelTreeDemo"), quoteSetting, zNode); 
+	//20140820  薛坤 去掉重复的根节点 
+	$.post(
+			$.appClient.generateUrl({ESTemplate:'getChildTree',id:1},'x'),
+			function (data){
+				$.fn.zTree.init($("#quoteModelTreeDemo"), quoteSetting, data.zNodes); 	
+			},
+			'json'
+		);
+	
+//end
+   function showStructureModel(event, treeId, treeNode){
+	   $("#quote_model_tbl").flexOptions({url:$.appClient.generateUrl({ESTemplate :'getModelByTreeNode',nodeId:treeNode.id},'x'),newp:1}).flexReload();
+	}
+	function chooseModel(modelId,type){
+		$.ajax({
+		    url:$.appClient.generateUrl({ESTemplate:'lookModelContent',structureId:modelId,estype:type},'x'),
+		    success:function(data){
+		    	comdia = $.dialog({
+		    		id:'lookModelContentPanel',
+			    	title:'结构模板',
+		    	   	fixed:false,
+		    	    resize: true,
+				    content:data
+			    });
+			    },
+			    cache:false
+		});	
+	}
+function ajax_add(){
+	  var checkObj=$("#quote_model_tbl").find("input[name='checks']:checked");
+	  if(checkObj.length==0){
+		  $.dialog.notice({title:'操作提示',icon:'warning',content:'请选择数据！',time:3});
+		  return false;
+	  }else if(checkObj.length>1){
+		  $.dialog.notice({title:'操作提示',icon:'warning',content:'请选择一条数据数据！',time:3});
+		  return false;
+	  }else if(checkObj.length==1){
+		  var nid = ClickEditNodeObj.id;
+		  var cnid = $("#quote_model_tbl").find("input[name='checks']:checked").val();
+		$.ajax({
+		    url:$.appClient.generateUrl({ESTemplate:'quoteModelForTreeNode'},'x'),
+		    data:{nid:nid,cnid:cnid},
+		    dataType:'json',
+		    success:function(data){
+		    	if(data.success == "true"){
+		    		$.dialog.notice({icon:'success',content:'引用成功！',time:3});
+		    		comdia.close();
+		    		ClickEditNodeObj.sId = data.sId;
+			    	zTree.updateNode(ClickEditNodeObj);
+			    	get_by_sid();
+			    	is_allowed.init({CHOOSE_STRU_NODE:false,QUOTE_STRU_NODE:false,DEL_NODE:false,DELETE_STRU_NODE:true}); // init
+			    	
+			    }else{
+			    	$.dialog.notice({icon:'error',content:'引用失败！',time:3});
+				}
+			},
+			cache:false
+		});	
+		
+	  }
+}
+});
+		
+</script>

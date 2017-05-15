@@ -1,0 +1,59 @@
+@CHARSET "UTF-8";
+.esmain{width:96%;margin-left:2%;overflow:hidden;}
+.esmain .esleft{line-height:29px;width:220px;float:left;background-color:#133959;border-radius:5px;}
+.esmain .esleft ul{list-style-type:none;margin-left:0px;padding-left:0px;margin-top:0px;}
+.esmain .esleft ul li{display:block;width:220px;}
+.esmain .esleft li.turn{}
+.esmain .esleft li.turn a{color:#133959;background-color:#EEEEEE;z-index:0;}
+.esmain .esleft .turn .k{padding-left:39px;color:#133959;}
+.esmain .esleft a{width:220px;display:block;font-size:13px;color: #fff;
+	padding-top:5px;
+	padding-bottom:5px;
+	text-indent:80px;
+}
+.esmain .esleft a:hover{background-color:#eee;width:220px;color:#133959;}
+
+.esmain .esright{margin-left:230px;}
+
+a img {border: 0 none;}
+a{text-decoration:none;}
+.clear{clear:both;}
+
+/* 筛选功能通用样式 */
+#addrolefree{ width:630px; height:auto; overflow:hidden; float:left;}
+#contents{ width:630px; height:150px;dispaly:inline;}
+#addrolefree .h2{ width:100%;  line-height:25px; text-indent:25px; color:#555; border-bottom:1px solid #f3f3f3; float:left; margin:5px 0; background:#f9f9f9 url(../img/info.gif) no-repeat 5px 5px;}
+.contbox{ width:630px; height:30px; float:left; margin-left:5px; display:inline;}
+/* gengqianfeng 20140916 文本框样式修改  */
+.contbox input{ height:20px; padding:0; border:1px solid #ccc;}
+.contbox input:hover{border:1px solid #5599ff; }
+.w14090{ font-size:9pt; color:#555; float:left; margin-right:25px; display:block;}
+.hei30{ line-height:30px;}
+.w140{ width:125px; padding-left:0px;}
+/* gengqianfeng 20140916 宽度样式修改  */
+.w90{ width:70px;}
+.hei20{ height:20px; line-height:20px; margin-top:4px; border:1px solid #aaa;}
+/* 添加行删除行按钮样式 */
+/* gengqianfeng 20140916 添加删除样式修改  */
+.newfilter,.delfilter{margin-left:17px;margin-right:20px; width:22px;height:22px; line-height:22px; text-indent:22px; color:#555; float:left; margin-top:3px;cursor:pointer;}
+.newfilter{ background:url(../../public/img/add.png) no-repeat 4px 4px;}
+.delfilter{ background:url(../../public/img/del.gif) no-repeat 4px 4px;}
+.newfilter:hover,.delfilter:hover{ width:22px; line-height:22px; text-indent:22px;}
+/*批量变更*/
+#batchmodify{width:655px;height:300px;}
+#batchmodify #contents{ width:650px; height:100px; overflow:auto; marign-left:5px; _dispaly:inline;}
+#batchmodify .sst{margin-top:0px;;height:40px;}
+.bas1{height:30px;line-height:30px;color:13px;width:130px;display:inline-block;}
+.bas2{width:500px;}
+.bas3{vertical-align:middle; }
+.edit0{width:500px;height:35px;vertical-align:middle; }
+
+/* guolanrui 20140909 增加报表打印样式 */
+#myprint{ width:500px; height:auto; overflow:hidden; float:left;}
+#myprint h2{ width:100%; line-height:25px; font-weight:normal; text-indent:15px; float:left; background:#eee; border-bottom:1px solid #ccc;}
+#myprint .mytype{ width:100%; height:auto;overflow:hidden; float:left;}
+#myprint .mytype p{ width:100%; height:30px; float:left; cursor:default;}
+#myprint .mytype p input{ float:left; margin:8px 0 0 15px; _margin-top:5px;}
+#myprint .mytype p span{ float:left; margin:8px 0 0 10px;}
+/* end */
+

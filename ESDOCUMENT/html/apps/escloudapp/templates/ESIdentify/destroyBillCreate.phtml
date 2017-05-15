@@ -1,0 +1,47 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ext/resources/css/ext-all.css" />
+<link rel="stylesheet" href="<?php echo $tplPath ?>/ESFormStart/css/formStartPage.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/ext-all.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/source/locale/ext-lang-zh_CN.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/Utils.js"></script>
+<!-- wanghongchen 20140905 修改样式 -->
+<style>
+	#FORM_TAB_DIV {
+		height:350px;
+	}
+	.formBuilderDiv .floatLeft {
+		float: left;
+		padding: 0 0 0 25px;
+	}
+	.formBuilderDiv form{
+		width:640px !important;
+	}
+	.formBuilderDiv .x-panel-bwrap{
+		width:650px !important;
+	}
+</style>
+<!-- wanghongchen 20140725 添加滚动条样式 -->
+<div id='FORM_TAB_DIV' class="formBuilderDiv Tags" style="width:680px;overflow-y:auto;overflow-x:hidden;position:relative;">
+	<div id='formBuilderPanelDiv' class="formBuilderPanelDiv">
+	</div>
+	<input type="hidden" id="destroyFormId">
+	<!-- wanghongchen 20140916 c -->
+	<div id="formStartPage" wfmodelid="" formid="" actionid="" dataList="" dataHaveRight="" relationBusiness="destroy"></div>
+	<div id="attachFileDataTable" filePaths="" fileNames="" ></div>
+</div> 
+<script type="text/javascript">
+$(function() {
+	/** 渲染中间formpanel **/
+	setTimeout(function(){
+		new Ext.Panel({
+			id:'formBuilderPanel',
+			width:680,
+			border:false,
+			items:<?php echo $extjs;?>,
+			renderTo:'formBuilderPanelDiv'
+		});
+		/** wanghongchen 20140805 根据名称判断，自动生成“申请销毁数量”的值**/
+		$("label:contains(销毁数量)").next().find("input").val(realDestroyNum);
+	},100);
+});
+</script>

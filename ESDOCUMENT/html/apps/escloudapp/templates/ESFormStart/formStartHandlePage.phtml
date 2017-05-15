@@ -1,0 +1,17 @@
+<form id="formStartHandleForm" action="" method="post">
+	<div class="formStartHanderForm">
+		<ul>
+			<li style="margin-top:0px;">
+				<span>选择决策<font color="red" size="3">*</font></span>
+				<?php echo $data[0];?>
+			</li>
+			<li>
+				<span>选择处理人<font color="red" size="3">*</font></span>
+				<div class="selectOwner">
+					<input id="nextStepOwer" type="text" readonly="true" />
+					<span onclick="formStartHandle.selectWfOwner()"></span>
+				</div>
+			</li>
+		</ul>
+	</div>
+</form>

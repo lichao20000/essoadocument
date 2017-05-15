@@ -1,0 +1,83 @@
+<?php
+/**
+ * 规定规范
+ * @author xiewenda
+ *
+ */
+class ProxyEsdocumentStandarddocument extends AgentProxyAbstract {
+	const SERVICE_NAME = "standarddocument";
+	public function getCount() {
+		$urlParam = array (
+				'count' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	public function getCountByCondition($param) {
+		$urlParam = array (
+				'getCountByCondition' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function getList($condition) {
+		$urlParam = array (
+				'list' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $condition, "application/json;charset=UTF-8" );
+	}
+	public function add($data) {
+		$urlParam = array (
+				'add' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+	public function edit($data) {
+		$urlParam = array (
+				'update' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+	public function del($ids) {
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'delete',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, "application/json;charset=UTF-8" );
+	}
+	public function getStandardById($id) {
+		return $this->get ( self::SERVICE_NAME, "getStandardById/" . $id );
+	}
+	public function getStandardByCondition($param) {
+		$urlParam = array (
+				'getStandardByCondition' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function deleteFile($param) {
+		$urlParam = array (
+				'deleteFile'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 验证编号唯一性
+	 * @param string $standardDocumentNo
+	 */
+	public function uniqueNo($standardDocumentNo) {
+		$urlParam = array (
+				'uniqueNo'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $standardDocumentNo, 'text/plain;charset=UTF-8' );
+	}
+}

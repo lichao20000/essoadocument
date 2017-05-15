@@ -1,0 +1,74 @@
+<link href="<?php echo $tplPath?>/ESSendReceiveFlow/css/index.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeTbar.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESSendReceiveFlow/js/menu.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESSendReceiveFlow/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.select.tree.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"定制收发流程", content:"#esmenu, #esone, #eslist"});
+	$(".esleft").css("height",esleftH);//设置左侧菜单
+});
+</script>
+<input type="hidden" id="condition">
+<div  class='esmain'>
+	<div id="escontent">
+			<div id="esmenu" class="esleft">
+				<div id='modelTypeTreeTBar' class='treeTbar'>
+					<div class="tbarDiv" style = "margin-left:12px;">
+						<div class="tbarButton">
+							<div>
+								<span class="add" style="padding-left:20px;">添加</span>
+							</div>
+						</div>
+						<div class="tbarButton">
+							<div>
+								<span class="edit" style="padding-left:20px;">编辑</span>
+							</div>
+						</div>
+						<div class="tbarButton">
+							<div>
+								<span class="delete" style="padding-left:20px;">删除</span>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" id="selTreeId" name="selTreeId" value=""/>
+				</div>
+				<ul id="esTypeTree" class="ztree" treenodeid=''></ul>
+			</div>
+			<div id ="esone" class="esright">
+					<div id="eslist">
+					  <table id="esDataList"></table>
+			       </div>
+			</div>
+			<div id="esfileview"></div>
+			<div id="esnotfiling"></div>
+	</div>
+	<div id="transfer"></div>
+</div>
+<script type="text/javascript">
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".esleft").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".esleft").offset().top;
+var esleftH=winH-eslefttop;
+var height=winH-eslefttop-115;
+window.onresize=function()
+{
+	winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".esleft").width()-5;
+	}
+	winH=$(window).height();
+	height=winH-eslefttop-115;
+	esleftH=winH-eslefttop;
+	$(".esleft").css("height",esleftH);
+	$(".flexigrid").css({width:width});		
+};
+</script>

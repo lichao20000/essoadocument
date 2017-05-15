@@ -1,0 +1,192 @@
+<div class='userFromOrg'>
+	<div id='orgTreeDiV' class='leftTree'>
+		<div id='orgTree' class='ztree'></div>
+	</div>
+	<div id='userGridDiv' class='rightGrid'>
+		<table id='userGrid'></table>
+	</div>
+</div>
+<script type="text/javascript">
+var userFromOrg = {
+		showMsg: function(msg, type){
+			if(type == '1'){
+				$.dialog.notice({icon : 'succeed',content : msg,title : '3秒后自动关闭',time : 3});
+			} else if(type == '2'){
+				$.dialog.notice({icon : 'error',content : msg,title : '3秒后自动关闭',time : 3});
+			} else {
+				$.dialog.notice({icon : 'warning',content : msg,title : '3秒后自动关闭',time : 3});
+			}
+		},
+		userQuery: function(){
+			var keyword = $.trim($('#userQuery').val());
+			if(keyword == '' || keyword=='请输入关键字') {
+				keyword = '';
+			}
+			$("#userGrid").flexOptions({query:keyword}).flexReload();
+		},
+		addUsers: function(){
+			var checkboxs = $('#userGrid input:checked') ;
+			var checkboxlength = checkboxs.length;
+			if (checkboxlength == 0) {
+				userFromOrg.showMsg('请先选择数据，再进行此操作！','3') ;
+				return;
+			}
+			var userIds = $("#forwardToUsersDiv").attr('userIds');
+			var hasedUsers = "" ;
+			var newAdd = false ;
+			checkboxs.each(function(i) {
+				var columns = ['id', 'userid', 'username'];
+				var colValues = $("#userGrid").flexGetColumnValue($(this).closest("tr"),columns);
+				var colValuesArray = colValues.split("|");
+				if(userIds.indexOf('|'+colValuesArray[0]+"|")==-1){
+					if(userIds == ""){
+						userIds = "|"+colValuesArray[0]+"|"
+					} else {
+						userIds += colValuesArray[0]+"|"
+					}
+					$("#forwardToUsers").flexExtendData([{
+						'cell':{
+								'ids':'<input type="checkbox" name="checkbox" id="" value="'+colValuesArray[0]+'"/>',
+								'id':colValuesArray[0],
+								'userid':colValuesArray[1],
+								'username':colValuesArray[2]
+							   }
+					}]);
+					newAdd = true ;
+				} else {
+					if(hasedUsers == ""){
+						hasedUsers = colValuesArray[1] ;
+					} else {
+						hasedUsers += "、"+colValuesArray[1] ;
+					}
+				}
+			});
+			if(hasedUsers == ""){
+				userFromOrg.showMsg('设置成功！','1') ;
+			} else {
+				if(newAdd){
+					userFromOrg.showMsg('设置成功，但是其中【'+hasedUsers+'】已经存在，不能重复设置！','1') ;
+				} else {
+					userFromOrg.showMsg('设置失败，其中【'+hasedUsers+'】已经存在，不能重复设置！','3') ;
+				}
+			}
+			$("#forwardToUsersDiv").attr('userIds', userIds);
+		}
+};
+$(document).ready(function() {
+	var setting = {
+			view: {
+				dblClickExpand: false,
+				showLine: false
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			async:{
+				enable:true,
+			},
+			
+			callback: {
+				onClick: onZTreeObjClick
+				
+			}
+		};
+
+	function onZTreeObjClick(e,treeId, treeNode) {
+		$("#userGrid").flexOptions({url:$.appClient.generateUrl({ESFormStart: 'getUsersForForward',orgIdseq:treeNode.idseq+treeNode.id}, 'x')}).flexReload();
+	}
+	
+	$.ajax({
+		dataType : "json",
+		url : $.appClient.generateUrl({
+			ESFormStart : 'getOrganTreeNodes'
+		}, 'x'),// 请求的action路径
+		error : function() {// 请求失败处理函数
+			alert('请求失败');
+		},
+		success : function(data) { // 请求成功后处理函数。
+			var zTreeObj = $.fn.zTree.init($("#orgTree"), setting, data);
+    		zTreeObj.selectNode(zTreeObj.getNodes()[0]);
+		}
+	});
+	$("#userGrid").flexigrid({url :$.appClient.generateUrl({ESFormStart: 'getUsersForForward'}, 'x'),
+		dataType : 'json',
+		colModel : [ 
+		    {display : '',name : 'startNum',width : 30,align : 'center'},
+		    {display : '<input type="checkbox" id="users">',name : 'ids',width : 15,align : 'center'}, 
+		    {
+				display : 'id',
+				name : 'id',
+				metadata:'id',
+				hide:true,
+				sortable : false,
+				align : 'left'
+			},{
+				display : '用户名',
+				name : 'userid',
+				metadata : 'userid',
+				width : 150,
+				sortable : true,
+				align : 'left'
+			},{
+				display : '中文名',
+				name : 'username',
+				metadata : 'username',
+				width : 250,
+				sortable : true,
+				align : 'left'
+			}
+		],
+		buttons:[{
+			name : '选择',
+			bclass : 'add',
+			onpress : function(){userFromOrg.addUsers();}
+		}],
+		singleSelect:true,
+		usepager : true,
+		useRp : true,
+		rp : 20,
+		nomsg : "没有数据",
+		showTableToggleBtn : false,
+		pagetext : '第',
+		outof : '页 /共',
+		width : 'auto',
+		height : 'auto',
+		pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条' 
+	});
+	
+	function sizeChanged(tabelName, h){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var flex = $("#"+tabelName).closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    bDiv.height(h - headflootHeight);
+		flex.height(h);
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	$('#userGridDiv div[class="tDiv"]').css("border-top","1px solid #ccc");
+	$('#userGridDiv div[class="tDiv2"]').append('<div class="find-dialog"><input id="userQuery" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="keyWord" value="请输入关键字" /><span onclick="userFromOrg.userQuery()"></span></div>');
+	sizeChanged('userGrid', 400);
+
+	//全选
+	$("#users").die().live('click',function(){
+		$("#userGrid input[name='checkbox']").attr('checked',$(this).is(':checked'));
+		$("#users").attr('checked',$(this).is(':checked'));
+	});
+	
+	$(document).keydown(function(event){
+		if(event.keyCode == 13 && document.activeElement.id == 'userQuery'){
+			userFromOrg.userQuery();
+		}
+	});
+
+});
+</script>

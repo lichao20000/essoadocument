@@ -1,0 +1,7 @@
+appid = np000
+apptoken = wwwwww
+name = 系统应用
+description = 系统应用
+version = 1.0
+display = hidden
+is_public = 1

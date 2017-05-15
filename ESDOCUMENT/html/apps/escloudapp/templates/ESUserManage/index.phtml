@@ -1,0 +1,19 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESUserManage/css/index.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'用户管理'));?>
+
+
+<div id="ESSystemIndex" >
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+	<div id="leftfree" class='leftfree'>
+		<div id="u_tree" class="ztree"></div>
+	</div>
+	<div id='rightfree' class='rightfree'>
+		<table id="u_list"></table>
+	</div>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESUserManage/js/template.js"></script>

@@ -1,0 +1,187 @@
+<style>
+.searchList em {font-style:normal;color:red;font-size:16px;}
+.searchList p em {font-size:12px;}
+
+.left_more{float:left;padding:5px 0;width:170px; font-weight:bold;clear:both; height:30px; line-height:30px; padding-left:30px;}
+.left_more a{ text-decoration:none;color:#222;}
+.left_more a:hover{ text-decoration:underline;color:#F00;}
+
+</style>
+<script type="text/javascript">
+<!--
+function typenums(id){
+	  var matchURL = new RegExp("((?:http|https|ftp|mms|rtsp)://(&(?=amp;)|[A-Za-z0-9\./=\?%_~@&#:;\+\-])+)","ig");
+	  var cval=$(id).val();
+	  var webnum=cval.match(matchURL);
+	  if (webnum) {
+	    webnum=webnum.length;
+	  } else {
+	    webnum=0;
+	  }
+	  var len=$.trim(cval).length+(webnum*8);
+	  len=1024-len;
+	  return len;
+	}
+
+function retnums(val, nums){
+	  var len=typenums("#"+val);
+	  if (len<0) {
+	    $("#"+nums).html('<font color="red"><em>-'+len+'</em></font>');
+	  } else {
+	    $("#"+nums).html('<span class="font14 color03c">'+len+'</span>');
+	  }
+}
+
+function sendsms(sendId, receiverInfo, receiverTel){
+		var html = '<form id="sms_form"method="post"><ul><li style="width:60px; margin-right:10px;"class="bold">发送人</li><li>'+sendId+'</li></ul><ul><li style="width:60px; margin-right:10px;"class="bold">接收人</li><li class="inputBox"style="width:290px;"><span>'+receiverInfo+'</span></li></ul><ul><li style="width:60px; margin-right:10px;"class="bold">短信内容</li><li><span id="nums" class="red">0</span>/1024</li></ul><ul><li><label for="textarea"></label><textarea onkeyup="retnums(\'smscontent\',\'nums\')" name="smscontent"id="smscontent"cols="45"rows="5"style="width:375px; height:120px;"></textarea></li></ul><input type="hidden"id="receivertel"name="receivertel"value="'+receiverTel+'"><div class="release"><a id="sendsms"href="javascript:void(0);">发送</a><span id="nums_tips" style="display:none;">短信内容操作字数限制了</span></div></form>';
+		ChinaUnicom.dialog.open({content : html,width: '460',height: '320', open:function(el){
+			    //修改数据
+			    $('#sendsms').bind('click',function(e){
+
+				     if($('#smscontent').val().length==0){
+					     alert('短信内容不能为空！');
+					     e.preventDefault();
+					     return false;
+				     }
+				     if(typenums('#smscontent')<0){
+				    	 alert('短信内容不能操作1024字！');
+			    		 /*setTimeout(function(){
+				    		 $('#nums_tips').show();
+				    	 }, 2000);
+			    		 $('#nums_tips').hide();*/
+			    		 return false;
+				     }
+				     //alert('oooo');return;
+				     //获取字数
+			       var url = '<?php echo url('search/sms');?>';
+			       $.ajax({
+			    			type: "post",
+			    			url: url,
+			    			data :{receivertel:$('#receivertel').val(),smscontent:$('#smscontent').val()},
+			    			dataType: "json",
+			    			success: function(result, textStatus){
+			    				if (result.status == 'ok') {
+			    					alert(result.info);
+			    				} else {
+			    					alert(result.info);
+			    				}
+			    			},
+			    			error: function(){
+			    				alert('ajax请求失败！');
+			    			}
+			   		})
+			    });
+		}});
+	}
+//-->
+</script>
+<div class="topNav" id="page-nav">
+  <div class="topNavL"><img src="<?php echo $tplPath?>/images/icons/search_icon1.gif" width="30" height="32" alt="搜索"/>搜索</div>
+  <div class="topNavC"><span class="color999" style=" line-height:23px;">找到相关结果 <?php echo isset($numfound) ? $numfound: 0;?> 个</span> </div>
+  <div class="topTabPage">
+  </div>
+</div>
+<div class="content" id="page-body">
+  <div class="left page-sidebar">
+    <ul>
+    <?php $showMoreLink = false; $index = 0;?>
+    <?php if(isset($filters) && count($filters) > 0):?>
+    <?php if(!isset($_GET['bundle_name'])){?>
+      <li class="leftOn bold">所有结果</li>
+      <?php }else{?>
+      <li><a href="<?php echo url("search/colleage?keywords=". urlencode($keywords). "&page=1".$queryString1)?>">所有结果</a></li>
+      <?php }?>
+
+
+      <?php foreach($filters as $key=>$value):?>
+      	<?php $fields = (array)$value; foreach ($fields as $field => $numcount):?>
+      	<?php $index++;if($index>10){ $showMoreLink = true; break;}?>
+	      	<?php if(isset($_GET['bundle_name']) && $_GET['bundle_name'] == $field){?>
+	      	<li class="leftOn bold"><?php echo $field . '(' . $numcount .')'?></li>
+      	  <?php } else {?>
+      	  <li><a href="<?php echo url("search/colleage?keywords=". urlencode($keywords)."&{$key}=" . urlencode($field) . "&page=1".$queryString1)?>" title="<?php echo $field. '(' . $numcount .')';?>"><?php echo utf8_substr($field,0,12) . '(' . $numcount .')'?></a></li>
+      	  <?php }?>
+      	<?php endforeach;?>
+      <?php endforeach;?>
+    <?php endif;?>
+    </ul>
+    <ul id="taglist" style="display:none">
+    <?php if(isset($filters) && count($filters) > 0):?>
+      <?php $count = 0;?>
+      <?php foreach($filters as $key=>$value):?>
+      	<?php $fields = (array)$value; foreach ($fields as $field => $numcount):?>
+      	<?php $count++; if($count<$index){ continue;}?>
+	      	<?php if(isset($_GET['bundle_name']) && $_GET['bundle_name'] == $field){?>
+	      	<li class="leftOn bold"><?php echo $field . '(' . $numcount .')'?></li>
+      	  <?php } else {?>
+      	  <li><a href="<?php echo url("search/colleage?keywords=". urlencode($keywords)."&{$key}=" . urlencode($field) . "&page=1".$queryString1)?>"><?php echo $field . '(' . $numcount .')'?></a></li>
+      	  <?php }?>
+      	<?php endforeach;?>
+      <?php endforeach;?>
+    <?php endif;?>
+    </ul>
+<?php if($showMoreLink): ?>
+    <!-- <ul class="clearIE6"><li><a href="javascript:void(0)" id="more" class="bold" style="color:red">更多</a></li></ul>  -->
+<div class="left_more"><a href="javascript:void(0)" id="more" class="bold" style="color:red">更多</a></div>
+<?php endif ?>
+  </div>
+
+
+  <div class="contentCenter page-content" style="padding:10px 0 0 10px">
+    <?php if (isset($spellword)) {?>
+    	<div class="centerTitle">
+      	<h1>您是不是要找：<span class="bold red font16"><?php echo $spellword?></span></h1>
+    	</div>
+    <?php }?>
+    <?php if(isset($response)){?>
+    <?php foreach($response as $v){?>
+    <?php //print_r($v);?>
+    <div class="searchList" style="width:750px;">
+      <div class="searchListImg"><a href="/setting/0/view/<?php echo $v['fields']['ss_userid']?>"><img src="<?php echo $v['imageSrc']?>" width="80" height="80" alt="name"></a></div>
+      <div style="display:block;float:right;width:85%">
+      <h1><a href="/setting/0/view/<?php echo $v['fields']['ss_userid']?>"><span><?php echo $v['title']?></span></a></h1>
+      <!-- <h2>联通总部 战略投资部 - 对外投资与合作处 <span style="color:#222;">处长</span></h2> -->
+      <h2><?php echo $v['fields']['bundle_name']?> <span style="color:#222;"><?php //echo $v['fields']['created']?></span></h2>
+      <p class="color808080"><?php echo $v['fields']['teaser']?></p>
+      <p class="color808080" style="width:618px;"><span style="width:170px;" class="block">员工号码：<?php echo isset($v['fields']['ss_empcode'])?$v['fields']['ss_empcode']:'无';?></span><span style="width:290px;overflow:hidden;white-space:nowrap;" class="block">电子邮件：<?php echo isset($v['fields']['ss_email'])?$v['fields']['ss_email']:'无';?></span><span style="width:50px">房间号码：<?php echo isset($v['fields']['ss_roomnumber'])?$v['fields']['ss_roomnumber']:'无';?></span><br>
+        <span style="width:170px;overflow:hidden;white-space:nowrap;" class="block">办公电话：<?php echo (isset($v['fields']['ss_officephone']) && $v['fields']['ss_officephone'] != '')?$v['fields']['ss_officephone']:'无';?></span><span style="width:290px;" class="block">移动电话：<?php echo (isset($v['fields']['ss_mobilephone']) && $v['fields']['ss_mobilephone'] != '')?$v['fields']['ss_mobilephone']:'无';?></span><span style="width:50px">传真号码： </span><br>
+        <ul style="display:block;margin-top:6px;float:left">
+        <li style="float:left;margin-right:30px"><a href="/setting/0/view/<?php echo $v['fields']['ss_userid']?>" class="color369">个人主页</a></li>
+        <li style="float:left;margin-right:30px"><a href="mailto:<?php echo $v['fields']['ss_email'];?>" class="color369">发邮件</a></li>
+        <li style="float:left;margin-right:30px"><?php if(isset($v['fields']['ss_userid']) && ($GLOBALS['user']->uid!=$v['fields']['ss_userid']) && $v['fields']['ss_mobilephone']!=''){?><a href="javascript:void(0);" class="color369" onclick="sendsms('<?php echo $GLOBALS['user']->userName;?>', '<?php echo $v['fields']['label']; ?>', '<?php echo $v['fields']['ss_mobilephone'];?>')">发短信</a><?php }?></li>
+        <li style="float:left;margin-right:30px"><?php echo $v['button']?></li>
+        <li style="float:left;margin-right:30px"><?php if(isset($v['fields']['ss_userid']) && $GLOBALS['user']->uid!=$v['fields']['ss_userid']){?><a href="javascript:addToWeibo('<?php echo $v['fields']['ss_userid']?>')" class="color369">添加关注</a><?php }?></li>
+        </ul>
+        </div>
+    </div>
+
+   <?php }?>
+	<?php }?>
+	<div class="searchPage"><?php echo $page;?></div>
+  </div>
+</div>
+
+<script language="javascript">
+function addToWeibo(followName){
+	$.ajax({
+		url:'/search/addToWeibo/?followname=' + followName,
+	  success:function(resp){
+      alert(resp);
+	  }
+	});
+}
+
+$(document).ready(function(){
+  var elMore = $('#more');
+  $('#seachKey').val('<?php echo $keywords?>');
+  $('#searchArea').attr('value','colleage').html('同事');
+
+	elMore.toggle(function(){
+		elMore.text('收起');
+		$('#taglist').show();
+	},function(){
+		elMore.text('更多');
+		$('#taglist').hide();
+	});
+});
+</script>

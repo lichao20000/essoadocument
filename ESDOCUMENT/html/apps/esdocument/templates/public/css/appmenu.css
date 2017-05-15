@@ -1,0 +1,109 @@
+@CHARSET "UTF-8";
+/**  菜单的menu菜单位置   **/
+
+.subulPersonManage{background-position: 40px 16px;background-image:url(../img/icon_menu_1.png);background-repeat:no-repeat;}
+.subulArcCollecte{background-position: 40px 16px;background-image:url(../img/icon_menu_2.png);background-repeat:no-repeat;}
+.subulArcManage{background-position: 40px 16px;background-image:url(../img/icon_menu_3.png);background-repeat:no-repeat;}
+.subulArcUse{background-position: 40px 16px;background-image:url(../img/icon_menu_4.png);background-repeat:no-repeat;}
+.subulArcCount{background-position: 40px 16px;background-image:url(../img/icon_menu_5.png);background-repeat:no-repeat;}
+.subulTasks{background-position: 40px 16px;background-image:url(../img/icon_menu_6.png);background-repeat:no-repeat;}
+.subulSystemManage{background-position: 40px 16px;background-image:url(../img/icon_menu_7.png);background-repeat:no-repeat;}
+.subulAPPManage{background-position: 40px 16px;background-image:url(../img/icon_menu_8.png);background-repeat:no-repeat;}
+
+/** 首页添加模块菜单样式 **/
+
+.ESDefault_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/backtohome_small.png);}
+.ESDefault_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/backtohome.png);}
+
+
+.ESFullTextSearch_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESFullTextSearch_index_small.png);}
+.ESFullTextSearch_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESFullTextSearch_index.png);}
+
+.ESStatistics_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESStatistics_index_small.png);}
+.ESStatistics_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESStatistics_index.png);}
+
+.ESDocumentBorrowing_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESDocumentBorrowing_index_small.png);}
+.ESDocumentBorrowing_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESDocumentBorrowing_index.png);}
+
+
+.ESDiscuss_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESDiscuss_small.png);background-repeat:no-repeat;}
+.ESDiscuss_index{background-image:url(../img/appmenus/ESDiscuss.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+
+.ESRole_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESRole_index_small.png);background-repeat:no-repeat;}
+.ESRole_index{background-image:url(../img/appmenus/ESRole_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESMetadata_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESMetadata_index_small.png);background-repeat:no-repeat;}
+.ESMetadata_index{background-image:url(../img/appmenus/ESMetadata_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESLucene_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESLucene_index_small.png);background-repeat:no-repeat;}
+.ESLucene_index{background-image:url(../img/appmenus/ESLucene_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESEFile_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESEFile_index_small.png);background-repeat:no-repeat;}
+.ESEFile_index{background-image:url(../img/appmenus/ESEFile_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESLog_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESLog_index_small.png);background-repeat:no-repeat;}
+.ESLog_index{background-image:url(../img/appmenus/ESLog_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESInformationPublish_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESInformationPublish_index_small.png);background-repeat:no-repeat;}
+.ESInformationPublish_index{background-image:url(../img/appmenus/ESInformationPublish_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESReport_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESReport_index_small.png);background-repeat:no-repeat;}
+.ESReport_index{background-image:url(../img/appmenus/ESReport_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESCollaborative_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESCollaborative_small.png);background-repeat:no-repeat;}
+.ESCollaborative_index{background-image:url(../img/appmenus/ESCollaborative.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESParticipatory_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESParticipatory_index_small.png);}
+.ESParticipatory_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESParticipatory_index.png);}
+
+.ESDevice_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESDevice_index_small.png);}
+.ESDevice_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESDevice_index.png);}
+
+.ESContractItem_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESContractItem_index_small.png);}
+.ESContractItem_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESContractItem_index.png);}
+
+.ESDocumentStage_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESDocumentStage_index_small.png);}
+.ESDocumentStage_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESDocumentStage_index.png);}
+
+.ESDocumentType_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESDocumentType_index_small.png);}
+.ESDocumentType_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESDocumentType_index.png);}
+
+.ESEngineering_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESEngineering_index_small.png);}
+.ESEngineering_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESEngineering_index.png);}
+
+.ESDocumentsMetadata_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESDocumentsMetadata_index_small.png);}
+.ESDocumentsMetadata_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESDocumentsMetadata_index.png);}
+
+.ESDocumentsCollection_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESDocumentsCollection_index_small.png);}
+.ESDocumentsCollection_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESDocumentsCollection_index.png);}
+
+.ESTransferFlow_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESTransferFlow_index_small.png);}
+.ESTransferFlow_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESTransferFlow_index.png);}
+
+.ESDocumentTransfer_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESDocumentTransfer_index_small.png);}
+.ESDocumentTransfer_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESDocumentTransfer_index.png);}
+
+.ESSendReceiveFlow_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESSendReceiveFlow_index_small.png);}
+.ESSendReceiveFlow_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESSendReceiveFlow_index.png);}
+
+.ESDocumentReceive_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESDocumentReceive_index_small.png);}
+.ESDocumentReceive_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESDocumentReceive_index.png);}
+
+.ESDocumentSend_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESDocumentSend_index_small.png);}
+.ESDocumentSend_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESDocumentSend_index.png);}
+
+.ESChangeOrders_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESChangeOrders_index_small.png);}
+.ESChangeOrders_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESChangeOrders_index.png);}
+
+.ESCatalogCheck_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESCatalogCheck_index_small.png);}
+.ESCatalogCheck_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESCatalogCheck_index.png);}
+
+.ESFiling_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESFiling_index_small.png);}
+.ESFiling_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESFiling_index.png);}
+
+.ESRegulations_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESRegulations_index_small.png);}
+.ESRegulations_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESRegulations_index.png);}
+
+.ESStandardDocuments_index_small{background-position: 40px 16px;background-repeat:no-repeat;background-image:url(../img/appmenus_small/ESStandardDocuments_index_small.png);}
+.ESStandardDocuments_index{background-position:  center 15px;background-repeat:no-repeat;background-image:url(../img/appmenus/ESStandardDocuments_index.png);}

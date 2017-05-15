@@ -1,0 +1,58 @@
+<?php
+class ProxyEssoaadminEscloud_loginNetSegmentws extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "loginNetSegmentWS";
+  
+  
+  /**
+   * 获取数据集
+   */
+  public function getDataList($postData){
+  	$urlParam = array('getDataList');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+  }
+  
+  
+  /**
+   * 添加
+   */
+  public function add($postData){
+  	$urlParam = array('add');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+  }
+  /**
+   * 编辑
+   */
+  public function edit($postData){
+  	$urlParam = array('edit');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+  }
+  
+  public function deleteByIds($postData){
+  	$urlParam = array('delete');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+  }
+  
+  public function getDataById($postData){
+  	$urlParam = array('getDataById');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+  }
+  
+  
+  
+  
+  
+  
+	/**
+	 * guolanrui 20140830 编辑报表时的保存方法
+	 */
+// 	public function checkReportDataIsExists($postData){
+// 		$url = "checkReportDataIsExists";
+// 		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+// 	}
+}

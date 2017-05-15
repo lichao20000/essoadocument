@@ -1,0 +1,179 @@
+<?php
+/***
+ * xiaoxiong 20140521
+ * 表单管理代理类
+ */
+class ProxyEscloudappEscloud_formbuilder extends AgentProxyAbstract{
+	
+	const SERVICE_NAME = "escloud_workflowws";
+
+	/**
+	 * guolanrui 20140504
+	 * 返回表单分类树数据
+	 * @throws Exception
+	 */
+	public function showFormTypeTree(){
+		$url = "showFormTypeTree";
+		return $this->post(self::SERVICE_NAME,$url,"application/json;charset=UTF-8");
+	}
+
+	/**
+	 * 获取表单数据
+	 */
+	public function getFormBuilderDataList($postData){
+		$url = "getFormBuilderDataList";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	/** 分类树添加处理方法 **/
+	public function addFormType($postData){
+		$url = "addFormType";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	/** 分类树编辑处理方法 **/
+	public function editFormType($postData){
+		$url = "updateFormType";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	/** 分类树删除处理方法 **/
+	public function deleteFormType($postData){
+		$url = "deleteFormType";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	/** 根据表单ID获取表单信息 **/
+	public function getFormJs($postData){
+		$url = "getFormJs";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"text/plain;charset=UTF-8");
+	}
+	
+	/** 保存表单信息 **/
+	public function saveFormBuilder($postData){
+		$url = "saveFormBuilder";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	/** 根据表单ID获取当前表单是否存在表单数据 **/
+	public function getHasDataFlag($postData){
+		$url = 'getHasDataFlag' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	/** 根据表单ID发布表单 **/
+	public function promulgateForm($postData){
+		$url = 'promulgateForm' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 表单关联流程 **/
+	public function relationWorklfow($postData){
+		$url = 'relationWorklfow' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 取消表单流程关联 **/
+	public function cancelRelationWorkflow($postData){
+		$url = 'cancelRelationWorkflow' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 修改表单状态 **/
+	public function changeFormState($postData){
+		$url = 'changeFormState' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 删除表单 **/
+	public function deleteForm($postData){
+		$url = 'deleteForm' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 复制表单 **/
+	public function copyForm($postData){
+		$url = 'copyForm' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取数据字典列表 **/
+	public function getMetadataList($postData){
+		$url = 'getMetadataList' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 保存数据字典数据 **/
+	public function saveCombo($postData){
+		$url = 'saveCombo' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 删除数据字典数据 **/
+	public function deleteCombo($postData){
+		$url = 'deleteCombo' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 保存数据字典选项数据 **/
+	public function saveComboItem($postData){
+		$url = 'saveComboItem' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 删除数据字典选项数据 **/
+	public function deleteComboItems($postData){
+		$url = 'deleteComboItems' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取数据字典选择项列表 **/
+	public function getMetadataItemList($postData){
+		$url = 'getMetadataItemList' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取表达式 **/
+	public function queryExpression($postData){
+		$url = 'queryExpression' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 保存表达式 **/
+	public function saveExpression($postData){
+		$url = 'saveExpression' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 删除表达式 **/
+	public function dropExpression($postData){
+		$url = 'dropExpression' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 删除一个表单全部的表达式数据 **/
+	public function deleteExpression($postData){
+		$url = 'deleteExpression' ;
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	/**
+	 * 导出表单
+	 * @param unknown $postData
+	 */
+	public function exportFormbuilder($postData) {
+		$url = 'exportFormbuilder';
+		return $this->post(self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取表单导入的url
+	 * @return Ambigous <string, string>
+	 */
+	public function importFormbuilder(){
+		$urlParam=array('importFormbuilder');
+		$url=implode('/',$urlParam);
+		$restUrl = $this->getUri(self::SERVICE_NAME, $url);
+		return $restUrl;
+	}
+}

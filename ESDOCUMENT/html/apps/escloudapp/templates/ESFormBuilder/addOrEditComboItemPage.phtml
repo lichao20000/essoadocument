@@ -1,0 +1,16 @@
+<form id="metadadaitemForm" action="" method="post">
+	<div class="esModelType">
+		<ul>
+			<li>
+				<span>属性值<font color="red" size="3">*</font></span>
+				<input type="text" verify="text/50/1/0" name="item" value="<?php echo $data[2];?>"/>
+				<input type="hidden" name="id" value="<?php echo $data[1];?>"/>
+				<input type="hidden" name="comboid" value="<?php echo $data[0];?>"/>
+			</li>
+			<li>
+				<span>顺序<font color="red" size="3">*</font></span>
+				<input  type="text" verify="text/50/1/0" name="order" value="<?php echo $data[3];?>"/>
+			</li>
+		</ul>
+	</div>
+</form>

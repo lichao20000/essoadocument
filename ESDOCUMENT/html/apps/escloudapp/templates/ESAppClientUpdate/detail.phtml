@@ -1,0 +1,114 @@
+<!-- yanghuiqiang 20140522 升级详细窗口-->
+
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<style type="text/css">
+.mydiv p {
+	margin: 0px;
+	padding: 0px;
+}
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="detail" method="post" enctype="multipart/form-data">
+			<table id="table_detail" style="height: 200px;">
+				<tr>
+					<td><input type="hidden" name="id" id="id"
+						value="<?php echo $update->id;?>"
+						style="width: 380px; height: 0px;" /></td>
+				</tr>
+				<tr>
+					<td>APP名称：</td>
+					<td><input type="text" name="appName" id="appName"
+						value="<?php echo $update->appName;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>APP描述：</td>
+					<td><input type="text" name="appDescription" id="appDescription"
+						value="<?php echo $update->appDescription;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>APP包名：</td>
+					<td><input type="text" name="packageName" id="packageName"
+						value="<?php echo $update->packageName;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>内部版本号：</td>
+					<td><input type="text" name="versionCode" id="versionCode"
+						value="<?php echo $update->versionCode;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>版本名称：</td>
+					<td><input type="text" name="versionName" id="versionName"
+						value="<?php echo $update->versionName;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>是否强制更新：</td>
+					<td><input type="text" name="forceUpdate" id="forceUpdate"
+						value="<?php echo $update->forceUpdate == 1 ? "是":"否";?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>是否自动更新：</td>
+					<td><input type="text" name="autoUpdate" id="autoUpdate"
+						value="<?php echo $update->autoUpdate == 1 ? "是":"否";?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>APKFileId：</td>
+					<td><input type="text" name="apkUrl" id="apkUrl"
+						value="<?php echo $update->apkFileId;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<!--  
+				<tr>
+					<td>更新提示信息：</td>
+					<td><div class="mydiv" id="msgDiv"
+							style="background-color: #eeeeee; border:1px solid #A8A59C; width: 383px; height: 100px; cursor: text">
+							<?php echo $update->updateDefaultTip;?>
+						</div></td>
+				</tr>
+				-->
+				
+				<tr>
+					<td>更新提示信息：</td>
+					<td><textarea name="updateTips" id="updateTips"
+							style="width: 380px; height: 100px;"><?php echo $update->updateDefaultTip;?></textarea>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<td>更新时间：</td>
+					<td><input type="text" name="updateTime" id="updateTime"
+						value="<?php echo gmdate("Y-m-d H:i:s", ($update->updateTime / 1000) + 8*3600);?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#table_detail input:text').attr("readOnly", true); 
+	$('#table_detail textarea').attr("readOnly", true);
+});
+</script>
+

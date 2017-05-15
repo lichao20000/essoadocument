@@ -1,0 +1,15 @@
+<form id="metadadaForm" action="" method="post">
+	<div class="esModelType">
+		<ul>
+			<li>
+				<span>属性名称<font color="red" size="3">*</font></span>
+				<input type="text" verify="text/50/1/0" name="name" value="<?php echo $data[1];?>"/>
+				<input type="hidden" name="id" value="<?php echo $data[0];?>"/>
+			</li>
+			<li>
+				<span>描述</span>
+				<textarea  type="text" verify="text/100/0/0" name="description"  rows=4 style="width:158px;float:left"><?php echo $data[2];?></textarea>
+			</li>
+		</ul>
+	</div>
+</form>

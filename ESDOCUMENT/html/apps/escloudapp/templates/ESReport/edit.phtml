@@ -1,0 +1,204 @@
+<style>
+
+#editReport table tr{height:50px;}
+span.editReportType input{float:left;margin-left:25px;} 
+ span.editReportType label{float:left;margin-right:45px;}
+
+
+</style>
+<div style="height:300px;">
+<!--
+<div style="margin-top: 10px;font-size:24px;font-weight:bold;border-bottom:1px solid #CCC;">条目概览</div>
+-->
+<div style="padding-top:10px;">
+<form id="editReport" method="post" enctype="multipart/form-data">
+<table style="height:100px;">
+  <tr>
+    <td>报表标题:</td>
+    <td><input type="text" name="title" verify="text/100/1/0" id="title" value="<?php echo $report->title;?>" style="width:380px;height:20px;"  /></td>
+  </tr>
+  <tr>
+    <td>报表类型:</td>
+    <td><select name="mytype" disabled="true" style="width:380px;height:20px;">
+	    <option value="<?php echo $report->reportType;?>">
+	    	<?php if ($report->reportType=="archive"){
+	    		 	echo '档案报表';
+// 	    		}elseif ($report->reportType=="voucher"){
+// 					echo '会计对照表';
+// 	    		}elseif ($report->reportType=="documentForm"){
+// 					echo '文书移交清单';
+// 	    		}elseif ($report->reportType=="accountingForm"){
+// 					echo '会计档案移交清单';
+// 	    		}elseif ($report->reportType=="documentDetail"){
+// 					echo '文书移交明细';
+// 	    		}elseif ($report->reportType=="accountingDetail"){
+// 					echo '会计档案移交明细';
+	    		}elseif ($report->reportType=="inout"){
+					echo '出入库报表';
+	    		}elseif ($report->reportType=="using"){
+					echo '借阅利用';
+	    		}elseif ($report->reportType=="storm"){
+					echo '库房结构';
+				//guolanrui 20140909 增加工作流类型，为工作流使用	
+	    		}elseif ($report->reportType=="workflow"){
+					echo '工作流';
+// 	    		}elseif ($report->reportType=="compareTable"){
+// 					echo '文件校验';
+				}else {
+					echo '';
+    			}
+	    	?>
+	    </option>
+    </select></td>
+  </tr>
+  <tr>
+    <td>输出格式:</td>
+     <td>
+    	<span class="editReportType"><input id="s1" class="radio" type="radio" name="resourceleve" <?php if ($report->reportstyle=="pdf") echo 'checked="checked"';?> value="pdf"><label for="s1">PDF格式</label></span>
+    	<span class="editReportType"><input id="s2" class="radio" type="radio" name="resourceleve" <?php if ($report->reportstyle=="rtf") echo 'checked="checked"';?>  value="rtf"><label for="s2">WORD格式</label></span>
+    	<span class="editReportType"><input id="s3" class="radio" type="radio" name="resourceleve" <?php if ($report->reportstyle=="xls") echo 'checked="checked"';?>  value="xls"><label for="s3">EXCEL格式</label></span>
+    </td>
+  </tr>
+<tr id="myproces"><td>模版文件:</td>
+<td><input id="btnAdd" type="button" value=" 添加文件 " />
+<input id="btnCancel" style="display:none;" type="button" value=" 取消" /></td>
+</tr>
+<tr><td></td><td><div style="height:25px;width:30px;" id="fsUploadProgress"></div></td></tr>
+</table>
+</form>
+</div>
+</div>
+
+<script type="text/javascript">
+
+//去左空格; 
+function ltrim(s){
+	return s.replace( /^\s*/, ""); 
+} 
+//去右空格; 
+function rtrim(s){ 
+	return s.replace( /\s*$/, ""); 
+} 
+//去左右空格; 
+function trim(s){
+	return rtrim(ltrim(s)); 
+}
+
+$(document).ready(function(){
+	// 上传电子文件
+		
+		var upload = new SWFUpload({
+			//提交路径
+			upload_url: "<?php echo $ip;?>/addReport",
+			//向后台传递额外的参数
+			//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+			//上传文件的名称
+			file_post_name: "file",
+			
+			file_size_limit : "102400",	// 100MB
+			file_types : "*.jrxml",
+			file_types_description : "jrxml文件",
+			file_upload_limit : "1",
+			file_queue_limit : "0",
+
+			// 事件处理
+			swfupload_loaded_handler : swfuploadLoaded,
+			file_dialog_start_handler : fileDialogStart,
+			file_queued_handler : fileQueued,
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_start_handler : uploadStart,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+
+			// 按钮的处理
+			button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+			button_placeholder_id : "btnAdd",
+			button_width: 72,
+			button_height: 28,
+			
+			// Flash文件地址设置
+			flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+			
+			custom_settings : {
+				progressTarget : "fsUploadProgress",
+				cancelButtonId : "btnCancel",
+				startButtonId : "btnStarts",
+				//guolanrui 20140830 增加一个按钮标识属性BUG：693
+				startButtonFlag : "editReport",
+				// 上传成功的回调函数
+// 				uploadSuccess : function(file, data){$("#report").flexOptions({newp:1}).flexReload();}
+				/** guolanrui 20140811 添加成功后去掉newp参数，避免添加数据成功后，数据刷新到第一页的BUG：680 **/
+				uploadSuccess : function(file, data){$("#report").flexOptions().flexReload();}
+			},
+			
+			// Debug 设置
+			debug: false
+		});
+		$("#btnCancel").click(function(){cancelQueue(upload);});
+		$("#btnStarts").click(function(){
+			/** guolanrui 20140812 提交前添加表单验证BUG：721 **/
+			var form=$('#editReport');
+    		if (!form.validate()) {
+    			return false;
+    		}
+			var title = $("#editReport input[name='title']").val();
+			var resourceleve = $("#editReport .radio:checked").val();
+			var rtitle = trim(title);
+			if(rtitle==""){
+				$.dialog.notice({icon:'warning', content:"报表标题不能为空!", time:1});
+				return;
+			}
+			/** guolanrui 20140813 添加对标题是否重复的验证BUG:711 **/
+			$.ajax({
+				type: "POST",
+    	    	url:$.appClient.generateUrl({ESReport:'checkTitleUnique'},'x'),
+    	    	data:{title:rtitle},
+    	    	success:function(data){
+//         	    	alert(data);
+					//guolanrui 20140915 添加题名的验证，校验title是不是本身
+        	    	if(data == 'true' || '<?php echo $report->title;?>'==rtitle){
+            	    	var fileFlag = false;
+						var status = $(".progressBarStatus");
+						$.each(status,function(){
+// 							alert(this+'      '+$(this).html());
+							if('等待上传...' == $(this).html()){
+								fileFlag = true;
+							}	
+						});
+						if(!fileFlag){//如果不存在文件
+							$.ajax({
+								type: "POST",
+				    	    	url:$.appClient.generateUrl({ESReport:'saveReportTemForEdit'},'x'),
+								data:{title:rtitle,reportid:"<?php echo $report->idReport;?>",reportstyle:resourceleve},
+				    	    	success:function(result){
+					    	    	if(result == 'true'){
+					    	    		$.dialog.notice({icon:'succeed', content:"保存成功", time:3});
+					    	    		$("#report").flexOptions().flexReload();
+					    	    		art.dialog.list['editReportPanel'].close();
+					    	    	}else{
+					    	    		$.dialog.notice({icon:'error', content:"保存失败", time:3});
+						    	    }	
+				    	    	},
+				    		    cache:false
+							});
+						}else{
+	        				upload.addPostParam("reportid","<?php echo $report->idReport;?>");
+	        				upload.addPostParam("reportname",rtitle);
+	        				upload.addPostParam("reportstyle",resourceleve);
+	        				upload.addPostParam("uploader","<?php echo $report->uplodaer;?>");
+	        				startQueue(upload);
+						}	
+        	    	}else{
+        	    		$.dialog.notice({icon:'warning', content:"标题为【"+rtitle+"】的报表已经存在，请重新填写报表标题!", time:3});
+        				return;
+                	}	
+    	    	},
+    		    cache:false
+    		});
+			
+		});
+});
+</script>

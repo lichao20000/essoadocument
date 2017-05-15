@@ -1,0 +1,157 @@
+<?php
+/**
+ * menu servive
+ * author fangjixiang
+ *
+ */
+class ProxyEscloudappEscloud_menuservice extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_menuservice";
+	
+	public function getArchiveMenu()
+	{
+		$urlParam = array('getArchiveMenu');
+		$url = implode('/', $urlParam);
+		//return $url.'---'.$conditionAndRights;
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	// [20130708停用]
+	public function getAllMenuWithRightSign($userId,$roleCode)
+	{
+		$urlParam = array('getAllMenuWithRightSign',$userId,$roleCode);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	
+  /* @保存菜单树节点 [20130708停用]
+	 * @Path("osSaveMenuAuthorize/{roleCode}/{modelId}")
+	 * @author fangjixiang 20121011
+	 * @param roleId 角色编码
+	 * @param ids 树叶子节点id
+	 * @return 返回目录树
+	 */
+	public function osSaveMenuAuthorize($roleCode,$ids,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('osSaveMenuAuthorize',$roleCode,$ids,$userid,$ip);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	}
+	
+	public function getArchiveRightMenu($userId)
+	{
+		$urlParam = array('getArchiveRightMenu',$userId);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	
+	/**
+	 * @see 保存角色的功能权限
+	 * @author fangjixiang 20130705
+	 * @param resourceId 功能权限的id（若存在为编辑，不存在为添加）
+	 * @param roleId 角色编码
+	 * @param selectedMenuIds 勾选的目录节点
+	 * @return 成功返回true失败返回false
+	 */
+	public function saveMenuAuth($resourceId, $roleId, $selectedMenuIds, $userid)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveMenuAuth', $resourceId, $roleId, $userid, $ip);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->post(self::SERVICE_NAME, $url, $selectedMenuIds, "application/json;charset=UTF-8");
+	}
+	
+	
+	/**
+	 * 获取角色所拥有的功能权限，并标识出勾选该角色具备权限的功能权限
+	 * @author fangjixiang 20130705
+	 * @param roleId 角色编码
+	 * @param userId 当前用户账户id
+	 * @return 返回全部菜单，并标识有权限的菜单
+	 */
+	public function getMenuAuth($userId, $roleId, $bigOrgId)
+	{
+		
+		$urlParam = array('getMenuAuth',$userId,$roleId,$bigOrgId);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+		
+	}
+	
+	/**
+	 * 获取用户功能权限列表
+	 * fangjixiang 20130724
+	 * @param userId
+	 * @return
+	 */
+	public function getArchiveAuthMenu($userId,$bigOrgId)
+	{
+	
+		$urlParam = array('getArchiveAuthMenu', $userId , $bigOrgId);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	
+	}
+	
+	/**
+	 * 获取用户的桌面的APPS的集合
+	 * liuhezeng 20140801
+	 * 
+	 * **/
+	public function getUserDeskApps($userId)
+	{
+	
+		$urlParam = array('getUserDeskApps',$userId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, '', "application/json;charset=UTF-8");
+	
+	}
+	
+	/**
+	 * 获取当前用户所有的功能菜单
+	 * @author liuhezeng  20140801
+	 * @param userId 当前用户账户id
+	 * @return 返回功能全部菜单，并标识有权限的菜单
+	 */
+	public function getDeskMenuTree($userId)
+	{
+	
+		$urlParam = array('getDeskMenuTree',$userId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, '', "application/json;charset=UTF-8");
+			
+	}
+	
+	/**
+	 * 获取当前用户所有的功能菜单
+	 * @author liuhezeng  20140801
+	 * @param userId 当前用户账户id
+	 * @return 返回功能全部菜单，并标识有权限的菜单
+	 */
+	public function saveUserDeskApps($params)
+	{
+		return $this->post(self::SERVICE_NAME,'saveUserDeskApps', $params, "application/json;charset=UTF-8");
+			
+	}
+	
+	/**
+	 * 获取用户功能权限列表
+	 * @author longjunhao 20140811
+	 * @param userId
+	 * @return
+	 */
+	public function getUserDeskAppsDetails($userId)
+	{
+		return $this->post(self::SERVICE_NAME,'getUserDeskAppsDetails', $userId, "application/json;charset=UTF-8");
+	}
+	
+}

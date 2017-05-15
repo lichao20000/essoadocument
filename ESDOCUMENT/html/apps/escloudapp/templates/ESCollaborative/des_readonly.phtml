@@ -1,0 +1,72 @@
+<div class='flowsheet_paper adv_btn'>
+	<div class='buttons' id='flowsheet'>
+		<div class="afree"></div>
+		<div class='button'><div><span class='process' id='identify_flowsheet'>流程图</span></div></div>
+		<input type='hidden' id='status' value='<?php echo $formMap->status;?>' />
+		<input type='hidden' id='formId' value='<?php echo $formMap->id;?>' />
+		<input type='hidden' id='workId' value='<?php echo $formMap->workflowid;?>' />
+	</div>
+	<div class='flowsheet_full'>
+		<h2 class='form_title'>鉴定申请单</h2>
+		<p class='form_number'>单号：<?php echo $formMap->code;?></p>
+		<div class='flowsheet_form'>
+			<ul>
+				<li class='field_name'>标题</li>
+				<li class='long_field_value'><?php echo $formMap->title;?></li>
+			</ul>
+			<ul>
+				<li class='field_name'>档案类别</li>
+				<li class='short_field_value border_right'><?php echo $formMap->archive_type;?></li>
+				<li class='field_name'>待鉴定数量</li>
+				<li class='short_field_value'><?php echo $formMap->destroy_number;?></li>
+			</ul>
+			<div class='div'>
+				<table id='destroy_list'></table>
+			</div>
+			<div class='div'>
+				<table id='reserve_list'></table>
+			</div>
+			
+			<ul>
+				<li class='field_name reset_height'>销毁报告</li>
+				<li class='long_field_value reset_height'><textarea class='opinions_textarea ext_css' readonly='readonly'><?php echo $formMap->report_content;?></textarea></li>
+			</ul>
+			<ul>
+				<li class='field_name reset_height'>鉴定申请描述</li>
+				<li class='long_field_value reset_height'><textarea class='opinions_textarea ext_css' readonly='readonly'><?php echo $formMap->description;?></textarea></li>
+			</ul>
+			
+			<?php
+				// 有多少人审批展示多少条意见
+				foreach($opinionList as $opinion)
+				{
+					$date = explode(' ',$opinion->opinion_time);
+					$date = $date[0];
+					echo '<ul>';
+					echo '<li class="field_name reset_height">'.$opinion->opinion_user_name.'的意见<br />'.$date.'</li>';
+					echo '<li class="long_field_value reset_height"><textarea class="opinions_textarea ext_css" readonly="readonly">'.$opinion->opinion_desc.'</textarea></li>';
+					echo '</ul>';
+				
+				}
+
+			?>
+		</div>
+		<div class='only_space'></div>
+	</div>
+</div>
+<script type='text/javascript'>
+	var isComplete="<?php echo $iscomplete;?>";
+	if(isComplete==1){
+		var endImg = "<?php echo $tplPath;?>/ESCollaborative/img/jianding_complete.gif";
+	}
+// 销毁审批流程按钮
+$('#flowsheet span').live('mouseover',function (){
+	$(this).parent().parent().addClass('extbutton');
+	$(this).parent().addClass('div');
+});
+$('#flowsheet span').live('mouseout',function (){
+	$(this).parent().parent().removeClass('extbutton');
+	$(this).parent().removeClass('div');
+});
+
+</script>

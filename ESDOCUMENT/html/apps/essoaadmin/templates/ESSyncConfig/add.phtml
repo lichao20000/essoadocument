@@ -1,0 +1,29 @@
+<form id="addConfigForm" action="" method="post">
+	<div class="configItem">
+		<ul>
+			<li>
+				<input name="id" type="hidden" value="-1">
+				<span>应用名称<font color="red" size="3">*</font></span>
+				<select	id="applyappid" name="applyappid" verify="text/10/1/0">
+					<?php foreach ($appList as $app){?>
+						<option value='<?php echo $app->id;?>'><?php echo $app->appnamecn;?></option>
+					<?php }?>
+				</select>
+			</li>
+			<li>
+				<span>同步类型<font color="red" size="3">*</font></span>
+				<select	id="synctype" name="synctype" verify="text/32/1/0">
+					<option value='user'>用户</option>
+				</select>
+			</li>
+			<li>
+				<span>接口名称<font color="red" size="3">*</font></span>
+				<input type="text" id="restfullclassname" name="restfullclassname" verify="text/128/1/0">
+			</li>
+			<li>
+				<span>方法名称<font color="red" size="3">*</font></span>
+				<input type="text" id="functionname" name="functionname" verify="text/64/1/0">
+			</li>
+		</ul>
+	</div>
+</form>

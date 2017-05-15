@@ -1,0 +1,76 @@
+<style>
+
+.ztree li a span{
+	color:#444;
+}
+
+</style>
+<div id='addrolefree'>
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span>
+		<span class='w90 w14090 hei30'>比较符</span>
+		<span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span>
+		<!-- gengqianfeng 20140916 添加删除样式修改 -->
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">添加行</span></span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">删除行</span></span>
+	</p>
+	<div id='contents'>
+		<!-- 1 -->
+		<?php for( $i=0;$i<5;$i++){?>
+		<p class='contbox creatediv'>
+			<select class='w140 w14090 hei20 filedname'>
+				<option value=''>--请选择--</option>
+				<option value='CODE'>库房编号</option>
+				<option value='ARCHIVE_CODE'>档号</option>
+				<option value='TITLE'>题名</option>
+				<option value='PAGE'>页数</option>
+				<option value='NUMBER'>份数</option>
+				<option value='TYPE'>类型</option>
+				<option value='STATUS'>状态</option>
+				<option value='REASON'>出入库原因</option>
+				<option value='MANAGER'>办理人</option>
+				<option value='DATE'>办理日期</option>
+			</select>
+			<select class='w90 w14090 hei20 comparison'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<!-- gengqianfeng 20140928 修改默认选择条件 -->
+				<option value="like" selected="selected">包含</option>
+				<option value="notLike">不包含</option>
+			</select>
+			<input type='text' class='w140 w14090 hei20 filedvalue' />
+			<select id='' class='w14090 w90 hei20 relationship'>
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select>
+			<!-- gengqianfeng 20140916 添加删除样式修改 -->
+			<a class='newfilter'></a> 
+			<a class='delfilter'></a>
+		</p>
+		<?php }?>
+	</div>
+</div>
+<script type="text/javascript">
+$('.newfilter').die().live('click',function (){
+	$(this).parent().clone().insertAfter($(this).parent());
+});
+
+$('.delfilter').die().live('click',function (){
+	//gengqianfeng 20140917 筛选删除事件修改
+	if($('#contents p').length > 5){
+		$(this).closest('p').remove();
+	}else{
+		var tds = $(this).closest('p').children();
+		$(tds[0]).val('');
+		//gengqianfeng 20140928 修改默认条件为包含
+		$(tds[1]).val('like');
+		$(tds[2]).val('');
+		$(tds[3]).val('AND');
+	}
+});
+</script>

@@ -1,0 +1,88 @@
+<script type='text/javascript'>
+	dataAuth.options = <?php echo $joptions;?>;
+</script>
+<div class='rule-public'>
+<!-- 20140507 wangbo 注释掉检索条件设置 -->
+	<!-- <h2>检索条件设置</h2>
+	<div class='setting-unit'>
+		<input type='text' value='归档单位' id='unit_name' />
+		<a href='javascript:;' id='display_unit'>设置归档单位</a>
+	</div>
+	<div class='unit-list'>
+		<p id='unit_title'>归档单位：</p>
+		<div id='unit_list'></div>
+	</div> -->
+	<div class='condition-free'>
+		<ul>
+			<li class='long'>字段名</li>
+			<li class='short'>比较符</li>
+			<li class='long'>字段值</li>
+			<li class='short'>关系符</li>
+			<li>添加行</li>
+			<li>删除行</li>
+		</ul>
+		<div class='condition' id='condition'>
+			<?php
+				for($i=0; $i<5; $i++){
+			?>
+			<ul>
+				<li class='long'>
+					<select name='key'><?php echo $options;?></select>
+				</li>
+				<li class='short'>
+					<select name='comparison'>
+						<option value="equal">等于</option>
+						<option value="greaterThan">大于</option>
+						<option value="lessThan">小于</option>
+						<option value="notEqual">不等于</option>
+						<option value="greaterEqual">大于等于</option>
+						<option value="lessEqual">小于等于</option>
+						<option value="like">包含</option>
+						<option value="notLike">不包含</option>
+					</select>
+				</li>
+				<li class='long'>
+					<input type='text' name='value' />
+				</li>
+				<li class='short'>
+					<select name='relation'>
+						<option value='true'>并且</option>
+						<option value='false'>或者</option>
+					</select>
+				</li>
+				<li>
+					<a href='javascript:;' class='add' style = "margin-left:10px;"></a>
+				</li>
+				<li class='clear'>
+					<a href='javascript:;' class='del' style = "margin-left:8px;"></a>
+				</li>
+			</ul>
+			<?php } ?>
+		</div>
+	</div>
+	<h2>数据权限设置</h2>
+	<div class='rights' id='rights'>
+		<?php if($isfile == '1'){?>
+			<label for='fileRead'><input type="checkbox" name="auth" id='fileRead'  checked='checked' /><span>文件浏览</span></label>
+			<label for='filePrint'><input type="checkbox" name="auth" id='filePrint'  checked='checked' /><span>文件打印</span></label>
+			<label for='fileDownload'><input type="checkbox" name="auth" id='fileDownload'  checked='checked' /><span>文件下载</span></label>
+			<label for='checkedAll'><input type="checkbox" id='checkedAll' checked='checked' /><span style="color: red">全选</span></label>
+			<label for='cancelChecked'><input type="checkbox" id='cancelChecked' /><span style="color: red">反选</span ></label>
+		<?php } elseif ($isfile == '2') {?>
+			<label for='itemRead'><input type="checkbox" name="auth" id='itemRead'  checked='checked' /><span>条目浏览</span></label>
+			<label for='itemEdit'><input type="checkbox" name="auth" id='itemEdit'  checked='checked' /><span>条目编辑</span></label>
+			<label for='itemDelete'><input type="checkbox" name="auth" id='itemDelete'  checked='checked' /><span>条目删除</span></label>
+			<label for='checkedAll'><input type="checkbox" id='checkedAll' checked='checked' /><span style="color: red">全选</span></label>
+			<label for='cancelChecked'><input type="checkbox" id='cancelChecked' /><span style="color: red">反选</span ></label>
+		<?php } else {?>
+			<label for='fileRead'><input type="checkbox" name="auth" id='fileRead' checked='checked' /><span>文件浏览</span></label>
+			<label for='filePrint'><input type="checkbox" name="auth" id='filePrint'  checked='checked' /><span>文件打印</span></label>
+			<label for='fileDownload'><input type="checkbox" name="auth" id='fileDownload' value="FD" checked='checked' /><span>文件下载</span></label>
+			<label for='itemRead'><input type="checkbox" name="auth" id='itemRead' checked='checked' /><span>条目浏览</span></label>
+			<label for='itemEdit'><input type="checkbox" name="auth" id='itemEdit'  checked='checked' /><span>条目编辑</span></label>
+			<label for='itemDelete'><input type="checkbox" name="auth" id='itemDelete'  checked='checked' /><span>条目删除</span></label>
+			<label for='checkedAll'><input type="checkbox" id='checkedAll' checked='checked' /><span style="color: red">全选</span></label>
+			<label for='cancelChecked'><input type="checkbox" id='cancelChecked' /><span style="color: red">反选</span ></label>
+		<?php }?>
+	</div>
+</div>

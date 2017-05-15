@@ -1,0 +1,53 @@
+<!-- wangbo 20140403-->
+ <div id="eslist"   style="width: 600;">
+        <div class="roleSearch"> <input id="roleKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="alert('ss');if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="roleKeyWord" value="请输入关键字" /><span onclick="getRoleQuery()"></span></div>
+		<br><table id = "listRoleGrid"></table>
+ </div>
+ <script type="text/javascript">
+$(document).ready(function(){
+	 $("#listRoleGrid").flexigrid({url :$.appClient.generateUrl({ESOrgAndUser: 'findRoleList',appId:<?php echo $data[0];?>,idStr:'<?php echo $data[1];?>'}, 'x'),
+			dataType : 'json',
+			colModel : [ 
+               {display : '',name : 'startNum',width : 30,align : 'center'}, 
+			   {display : '<input type="checkbox" id="listRoleList">',name : 'ids',width : 50,align : 'center'},
+               {display : '角色名称',name : 'roleName',width : 50,align : 'center'}, 
+               {display : '角色描述',name : 'roleRemark',width : 150,align : 'center'},
+               {display : '角色类型',name : 'isSystem',width : 80,align : 'center',process:formatRole}],
+				singleSelect:true,
+				usepager : true,
+				title : '角色列表',
+				useRp : true,
+				rp : 20,
+				nomsg : "没有数据",
+				showTableToggleBtn : false,
+				pagetext : '第',
+				outof : '页 /共',
+				width : 'auto',
+				height : 'auto',
+				pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条' 
+		});
+		function sizeChanged(){
+			if($.browser.msie && $.browser.version==='6.0'){
+				$("html").css({overflow:"hidden"});
+			}
+			var h = $(window).height() - $("#eslist").position().top;
+			var flex = $("#listRoleGrid").closest("div.flexigrid");
+			var bDiv = flex.find('.bDiv');
+		    var contentHeight = bDiv.height();
+		    var headflootHeight = flex.height() - contentHeight; 
+		    bDiv.height(200 - headflootHeight);
+			flex.height(200);
+			flex.width(560);
+			// 修改IE表格宽度兼容
+			if($.browser.msie && $.browser.version==='6.0'){
+				flex.css({width:"-=3px"});
+			}
+		};
+		sizeChanged();
+		//全选
+		$("#listRoleList").die().live('click',function(){
+			$("input[name='listRoleServerId']").attr('checked',$(this).is(':checked'));
+		});
+});
+</script>
+ 

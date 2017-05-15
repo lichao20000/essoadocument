@@ -1,0 +1,40 @@
+<script type="text/javascript">
+var menuitem = 'menu_home';
+var appAreaStatus = <?php echo $appCanvasStatus?>;
+
+</script>
+<div class="content940">
+<div class="indexL">
+  <?php if(isset($layout['left'])):?>
+  <?php foreach ($layout['left'] as $value):?>
+  <?php if(!is_array($value) || count($value) < 2)continue;?>
+  <div>
+  <?php echo $systemInstance->invokeDraw($value[0],$value[1]);?>
+  </div>
+  <?php endforeach;?>
+  <?php endif;?>
+</div>
+<div class="indexR">
+  <?php if(isset($layout['right'])):?>
+  <?php foreach ($layout['right'] as $value):?>
+  <?php if(!is_array($value) || count($value) < 2)continue;?>
+  <div>
+  <?php echo $systemInstance->invokeDraw($value[0],$value[1]);?>
+  </div>
+  <?php endforeach;?>
+  <?php endif;?>
+</div>
+</div>
+<div class="footer">
+  <div class="footerL"><img src="<?php echo $tplPath?>/images/logo_copyright.gif" width="107" height="60" alt="中国联通" /></div>
+  <div class="footerR">
+    <ul>
+      <li><a href="">关于联通</a></li>
+      <li><a href="">新手入门</a></li>
+      <li><a href="">使用指南</a></li>
+      <li><a href="">建议反馈</a></li>
+      <li><a href="">&copy; 2012中国联通 EIP平台</a></li>
+    </ul>
+    <p>Copyright © 2010 Hewlett Packard Development Company.L.P</p>
+  </div>
+</div>

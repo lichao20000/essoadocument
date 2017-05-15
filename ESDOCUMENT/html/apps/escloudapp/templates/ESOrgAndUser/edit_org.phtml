@@ -1,0 +1,15 @@
+<!-- wangbo 20140429-->
+<form id="editOrg" action=""	method="post">
+<div class="estransferorg">
+<ul>
+<li><span>机构名称<font color="red" size="3">*</font></span><input  type="text" name="orgname"  verify="unspecial/150/1/0"   value="<?php echo $data[1];?>">
+<input type="hidden" name="id"    value="<?php echo $data[0];?>">
+</li>
+<li><span>地址<font color="red" size="3">*</font></span><input type="text" name="address"  verify="unspecial/150/1/0"  value="<?php echo $data[2];?>"></li>
+<li><span>库房坐标</span><input type="text" name="position" verify="unspecial/10/0/0" readonly="readonly"	 value="<?php echo $data[3];?>"></li>
+<!-- gengqianfeng 20140922 添加顺序长度限制 -->
+<li><span>顺序<font color="red" size="3">*</font></span><input type="text" name="orgsort"  verify="number/50/1/0"  value="<?php echo $data[4];?>"></li>
+ 
+</ul>
+</div>
+</form>

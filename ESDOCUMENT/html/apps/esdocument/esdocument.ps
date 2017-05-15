@@ -1,0 +1,123 @@
+<?php
+/**
+ * 文档控制管理应用
+ * @author dengguoqi
+ */
+ define('ESDOCUMENT_PATH', str_replace('\\', '/', dirname(__FILE__)));
+class AppEsdocument extends AppPackageAbstract
+{
+	private $appmenuDefaultParm = array("expand"=>0, "autoHide"=>true,);
+	// 路径定义
+	public function urls()
+	{
+		return array(
+				'default' => array(
+						'callback' => 'default',
+						'access' => true,
+						'template' => 'es',
+				),
+				/* 离线测试开发 access 属性设置为 true，正式发布后修改为 false */
+				'x' => array(
+						'callback' => 'default',
+						'access' => true,
+						'template' => 'default',
+				),
+				/* 离线测试开发使用，正式发布后注释掉 */
+				'offline' => array(
+						'callback' => 'offline',
+						'access' => true,
+						'template' => 'es',
+				),
+				/* 调用手机主题  */
+				'm' => array (
+						'callback' => 'mobile',
+						'access' => true,
+						'template' => 'mobile',
+				),
+		);
+	}
+
+	/**
+	 * 默认访问入口
+	 * @param unknown_type $controller
+	 * @param unknown_type $action
+	 */
+	public function url_default($controller='ESDefault', $action='index')
+	{
+		return $this->process_url($controller, $action);
+	}
+
+	public function url_mobile($controller='ESDefault', $action='index')
+	{
+		return $this->process_url($controller, $action, 'mobile');
+	}
+
+	/**
+	 * 本地访问入口
+	 * @param unknown_type $controller
+	 * @param unknown_type $action
+	 */
+	public function url_offline($controller='ESDefault', $action='index')
+	{
+		return $this->process_url($controller, $action, 'offline');
+	}
+
+	private function process_url($controller='ESDefault', $action='index', $url='default')
+	{
+		// 注册自动加载方法
+		$appPath = dirname(__FILE__);
+		include_once $appPath.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'ESClassLoader.php';
+		ESClassLoader::registerAutoload();
+		// 		return ESActionFactory::createAction($this, $controller, $action);
+		return ESActionFactory::createAction($this, $controller, $action, $url)
+		-> execute();
+	}
+
+	public function views()
+	{
+		return array(
+				'appmenu' => array(
+						'title' => '应用菜单',
+						'callback' => 'appmenu',
+				),
+				'nav' => array(
+						'title' => '标签页导航',
+						'callback' => 'nav',
+				),
+		);
+	}
+
+	public function getAppInfo()
+	{
+		return $this->appInfo;
+	}
+
+	public function view_appmenu($parm)
+	{
+		$parm = array_merge(array(), $this->appmenuDefaultParm, $parm);
+		$parm["expand"] = $parm["expand"] + 1;
+		return $this->getView()->render('appmenu', $parm);
+	}
+
+	public function view_nav($parm)
+	{
+		return $this->getView()->render('nav', $parm);
+	}
+	// 安装事件
+	public function hook_install($catalogId, $productId)
+	{
+		parent::hook_install($catalogId, $productId);
+
+		$mysql = $this->getProxy('nativemysql');
+		$sql = <<<SQL
+			CREATE  TABLE `news` (
+			  `_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+			  `title` VARCHAR(128) NOT NULL ,
+			  `body` TEXT NOT NULL ,
+			  PRIMARY KEY (`_id`)
+			) DEFAULT CHARACTER SET = utf8;
+SQL;
+		$mysql->execute($sql);
+	}
+
+}

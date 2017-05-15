@@ -1,0 +1,31 @@
+<form id="registerForm" action="" method="post">
+	<div class="estransfer">
+		<ul>
+			<li class="merge">
+				<span>用户名<font color="red" size="3">*</font></span>
+				<input type="text" name="ID" value="<?php echo $data[0];?>" hidden="true" style = "display:none;">
+				<input type="text" name="USERID" readonly="readonly" value="<?php echo $data[1];?>" title="例如:XXX">
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>姓<font color="red" size="3">*</font></span>
+				<input type="text" name="LASTNAME" verify="text/50/1/0" value="<?php echo $data[2];?>">
+			</li>
+			<li>
+				<span>名<font color="red" size="3">*</font></span>
+				<input type="text" name="FIRSTNAME" verify="text/50/1/0" value="<?php echo $data[3];?>">
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>是否启用<font color="red" size="3">*</font></span>
+				<select id="USERSTATUS" name="USERSTATUS" ><option value='启用' <?php echo ($data[5]=='启用'?'selected':'');?>>启用</option><option value='禁用' <?php echo ($data[5]=='禁用'?'selected':'');?>>禁用</option></select>
+			</li>
+			<li>
+				<span>手机</span>
+				<input type="text" name="MOBTEL" value="<?php echo $data[4];?>" verify="mobel/11/0/0">
+			</li>
+		</ul>
+	</div>
+</form>

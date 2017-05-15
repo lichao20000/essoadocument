@@ -1,0 +1,212 @@
+<div class="topNav" id="page-nav">
+  <div class="topNavL"><img src="<?php echo $tplPath?>/images/icons/search_icon1.gif" width="30" height="32" alt="搜索"/>搜索</div>
+  <div class="topNavC"><span class="color999" style=" line-height:23px;">找到相关结果 <?php echo isset($response) ? count($response): 0;?> 个</span> </div>
+</div>
+<div class="content" id="page-body">
+  <div class="left page-sidebar">
+    <ul>
+      <li class="<?php if($op =='all')echo 'bold leftOn';?>">
+<?php if ($op=='all'): ?>所有结果
+<?php else: ?>
+        <a href="<?php echo url('search/app?keywords=' . urlencode($keywords).'&op=all')?>">所有结果</a>
+<?php endif;?>
+      </li>
+      <li class="<?php if($op=='subscribe')echo 'leftOn bold';?>">
+<?php if ($op=='subscribe'): ?>已开通
+<?php else: ?>
+        <a href="<?php echo url('search/app?keywords=' . urlencode($keywords).'&op=subscribe')?>">已开通</a>
+<?php endif ?>
+      </li>
+      <li class="<?php if($op=='unsubscribe')echo 'leftOn bold';?>">
+<?php if ($op=='unsubscribe'): ?>未开通
+<?php else: ?>
+      <a href="<?php echo url('search/app?keywords=' . urlencode($keywords).'&op=unsubscribe')?>">未开通</a>
+<?php endif;?>
+      </li>
+    </ul>
+  </div>
+  <div class="contentCenter page-content" style="padding:10px 0 0 10px">
+	<?php if(isset($response)){?>
+	    <?php foreach($response as $appid => $v){?>
+	    <div class="searchList">
+	      <div class="searchIcon">
+	        <div class="searchIcon1">
+	        <?php if(empty($v['url'])){?>
+	        <img src="<?php echo $v['icon']?>" width="32" height="32" alt="name" />
+	        <?php }else{?>
+	        <a href="<?php echo $v['url']?>">
+	        <img src="<?php echo $v['icon']?>" width="32" height="32" alt="name" />
+	        </a>
+	        <?php }?>
+	        </div>
+	      </div>
+	      <h1>
+	      <?php if(empty($v['url'])){?>
+	      <?php echo $v['productName']?>
+	      <?php }else{?>
+	      <a href="<?php echo $v['url']?>" style="text-decoration:none">
+	      <?php echo $v['productName']?>
+	      <?php }?>
+	      </a>
+	      <?php if (isset($userapps[$appid]) && $v['is_singleton']){ ?>
+      <div   id="sub_count_<?php echo $appid?>" rel="1"></div>
+      <?php }else{?>
+      <div   id="sub_count_<?php echo $appid?>" rel="<?php echo isset($subscribed_apps[$appid]) ? count($subscribed_apps[$appid]) : 0;?>"></div>
+      <?php }?>
+<?php
+if (!$v['is_public'] && substr($appid,0,5)!='link-' ):
+  if ((isset($userapps[$appid]) && $v['is_singleton']) || $v['status'] != -1):
+    if ($v['status'] && isset($userapps[$appid])):
+      $instanceId = key($userapps[$appid]['instance_id']);
+?>
+          <a style="text-decoration:none;" id="action_<?php echo $appid?>"
+          href="javascript:unsubscribe('<?php echo $appid ?>', '<?php echo $instanceId; ?>','<?php echo $this->plain($v['productName']) ?>',<?php echo $v['id']?>)"
+          class="gray_but floatRight" >取消开通</a>
+<?php else: ?>
+      <a class="color000 floatRight  font12" style="font-weight:100;">审核中</a>
+<?php
+    endif;
+  else:
+?>
+        <a style="text-decoration:none;" id="action_<?php echo $appid?>" href="javascript:subscribe('<?php echo $appid?>', <?php echo $v['id']?>, '<?php echo $this->plain($v['productName']) ?>')" class="btn_blue floatRight" >申请开通</a>
+<?php
+  endif;
+endif;
+?>
+	      </h1>
+	      <p><?php echo $v['description']?></p>
+	    </div>
+	    <?php }?>
+	<?php }?>
+</div>
+<div id="dialog-confirm" title="提示信息" style="vertical-align:middle;">
+</div>
+
+<script>
+$('#seachKey').val('<?php echo $keywords?>');
+$('#searchArea').attr('value','app').html('应用');
+
+function subscribe(app, pid, title){
+  
+  var c = parseInt($('#sub_count_' + app).attr('rel'));
+  if(isNaN(c)){
+    alert('应用开通次数出错');
+    return;
+  }
+  if($('#info-' + app).length === 0){
+    if(c > 0){
+      alert('不能再开通应用');
+      return;
+    }
+  }
+  if (typeof title == 'undefined') {
+    title = app;
+  }
+  if(app == "sns"){
+    alert("暂不开放论坛应用");
+    return;
+  }
+
+
+
+ $("#dialog-confirm").dialog({
+      open: function(){
+        $(this).removeClass("bgonebtn");
+    if($.browser.mozilla){
+      //alert(self.dialogDom.parent().html());
+       $("#dialog-confirm").parent().css('position', 'absolute');
+       $("#dialog-confirm").parent().css('top', '200px');
+       $("#dialog-confirm").parent().css('left', '400px');
+    }
+      },
+      modal: true,
+      draggable: false,
+      resizable: false,
+      buttons: {
+        " 确 认 ": function() {
+          $.ajax({
+            dataType: "json",
+            url:'/app/subscribe/'+ app + '/' + pid,
+            success:function(data){
+              if(data.status == 'ok'){
+                if(data.is_check == '0'){  //不需要审核
+                  if($('#info-' + app).length === 0){
+                    $('#action_' + app).click(function(e) {
+                      e.preventDefault();
+                    })
+                    .removeClass('btn_blue').html('已审核').css('font-weight',100).addClass('color000 floatRight font12');
+                  }
+                  c = c+1;
+                  $('#sub_count_' + app).attr('rel',c);
+                } else {  //需要审核
+                  if($('#info-' + app).length === 0){
+                    $('#action_' + app).click(function(e) {
+                      e.preventDefault();
+                    })
+                    .removeClass('btn_blue').html('审核中').css('font-weight',100).addClass('color000 floatRight font12');
+                  }
+                  c = c+1;
+                  $('#sub_count_' + app).attr('rel',c);
+                }
+              } else {
+                alert('订购出错！');
+              }
+            }
+          });
+          $(this).dialog('close');
+        },
+        " 取 消 ": function() {
+          $(this).dialog('close');
+        }
+      }
+    });
+    $("#dialog-confirm").html("<span style='font-size: 14px;' class='dialog_s'>确定申请开通\"" + title + "\"吗?</span>");
+}
+
+
+function unsubscribe(app, instanceid, title,id){
+  var c = parseInt($('#sub_count_' + app).attr('rel'));
+  if(isNaN(c) || c <= 0){
+    alert('应用开通次数出错');
+    return;
+  }
+  if (typeof title == 'undefined') {
+    title = app;
+  }
+
+ $("#dialog-confirm").dialog({
+      open: function(){
+        $(this).removeClass("bgonebtn");
+      },
+      modal: true,
+      draggable: false,
+      resizable: false,
+      buttons: {
+        " 确 认 ": function() {
+          $.ajax({
+            url:'/app/unsubscribe/'+ app + '/' + instanceid,
+            success:function(resp){
+              alert('"' + title + '"取消开通成功');
+              $('#li-'+id).html('&nbsp;');
+                c = c-1;
+                $('#sub_count_' + app).attr('rel',c);
+                if (c === 0) {
+                  $('#action_' + app).removeClass('gray_but').addClass('btn_blue').html('申请开通').attr('href',"javascript:subscribe('"+app+"',"+id+",'"+title+"')");
+                }
+            }
+          });
+          $(this).dialog('close');
+        },
+        " 取 消 ": function() {
+          $(this).dialog('close');
+        }
+      }
+    });
+
+      $("#dialog-confirm").parent().css('position', 'absolute');
+      $("#dialog-confirm").parent().css('top', '200px');
+      $("#dialog-confirm").parent().css('left', '400px');
+
+    $("#dialog-confirm").html("<span style='font-size: 14px;' class='dialog_s'>确定要取消开通\"" + title + "\"吗?</span>");
+}
+</script>

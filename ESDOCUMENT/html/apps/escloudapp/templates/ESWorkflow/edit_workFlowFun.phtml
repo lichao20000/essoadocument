@@ -1,0 +1,62 @@
+<!-- wangbo 20140318-->
+<form id="editWorkFlowFun" action=""	method="post">
+<div class="estransfer">
+<ul>
+<li><span>方法名称<font color="red" size="3">*</font></span><input  type="text" name="functionName"  value= "<?php echo $data[1];?>"   ><input type="hidden" name="id"    value= "<?php echo $data[0];?>"> </li>
+<li><span>rest服务全类名<font color="red" size="3">*</font></span><input type="text" name="restFullClassName"  value= "<?php echo $data[2];?>"></li>
+<li><span>执行方法<font color="red" size="3">*</font></span><input type="text" name="exeFunction"   value= "<?php echo $data[3];?>"></li>
+<li><span>关联业务</span>
+	<select name="relationBusiness" id="relationBusiness">
+				<option value="empty">不关联业务</option>
+				<option value="using">档案利用</option>
+				<option value="moving">档案移交</option>
+				<option value="destroy">档案销毁</option>
+				<option value="helpSearch">档案协查</option>
+	</select></li>
+<li ><span>描述信息</span><textarea name="description" style="width:158px;height:50px;float:left"><?php echo $data[5];?> </textarea></li>
+</ul>
+</div>
+</form> 
+<script type="text/javascript">
+
+$('#relationBusiness').val('<?php echo $data[4];?>');
+
+var restFullClassNameZZ  =  new RegExp("[`~!@#$^&*()=|{}':;',\\[\\]<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+var exeFunctionZZ =  /^[A-Za-z]+$/;
+ $("#editWorkFlowFun input[name='functionName']").bind('blur',function(){
+ 	var functionName = $(this).val();
+ 	functionName=functionName.replace(/[ ]/g,"");
+ 	if(functionName==''){
+ 		$(this).addClass("warnning");
+ 		return false;
+ 	}
+ 	$(this).removeClass("warnning");
+ });
+ $("#editWorkFlowFun input[name='restFullClassName']").bind('blur',function(){
+	 	var restFullClassName = $(this).val();
+	 	restFullClassName=restFullClassName.replace(/[ ]/g,"");
+	 	if(restFullClassName==''){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+ 	   if(restFullClassNameZZ.test(restFullClassName )==true){
+ 		   $(this).addClass("warnning");
+    		return false;
+    	}
+	 	$(this).removeClass("warnning");
+	 });
+ $("#editWorkFlowFun input[name='exeFunction']").bind('blur',function(){
+	 	var exeFunction = $(this).val();
+	 	exeFunction=exeFunction.replace(/[ ]/g,"");
+	 	if(exeFunction==''){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+	 	  if(exeFunctionZZ.test(exeFunction )==false){
+	 		   $(this).addClass("warnning");
+	    		return false;
+	    	}
+	 	$(this).removeClass("warnning");
+	 });
+ 
+ </script>

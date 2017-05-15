@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESArchiveLending/css/index.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESCollaborative/css/index.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'借阅管理'));?>
+
+<script  type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"借阅管理", content:"#ESSystemIndex"});
+	$("#estabs").esTabs("select", "借阅管理");
+});
+</script>
+<!-- 右侧 -->
+<div id="ESSystemIndex" >
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<div id="leftDiv" class ="leftDiv1">
+	<div class='formForStatus'>
+		<label for="statusForTree0" style="display: inline;margin-left:35px;">
+		<input type="radio" name="statusForTree" id="statusForTree0" value='0' checked>未结束
+		</label>
+		<label for="statusForTree1"  style="display: inline;">
+		<input type="radio" name="statusForTree" id="statusForTree1" value='1'>结束
+		</label>
+		<label for="statusForTreeall"  style="display: inline;">
+		<input type="radio" name="statusForTree" id="statusForTreeall" value='all'>全部
+		</label>
+	</div>
+	<div class = "spliteLine"></div>
+	<ul id="usingTreeDemo" class="ztree usingTreeDemo"></ul>
+</div>
+<div id="rightdiv" class ="rightDiv"><table id="flexme1">
+</table>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESArchiveLending/js/ESArchiveLending.js"></script>
+<script type="text/javascript">
+
+</script>
+</div>
+</div>
+
+
+
+
+

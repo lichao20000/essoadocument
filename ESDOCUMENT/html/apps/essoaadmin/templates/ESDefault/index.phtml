@@ -1,0 +1,73 @@
+<link href='<?php echo $tplPath?>/ESDefault/css/index.css' rel="stylesheet"/>
+<link href='<?php echo $tplPath?>/ESDefault/css/main.css' rel="stylesheet"/>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>1));?>
+
+<div style=" padding-top: 55px; align: center; margin: 0 auto; overflow-x: auto; overflow-y: hidden;"	id="mainContentContainer">
+	<div id="centerFunc" class="centerFunc">
+		<!-- @author liuhezeng 左侧功能区  -->
+		<div class="lineModelLeft1">
+			<div id="dateSection" class="dateSection">
+				<div id="hourSection" class="hourSection"></div>
+				<div class="clearFloat"></div>
+				<div id="daySection" class="daySection"></div>
+				<div class="clearFloat"></div>
+				<div id="monthSection" class="monthSection"></div>
+				<div class="clearFloat"></div>
+				<div id="weekSection" class="weekSection">星期一</div>
+				<img src="<?php echo $tplPath;?>/ESDefault/img/dateLogo.png" id="dataLogo" class="dataLogo" />
+			</div>
+		</div>
+		<div class="lineModelRight1" controller="ESAppSetting" action="index">
+			<div class="showTextAreaUpLeft2">
+				<a class="arcStandardImg" id="arcStandardImga"><i class="icon-cog icon-4x" id="arcStandardImgId"></i> </a>
+				<div id="titleLineRight1" class="titleImgArcs">系统应用管理</div>
+			</div>
+		</div>
+
+		<div class="lineModelLeft3" controller="ESConsoleServer" action="index">
+			<div class="showTextAreaUpLeft2">
+				<a class="arcStandardImg" id="arcStandardImga"><i class="icon-exchange icon-4x" id="arcStandardImgId"></i> </a>
+				<div id="titleLineRight1" class="titleImgArcs">REST应用管理</div>
+			</div>
+		</div>
+
+		<!-- 换行符 -->
+		<div class="clearFloat"></div>
+		<div class="lineModelLeft2" controller="ESUserRegistration" action="index">
+			<div class="showTextAreaUpLeft2">
+				<a class="arcStandardImg" id="arcStandardImga"><i class="icon-user icon-4x" id="arcStandardImgId"></i> </a>
+				<div id="titleLineRight1" class="titleImgArcs">用户注册</div>
+			</div>
+		</div>
+
+		<div class="lineModelRight2" controller="ESOrgRegister" action="index">
+			<div class="showTextAreaUpLeft2">
+				<a class="arcStandardImg" id="arcStandardImga"><i class="icon-hdd icon-4x" id="arcStandardImgId"></i></a>
+				<div id="titleLineRight1" class="titleImgArcs">SAAS注册</div>
+			</div>
+		</div>
+
+		<!-- 换行符 -->
+		<div class="lineModelRight3" controller="ESFileEquipment" action="index">
+			<div class="showTextAreaUpLeft2">
+				<a class="arcStandardImg" id="arcStandardImga"><i class="icon-folder-open icon-4x" id="arcStandardImgId"></i> </a>
+				<div id="titleLineRight1" class="titleImgArcs">文件存储设备管理</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	/**  对于不是admin用户的特殊处理，隐藏SAAS用户注册和控制台服务 **/
+	var isAdmin  = "<?php global $user; echo $user->id;?>";
+	if(null != isAdmin && isAdmin != "admin"){
+		$(".lineModelRight3,.lineModelRight2").css("display","none");
+	}
+</script>
+
+<!-- BEGIN JAVASCRIPTS -->
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script	type="text/javascript" src='<?php echo $tplPath?>/ESDefault/js/index.js'></script>
+<script	type="text/javascript" src='<?php echo $tplPath?>/ESDefault/js/pagebtn.js'></script>
+<!-- END JAVASCRIPTS -->

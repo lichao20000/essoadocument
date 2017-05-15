@@ -1,0 +1,19 @@
+<?php
+$data = json_decode($layout['data'],true);
+$dataL = array_shift($data);
+$dataR = array_shift($data);
+?>
+<script type="text/javascript">
+var menuitem = 'my_space';
+</script>
+<div class="content940">
+  <div class="indexL">
+  <div id="panel" style="height:18px;"></div>
+
+  <?php foreach($dataL as $k=>$v):?>
+  <?php echo $system->invokeDraw($v[1], $v[2]);?>
+  <?php endforeach;?>
+  </div>
+  <div class="indexR">
+  </div>
+</div>

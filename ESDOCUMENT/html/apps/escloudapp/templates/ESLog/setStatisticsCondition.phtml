@@ -1,0 +1,85 @@
+<!-- gengqianfeng 20140916 修改统计页面样式 
+<style>
+.rule-public1{ width:700px; height:auto; float:left; overflow:hidden;}
+.rule-public1 .condition-free1{ width:680px; height:214px; float:left;padding:15px;}
+.rule-public1 .condition{ width:680px; height:180px; float:left; overflow-y:auto; overflow:-x:hidden;}
+
+.rule-public1 .condition-free1 ul{ width:620px; float:left; margin-top:0px; margin-left: 0px; margin-right: 0px;}
+.rule-public1 .condition-free1 ul li{ height:24px; line-height:24px; float:left; margin-right:15px; overflow:hidden; width:45px;}
+.rule-public1 .condition-free1 ul li.long{ width:160px;}
+.rule-public1 .condition-free1 ul li.long select{ width:160px; height:20px;}
+.rule-public1 .condition-free1 ul li.long select, .rule-public .condition ul li.long input, .rule-public .condition ul li.short select{ float:left; margin-top:2px; border:1px solid #ccc; font-size:13px; font-family:arial;}
+.rule-public1 .condition-free1 ul li.long input{ width:155px; height:18px; overflow:hidden;padding:0; border:1px solid #ccc;}
+.rule-public1 .condition-free1 ul li.long input:hover{border:1px solid #5599ff;}
+.rule-public1 .condition-free1 ul li.short{ width:75px;}
+.rule-public1 .condition-free1 ul li.short select{ width:75px; height:20px;}
+.rule-public1 .condition-free1 ul li.middle{ width:130px;}
+.rule-public1 .condition-free1 ul li.middle select{ width:130px;}
+.rule-public1 .condition-free1 ul li.clear{ margin:0;}
+
+.rule-public1 .condition ul li a{ width:20px; height:20px; float:left; margin-top:2px;}
+.rule-public1 .condition ul li a.add{ background:url(<?php echo $tplPath;?>/public/img/add.png) no-repeat center center;}
+.rule-public1 .condition ul li a.del{ background:url(<?php echo $tplPath;?>/public/img/del.gif) no-repeat center center;}
+.rule-public1 .condition ul li a.add:hover{ background:#ccc url(<?php echo $tplPath;?>/public/img/add.png) no-repeat center center;}
+.rule-public1 .condition ul li a.del:hover{ background:#ccc url(<?php echo $tplPath;?>/public/img/del.gif) no-repeat center center;}
+
+.user, .org{ width:16px; height:16px; position:absolute; top:4px; right:4px; background:url(<?php echo $tplPath;?>/public/img/edit.jpg) no-repeat center center; cursor:pointer;}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	input,textarea{ margin-left:0 !important;}
+}
+
+</style>
+-->
+<!-- xiewenda 20140924 注释点上边的的样式 -->
+<!-- 统一样式都引用filter.css中的样式 容易控制 -->
+<div class='rule-public'>
+	<div class='condition-free'>
+		<ul>
+			<li class='long middle'>字段名</li>
+			<li class='short'>比较符</li>
+			<li class='long'>字段值</li>
+			<li class='short'>关系符</li>
+			<li style="text-align: center;">添加行</li>
+			<li style="text-align: center;">删除行</li>
+		</ul>
+		<div class='condition' id='condition'>
+			<?php
+				for($i=0; $i<5; $i++){
+			?>
+			<ul>
+				<li class='long middle'>
+					<select name='key'><?php echo $options; ?></select>
+				</li>
+				<li class='short'>
+					<select name='comparison'>
+						<option value="=">等于</option>
+						<option value=">">大于</option>
+						<option value="<">小于</option>
+						<option value="!=">不等于</option>
+						<option value=">=">大于等于</option>
+						<option value="<=">小于等于</option>
+						<option value="%">包含</option>
+						<option value="!%">不包含</option>
+					</select>
+				</li>
+				<li class='long'>
+					<input type='text' name='value' />
+				</li>
+				<li class='short'>
+					<select name='relation'>
+						<option value='and'>并且</option>
+						<option value='or'>或者</option>
+					</select>
+				</li>
+				<li style="margin-left: 13px;">
+					<a href='javascript:;' class='add'></a>
+				</li>
+				<li class='clear' style="margin-left: 2px;">
+					<a href='javascript:;' class='del'></a>
+				</li>
+			</ul>
+			<?php } ?>
+		</div>
+	</div>
+</div>

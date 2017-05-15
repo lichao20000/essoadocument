@@ -1,0 +1,68 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath?>/ESArchiveSeache/css/index.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/viewfile.css" />
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/formStartHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/addAttachData.js"></script>
+
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<div class='paper' id='ESPaper'>
+	<div class="leftnav"><ul>
+		<li id="navall"><a href="javascript:void(0)">所有结果</a></li>
+		<!-- xiaoxiong 20140730 修改为动态获取 -->
+		<?php 
+			foreach ($archiveTypes as $list){
+				echo '<li id="nav'.$list->SKUNumber.'"><a href="javascript:void(0)">'.$list->className.'</a></li>';
+			}
+		?>
+	</ul></div>
+	<div class='so-paper'>
+		<div class='so-so' id='soso'>
+			<div class='base-so'>
+				<div class='so'>
+					<input type='text' id='searchWord' value='' placeholder='多个关键字用空格分开'/>
+					<a id="NY_searchall" href='javascript:;' class='searchall'>搜索</a>
+				</div>
+				<div class='adv-so-bn'>
+					<a href='javascript:_query.intricate();'>高级检索</a>
+				</div>
+			</div>
+		</div>
+		<div class='so-result' id='so_result'></div>
+	</div>
+	<div class='so-hd'>
+		<div class='so-car' id='car'>
+			<i>提交申请</i>
+			<span class='so-st'><?php echo count($SESScommon);?></span>
+			<div class='product-list' id='product_list'>
+				<?php
+				if(count($SESScommon)==0){
+					echo "<h2 class='pl-null'>没有申请数据！</h2>";//liqiubo 20141011修改显示的文字，修复bug 1270
+				}else{
+					$shop="<h2 class='pl-hd'><b>申请数据清单</b></h2>";//liqiubo 20140929 修改显示的文字，修复bug 1270
+					$shop.="<ul class='pl-ul'>";
+					foreach($SESScommon as $v){
+						$shop.="<li id='".$v['id']."' class='thisli_".$v['delId']."'>";
+						$shop.="<span></span>";
+						$shop.="<div class='titlestyle'>".$v['name']."</div>";
+						$shop.="<div class='deletestyle'><a href='javascript:delFormArchivesCar(\"".$v['id']."\",\"".$v['delId']."\");'>删除</a></div>";
+						$shop.="</li>";
+					}
+					$shop.="</ul>";
+					$shop.="<div class='pl-hr'><a onclick='javascript:clearAllApply();'>清空</a></div>";
+					$shop.="<div class='pl-sb'>";
+					$shop.="<a href='javascript:submitArchivesCar();'>提交审批</a>";
+					$shop.="</div>";
+					echo $shop;
+				}
+				?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type='text/javascript' src='<?php echo $tplPath;?>/ESArchiveSeache/js/index.js'></script>

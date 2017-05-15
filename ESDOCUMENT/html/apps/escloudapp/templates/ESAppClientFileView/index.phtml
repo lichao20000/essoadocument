@@ -1,0 +1,47 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexpaper/css/flexpaper.css" />
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexpaper/js/flexpaper.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexpaper/js/flexpaper_handlers.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#header').hide();
+	var $documentViewer = $('#documentViewer');
+	viewFile("<?php echo $fileId;?>"); // 在浏览原文时用户勾选数据时选择用户勾选的第一条//liqiubo 20140618 修复无法查看问题
+
+    function createFlexpaper(fileId){
+    	$documentViewer.FlexPaperViewer(
+    			{ config : {
+        			fileId: fileId,
+        			baseUrl: escape($.appClient.generateUrl({ESEFile:'getViewUrl',path:"path"}, 'x')),
+    				jsDirectory : '<?php echo $tplPath;?>/public/flexpaper/js/'
+    			}
+    		}
+    	);
+	}
+    function viewFile(fileId){
+        if($documentViewer.find("object").length){
+        	getDocViewer("documentViewer").loadFile(fileId);
+		} else {
+			createFlexpaper(fileId);
+        }
+	}
+
+});
+</script>
+
+<link rel="stylesheet" href="http://jquerymobile.com/demos/1.1.0/docs/_assets/css/jqm-docs.css"/>
+<div data-role="page" id="pageone" data-theme="d">
+
+	<div data-role="content">
+	
+		<div id="documentViewer" class="flexpaper_viewer"></div>
+
+	</div>
+
+</div>
+
+

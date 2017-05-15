@@ -1,0 +1,105 @@
+<?php
+class ProxyEscloudappEscloud_searchws extends AgentProxyAbstract
+{
+	/**
+	 * @author zhanglei 20130902  检索，包含高级检索
+	 * @param start 起始页码，第一页为0
+	 * @param limit 每页显示数据量
+	 * @param param 检索条件
+	 * userId 必传
+	 * searchWord 检索关键词，在普通搜索时必传
+	 * archiveClass 档案类型
+	 * searchFields元数据{"key":"value"}
+	 * archiveYear归档年度，开始年度与结束年度之间以,分隔
+	 * retentionPeriod保管期限，多个中间以,分隔
+	 * archiveOrgs归档省份ID（key）、地市ID（value），多个地市中间以,分隔
+	 * 
+	 * @return
+	 */
+	const SERVICE_NAME="escloud_searchws";
+	public function search($start, $limit, $param)
+	{
+		$urlParam = array('search', $start, $limit);
+		$url = implode('/', $urlParam);
+	  	return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+	}
+	
+	public function getArchiveTypes(){
+		$url = "getArchiveTypes";
+		return $this->post(self::SERVICE_NAME,$url,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * author 暂时不用
+	 * modify author fjx
+	 * 根据path获取题名和档号（可以是多个）
+	 * 返回 list
+	 **/
+	public function getList($path){
+		
+		return $this->post(self::SERVICE_NAME, 'getArchiveCodeAndTitle', $path, 'application/json;charset=UTF-8');
+		
+	}
+
+	/**
+	 * 获取省份
+	 * @author fjx 20130902
+	 * @return
+	 */
+	public function getProvinceCompanyList($mainsite)
+	{
+		$urlParam = array('getProvinceCompanyList', $mainsite);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);		
+		//return $this->get(self::SERVICE_NAME, 'getProvinceCompanyList');
+	}
+	
+	/**
+	 * 获取地市
+	 * @author fjx 20130902
+	 * @param provinceOrgId
+	 * @return
+	 */
+	public function getCityCompanyList($orgId)
+	{
+		$urlParam = array('getCityCompanyList', $orgId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 获取部门
+	 * @author yzh
+	 * @date   20131101
+	 */
+	 public function getDeptList($orgId,$archiveClass){
+	 	$urlParam = array('getDeptList',$orgId,$archiveClass);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	 }
+	/**
+	 * 获取检索元数据
+	 * @author zhanglei 20130902
+	 * @param archiveClass
+	 * @return
+	 */
+	public function getArchiveClassFields($docClass)
+	{
+		$urlParam = array('getArchiveClassFields', $docClass);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * shimiao 20140807 
+	 */
+	public function showSubmitData($param){
+		return $this->post(self::SERVICE_NAME, 'showSubmitData', $param, 'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 获取保管期限元数据对应的值
+	 */
+	public function getRetentionPeriodValMetadata(){
+		$url = "getRetentionPeriodValMetadata";
+		return $this->post(self::SERVICE_NAME,$url,"application/json;charset=UTF-8");
+	}
+}

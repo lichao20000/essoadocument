@@ -1,0 +1,20 @@
+appid = np001
+apptoken = wwwwww
+name = 我的空间
+description = 我的空间/专区
+version = 1.0
+display = hidden
+
+icon = app_5.png
+
+is_single = 1
+is_child = 0
+is_singleton = 0
+
+is_console = 1
+is_app = 1
+is_public = 1
+
+children = *
+
+block[] = quicklinks

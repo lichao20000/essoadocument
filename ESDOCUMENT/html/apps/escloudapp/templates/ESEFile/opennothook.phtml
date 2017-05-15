@@ -1,0 +1,219 @@
+<style type="text/css">
+.myfilenothook{width:96%;margin-left:2%;text-align:center;}
+
+</style>
+<div class="filenotcontent">
+<table id="nothookfile"></table>
+</div>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+
+<script type="text/javascript">
+$(function(){
+	var $size = {
+			init : function (){
+				var width = $(document).width()*0.96;
+				var height = $(document).height()-110;	// 可见总高度 - 176为平台头部高度
+				var leftWidth = 230;
+				if(navigator.userAgent.indexOf("MSIE 6.0")>0){
+					
+					width = width-6;
+					
+				}else if(navigator.userAgent.indexOf("MSIE 8.0")>0){
+					width = width-4;
+					height = height-4;
+				}
+				
+				var rightWidth = width ;
+				var tblHeight = height -147;
+				
+				var size = {
+						leftWidth: leftWidth,
+						rightWidth : rightWidth,
+						height: height,
+						tblWidth : rightWidth,
+						tblHeight : tblHeight
+					};
+				return size;
+			}
+				
+		};
+	$("#nothookfile").flexigrid({
+		dataType: 'json',
+		colModel : [
+		     //xiewenda 20141009 加入原文路径列
+			{display: '原文路径', name : 'c2', width : 320, sortable : true, align: 'center'},		    		
+			{display: '文件名', name : 'c3', width : 320, sortable : true, align: 'center'},
+			{display: 'MD5值', name : 'c4', width : 300, sortable : true, align: 'center'},
+			{display: '大小', name : 'c5', width : 150, sortable : true, align: 'center'},
+			{display: '类型', name : 'c6', width : 180, sortable : true, align: 'center'}
+			],
+		buttons : [{name: '批量上传电子文件', bclass: 'add',onpress:uploadManyFiles}],
+		usepager: true,
+		title: '电子文件列表',
+		useRp: true,
+		rp: 20,
+		procmsg:"正在加载，请稍等",
+		nomsg:"没有数据",
+		resizable:false,
+		minColToggle:0,
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: $size.init().tblWidth,
+		height: $size.init().tblHeight,
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	var tableurl = $.appClient.generateUrl({ESEFile:'nothook_json'},'x');
+	$("#nothookfile").flexOptions({newp:1,url:tableurl,query:floderid}).flexReload();
+	/**
+	 * 改变浏览器尺寸
+	 */ 
+	function sizeChanged(){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var h = $(window).height() - $(".filenotcontent").position().top;
+		var flex = $("#nothookfile").closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    
+	    bDiv.height(h - headflootHeight);
+		flex.height(h);
+
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	
+	//sizeChanged();
+});
+
+//上传文件
+function uploadManyFiles(){
+	$.dialog({
+		title:'上传文件',
+		width: '450px',
+	   	height: '250px',
+	    fixed:true,
+	    resize: false,
+		content:"<div id='content'><div class='fieldset flash' id='fsUploadProgressForOpen'></div></div>",
+		cancelVal: '关闭',
+		cancel: true,
+		padding: '10px',
+		button: [
+    		{id:'btnAdd', name: '添加文件'},
+            {id:'btnCancel', name: '删除所有', disabled: true},
+            {id:'btnStart', name: '开始上传', disabled: true, callback: function(){return false;}}
+		],
+		init:uploadForOpennothook
+	});	 
+};
+// 创建上传文件组件
+function uploadForOpennothook(){
+	var files = [];
+	var upload = new SWFUpload({
+		//提交路径
+		upload_url: "",
+		file_post_name: "file.txt",		
+		file_size_limit : "1048576",	// 100MB  longjunhao 20140905 修改为1024MB=1GB
+		file_types : "*.*",
+		file_types_description : "所有文件",
+		file_upload_limit : "0",
+		file_queue_limit : "0",
+
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnAdd",
+		button_width: 72,
+		button_height: 28,
+		
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		
+		custom_settings : {
+			progressTarget : "fsUploadProgressForOpen",
+			cancelButtonId : "btnCancel",
+			startButtonId : "btnStart",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data, remainder){
+				var f = $.parseJSON(data);
+				var extName = file.name.substr(file.name.lastIndexOf(".")+1);
+				extendFileForNotHook(f.fileId, f.contentMD5, f.fileSize, f.createTime, file.name, extName, remainder);
+			}
+		},
+		
+		// Debug 设置
+		debug: false
+	});
+	$("#btnCancel").click(function(){cancelQueue(upload);});
+	$("#btnStart").click(function(){
+		$.post($.appClient.generateUrl({ESIdentify:'getUploadURL'},'x'),  function(data){
+			upload.setUploadURL(data);
+			startQueue(upload);
+		});
+	});
+	function extendFileForNotHook(fileid, md5, filesize, createtime, filename, extName, remainder){
+		files.push({ORIGINAL_ID:fileid, ESMD5:md5, ESTITLE:filename, ESTYPE:extName, ESSIZE:filesize, EsCreateTime:createtime});
+		if(remainder ===0){
+			$.post($.appClient.generateUrl({ESIdentify:'addNoLinkFile'},'x'), {floderid:floderid, files:files}, function(data){
+				files=[];
+				$("#nothookfile").flexReload();
+				refreshFolders()
+			});
+		}
+	};
+}
+/**wanghongchen 20140716 上传完成刷新文件夹下的数量**/
+function refreshFolders(){
+	var url = $.appClient.generateUrl({ESEFile:'access'},'x');
+	var trid = $("input[name='parentid1']").val();;
+	$.ajax({
+		url:url,
+		type:"POST",
+		cache:false,
+		dataType:"json",
+		data:{
+			param:trid
+			},
+		error:function(){
+			alert("系统错误");
+		},
+		success:function(datas){
+			var length = datas.length;
+			$(".mycontent").html("");
+			for(var i=0;i<length;i++){
+				var html='';
+				html='<div class="list" id="'+datas[i].id+'">';
+				html+='<div class="photo"><a href="javascript:void(0)"><img src="<?php echo $tplPath?>/ESEFile/img/files.png" /></a></div>';
+				html+='<div class="re_title"><span>'+datas[i].estitle+'</span></div>';
+				html+='<div class="re_time"><span>电子文件共</span><a href="javascript:void(0);" onclick="openfile('+datas[i].id+')"><span>'+(Number(datas[i].hookingNum)+Number(datas[i].notHookNum))+'</span></a>个</div>';					
+				html+='<div class="re_intro"><span>未挂接</span><a href="javascript:void(0);" onclick="nothook('+datas[i].id+')">'+datas[i].notHookNum+'</a>个</div>';
+				html+='<input type="hidden" name="havesub" value="'+datas[i].isParent+'" />';
+				html+='<input type="hidden" name="parentid" value="'+datas[i].parentid+'" />';
+				html+='</div>';
+				$(".mycontent").append(html);
+			}
+			$("#folderNav").html(folderPath);
+		}
+	});
+}
+ 
+</script>

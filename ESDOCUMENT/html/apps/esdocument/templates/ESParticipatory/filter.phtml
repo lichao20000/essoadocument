@@ -1,0 +1,78 @@
+<div id='filterContents' style='padding: 20px;'
+	tplPath="<?php echo $tplPath;?>" filterType="<?php echo $flag; ?>">
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span> <span
+			class='w90 w14090 hei30'>比较符</span> <span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span> <span
+			class='w90 w14090 hei30'
+			style="text-align: center; margin-right: 0px; width: 60px;">添加行</span></span>
+		<span class='w90 w14090 hei30'
+			style="text-align: center; margin-right: 0px; width: 60px;">删除行</span></span>
+	</p>
+	<div id='contents'>
+		<?php for($fly=1;$fly<6;$fly++){ ?>
+		<p class='contbox creatediv' style="overflow: hidden;">
+			<?php if($flag==1){?>
+			<select class='w140 w14090 hei20 filedname'>
+				<option value=''>请选择</option>
+				<option value='name'>名称</option>
+				<option value='code'>代码</option>
+				<option value='type'>类型</option>
+				<option value='user_id'>文控人员</option>
+			</select>
+			<?php }else{?> 
+			<select class='w140 w14090 hei20 filedname'>
+				<option value=''>请选择</option>
+				<option value='userid'>用户名</option>
+				<option value='name'>姓名</option>
+				<option value='emailAddress'>邮箱</option>
+				<option value='mobtel'>手机</option>
+				<option value='office'>职位</option>
+			</select>
+			<?php }?>
+			<select class='w90 w14090 hei20 comparison'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select> <input type='text' class='w140 w14090 hei20 filedvalue' />
+			<select class='w140 w14090 hei20 filedOffice' style="display: none;">
+				<option value="1">领导</option>
+				<option value="2">副领导</option>
+				<option value="3">普通员工</option>
+			</select> <select id='' class='w14090 w90 hei20 relationship'>
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select> <a class='newfilter'></a><a class='delfilter'></a>
+		</p>
+		<?php }?>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	if($("#filterContents").attr("filterType")==2){
+		$(".filedname").die().live("change",function(){
+			if($(this).val()=="office"){			
+				var value=$(this).closest("p").find(".filedvalue");	
+				var office=$(this).closest("p").find(".filedOffice");
+				value.hide();
+				office.show();
+				officeChange(office,value);
+			}else{
+				$(this).closest("p").find(".filedOffice").hide();
+				$(this).closest("p").find(".filedvalue").show();
+			}
+		});
+	}
+
+	function officeChange(office,value){
+		office.die().live("change",function(){
+			value.val($(this).val());
+		});
+	}
+});
+</script>

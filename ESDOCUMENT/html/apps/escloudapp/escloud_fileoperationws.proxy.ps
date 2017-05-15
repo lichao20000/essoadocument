@@ -1,0 +1,71 @@
+<?php
+class ProxyEscloudappEscloud_fileoperationws extends AgentProxyAbstract
+{
+	const SERVICE_NAME="escloud_fileoperationws";
+	/**
+	 * @author wangtao
+	 * 获取服务器IP
+	 * @return string
+	 */
+	public function getServiceIP()
+	{
+		$urlParam=array('getServiceIP');
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	
+	/*
+	 * Effect : remove file for add a new annex
+	 * Authoer : fangjixiang
+	 * Date : 20121112
+	 */
+	public function removefile($address)
+	{
+		$urlParam = array('removefile',$address);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	}
+	
+	/*
+	 * Effect : remove file for modify a annex
+	 * Authoer : fangjixiang
+	 * Date : 20121114
+	 */
+	public function deleteFile($module,$company,$clientIp,$addressMark,$param)
+	{
+		//{module}/{company}/{clientIp}/{addressMark}
+		$urlParam = array('deleteFile',$module,$company,$clientIp,$addressMark);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 下载一
+	 * @author ldm
+	 */
+	public function downloadFile($moudle,$company,$clientip,$path,$param){
+		$urlParam = array('downloadFile',$moudle,$company,$clientip,$path);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 下载二
+	 * @author ldm
+	 */
+	public function getFileUrl($moudle,$company,$clientip,$path,$param){
+		$urlParam = array('getFileUrl',$moudle,$company,$clientip,$path);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $param,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 下载原文
+	 * @author longjunhao 20140523
+	 */
+	public function getSrcFileDownloadUrl($fileId, $clientIp) {
+		$urlParam = array('getSrcFileDownloadUrlNew',$fileId, $clientIp);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,'','text/plain;charset=UTF-8');
+	}
+ 
+}

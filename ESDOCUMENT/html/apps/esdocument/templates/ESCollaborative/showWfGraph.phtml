@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+		<META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">
+		<style>
+			.color1 {
+				border: 4px solid red;
+			}
+			.color2 {
+				border: 4px solid green;
+			}
+		</style>
+	</head> 
+	<body>		
+		<div style="width: 100%;height:100%;overflow: hidden;">
+			<?php echo $mxGraphHtml;?>
+				<embed id="WfGraphObject" name="SVGTest" src="<?php echo $tplPath; ?>/ESCollaborative/WfGraph.svg" mce_src="<?php echo $tplPath; ?>/ESCollaborative/WfGraph.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,83 @@
+<?php
+/**
+ * 利用统计
+ * Enter description here ...
+ * @author wangtao
+ *
+ */
+class ProxyEscloudappEscloud_usingcollectionws extends AgentProxyAbstract
+{
+	const SERVICE_NAME="escloud_usingcollectionws";
+	/**
+	 * 保存利用统计方案
+	 * Enter description here ...
+	 */
+	public function savePlan($data)
+	{
+		return $this->post(self::SERVICE_NAME,'save',$data,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 获取方案列表
+	 * Enter description here ...
+	 * @param unknown_type $userid
+	 * @param unknown_type $orgid
+	 * @param unknown_type $page
+	 * @param unknown_type $size
+	 */
+	public function getList($orgid,$page,$size){
+		$param=array('getList',$orgid,$page,$size);
+		$url=implode('/',$param);
+		return $this->get(self::SERVICE_NAME,$url);
+	
+	}
+	/**
+	 * 编辑方案
+	 * Enter description here ...
+	 * @param unknown_type $planId
+	 */
+	public function modifyPlan($planId)
+	{
+		$param=array('getCollection',$planId);
+		$url=implode('/',$param);
+		return $this->get(self::SERVICE_NAME,$url);
+	
+	}
+	/**
+	 * 
+	 * 更新统计方案
+	 * @param unknown_type $param
+	 */
+	public function updatePlan($param)
+	{
+		return $this->post(self::SERVICE_NAME,'updateCollection',$param,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 删除方案
+	 * Enter description here ...
+	 * @param unknown_type $param
+	 */
+	public function deletePlan($map,$userId,$ip)
+	{		
+		$param=array('deleteCollection',$userId,$ip);
+		$url=implode('/',$param);
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 
+	 * 生成excel ...
+	 * @param unknown_type $param
+	 */
+	public function executePlan($planId,$xlsversion)
+	{
+		$param=array('ececutePlan',$planId,$xlsversion);
+		$url=implode('/',$param);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	public function getStaticDataForCol($param){
+		return $this->post(self::SERVICE_NAME,'getStaticDataForCol',$param,"application/json;charset=UTF-8");
+	}
+	public function printFile($param){
+		return $this->post(self::SERVICE_NAME,'printFile',$param,"application/json;charset=UTF-8");
+	}
+}

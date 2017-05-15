@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* CSS Document */
+
+html,body{ margin:0; padding:0; overflow:hidden;}
+
+.leftDiv{ width:180px; float:left; overflow:hidden;}
+.rightDiv{ float:left; overflow:hidden;}
+
+.leftDiv div{ width:100%; height:auto; overflow:hidden; float:left;}
+.leftDiv a, .leftDiv h2{ width:175px; height:30px; font:normal normal normal 14px/30px 微软雅黑,黑体,宋体,arial; text-indent:20px; float:left;}
+.leftDiv h2{ color:#3E78FD; font-weight:bold;}
+.leftDiv a{ border-left:5px solid #fff; font-size:12px; text-decoration:none; color:#000;}
+.leftDiv a:hover{ border-left:5px solid #f5f5f5; background:#f5f5f5;}
+.leftDiv a.selected{ border-left:5px solid #F24343; background:#eee;}
+.leftDiv span{ color:#000;}
+.opens{ width:16px; height:16px; display:inline-block; background:url(../img/editor.gif) no-repeat no-repeat; cursor:pointer;}

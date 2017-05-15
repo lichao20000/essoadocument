@@ -1,0 +1,286 @@
+.usingModel ul {
+	margin-left: 0px
+}
+
+.usingModel {
+	height: auto;
+	float: left;
+}
+
+.usingModel .subnav {
+	width: 100%;
+	/* margin-left: 2%; */
+	height: 30px;
+	float: left;
+	border-bottom: 5px solid #133959;
+	margin-bottom:0px;
+	padding-left: 0px;
+}
+
+.usingModel .subnav li {
+	line-height: 30px;
+	color: #fff;
+	float: left;
+	padding: 0 10px;
+	margin-right: 5px;
+	background: #6f6e81;
+	cursor: pointer;
+	border-radius: 5px 5px 0 0;
+}
+
+.usingModel .subnav .defalutTagOpen {
+	background: #133959;
+}
+
+.rolegrid {
+	width: 250px;
+	height: 100%;
+	overflow: auto;
+	overflow: hidden;
+	float: left;
+	padding: 0px 0 0px 0px;
+}
+
+.theBigGrid {
+	width: auto;
+	height: 100%;
+	overflow: auto;
+	overflow: hidden;
+	float: left;
+	padding: 0px 0px 5px 5px;
+}
+
+.filedit {
+	width: 100%;
+	height: 115px;
+	float: left;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+.fileditdiv {
+	width: 250px;
+	height: 25px;
+	float: left;
+	margin-left: 50px;
+	padding: 5px 20px 5px 20px;
+}
+
+.fileditdivArea {
+	width: 250px;
+	height: 68px;
+	float: left;
+	margin-left: 50px;
+	padding: 5px 20px 5px 20px;
+}
+
+.filedname {
+	width: 100px;
+	line-height: 25px;
+	text-indent: 5px;
+	float: left;
+}
+
+.filedvalue {
+	width: 100px;
+	height: 25px;
+	float: left
+}
+
+.showRoleNews {
+	float: left;
+	padding: 0px;
+}
+
+.showRoleNews1 {
+	float: left;
+	padding: 0px;
+	border: 1px solid #ccc;
+	background-color:#fff;
+}
+.showRoleNews2 {
+	float: left;
+	padding: 0px;
+	border: 1px solid #ccc;
+}
+
+.showRoleNews1 .buttoncss {
+	padding-left: 5px;
+}
+
+showRoleNews1 .buttoncss div {
+	float: left;
+	margin-top: 5px;
+	margin-right: 5px;
+	border: 1px solid transparent;
+}
+
+.showRoleNews1 .buttoncss span {
+	margin-right: 5px;
+	margin-top: 3px;
+}
+
+.showRoleNews1 .buttoncss span.title {
+	float: left;
+	height: 35px;
+	line-height: 30px;
+	padding: 0 5px 0px 20px;
+	margin-left: 5px;
+	border-right: 1px solid #ccc;
+}
+
+.showRoleNews1 .buttoncss span.button {
+	float: left;
+	height: 28px;
+	color: #fff;
+	line-height: 28px;
+	padding: 0 5px 0px 5px;
+	padding-left: 28px;
+	_border-top-color: tomato;
+	_border-left-color: tomato;
+	_filter: chroma(color =       tomato);
+	background-position-x: 5px;
+	_border-top-color: tomato;
+	cursor: pointer;
+}
+
+.showRoleNews1 .buttoncss span.button:HOVER {
+	background-color: #133959;
+	margin: 0px;
+	border: 0px;
+	/* padding: 0 5px 0px 5px; */
+	height: 28px;
+	margin-top: 3px;
+}
+
+.showRoleNews1 .button {
+	background: url(../../public/flexigrid/css/images/save.png) no-repeat
+		left;
+	background-color: #6f6e81;
+}
+
+.showRoleNews1 .buttoncss {
+	width: 100%;
+	height: 40px;
+	float: left;
+	padding: 0px;
+	border-bottom: 1px solid #ccc;
+}
+
+.chooseLeftUser {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url(../image/arrow_left.png) no-repeat no-repeat;
+	cursor: pointer;
+}
+
+.chooseRightUser {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url(../image/arrow_right.png) no-repeat no-repeat;
+	cursor: pointer;
+}
+
+.chooseLeftUser {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url(../image/arrow_left.png) no-repeat no-repeat;
+	cursor: pointer;
+}
+
+.tempUserGrid {
+	width: auto;
+	height: 100%;
+	overflow: auto;
+	overflow: hidden;
+	float: left;
+}
+.usingFormGrid{
+	width: auto;
+	height: 100%;
+	overflow: auto;
+	overflow: hidden;
+	float: left;
+}
+.usingStoreGrid{
+	width: auto;
+	height: 100%;
+	overflow: auto;
+	overflow: hidden;
+	float: left;
+}
+/* form validate */
+textarea.invalid-text,input.invalid-text,select.invalid-text {
+	border: 2px #DD0000 solid;
+}
+
+
+
+.showRoleNews2 .buttoncss {
+	padding-left: 5px;
+}
+
+.showRoleNews2 .buttoncss div {
+	float: left;
+	margin-top: 5px;
+	margin-right: 5px;
+	border: 1px solid transparent;
+}
+
+.showRoleNews2 .buttoncss span {
+	margin-right: 5px;
+	margin-top: 3px;
+}
+
+.showRoleNews2 .buttoncss span.title {
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 5px 0px 20px;
+	margin-left: 5px;
+	border-right: 1px solid #ccc;
+}
+
+.showRoleNews2 .buttoncss span.button {
+	float: left;
+	height: 28px;
+	color: #fff;
+	line-height: 28px;
+	padding: 0 5px 0px 5px;
+	padding-left: 28px;
+	_border-top-color: tomato;
+	_border-left-color: tomato;
+	_filter: chroma(color =       tomato);
+	background-position-x: 5px;
+	_border-top-color: tomato;
+	cursor: pointer;
+}
+
+.showRoleNews2 .buttoncss span.button:HOVER {
+	background-color: #41b3e5;
+	margin: 0px;
+	border: 0px;
+	height: 30px;
+}
+
+.showRoleNews2 .button {
+	background: url(../../public/flexigrid/css/images/save.png) no-repeat
+		left;
+	background-color: #4a8bc2;
+}
+
+.showRoleNews2 .buttoncss {
+	width: 100%;
+	height: 40px;
+	float: left;
+	padding: 0px;
+	border-bottom: 1px solid #ccc;
+}
+.showRoleNews .pPageStat{
+	
+	display:none;
+	
+}

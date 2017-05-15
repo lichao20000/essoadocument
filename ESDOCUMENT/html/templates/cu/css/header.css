@@ -1,0 +1,192 @@
+@charset "utf-8";
+input,button,select,textarea{outline:none} 
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, table, tr, th, td, embed, object, em, hr, span {
+	margin:0px;
+	padding:0px;
+	font-size:12px;
+	list-style:none;
+}
+a, a:hover, img {
+	border:0px;
+}
+
+
+/*=======================================顶部样式=======================================*/
+.top{ width:100%; height:130px; min-width:960px; background:url(../images/headerBg.gif);}
+
+.topNav{ height:44px; background:url(../images/navBg.gif);}
+.topNavL{ width:220px; float:left; height:40px;line-height:40px;_height:37px;_line-height:37px;  text-align:center; font-size:16px; color:#4a7aca; font-weight:bold; padding-top:4px; _padding-top:7px; overflow:hidden;}
+.topNavL img{ margin-right:10px; vertical-align:middle;}
+.topNavC{ float:left; height:32px; padding-top:12px;}
+.topNavMenuOn{ height:31px; border:1px solid #ccc; border-bottom:0px; width:100px; text-align:left; float:left; line-height:31px; font-size:14px; background:#fff; margin-right:1px; padding:0 10px; overflow:hidden;}
+.topNavMenuOff{text-align:left;float:left;margin-right:1px; border:1px solid #ccc; border-bottom:0px !important; width:100px; height:28px; margin-top:2px; cursor:pointer; font-size:14px;background:url(../images/navBg1.gif); padding:0 10px;overflow:hidden;}
+.topNavMenuOff a,.topNavMenuOn a{text-decoration:none; color:#777; line-height:25px; }
+.topNavMenuOff img{ margin-top:8px; margin-left:5px;}
+.topNavMenuOn img{ margin-top:12px; margin-left:5px;}
+.topNavR{ float:right; height:32px; padding-right:30px; padding-top:6px;}
+.topNavR input{ width:330px; height:25px; line-height:25px;}
+.topTab{ height:41px; border-bottom:1px solid #ddd; padding-top:8px; background:#fff;}
+.topTabTitle{ width:130px; height:32px;text-align:center; font-size:14px; font-weight:bold; color:#fff; float:left; line-height:32px; margin:0 45px; display:inline;}
+.topTabTitleBg{background:url(../images/bt_main_bg.gif);}
+.topTabTip{ float:left; line-height:30px; margin-left:10px; display:inline;}
+
+.topTabTitle a{ text-decoration:none; color:#fff; display:block;}
+.topTabTitle a:hover{ background:url(../images/bt_main_bg_hover.gif);}
+.topTabPage{padding-right:30px; font-family:Arial, Helvetica, sans-serif; font-size:14px; float:right;}
+.topTabPage span{ margin-right:5px;line-height:35px;}
+.release{ float:left; margin-right:15px; text-align:center; color:#fff; font-weight:bold; width:72px; height:29px; line-height:29px;}
+.release a{ text-decoration:none; color:#fff;background:url(../images/bt_main1_bg.gif);width:72px; height:29px; line-height:29px; display:block;}
+.release a:hover{ background:url(../images/bt_main1_bg_hover.gif)}
+
+
+.top .topLogin{ height:30px; line-height:30px; background:#333; padding:0 14px 0 0; font-size:12px;}
+.top .topLogin .topLoginL{ width:450px; float:left;color:#ccc;}
+.top .topLogin .topLoginL a{ text-decoration:none; color:#ccc; padding:0 14px; display:block; float:left;}
+.top .topLogin .topLoginL a:hover{text-decoration:none;background:#444; padding:0 14px;}
+.top .topLogin .topLoginR{ float:right; text-align:right; width:450px;color:#eee;}
+.top .topLogin .topLoginR a{ text-decoration:none; color:#eee;}
+
+
+.top .topLogo{ background:#c91617;height:60px; width:940px; margin:0 auto;}
+.top .topLogo .topLogoL{float:left; padding-top:5px;}
+.top .topLogo .topLogoR{ margin-left:30px; float:left; display:inline; padding-top:14px;}
+.top .topLogo .topLogoR .searchBut{ float:left;margin-top:1px;}
+.top .topLogo .topLogoR .topInput{ position:relative; width:302px; float:left; color:#999 !important; height:25px; line-height:25px; background:#fff;border:1px solid #abadb3; font-size:12px; padding:0 8px;margin-top:2px; margin-right:10px;}
+.searchBox{ position:absolute; left:-1px; top:25px; background:#fff;border:1px solid #abadb3; padding:0px 10px 0 10px; width:298px;*_padding:4px 9px 0 9px; *_width:300px; color:#808080;}
+.searchBox ul{ clear:both; overflow:hidden;*_border:1px solid #fff;margin-bottom:7px;}
+.searchBox li{ float:left; line-height:25px;}
+.searchBox ul input{ height:22px; line-height:22px; border:1px solid #c0c0c0; padding:0 5px;}
+.searchBox ul p{ float:left; width:298px;}
+.top .topLogo .topLogoR .topInput .topInputImg{
+	position:absolute;
+	left: 303px;
+	top: 11px;
+}
+
+.top .topLogo .topLogoR .topSelect{ margin-top:2px;float:left; width:67px; position:relative; height:25px; line-height:25px; border:1px solid #abadb3; background:#fff; color:#999; font-size:12px; padding-left:8px; margin-right:10px;*_margin-right:7px;}
+.top .topLogo .topLogoR .topSelect .topSelectImg{
+	position:absolute;
+	left: 60px;
+	top: 11px;
+}
+.top .topLogo .topLogoR .topSelect .topSelectList{
+	width:98px;
+	position:absolute;
+	left:-1px;
+	top: 25px;
+	border:1px solid #abadb3;
+	background:#fff;
+}
+.top .topLogo .topLogoR .topSelect .topSelectList a{ display:block; text-decoration:none; line-height:24px; color:#333; padding-left:16px; width:82px;}
+.top .topLogo .topLogoR .topSelect .topSelectList a:hover{ background:#eee;}
+
+
+
+
+.top .topMenu{ height:33px; line-height:33px; background:#8b0510; color:#fff; font-weight:bold; font-size:14px; width:940px; margin:0 auto;}
+.top .topMenu a{ text-decoration:none; color:#fff; padding:0 20px; display:block; float:left; line-height:33px;height:33px;}
+.top .topMenu a:hover{text-decoration:none; background:#444; padding:0 20px;line-height:33px;height:33px;  }
+.topMenuOn,.topMenuOn a,.topMenuOn a:hover{background:url(../images/global_tab_bg.gif)  !important;}
+.topMenu a img{*_padding-top:15px; margin-left:8px;}
+.topLine{ height:7px; font-size:0px; background:#666;}
+
+
+
+/*=======================================按扭样式=======================================*/
+.but1 {
+	border:1px solid #bbb;
+	line-height:27px;
+	height:27px;
+	text-align:center;
+	cursor:pointer;
+	background:#e2e2e2;
+	color:#222;
+	float:left;
+	padding:0 5px;
+	margin-right:15px;
+	position:relative;
+}
+.but1_icon {
+	position:absolute !important;
+	top: 8px;
+	left:65px;
+}
+.but1_text{ position:absolute; left:21px;}
+.but1_icon img{ margin-bottom:3px;}
+.but1_hover {
+	filter: alpha(opacity=73);
+	opacity:0.57;
+	-webkit-opacity:0.73;
+}
+.but2 {
+	border: 1px solid #bbb;
+	line-height:27px;
+	height:27px;
+	text-align:center;
+	background:#e2e2e2;
+	color:#222;
+	filter: alpha(opacity=33);
+	opacity:0.33;
+	-webkit-opacity:0.33;
+	float:left;padding:0 5px;margin-right:15px;
+}
+
+.but2_hover {
+	filter: alpha(opacity=73);
+	opacity:0.57;
+	-webkit-opacity:0.73;
+}
+.but2_icon{ position:absolute; left:66px; top:11px;}
+
+.but3Box {
+	position:relative !important;
+	float:left;padding:0 5px;margin-right:15px;
+}
+.but3 {
+	cursor:pointer;
+	background:#fff;
+}
+
+.but3_icon {
+	position:absolute !important;
+	top: 23px;
+	left:28px;
+}
+.butNoBg { background:#fff; border:0px;
+}
+.but1 a,.but2 a,.but3 a{ text-decoration:none; color:#222;}
+.but5Box {
+	position:relative !important;
+	float:left;padding:0 5px;margin-right:15px;
+}
+.but5 {
+	border:1px solid #bbb;
+	line-height:27px;
+	height:27px;
+	text-align:center;
+	cursor:pointer;
+	background:#e2e2e2;
+	color:#222;
+	float:left;
+	padding:0 5px;
+	margin-right:15px;
+	position:relative;
+	}
+
+
+/*=======================================底部样式=======================================*/
+
+.footer {
+	width:940px;
+	margin:0 auto;
+	border-top:1px solid #ccc;
+	height:90px;
+	margin-top:25px;
+}
+.footer .footerL{ float:left; padding-top:10px;}
+.footer .footerR{ float:right; padding-top:20px; text-align:right; width:500px;}
+.footer .footerR p{ padding-top:15px; color:#999;float:right; width:500px;}
+.footer .footerR ul{ clear:both; overflow:hidden; float:right; width:500px;}
+.footer .footerR li{  color:#999; background:url(../images/footerLiBg.gif) no-repeat; padding-left:10px;margin-left:10px; display:inline;}
+.footer .footerR li a{ text-decoration:none; color:#999;}
+.footer .footerR li a:hover{ text-decoration:underline;}

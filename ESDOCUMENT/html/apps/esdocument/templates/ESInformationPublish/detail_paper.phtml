@@ -1,0 +1,34 @@
+<link href='<?php echo $tplPath?>/ESInformationPublish/css/news.css' rel="stylesheet">
+	<div class="page">
+    	<div class="wrap">
+        	<div class="main">
+            	<div class="page_box">
+                	<div class="page_content">
+                    	
+                        <div class="p_b">
+                        	<div class="p_t"><?php echo $data->title;?>
+                        	<a href="#" class="home showMore_data" rel='<?php echo $info['boardId']; ?>' title="返回列表"></a></div>
+                            <div class="p_c">
+                            	<div class="attr">
+                                	<span>发布人：<?php echo $data->authorId;?></span>
+                                    <span>点击次数：<font color="red"><?php echo $data->browseTimes;?></font></span>
+                                    <span>发布时间：<?php echo $data->createTime;?></span>
+                                </div>
+                                <div class='summary'>
+									<span>摘要：</span>
+									<p id = "summaryText"><?php echo $data->summary; ?></p>
+								</div>
+                                <div class="cont">
+                                <?php echo $data->text;?>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESInformationPublish/js/news.js"></script>

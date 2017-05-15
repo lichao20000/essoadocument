@@ -1,0 +1,1230 @@
+<?php
+class AppDepartment extends AppGroupPackageAbstract
+{
+  public function __construct($appInfo){
+    parent::__construct($appInfo);
+    $this->db = $this->getProxy('mysql');
+  }
+
+  private $_deptTypeList = array(
+      '1' => '全国',
+      '2' => '公司',
+      '3' => '部门',
+  );
+
+  public function urls()
+  {
+    return array(
+      'default' => array(
+        'access' => true,
+        'callback' => 'view',
+      ),
+      'app' => array(
+        'access' => true,
+        'callback' => 'app',
+      ),
+      'view' => array(
+        'access' => true,
+        'callback' => 'view',
+      ),
+      'company' => array(
+        'access' => true,
+        'callback' => 'viewCompany',
+      ),
+      'department' => array(
+        'access' => true,
+        'callback' => 'viewDepartment',
+      ),
+      'call' => array(
+        'access' => true,
+        'callback' => 'call',
+      ),
+      'layout' => array(
+        'access' => true,
+        'callback' => 'layout',
+      ),
+      'publiclayout' => array(
+        'access' => true,
+        'callback' => 'publiclayout',
+      ),
+      'settings' => array(
+        'access' => true,
+        'callback' => 'settings',
+      ),
+      'members' => array(
+        'access' => true,
+        'callback' => 'members',
+      ),
+      'members_tree' => array(
+        'access' => true,
+        'callback' => 'members_tree',
+      ),
+      'members_people' => array(
+        'access' => true,
+        'callback' => 'members_people',
+      ),
+      'layout_setting' => array(
+        'access' => true,
+        'callback' => 'layout_setting',
+      ),
+      'quicklinks' => array(
+        'access' => true,
+        'callback' => 'quicklinks',
+      ),
+      'apps' => array(
+       'access' => true,
+        'callback' => 'apps',
+      ),
+      'fileshare' => array(
+        'access' => true,
+        'callback' => 'fileshare',
+      ),
+    );
+  }
+
+  public function hooks()
+  {
+    return array(
+      'unsubscribe' => 'unsubscribe',
+      'batonsubscribe' => 'batonsubscribe',
+      'getInstances' => array(
+      	'is_public' => true,
+        'callback' => 'getInstances',
+      ),
+      'getAdminInstances' => array(
+      	'is_public' => true,
+        'callback' => 'getAdminInstances',
+      ),
+      'getOwnInstances' => array(
+      	'is_public' => true,
+        'callback' => 'getOwnInstances',
+      ),
+      'header' =>  array(
+      	'is_public' => false,
+        'callback' => 'header',
+      ),
+      'getAdminList' =>  array(
+      	'is_public' => true,
+        'callback' => 'getAdminList',
+      ),
+      'isadmin' => array(
+        'is_public' => true,
+        'callback' => 'isadmin',
+      ),
+      'getSetting' => array(
+        'is_public' => true,
+        'callback' => 'getSetting',
+      ),
+    );
+  }
+
+  // 获取用户的部门天地
+  public function hook_getInstances($userId = null)
+  {
+    if (!isset($userId)) {
+      $userId = $this->getContext()->getUser()->getId();
+    }
+    static $list = array();
+    if (!isset($list[$userId])) {
+      $sessionKey = 'virtualsite_' . $userId;
+      if (!isset($_SESSION[$sessionKey])) {
+        $list[$userId] = array();
+        if ($userId != U_ANONYMOUS) {
+          $mysql = $this->getProxy('mysql');
+          $sql = 'SELECT * FROM `settings` WHERE `level` = 0';
+          $result = $mysql->query($sql);
+          $appInfo = $this->appInfo;
+          foreach ($result as $row) {
+            $appInfo['instance_id'] = $row->offer_instance_id;
+            $appInstance = AopApp::getInstance($appInfo);
+            if ($appInstance->isMember($userId)) {
+              $list[$userId][$row->offer_instance_id] = $row->title;
+            }
+          }
+        }
+        $_SESSION[$sessionKey] = $list[$userId];
+      } else {
+        $list[$userId] = $_SESSION['virtualsite_' . $userId];
+      }
+    }
+    return $list[$userId];
+  }
+
+  // 获取用户是管理员的部门天地
+  public function hook_getAdminInstances($appId, $userId = null, $mark = 0)
+  {
+    if (!isset($userId)) {
+      $userId = $this->getContext()->getUser()->getId();
+    }
+    static $list = array();
+    if($mark == 1){
+      unset($list);
+      $list = array();
+    }
+    if (!isset($list[$userId])) {
+      $mysql = $this->getProxy('mysql');
+      $sql = 'SELECT s.* FROM `apps` a INNER JOIN `settings` s ON a.offer_instance_id = s.offer_instance_id WHERE a.member_id = "%s" AND a.app_id = "%s" AND s.level = 0';
+      $sql = sprintf($sql, $mysql->escape($userId), $mysql->escape($appId));
+      $result = $mysql->query($sql);
+      $list[$userId] = array();
+      if($result && count($result)>0){
+        foreach ($result as $row) {
+          $list[$userId][$row->offer_instance_id] = $row->title;
+        }
+      }
+    }
+    return $list[$userId];
+  }
+
+  // 获取用户是订购人的部门天地
+  public function hook_getOwnInstances($userId = null)
+  {
+    if (!isset($userId)) {
+      $userId = $this->getContext()->getUser()->getId();
+    }
+    static $list = array();
+    if (!isset($list[$userId])) {
+      $mysql = $this->getProxy('mysql');
+      $sql = 'SELECT s.* FROM `members` m INNER JOIN `settings` s ON m.offer_instance_id = s.offer_instance_id WHERE m.member_id = "%s" AND m.role = ' . AppGroupAbstract::ROLE_OWNER . ' AND s.level = 0';
+      $sql = sprintf($sql, $mysql->escape($userId));
+      $result = $mysql->query($sql);
+      $list[$userId] = array();
+      foreach ($result as $row) {
+        $list[$userId][$row->offer_instance_id] = $row->title;
+      }
+    }
+    return $list[$userId];
+  }
+
+  public function hook_getAdminList($appId, $instanceId = null) {
+    $appsSetting = $this->getAppsSetting($instanceId);
+    $list = array();
+    foreach ($appsSetting as $row) {
+      if ($appId == $row->app_id) {
+        $list[] = $row->member_id;
+      }
+    }
+    return $list;
+  }
+
+  /**
+   * 批量开通【可回滚】
+   * @param string $userId
+   * @param array $offerInstanceIds
+   *
+   * 待测试
+   */
+  public function hook_batonsubscribe($userId, array $offerInstanceIds) {
+    if (!parent::hook_batonsubscribe($userId, $offerInstanceIds)) {
+      return false;
+    }
+    $sqlArray = array();
+    $data = serialize(array());
+    foreach ($offerInstanceIds as $instanceId) {
+      if ($instanceId != '') {
+        $sqlArray[] = "insert into layouts (`offer_instance_id`, `data`) values ('$instanceId', '$data')";
+      }
+    }
+    if (count($sqlArray) > 0) {
+      //@todo 优先保证layouts表执行成功；
+      $result = $mysql->batchExecute($sqlArray);
+/*       if (is_string($result) && strtolower($result)=='success') {
+        return true;
+      } */
+    }
+    return true;
+  }
+
+  public function hook_unsubscribe($instanceId) {
+    $userId = $this->getContext()->getUser()->getId();
+    //@todo 存在问题：其中一条sql执行出现问题，无法回滚了
+    $mysql = $this->getProxy('mysql');
+    $layoutSql = "delete from layouts where offer_instance_id='$instanceId'";
+    $mysql->execute($layoutSql);
+    $memberSql = "delete from members where offer_instance_id='$instanceId'";
+    $mysql->execute($memberSql);
+    $settingSql = "delete from settings where offer_instance_id='$instanceId'";
+    $mysql->execute($settingSql);
+    return true;
+  }
+
+  protected function getLayout()
+  {
+    $mysql = $this->getProxy('mysql');
+    $sql = 'SELECT data FROM `layouts` WHERE `offer_instance_id` = "' . $this->getInstanceId() . '"';
+    $result = $mysql->fetchField($sql);
+    if ($result) {
+      return unserialize($result);
+    } else {  //添加一条数据
+
+    }
+    return false;
+  }
+
+  private function _checkOwnerAccess($checkAppAdmin = false)
+  {
+    if (!isLogin()) {
+      gotoUrl('user/login');
+    }
+    $instanceId = $this->getInstanceId();
+    if (!$this->getInstanceId()) {
+      throw new Aop404Exception();
+    }
+    $userId = $this->getContext()->getUser()->getId();
+    if ($checkAppAdmin) {
+      if (!$this->isOwner($userId) && !$this->isAppAdmin($userId)) {
+        throw new Aop403Exception();
+      }
+    } else if (!$this->isOwner($userId)) {
+      throw new Aop403Exception();
+    }
+  }
+
+  public function url_layout(){
+    // 检查权限
+    $this->_checkOwnerAccess();
+
+    $apps = $this->getAppList();
+    if (!isset($apps[$this->getId()])) {
+      $apps[$this->getId()] = $this->appInfo;
+    }
+
+    //$appConfigList = $this->getConfigViews();
+    $appConfigList = $this->getConfigViews($this->isSite() ? 'portal' : 'default');
+
+    $applist = array();
+    foreach ($apps as $appId => $appInfo) {
+      $app = AopApp::getInstance($appInfo);
+      if (isset($appConfigList[$appId])) {  //过滤
+        $info = $app->getAppInfo();
+        $row = array(
+          'name' => $info['name'],
+          'views' => array(),
+        );
+        foreach ($app->views($this->getInstanceId()) as $viewid => $view) {
+          if(in_array($viewid, $appConfigList[$appId])){  //过滤
+            $row['views'][$viewid] = $view['title'];
+          }
+        }
+
+        if ($row['views']) {
+          $applist[$appId] = $row;
+        }
+      }
+    }
+    unset($apps);
+
+    $layout = $this->getLayout();
+    $postUrl = $this->getUrl('layout_setting', 1);
+    $layoutProxy = $this->getProxy('layout');
+    $layoutHtml = $layoutProxy->generateHtml($layout, $applist, $postUrl);
+    $userId = $this->getContext()->getUser()->getId();
+
+    $args = array(
+      'applist' => $applist,
+      'editable' => $this->isOwner($userId),
+      'appadmin' => $this->isAppAdmin($userId),
+      'layout' => $layout,
+      'layoutHtml' => $layoutHtml,
+    );
+    if($this->isSite()){
+      $args['header'] = $this->get_header();
+      return $this->getView()->render('layout', $args);
+    }else{
+       return $this->getView()->render('layout', $args);
+    }
+
+  }
+
+  protected function setLayout($data)
+  {
+    $mysql = $this->getProxy('mysql');
+    $data = serialize($data);
+    $sql = 'update layouts set data =\'' . $data . '\' where offer_instance_id = "' . $this->getInstanceId() . '" ';
+    $result = $mysql->execute($sql);
+  }
+
+  public function isSite()
+  {
+    static $siteInfo = null;
+    if (!isset($siteInfo)) {
+      $instanceId = $this->getInstanceId();
+      $mysql = $this->getProxy('mysql');
+      $sql = "select * from settings where offer_instance_id = '{$instanceId}'";
+      $siteInfo = $mysql->fetchRow($sql);
+    }
+
+    if (isset($siteInfo) && $siteInfo->level == 0) {
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  public function get_header()
+  {
+    AopConfig::set('template', 'virtualsite');
+    $userId = $this->getContext()->getUser()->getId();
+    $is_admin = $this->isOwner($userId) || $this->isAppAdmin($userId);
+    $args = array();
+    $args['setting'] = $setting = $this->getSetting();
+    $args['title'] = $setting->title;
+    $args['is_admin'] = $is_admin;
+    ob_start();
+    echo $this->getView()->render('header', $args);
+    $content = ob_get_contents();
+    ob_end_clean();
+    return $content;
+  }
+
+  public function url_view($org = null)
+  {
+    //print_r(func_get_args());
+    if (!isLogin()) {
+      gotoUrl('user/login');
+    }
+    $userId = $this->getContext()->getUser()->getId();
+
+    // 鉴权
+    $instanceId = $this->getInstanceId();
+    if (!$instanceId) {
+      // 查找相应的 InstanceId;
+      if (!isset($org)) {
+        // 联通集团
+        $instanceId = $this->_getInstanceIdByOrg('group');
+        $menuitem = 'menu_group';
+      } else {
+        $userProxy = $this->getProxy('user');
+        $userInfo = $userProxy->getUserInfo($userId);
+        if ($org == 'company') {
+          if ($userInfo->jd_cityid) {
+            $orgId = $userInfo->jd_cityid;
+          } else {
+            $orgId = $userInfo->cityid;
+          }
+          $instanceId = $this->_getInstanceIdByOrg('company', $orgId);
+          $menuitem = 'menu_company';
+        } else if ($org == 'department') {
+          if ($userInfo->jd_orgid) {
+            $orgId = $userInfo->jd_orgid;
+          } else {
+            $orgId = $userInfo->bigdeptid;
+          }
+          $instanceId = $this->_getInstanceIdByOrg('department', $orgId);
+          $menuitem = 'menu_department';
+        }
+      }
+      if (!$instanceId) {
+        // 依然获取不到相关订购关系，则抛出
+        throw new Aop404Exception();
+      }
+      $this->appInfo['instance_id'] = $instanceId;
+    } else {
+      $menuitem = '';
+    }
+
+    $apps = $this->getAppList();
+    if (!isset($apps[$this->getId()])) {
+      $apps[$this->getId()] = $this->appInfo;
+    }
+    $layout = $this->getLayout();
+
+    $onlines = 1;
+    $mainSite = '';
+    if(isset($userInfo) && $menuitem == 'menu_company'){
+      $mainSite = $userInfo->mainSite;
+      $mainSite = strtolower($mainSite);
+      $sso = $this->getProxy('sso');
+      $online = $sso->getOnlineUsers();
+      if(!empty($online)){
+        $online = json_decode($online);
+      }
+      if(isset($online->$mainSite)){
+        if($online->$mainSite == 0){
+          $onlines = 1;
+        }else{
+          $onlines = $online->$mainSite;
+        }
+      }
+    }
+
+    $args = array(
+      'apps' => $apps,
+      'layout' => $layout,
+      'instance' => $this,
+      'instanceId' => $instanceId,
+      'editable' => $this->isOwner($userId) || $this->isAppAdmin($userId),
+      'owners' => $this->getOwners(),
+      'ismember' => $this->isMember($userId),
+      'menuitem' => $menuitem,
+      'online' => $onlines,
+      'mainSite' => $mainSite,
+    );
+
+    if(!isLogin() || $this->isSite()){
+      $args['header'] = $this->get_header();
+      return $this->getView()->render('site_default', $args);
+    }else{
+      return $this->getView()->render('default', $args);
+    }
+  }
+
+  private function _getInstanceIdByOrg($orgName, $orgId = '')
+  {
+    $db = $this->getProxy('mysql');
+    switch ($orgName) {
+      case 'group':
+        // 联通集团, 查找第一个level=1的部门天地
+        return $db->fetchField('SELECT `offer_instance_id` FROM `settings` WHERE `level` = 1 LIMIT 1');
+        break;
+      case 'company':
+        // 我的公司, level=2
+        $sql = 'SELECT m.offer_instance_id FROM `settings` s INNER JOIN `members` m ON s.offer_instance_id = m.offer_instance_id WHERE m.org_id = "%s" AND s.level = 2 LIMIT 1';
+        return $db->fetchField(sprintf($sql, $orgId));
+        break;
+      case 'department':
+        // 我的部门, level=3
+        $sql = 'SELECT m.offer_instance_id FROM `settings` s INNER JOIN `members` m ON s.offer_instance_id = m.offer_instance_id WHERE m.org_id = "%s" AND s.level = 3 LIMIT 1';
+        return $db->fetchField(sprintf($sql, $orgId));
+        break;
+    }
+    return false;
+  }
+
+  public function checkDepartmentExists()
+  {
+    if (!isset($_SESSION['hasDepartment'])) {
+      $userId = $this->getContext()->getUser()->getId();
+      $userProxy = $this->getProxy('user');
+      $_SESSION['hasDepartment'] = false;
+      if ($userInfo = $userProxy->getUserInfo($userId)) {
+        if ($userInfo->jd_orgid) {
+          $orgId = $userInfo->jd_orgid;
+          $_SESSION['hasDepartment'] = (boolean) $this->_getInstanceIdByOrg('department', $orgId);
+        } else if (isset($userInfo->bigdeptid) && $userInfo->bigdeptid) {
+          $orgId = $userInfo->bigdeptid;
+          $_SESSION['hasDepartment'] = (boolean) $this->_getInstanceIdByOrg('department', $orgId);
+        }
+      }
+    }
+    return $_SESSION['hasDepartment'];
+  }
+
+  public function url_viewCompany()
+  {
+    return $this->url_view('company');
+  }
+
+  public function url_viewDepartment()
+  {
+    return $this->url_view('department');
+  }
+
+  public function url_call()
+  {
+    // 鉴权
+    $userId = $this->getContext()->getUser()->getId();
+    $instanceId = $this->getInstanceId();
+    if (!$instanceId) {
+      throw new Aop404Exception();
+    }
+    $args = func_get_args();
+    $appId = array_shift($args);
+    $children = $this->getChildren();
+    if (!in_array($appId, $children)) {
+      throw new Aop404Exception();
+    }
+    $appInstanceId = array_shift($args);
+    if (!isset($appId) || !isset($appInstanceId)) {
+      throw new Aop404Exception();
+    }
+    $appInfo = AopApp::getInfo($appId);
+    $appInfo['instance_id'] = $appInstanceId;
+    $appInstance = AopApp::getInstance($appInfo);
+    $url = array_shift($args);
+    if (!isset($url)) {
+      $url = 'default';
+    }
+    $urls = $appInstance->urls();
+    if (!isset($url) || !isset($urls[$url])) {
+      throw new Aop404Exception();
+    }
+    $url = $urls[$url];
+    if (!is_array($url)) {
+      $url = array(
+        'callback' => $url,
+      );
+    }
+    $methodName = 'url_' . $url['callback'];
+
+    if ($this->isSite()) {
+      array_unshift($args, $this);
+      return $this->get_header() . call_user_func_array(array($appInstance, $methodName), $args);
+    } else {
+      throw new Aop404Exception();
+    }
+  }
+
+  public function hook_subscribed($userId, $offerInstanceId, $catalogId, $productId)
+  {
+    if ($offerInstanceId) {
+      if (!parent::hook_subscribed($userId, $offerInstanceId, $catalogId, $productId)) {
+        return false;
+      }
+      $mysql = $this->getProxy('mysql');
+      $data = serialize(array());
+      $sql = "INSERT INTO `layouts` (`offer_instance_id`, `data`) VALUES ('$offerInstanceId', '$data')";
+      $result = $mysql->execute($sql);
+      if (strtolower($result) == 'success') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public function url_members()
+  {
+    // 检查权限
+    $this->_checkOwnerAccess();
+
+    $userId = $this->getContext()->getUser()->getId();
+    $editable = $this->isOwner($userId);
+    if ($editable && $this->getContext()->getRequest()->isPost()) {
+      $members = $this->getContext()->getRequest()->getPost('m', array());
+      $people = array();
+      $org = array();
+      foreach ($members as $member => $v) {
+        $type = $member[0];
+        $id = substr($member, 2);
+        if ($type == 'o') {
+          $org[$id] = 1;
+        } else {
+          $people[$id] = 1;
+        }
+      }
+      // 管理员必须存在列表中
+      $owners = $this->getOwners();
+      foreach ($owners as $ownerId) {
+        if (!in_array($ownerId, $people)) {
+          $people[$ownerId] = 1;
+        }
+      }
+      // 用于提交到钩子
+      $orgKeys = array_keys($org);
+      $peopleKeys = array_keys($people);
+
+      $members = $this->getMemberList();
+      // 删除已取消的
+      foreach ($members as $row) {
+        if ($row->role == AppGroupAbstract::ROLE_ORG) {
+          $id = $row->org_id;
+          if (isset($org[$id])) {
+            // 没有更新
+            unset($org[$id]);
+          } else {
+            // 已取消
+            $this->removeMember(null, $id);
+          }
+        } else {
+          $id = $row->member_id;
+          if (isset($people[$id])) {
+            // 没有更新
+            unset($people[$id]);
+          } else {
+            // 已取消
+            $this->removeMember($id);
+          }
+        }
+      }
+      // 插入新增的
+      foreach ($org as $id => $v) {
+        $this->setMember(null, $id);
+      }
+      foreach ($people as $id => $v) {
+        $this->setMember($id);
+      }
+      // 调用成员设置钩子
+      $instanceId = $this->getInstanceId();
+      foreach ($this->getChildren() as $appId) {
+        $this->invoke($appId, 'memberset', $instanceId, $orgKeys, $peopleKeys);
+      }
+
+      // 清空缓存
+      $cacheId = 'department_members_' . $instanceId;
+      cache::remove($cacheId);
+
+      $this->redirect('');
+    } else {
+      $members = $this->getMemberList(true);
+      $userProxy = $this->getProxy('user');
+      foreach ($members as $row) {
+        if ($row->role == self::ROLE_ORG) {
+          if ($row->object->parentOrgCode != '0000' && $org = $userProxy->getOrgInfoByOrgId($row->object->parentOrgCode)) {
+            if ($org->orgNameDisplay == '本部'){
+        			$row->object->parentOrgName = $org->orgName;
+        		} else {
+        			$row->object->parentOrgName = $org->orgNameDisplay;
+        		}
+          } else {
+            $row->object->parentOrgName = '中国联通';
+          }
+          $row->object->parentOrgName = '@' . $row->object->parentOrgName;
+        }
+      }
+      if($this->isSite()){
+        return $this->getView()->render('members', array(
+          'editable' => $editable,
+          'appadmin' => $this->isAppAdmin($userId),
+          'members' => $members,
+          'header' => $this->get_header()
+        ));
+      }else{
+        return $this->getView()->render('members', array(
+          'editable' => $editable,
+          'appadmin' => $this->isAppAdmin($userId),
+          'members' => $members,
+        ));
+      }
+    }
+  }
+
+  public function url_members_tree()
+  {
+    // 检查权限
+    $this->_checkOwnerAccess();
+
+    $editable = $this->isOwner($this->getContext()->getUser()->getId());
+    $orgId = $this->getContext()->getRequest()->getGet('id');
+    $userProxy = $this->getProxy('user');
+    if (!isset($orgId)) {
+      //获取省分公司
+      $list = $userProxy->getCompanyList();
+    } else {
+      $list = $userProxy->findOrgListByParentid($orgId);
+    }
+
+    $result = $this->buildTreeData($list);
+
+    return array(
+      'type' => 'json',
+      'value' => $result,
+    );
+  }
+
+  private function buildTreeData($orgList)
+  {
+    $return = array();
+    if ($orgList) {
+      foreach ($orgList as $val) {
+        $row = array();
+        $row['id'] = $val->orgid;
+        if($val->orgNameDisplay == '本部'){
+          $row['text'] = $val->orgName;
+        } else {
+          $row['text'] = $val->orgNameDisplay;
+        }
+        if($this->hasChild($val->orgid)) {
+          $row['state'] ='closed';
+        } else {
+          $row['state'] ='open';
+        }
+        $return[] = $row;
+      }
+    }
+    return $return;
+  }
+
+  private function hasChild($orgId)
+  {
+    $userProxy = $this->getProxy('user');
+    $orgList = $userProxy->findOrgListByParentid($orgId);
+    return is_array($orgList) && count($orgList) > 0;
+  }
+
+  public function url_members_people()
+  {
+    // 检查权限
+    $this->_checkOwnerAccess();
+
+    $editable = $this->isOwner($this->getContext()->getUser()->getId());
+    $orgId = $this->getContext()->getRequest()->getGet('id');
+    $result = array();
+    if (isset($orgId)) {
+      $userProxy = $this->getProxy('user');
+      try {
+        if ($org = $userProxy->getOrgInfoByOrgId($orgId)) {
+          // 部门项
+          $row = array(
+            'type' => 'o',
+            'id' => $orgId,
+          );
+          if ($org->orgNameDisplay == '本部') {
+            $row['name'] = $org->orgName;
+          } else {
+            $row['name'] = $org->orgNameDisplay;
+          }
+
+          if ($org->parentOrgCode != '0000' && $parentOrg = $userProxy->getOrgInfoByOrgId($org->parentOrgCode)) {
+            if ($parentOrg->orgNameDisplay == '本部') {
+        			$row['email'] = $parentOrg->orgName;
+        		} else {
+        			$row['email'] = $parentOrg->orgNameDisplay;
+        		}
+          } else {
+            $row['email'] = '中国联通';
+          }
+          $row['email'] = '@' . $row['email'];
+
+          $result[] = $row;
+
+          // 人员项
+          $userList = $userProxy->getUserListByOrgid($orgId);
+          //print_r($usreList);
+          foreach ($userList as $val) {
+            $row = array(
+              'type' => 'p',
+              'id' => $val->userid,
+              'name' => $val->realname,
+              'email' => $val->email,
+            );
+            $result[] = $row;
+          }
+        }
+      } catch(Exception $ex) {
+      }
+    }
+    return array(
+      'type' => 'json',
+      'value' => $result,
+    );
+  }
+
+  public function getTitle()
+  {
+    $setting = $this->getSetting();
+    return $setting->title;
+  }
+
+  public function getLevel() {
+    $setting = $this->getSetting();
+    return $setting->level;
+  }
+
+  public function url_settings()
+  {
+    // 检查权限
+    $this->_checkOwnerAccess(true);
+
+    $userId = $this->getContext()->getUser()->getId();
+    $editable = $this->isOwner($userId);
+    if (!$editable && $this->isAppAdmin($userId)) {
+      $this->redirect('apps');
+    }
+
+    if ($editable && $this->getContext()->getRequest()->isPost()) {
+      $post = $this->getContext()->getRequest()->getPost();
+      $set = array(
+        'title' => trim($post['title']),
+//        'level' => intval($post['level']),
+        'level' => $this->getLevel(),
+        'description' => trim($post['description']),
+      );
+      if ($picFilename = $this->uploadPic()) {
+        $set['pic'] = $picFilename;
+      }
+      $set['path'] = isset($post['path']) && trim($post['path']) ? trim($post['path']) :'';
+      $this->setSetting($set);
+      $this->redirect('');
+    } else {
+      if($this->isSite()){
+        return $this->getView()->render('settings', array(
+          'editable' => $editable,
+          'appadmin' => $this->isAppAdmin($userId),
+          'setting' => $this->getSetting(),
+          'header' => $this->get_header(),
+        ));
+      }else{
+        return $this->getView()->render('settings', array(
+          'editable' => $editable,
+          'appadmin' => $this->isAppAdmin($userId),
+          'setting' => $this->getSetting(),
+        ));
+      }
+    }
+  }
+
+  public function hook_getSetting($instance_id){
+    return $this->getSetting($instance_id);
+  }
+
+  protected function getSetting($instance_id = '')
+  {
+    $instanceId = $instance_id ? $instance_id : $this->getInstanceId();
+    static $list = array();
+    if (!isset($list[$instanceId])) {
+      $mysql = $this->getProxy('mysql');
+      $sql = 'SELECT * FROM `settings` WHERE `offer_instance_id` = "' . $instanceId . '"';
+      $result = $mysql->fetchRow($sql);
+      if (!$result) {
+        $sql = 'INSERT INTO `settings` (`offer_instance_id`, `title`, `pic`, `path`, `level`, `description`, `data`) VALUES ("'. $instanceId . '", "部门天地", "", "", "0", "", "")';
+        $mysql->execute($sql);
+        $result = new stdClass();
+        $result->offer_instance_id = $this->getInstanceId();
+        $result->title = '部门天地';
+        $result->path = '';
+        $result->level = 0;
+        $result->description = '';
+        $result->data = array();
+      } else {
+        if (isset($result->data) && $result->data) {
+          $result->data = unserialize($result->data);
+        } else {
+          $result->data = array();
+        }
+      }
+      $list[$instanceId] = $result;
+    }
+    return $list[$instanceId];
+  }
+
+  protected function uploadPic()
+  {
+    if (isset($_FILES['pic']) && !$_FILES['pic']['error'] && $_FILES['pic']['size']) {
+      $filename = $_FILES['pic']['tmp_name'];
+      if (!$info = getimagesize($filename)) {
+        return false;
+      }
+      $path = $this->getPublicPath() . '/' . $this->getInstanceId() . '.gif';
+      $im = imagecreatetruecolor(80, 80);
+      imagecopyresampled($im, imagecreatefromstring(file_get_contents($filename)), 0, 0, 0, 0, 80, 80, $info[0], $info[1]);
+      imagegif($im, $path);
+      return $path;
+    }
+    return false;
+  }
+
+  protected function setSetting($setting)
+  {
+    $mysql = $this->getProxy('mysql');
+    if (isset($setting['pic'])) {
+      $sql = 'UPDATE `settings` SET `title` = "%s", `pic` = "%s", `level` = %d, `description` = "%s", `data` = "%s", `path` = "%s" WHERE `offer_instance_id` = "%s"';
+      $sql = sprintf($sql, $mysql->escape($setting['title']), $setting['pic'], $setting['level'], $mysql->escape($setting['description']), $mysql->escape(serialize($setting['data'])), $mysql->escape($setting['path']), $this->getInstanceId());
+    } else {
+      $sql = 'UPDATE `settings` SET `title` = "%s", `level` = %d, `description` = "%s", `data` = "%s", `path` = "%s" WHERE `offer_instance_id` = "%s"';
+      $sql = sprintf($sql, $mysql->escape($setting['title']), $setting['level'], $mysql->escape($setting['description']), $mysql->escape(serialize($setting['data'])), $mysql->escape($setting['path']), $this->getInstanceId());
+    }
+    $mysql->execute($sql);
+  }
+
+  public function url_layout_setting()
+  {
+    // 检查权限
+    $this->_checkOwnerAccess();
+
+    $data = $this->getContext()->getRequest()->getPost('data');
+    $layoutProxy = $this->getProxy('layout');
+    $result = $layoutProxy->filterData($data);
+    $result = true;
+    if ($result) {
+      $this->setLayout(json_decode($data));
+    }
+    echo json_encode(array('redirect_url'=>$this->getUrl('' ,true)));
+    exit;
+  }
+
+  public function views($instanceId = null)
+  {
+    return array(
+      'intro' => array(
+        'title' => '站点介绍',
+        'callback' => 'intro',
+      ),
+    );
+  }
+
+  public function view_intro($instanceId = null)
+  {
+    if ($owners = $this->getOwners()) {
+      $userService = $this->getProxy('user');
+      $ownersInfo = array();
+      foreach ($owners as $ownerId) {
+        $ownersInfo[] = $userService->getUser($ownerId);
+      }
+
+      return $this->getView()->render('view_intro', array(
+        'setting' => $this->getSetting(),
+        'ownersInfo' => $ownersInfo,
+      ));
+    }
+  }
+
+  public function url_quicklinks(){
+    // 检查权限
+    $this->_checkOwnerAccess(true);
+    $get = $this->getContext()->getRequest()->getGet();
+    $userId = $this->getContext()->getUser()->getId();
+    $args = array();
+    $args['editable'] = $this->isOwner($userId);
+    $args['appadmin'] = $this->isAppAdmin($userId);
+    $args['instance_id'] = $this->getInstanceId();
+    $args['type'] = $get['type'];
+    $args['html'] = $this->invoke('quicklinks', 'quicklinks', $args);
+    if($this->isSite()){
+      $args['header'] = $this->get_header();
+      return $this->getView()->render('quicklinks', $args);
+    }else{
+      return $this->getView()->render('quicklinks', $args);
+    }
+  }
+
+  protected function isAppAdmin($uid)
+  {
+    $mysql = $this->getProxy('mysql');
+    $sql = 'SELECT COUNT(0) FROM `apps` WHERE `offer_instance_id` = "%s" AND `member_id` = "%s"';
+    $sql = sprintf($sql, $mysql->escape($this->getInstanceId()), $mysql->escape($uid));
+    return $mysql->fetchField($sql);
+  }
+
+  public function hook_isadmin($userId){
+    return $this->isOwner($userId) || $this->isAppAdmin($userId);
+  }
+
+  public function url_app($appId = '', $url = '') {
+    if (!isLogin()){
+      $url = url('user/login',true);
+      gotoUrl($url);
+    }
+
+    AopCore::loadLibrary('app');
+    $appId = trim($appId);
+    $vinstanceid = $this->getInstanceId();
+    if (strlen($appId) === 0 || !($appInfo =  AopApp::getInfo($appId)) || empty($vinstanceid)){
+      return AOP_NOT_FOUND;
+    }
+    $baseUrl = url($this->getPath());
+    $ismember = $this->isMember($this->getContext()->getUser()->getId());
+    $tparr = array_slice(func_get_args(), 2);
+    $tparr[] = $ismember;
+    $args = array_merge(array('sns', 'virtual', $vinstanceid, $url), $tparr);
+    $content = call_user_func_array(array($this, 'invoke'), $args);
+    $args = array('html'=>$content);
+    $args['header'] = $this->get_header();
+
+    return $this->getView(1)->render('virtual_app', $args);
+    //return $this->getView()->render('virtual_page', array('content'=>$content));
+  }
+
+  public function url_apps()
+  {
+    // 检查权限
+    if (!isLogin()) {
+      gotoUrl('user/login');
+    }
+    $instanceId = $this->getInstanceId();
+    if (!$this->getInstanceId()) {
+      throw new Aop404Exception();
+    }
+    $userId = $this->getContext()->getUser()->getId();
+    $editable = $this->isOwner($userId);
+    if (!$editable && !$this->isAppAdmin($userId)) {
+      throw new Aop403Exception();
+    }
+
+    $apps = $this->getAppList();
+    $appsList = array();
+    foreach ($apps as $appId => $info) {
+      if(in_array($appId, array('weather', 'stock', 'quicklinks'))) {
+        continue;
+      }
+      $instance = AopApp::getInstance($info);
+      if (method_exists($instance, 'hook_managelink')) {
+        $link = $instance->hook_managelink($instanceId);
+        $finder = $this->invoke('ucenter', 'findpeople_button', 'callbackPeopleFinder');
+      } else {
+        $link = null;
+        $finder = null;
+      }
+      $app = array(
+        'id' => $appId,
+        'name' => $info['name'],
+        'link' => $link,
+        'finder' => $finder,
+        'members' => array(),
+      );
+      $appsList[$appId] = $app;
+    }
+    unset($apps);
+    $appsSetting = $this->getAppsSetting();
+    foreach ($appsSetting as $row) {
+      $appsList[$row->app_id]['members'][] = $row->member_id;
+    }
+
+    if ($editable && $this->getContext()->getRequest()->isPost()) {
+      $request = $this->getContext()->getRequest();
+      $postApps = $request->getPost('apps', array());
+      $postEnable = $request->getPost('enable', array());
+      $postPeople = $request->getPost('people', array());
+      $set = array();
+      $userProxy = $this->getProxy('user');
+      $members_arr = $this->getMemberList();
+      $orgKeys = array();
+      $memberKeys = array();
+      foreach($members_arr as $val){
+        if(isset($val->org_id) && trim($val->org_id)){
+          $orgKeys[] = $val->org_id;
+        }elseif(isset($val->member_id) && trim($val->member_id)){
+          $memberKeys[] = $val->member_id;
+        }
+      }
+      foreach ($postApps as $key => $appId) {
+        if (!isset($appsList[$appId])) {
+          continue;
+        }
+        $members = explode(',', trim($postPeople[$key]));
+        foreach ($members as $k => $memberId) {
+          $memberId = trim($memberId);
+          try{
+            if ($memberId === '' || !$userProxy->getUser($memberId)) {
+              throw new Exception("error");
+            }
+          }catch(Exception $e){
+            unset($members[$k]);
+            continue;
+          }
+          $members[$k] = $memberId;
+          if(!$this->isMember($memberId)){
+            $memberKeys[] = $memberId;
+            $this->setMember($memberId);
+          }
+        }
+        $set[$appId] = $members;
+        $this->invoke($appId, 'managerset', $instanceId, $members);
+      }
+      foreach ($this->getChildren() as $appId) {
+        $this->invoke($appId, 'memberset', $instanceId, $orgKeys, $memberKeys);
+      }
+      $this->setAppsSetting($set);
+
+      // 保存可用的App
+      $enabledApps = array();
+      $children = $this->getChildren();
+      foreach ($postEnable as $appId => $value) {
+        if (in_array($appId, $children)) {
+          $enabledApps[] = $appId;
+        }
+      }
+      $setting = $this->getSetting();
+      $setting->data = array(
+        'apps' => $enabledApps,
+      );
+      $this->setSetting((array) $setting);
+
+      $this->redirect('');
+    } else {
+      $args = array();
+      $args['editable'] = $editable;
+      $args['appadmin'] = $this->isAppAdmin($userId);
+      $args['apps'] = $appsList;
+      $args['setting'] = $this->getSetting();
+      if($this->isSite()){
+        $args['header'] = $this->get_header();
+        return $this->getView()->render('apps', $args);
+      }else{
+        return $this->getView()->render('apps', $args);
+      }
+    }
+  }
+
+  protected function getAppsSetting($instanceid = null)
+  {
+    if (!isset($instanceid) || strlen($instanceid) === 0) {
+      $instanceid = $this->getInstanceId();
+    }
+    $mysql = $this->getProxy('mysql');
+    return $mysql->query('SELECT `offer_instance_id`, `app_id`, `member_id` FROM `apps` WHERE `offer_instance_id` = "' . $mysql->escape($instanceid) . '"');
+  }
+
+
+  protected function setAppsSetting($set)
+  {
+    $mysql = $this->getProxy('mysql');
+    $mysql->execute('DELETE FROM `apps` WHERE `offer_instance_id` = "' . $mysql->escape($this->getInstanceId()) . '"');
+    foreach ($set as $appId => $members) {
+      foreach ($members as $memberId) {
+        $mysql->execute('INSERT INTO `apps` (`offer_instance_id`, `app_id`, `member_id`) VALUES ("' . $mysql->escape($this->getInstanceId()) . '", "' . $mysql->escape($appId) . '", "' . $mysql->escape($memberId) . '")');
+      }
+    }
+  }
+
+  public function url_fileshare(){
+    if(!$this->isSite()) {
+      return AOP_NOT_FOUND;
+    }
+    $userId = $this->getContext()->getUser()->getId();
+    $instances = $this->invoke('department','getInstances',$userId);
+    $current_instanceid = $this->getInstanceId();
+
+    if(is_array($instances) && array_key_exists($current_instanceid, $instances)){
+      $isMember = 1;
+    }else{
+      $isMember = 0;
+    }
+    $html = $this->invoke('fileshare', 'virtual',$current_instanceid,$isMember);
+    $args = array('html'=>$html);
+    $args['header'] = $this->get_header();
+    return $this->getView(1)->render('fileshare', $args);
+  }
+
+  public function hook_install($catalogId, $productId)
+  {
+    if (!parent::hook_install($catalogId, $productId)) {
+      return false;
+    }
+    $mysql = $this->getProxy('mysql');
+    $sql = <<<SQL
+CREATE TABLE IF NOT EXISTS `apps` (
+  `offer_instance_id` VARCHAR(50) NOT NULL,
+	`app_id` VARCHAR(64) NOT NULL DEFAULT '',
+  `member_id` VARCHAR(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`offer_instance_id`, `app_id`, `member_id`),
+  KEY `list` (`offer_instance_id`, `member_id`)
+) DEFAULT CHARSET=utf8;
+SQL;
+    $result = $mysql->execute($sql);
+    if (strtolower($result) !== 'success') {
+      return false;
+    }
+    return true;
+  }
+
+  public function hook_uninstall($catalogId, $productId)
+  {
+    if (!parent::hook_uninstall($catalogId, $productId)) {
+      return false;
+    }
+    $mysql = $this->getProxy('mysql');
+    $sql = 'DROP TABLE IF EXISTS `apps`;';
+    $result = $mysql->execute($sql);
+    if (strtolower($result) !== 'success') {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * 获取可以显示出来的视图
+   * @param string $type default:表示组织可以获取的视图,portal:表示虚拟站点可以获取的视图
+   */
+  private function getConfigViews($type = 'default') {
+    $configProxy = $this->getProxy('config');
+    if($type == 'default'){
+      $list = $configProxy->searchConfig('views');
+    } else {
+      $list = $configProxy->searchConfig('portalviews');
+    }
+    if ($list=='') {
+      return array();
+    }
+    return unserialize($list);
+  }
+}

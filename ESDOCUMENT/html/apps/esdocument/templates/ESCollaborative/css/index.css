@@ -1,0 +1,291 @@
+@charset "utf-8";
+/* CSS Document */
+html,body{ margin:0; padding:0; overflow:hidden;}
+.rightDiv{ float:left;overflow:hidden;}
+.leftDiv{ width:220px; float:left; overflow:hidden; height:100%; background-color: #133959;border-radius: 5px; margin-right:10px;}
+.leftDiv div{ width:100%; height:auto; overflow:hidden; float:left;}
+.leftDiv a, .leftDiv h2{ width:220px; height:30px; font:normal normal normal 14px/30px 微软雅黑,黑体,宋体,arial; text-indent:80px; float:left;}
+.leftDiv h2{ color:#3E78FD; font-weight:bold;}
+.leftDiv a{  font-size:12px; text-decoration:none; color:#fff;}
+.leftDiv a:hover{  background:#f5f5f5;color:#133959;}
+.leftDiv a.selected{  background:#eee;color:#133959;}
+.leftDiv span{ color:#000;}
+.opens{ width:16px; height:16px; display:inline-block; background:url(../img/editor.gif) no-repeat no-repeat; cursor:pointer;}
+/* 操作列打开按钮 */
+.flexigrid div.bDiv span.openbtn {
+	display:inline-block; width:16px; height:16px; background:url(images/view.gif) no-repeat no-repeat; cursor:pointer;
+}
+a img {
+	border: 0 none;
+}
+
+a {
+	text-decoration: none;
+}
+
+.clear {
+	clear: both;
+}
+
+/* 按钮样式 */
+.agree {
+	background: url(../../public/flexigrid/css/images/accept.png) no-repeat
+		3px center;
+} /* 提交 */
+.back {
+	background: url(../../public/flexigrid/css/images/resetBtn.png)
+		no-repeat 3px center;
+} /* 退回 */
+.approval {
+	background: url(../../public/ztree/css/zTreeStyle/img/diy/2.png)
+		no-repeat 3px center;
+} /* 转审批 */
+.process {
+	background: url(../../public/ztree/css/zTreeStyle/img/diy/3.png)
+		no-repeat 3px center;
+} 
+/*发布*/
+.comrelease{background: url(../../public/flexigrid/css/images/FileModelManage.png) no-repeat 3px center;}
+
+/* 流程图 */
+
+/* 鼠标经过 */
+.extbtnmouseover {
+	border-color: #CCC #EEE #EEE #CCC;
+	border-style: solid;
+	border-width: 1px;
+}
+
+h2 {
+	font-size: 13px;
+	font-weight: normal;
+}
+
+textarea {
+	padding: 0;
+	margin: 0;
+}
+
+.borrowing_message {
+	width: 700px;
+	height: 550px;
+	float: left;
+	overflow-y: auto;
+	position: relative;
+}
+
+.positionbtn {
+	width: 450px;
+	height: auto;
+	overflow: hidden;
+	float: right;
+}
+
+.message_list,.borrowing_detailed_tbl {
+	width: 680px;
+	float: left;
+	margin-top: 5px;
+}
+
+.buttons {
+	width: auto;
+	height: 24px;
+	float: left;
+	margin-top: 5px;
+}
+
+.message_list {
+	height: auto;
+	overflow: hidden;
+}
+
+.borrowing_detailed_tbl {
+	height: auto;
+	overflow: hidden;
+}
+
+.borrowing_detailed_tbl_child {
+	width: 665px;
+	height: 250px;
+	float: left;
+	margin: 0px 0 5px 9px;
+	display: inline;
+}
+
+.buttons .basebtn {
+	height: 24px;
+	float: left;
+	padding-left: 20px;
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+.basebtn_border {
+	border-top: 1px solid #eee;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+.basebtn_border {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #f5f5f5 #ccc #ccc #f5f5f5;
+}
+
+.field_s {
+	width: 100%;
+	height: 30px;
+	float: left;
+}
+
+.like_input {
+	width: 322px;
+	height: 22px;
+	float: left;
+	margin: 0 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	_display: inline;
+}
+
+.field_s span {
+	width: 95px;
+	line-height: 22px;
+	font-weight: bold;
+	text-align: left;
+	text-indent: 5px;
+	float: left;
+}
+
+.field_s input {
+	width: 225px;
+	height: 22px;
+	line-height: 22px;
+	color: #555;
+	float: left;
+	border: 0;
+}
+
+.like_textarea {
+	width: 663px;
+	min-height: 100px;
+	height: auto;
+	overflow: hidden;
+	float: left;
+	margin: 0 0 5px 9px;
+	padding-bottom: 5px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: #eee;
+	_display: inline;
+}
+
+.like_textarea h2 {
+	width: 100%;
+	line-height: 22px;
+	text-indent: 5px;
+	font-size: 12px;
+	float: left;
+}
+
+.like_textarea .like_textarea_child {
+	width: 650px;
+	height: 90px;
+	overflow: hidden;
+	float: left;
+	border: 1px solid #dedede;
+	margin: 0 0 5px 5px;
+	overflow: hidden;
+	background: #f8f8f8;
+	_display: inline;
+}
+
+.like_textarea textarea {
+	width: 632px;
+	height: 60px;
+	line-height: 20px;
+	font-size: 12px;
+	float: left;
+	padding: 0 3px;
+	border: 1px solid #eee;
+	margin: 0 0 5px 5px;
+	overflow: hidden;
+	_display: inline;
+	resize: none;
+}
+
+.like_textarea .edit_textarea {
+	border: 1px solid #ddd;
+}
+
+.like_textarea .extextarea {
+	width: 645px;
+	color: #555;
+	float: left;
+	border: 1px solid #dedede;
+}
+
+.borrowing_detailed_tbl_child .flexigrid {
+	border-top: 1px solid #ccc;
+}
+
+.showdetail {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url(../img/editor.gif) no-repeat no-repeat;
+	cursor: pointer;
+}
+
+#loadfile div{margin-top:10px;margin-left:5px;}
+.link{ width:16px; height:16px; border:0; background:url('../img/link.png'); cursor:pointer;}
+/* 鉴定授权窗口@方吉祥 */
+.user_box{
+	width:900px;
+	height:500px;
+	float:left;
+	overflow:hidden;
+}
+.group_list{
+	width:900px;
+	height:200px;
+	float:left;
+	overflow:auto;
+}
+.user_ztree{
+	width:250px;
+	height:290px;
+	float:left;
+	border-top:1px solid #ccc;
+	overflow:scroll;
+}
+.user_tbl{
+	width:640px;
+	height:300px;
+	float:left;
+}
+
+/* 最终审批人窗口@方吉祥 */
+.terminator_box{ width:900px; height:500px; float:left; overflow:hidden}
+.terminator_ztree{ width:250px; height:490px; float:left; overflow:auto;}
+.terminator_tbl{ width:640px; height:500px; float:left}
+/* 最终审批人窗口@方吉祥 */
+.positionbtn .buttons .modify{ background:url(../../public/ztree/css/zTreeStyle/img/diy/2.png) no-repeat 3px center;}
+/*查看督办详细信息样式@niyang*/
+.espakcet{width:490px;overflow:auto;height:300px;margin-top:5px;}
+.espakcet ul{width: 460px;text-align:center;}
+.espakcet ul li{width:200px;height:30px;margin-left:20px;float:left;margin-top:10px;_display:inline}
+.espakcet span{width:60px;height:30px;line-height:30px;text-align:left;float:left;}
+.espakcet ul li input{height:20px;float:left;width:133px;}
+.espakcet ul li select{height:22px;float:left;width:135px;}
+
+.selectInput {
+	width: 300px;
+	height: 20px;
+	border: 1px solid #ccc;
+	background-image: url('../../public/img/drop_down_tab.gif');
+	background-repeat: no-repeat;
+	background-position: 99% 50%;
+	background-size: 20px20px;
+}

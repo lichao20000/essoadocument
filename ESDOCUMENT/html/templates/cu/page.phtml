@@ -1,0 +1,293 @@
+<?php
+global $user;
+$appSList = isset($user->apps) ? $user->apps : array();
+AopCore::loadLibrary('app');
+$appList = AopApp::getList();
+$dList = isset($appSList['department']) ? $appSList['department'] : array();
+$count = count($dList);
+$systemInfo = AopApp::getInfo('system');
+$systemInstance = AopApp::getInstance($systemInfo);
+// 根据部门获取原站点链接
+$oldSite = "http://www.hq.unicom.local/loginSelect/login.html";
+if (isset($user->id)) {
+  $userProxy = $systemInstance->getProxy('user');
+  if ($userInf = $userProxy->getUser($user->id)) {
+    $orgId = $userInf->deptEntry->orgid;
+    $dept = $userInf->mainSite;
+  } else {
+    $orgId = '';
+    $dept = '';
+  }
+  switch($dept){
+    case 'qh':
+    case 'QH':
+      $oldSite = "http://www.qh.unicom.local/";
+      break;
+    case 'hi':
+    case 'HI':
+      $oldSite = "http://www.hi.unicom.local/";
+      break;
+    case 'cq':
+    case 'CQ':
+      $oldSite = 'http://www.cq.unicom.local/eai/eai/authentication/checkLogin.do?return=http%3A%2F%2Fwww.cq.unicom.local%2Fportal%2Fwps%2Fthemes%2Fhtml%2FWebSeal.jsp';
+      break;
+    case 'hb':
+    case 'HB':
+      $oldSite = "http://www.hb.unicom.local/";
+      break;
+  }
+}
+
+if (!isset($_SESSION['header_urls'])) {
+  // 全国通讯录地址
+  $addressBookUrl = $_SESSION['header_urls']['abu'] = $systemInstance->invoke('unisapptongxunlu', 'gettongxunluurl', $orgId);
+  // 个人短信地址
+  $messageUrl = $_SESSION['header_urls']['mu'] = $systemInstance->invoke('unisappgerenduanxin', 'getsendsmsurl');
+} else {
+  $addressBookUrl = $_SESSION['header_urls']['abu'];
+  $messageUrl = $_SESSION['header_urls']['mu'];
+}
+
+//获取setting 应用
+$settingInfo = AopApp::getInfo('setting');
+$settingInstance = AopApp::getInstance($settingInfo);
+// $settingStatus = $settingInstance->isShow(2);  //liqiubo 20141125 这个配置还有用么？屏蔽掉，并将下面用这个比对的代码删掉，如有问题，比对上一版本代码
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>联通云门户</title>
+<link href="<?php echo $tplPath ?>/css/global.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath ?>/css/app_global.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath ?>/css/cu_red.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath ?>/css/jquery.ui.core.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath ?>/css/jquery.ui.theme.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath . '/js/jquery.js' ?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath . '/js/jquery.block-ui.js'?>"></script>
+<!--[if lt IE 10]>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/PIE.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+var App = {};
+var ChinaUnicom = {};
+</script>
+</head>
+<body>
+<div id="page-top" class="top" style="position:relative;z-index: 200;">
+  <div class="topLogin">
+    <div class="topLoginL">
+<?php if ($addressBookUrl): ?>
+      <a href="<?php echo $addressBookUrl ?>">全国通讯录</a>
+<?php endif ?>
+<?php if ($messageUrl): ?>
+      <a href="<?php echo $messageUrl ?>">个人短信</a>
+<?php endif ?>
+      <a href="<?php echo url('department/1343264363685aNl8yNFhIoxeAtnKJN4w8mvvu', true) ?>">IT系统优化建议</a>
+    </div>
+<?php if (isLogin()): ?>
+    <div class="topLoginR">
+      <span id="header-clock" style="margin-right:10px"><?php echo date('Y-m-d G:i', REQUEST_TIME) ?></span>
+      <a href="<?php echo url('desktop', true) ?>"><?php echo $this->plain($user->userName) ?></a> |
+      <?php echo $this->plain($user->desc) ?> |
+      <a href="http://10.0.9.143:8080/GlobalAddressList/jsp/userprivateindex.jsp" target="_blank">个人信息修改</a> |
+      <a href="<?php echo url('user/logout', true) ?>">退出</a>
+    </div>
+<?php else: ?>
+    <div class="topLoginR"><a href="<?php echo url('user/login', true) ?>">登录</a></div>
+<?php endif ?>
+  </div>
+  <?php
+  $tagsList = array('专业应用', '数据应用', '工作流程', '其他应用');
+  $list = AopApp::getUserProductList($tagsList);
+  /*
+  $app_professional = array_merge($list[1],$list[2]);
+  $app_work = (isset($list[3]) ? $list[3] : array());
+  $app_others = (isset($list[4]) ? $list[4] : array());
+  
+  //获取排序
+  AopCore::loadLibrary('app');
+  $appInfo = AopApp::getInfo('system');
+  $appInstance = AopApp::getInstance($appInfo);
+  $app_pro_nav = $appInstance->invokePublic('setting','getNavOrder','pro',$app_professional,$dept);
+  $app_work_nav = $appInstance->invokePublic('setting','getNavOrder','work',$app_work,$dept);
+  $app_others_nav = $appInstance->invokePublic('setting','getNavOrder','others',$app_others,$dept);
+  */
+  ?>
+  
+  <div class="topLogo">
+    <div class="topLogoL"><a href="#"><img src="<?php echo $tplPath ?>/images/logo1.gif" width="190" height="50" alt="中国联通" /></a></div>
+    <div class="topLogoR">
+      <div class="topSelect">
+        <span id="searchArea" value="info">信息</span>
+        <div class="topSelectImg" style="cursor: pointer;" id="showSearchList" ><img src="<?php echo $tplPath?>/images/search_drop_down.gif" width="7" height="4" alt="展开" /></div>
+        <div class="topSelectList" id="searchListPanel" style="display: none;" >
+          <a href="javascript:void(0)" onclick="searchBoxHide()" value="info">信息</a>
+          <a href="javascript:void(0)" onclick="searchBoxHide()" value="colleage">同事</a>
+          <a href="javascript:void(0)" onclick="searchBoxHide()" value="app">应用</a>
+        </div>
+      </div>
+      <div class="topInput">
+      <input type="text" class="topInput"  value="<?php
+
+      if(isset($_GET['keywords']) && urldecode($_GET['keywords'])!='搜新闻、通知、待办待阅、其它应用信息' && urldecode($_GET['keywords'])!='搜全国通讯录，专业通讯录，个人通讯录' && urldecode($_GET['keywords'])!='搜接入云门户的应用'){ echo urldecode($_GET['keywords']);}else{echo '搜新闻、通知、待办待阅、其它应用信息';}
+
+      ?>" id="seachKey"  style="border:0;height:25px;width:270px;float:left;font-size:12px;line-height:25px;color:#666;margin:0;padding:0;"/>
+        <div class="topInputImg" style="cursor: pointer;" id="showSearchListBox"><img src="<?php echo $tplPath?>/images/search_drop_down.gif" width="7" height="4" alt="展开" /></div>
+        <div class="searchBox" id="searchColleageBox" style="display:none;z-index:1000">
+          <ul style="margin-bottom:2px;">
+            <li style="float:right;"><span>&nbsp;</span><a href="javascript:void(0)" onclick="searchBoxHide('colleage')"><img src="<?php echo $tplPath?>/images/delete1.gif" width="7" height="6" alt="关闭"/></a></li>
+          </ul>
+          <ul>
+            <li style=" width:70px; margin-right:6px;" class="textAlignRight">姓名</li>
+            <li>
+              <label for="textfield"></label>
+              <input type="text" name="ss_name" id="ss_name"  style=" width:205px;"/>
+              <input type="hidden" name="adv" value="adv"/>
+            </li>
+          </ul>
+          <ul>
+            <li style=" width:70px; margin-right:6px;" class="textAlignRight">所属公司</li>
+            <li>
+              <label for="textfield"></label>
+              <input type="text" name="ss_orgName" id="ss_orgName"  style=" width:205px;"/>
+              <!-- <select name="com" id="select" style="width:217px; height:25px;">
+                <option value="all">所有公司</option>
+              </select> -->
+            </li>
+          </ul>
+          <ul>
+            <li style=" width:70px; margin-right:6px;" class="textAlignRight">职位</li>
+            <li>
+              <label for="textfield"></label>
+              <input type="text" name="ss_position" id="ss_position"  style=" width:205px;"/>
+            </li>
+          </ul>
+          <ul>
+            <li style=" width:70px; margin-right:6px;" class="textAlignRight">办公电话</li>
+            <li>
+              <label for="textfield"></label>
+              <input type="text" name="ss_officephone" id="ss_officephone"  style=" width:205px;"/>
+            </li>
+          </ul>
+          <ul>
+            <li style=" width:70px; margin-right:6px;" class="textAlignRight">手机号</li>
+            <li>
+              <label for="textfield"></label>
+              <input type="text" name="ss_mobilephone" id="ss_mobilephone"  style=" width:205px;"/>
+            </li>
+          </ul>
+          <ul>
+            <li style=" width:70px; margin-right:6px;" class="textAlignRight">邮箱地址</li>
+            <li>
+              <label for="textfield"></label>
+              <input type="text" name="ss_email" id="ss_email"  style=" width:205px;"/>
+            </li>
+          </ul>
+
+          <ul>
+            <li style=" width:75px; margin-right:6px;" class="textAlignRight" id="adv_colleage_more_text">较多搜索条件</li>
+            <li style="background: url(images/dotted.gif); width:215px; margin-top:5px;"><img id="adv_colleage_more" src="<?php echo $tplPath?>/images/drop_up.gif" width="11" height="11" align="absmiddle" style="float:right; margin-top:2px;"/></li>
+          </ul>
+
+          <ul name="colleage_more" style="display:none;">
+            <li style=" width:70px; margin-right:6px;" class="textAlignRight">员工ID</li>
+            <li>
+              <label for="textfield"></label>
+              <input type="text" name="ss_userid" id="ss_userid"  style=" width:205px;"/>
+            </li>
+          </ul>
+          <!-- <ul name="colleage_more" style="display:none;">
+            <li style=" width:70px; margin-right:6px;" class="textAlignRight">入职时间</li>
+            <li>
+              <label for="select2"></label>
+              <select name="onboardfrom" id="select2" style="width:93px; height:25px; line-height:25px;">
+                <option value="2008">2008</option>
+              </select>
+            </li>
+            <li style=" width:30px;" class="textAlignCenter">到</li>
+            <li>
+              <label for="select2"></label>
+              <select name="onboardfromto" id="select2" style="width:93px; height:25px;">
+                <option value="2011">2011</option>
+              </select>
+            </li>
+          </ul> -->
+          <ul name="colleage_more" style="display:none;">
+            <li style=" width:70px; margin-right:6px;" class="textAlignRight">办公房间号</li>
+            <li>
+              <label for="textfield"></label>
+              <input type="text" name="ss_roomnumber" id="ss_roomnumber"  style=" width:205px;"/>
+            </li>
+          </ul>
+          <ul style="padding-top:12px;">
+            <li><a href="javascript:search('custom', '<?php echo url('search') ?>')"><img src="<?php echo $tplPath?>/images/search_but.gif" width="72" height="29" alt="搜索" /></a></li>
+          </ul>
+        </div>
+
+        <div class="searchBox" id="searchInfoBox" style="display:none;z-index:1000">
+          <ul>
+            <li><span style="margin-right:205px;">在以下位置搜索</span><a href="javascript:void(0)" onclick="searchBoxHide('info')"><img src="<?php echo $tplPath?>/images/delete1.gif" width="7" height="6" alt="关闭"/></a></li>
+          </ul>
+
+          <ul>
+            <li style=" width:88px; margin-right:6px;" class="textAlignRight">搜索作者/起草人</li>
+            <li>
+              <label for="textfield"></label>
+              <input type="text" name="created_name" id="created_name"  style=" width:190px;"/>
+              <input type="hidden" name="adv" value="adv"/>
+            </li>
+          </ul>
+          <ul>
+            <li style=" width:88px; margin-right:6px;"  class="textAlignRight">搜索结果来源</li>
+            <li>
+              <label for="textfield"></label>
+              <label for="select"></label>
+              <input type="text" name="from" id="from"  style=" width:190px;"/>
+              <!-- <select name="from" id="select" style="width:202px; height:25px;">
+                <option value="all">所有公司部门</option>
+              </select> -->
+            </li>
+          </ul>
+          <ul style="padding-top:12px;">
+            <li><a href="javascript:search('custom', '<?php echo url('search') ?>')"><img src="<?php echo $tplPath?>/images/search_but.gif" width="72" height="29" alt="搜索" /></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="searchBut"><a href="javascript:search('common', '<?php echo url('search') ?>')"><img src="<?php echo $tplPath?>/images/bt_global_search.gif" width="70" height="30" alt="搜索 " align="absmiddle" /></a></div>
+    </div>
+  </div>
+  <div class="topMenu">
+    <a href="<?php echo url('default/home')?>" id="menu_home">首页</a>
+    <a href="<?php echo url('department', true)?>" id="menu_group">联通集团</a>
+    <a href="<?php echo url('department/0/company', true)?>" id="menu_company">我的公司</a>
+<?php
+// disabled the follow menu item while the deptCode cannot found in department app.
+$departmentInstance = AopApp::getInstance(AopApp::getInfo('department'));
+if ($departmentInstance->checkDepartmentExists()):
+?>
+    <a href="<?php echo url('department/0/department', true)?>" id="menu_department">我的部门</a>
+<?php endif ?>
+<?php if (isLogin()): ?>
+    <a id="my_space" href="<?php echo url('desktop')?>"><?php echo $user->isLeader == 'true' ? '领导专区' : '我的空间' ?></a>
+<?php endif ?>
+    <a href="javascript:void(0)" id="menu_appcenter">应用中心<img src="<?php echo $tplPath?>/images/drop_down.gif" width="9" height="6" alt="展开" /></a></div>
+  <div class="topLine"></div>
+</div>
+<?php echo $this->render('page_app.phtml', array('appSList' => $appSList,'tagsList'=>$tagsList,'list'=>$list)) ?>
+<?php echo $content ?>
+</body>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/jquery-ui.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/jquery.form.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/easySlider1.7.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/webtoolkit.base64.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/cu.page.js"></script>
+<script type="text/javascript">
+var requestTime = <?php echo REQUEST_TIME * 1000 ?>;
+var tplPath = '<?php echo $tplPath ?>';
+var baseUrl = '<?php echo url('',true); ?>';
+var searchBaseUrl = '<?php echo url('search') ?>';
+$(function() {if(window.PIE){ $('.but1').each(function() { PIE.attach(this); });} });
+</script>
+</html>

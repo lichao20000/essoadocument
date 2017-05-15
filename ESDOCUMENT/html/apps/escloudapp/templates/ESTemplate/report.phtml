@@ -1,0 +1,116 @@
+<div id="reportlsit">
+<table id="selectreport"></table>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#selectreport").flexigrid({
+		/** jiangyuntao 20140820 增加传参结构ID和modelID，用于过滤已经设置过的报表记录 **/
+		/** guolanrui 20140924 增加报表类型，为了报表规则中只刷出档案报表 ,reportType:'archive' **/
+		url: $.appClient.generateUrl({ESReport:'reportList',structureId:structureID,molid:molid,reportType:'archive'},'x'),
+		dataType: 'json',
+		minwidth: 20,
+		//editable: true,
+		colModel : [
+			{display: '', name: 'rownum', width: 20, align: 'center'},
+			{display: '', name : 'id', width : 40, align: 'center'},
+			{display: '编辑', name : 'editbtn', width : 30, align: 'center',hide:true},
+			{display: '报表标题', name : 'title', width :100, sortable : true, align: 'left', validate:/^\d+$/i, validateMsg:"必须为数字"},
+			{display: '输出格式', name : 'reportstyle', width : 100, sortable : true, align: 'left'},
+			{display: '报表样式', name : 'resourcelevel', width : 80, sortable : true, align: 'left', dropdown:["", "表格","复合报表","测试"],hide:true},
+			{display: '每页条数', name : 'perpage', width : 50, sortable : true, align: 'center',hide:true},
+			{display: '报表模板文件', name : 'reportmodel', width : 80, sortable : true, align: 'left',hide:true},
+			{display: '是否存在', name : 'ishave', width : 80, sortable : true, align: 'center',hide:true},
+			{display: '上传者', name : 'uplodaer', width : 100, sortable : true, align: 'left'}
+			],
+		buttons : [{name: '选择', bclass: 'choose', tooltip: '选择模板', onpress:choose} ],
+		sortname: "c3",
+		sortorder: "asc",
+		usepager: true,
+		title: '报表列表',
+		useRp: true,
+		rp: 20,
+		nomsg:"没有数据",
+		showTableToggleBtn: false,
+		pagetext: '第',
+		itemtext: '页',
+		outof: '页 /共',
+		width:500,
+		//width: 'auto',
+		//height: 'auto',
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条',
+		procmsg:'正在加载数据，请稍候...'
+	});
+	function choose(){
+    	var thiscontent = new Array();
+    	$('#report').find("tr").each(function(i){
+	    	thiscontent[i]=$(this).find("td").eq(2).text()+$(this).find("td").eq(1).text();
+	    });
+	    thiscontent = thiscontent.toString();
+	    var id='';
+    	var ins = true;
+    	var content = new Array();
+		var checkboxObj=$("input[name='id']:checked");
+		if(checkboxObj.length =='0' || checkboxObj.length==='undefined')
+		{
+			$.dialog.notice({icon:'warning',content:'请选择数据',time:2});
+			return false;
+		}else{
+			checkboxObj.each(function(i){
+				id+=$(this).closest("tr").prop("id").substr(3)+',';
+				content[i]=$(this).closest("tr").find("td").eq(3).text()+$(this).closest("tr").find("td").eq(4).text();
+			});
+		}
+		for (var st in content){
+			if(thiscontent.indexOf(content[st])!=-1){
+				ins = false;
+			}
+		}
+		if(ins==false){
+			$.dialog.notice({icon:'warning',content:'所选值与原有值有重复',time:2});
+			return false;
+		}
+		if(id=='' || id==='undefined' || id==0)
+		{
+			return false;
+		}
+    	$.post($.appClient.generateUrl({ESTemplate:'reportingrulessave'},'x'),{id:id,moid:molid,stid:structureID},function(result){
+			if(result=="true"){
+				$.dialog.notice({icon:'succeed',content:'保存成功',time:2});
+				$("#report").flexOptions({newp:1}).flexReload();
+				/** jiangyuntao 20140820 选择完成后刷新选择报表列表数据 **/
+				$("#selectreport").flexReload();
+				/**liqiubo 20140313 刷新数据**/
+				$('#edit_rule_tbl').flexReload();
+			}else{
+				$.dialog.notice({icon:'error',content:'保存失败',time:2});
+			}
+			
+	});
+	}
+	//全选
+	$("input[name='ids']").die().live('click',
+			function(){
+			$("input[name='id']").attr('checked',$(this).is(':checked'));
+			}
+	);
+	$("#reportlsit").find('div[class="tDiv2"]').append('<div class="find-dialog"><input id="KeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="KeyWord" value="请输入关键字" /><span  onclick="reportQuery();"></span></div>');
+
+	
+});
+function reportQuery(){
+	var keyword = $.trim($('input[name="KeyWord"]').val());
+	if (keyword == '' || keyword == '请输入关键字') {
+		keyword = '';
+	}
+	/** jiangyuntao 20140820 增加传参结构ID和modelID，用于过滤已经设置过的报表记录 **/
+	/** guolanrui 20140924 增加报表类型，为了报表规则中只刷出档案报表 ,reportType:'archive' **/
+	var url=$.appClient.generateUrl({ESReport:'reportList',keyWord : encodeURI(keyword),structureId:structureID,molid:molid,reportType:'archive'},'x');
+	$("#selectreport").flexOptions({url : url,newp:1}).flexReload();
+	return false;
+}
+$(document).keydown(function(event) {
+	if (event.keyCode == 13 && document.activeElement.id == 'KeyWord') {
+		reportQuery();
+	}
+})
+</script>

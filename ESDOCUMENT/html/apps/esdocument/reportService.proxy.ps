@@ -1,0 +1,310 @@
+<?php
+/**
+ * 报表维护
+ * @author xuekun
+ *
+ */
+class ProxyEsdocumentReportService extends AgentProxyAbstract {
+	const SERVICE_NAME = "reportService";
+	public function getReportList($page = 1, $rp = 20, $params) {
+		$urlParam = array (
+				'list',
+				$page,
+				$rp 
+		);
+		$url = implode ( '/', $urlParam );
+		
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	public function getReportCount($params) {
+		$urlParam = array (
+				'count' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 获取ip
+	 * 
+	 * @author ldm
+	 */
+	public function getServiceIP() {
+		$urlParam = array (
+				'getServiceIP' 
+		);
+		$url = implode ( '/', $urlParam );
+		
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 验证title是否唯一
+	 */
+	public function checkTitleUnique($title) {
+		$url = "checkTitleUnique";
+		return $this->post ( self::SERVICE_NAME, $url, $title, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 获取报表
+	 *
+	 * @param unknown_type $id        	
+	 */
+	public function getReport($id) {
+		$urlParam = array (
+				'get',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 编辑报表时的保存方法
+	 * xuekun 2014年12月24日 add
+	 *
+	 * @param unknown $postData        	
+	 * @return return_type
+	 */
+	public function saveReportTemForEdit($postData) {
+		$url = "saveReportTemForEdit";
+		return $this->post ( self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 删除报表
+	 * xuekun 2014年12月24日 add
+	 *
+	 * @param unknown $ids        	
+	 * @return return_type
+	 */
+	public function deleteReport($param) {
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'deleteBatch',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 报表导出
+	 */
+	public function exportReport($postData) {
+		$url = "exportReport";
+		return $this->post ( self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8" );
+	}
+	// /**
+	// * 获取报表列表
+	// *
+	// * @param unknown_type $start
+	// * @param unknown_type $end
+	// */
+	// public function getReportList($start = 1, $end = 20) {
+	// $urlParam = array (
+	// 'getReportList',
+	// $start,
+	// $end
+	// );
+	// $url = implode ( '/', $urlParam );
+	
+	// return $this->get ( self::SERVICE_NAME, $url );
+	// }
+	// /**
+	// * 获取总记录数
+	// */
+	// public function getCountAll() {
+	// return $this->get ( self::SERVICE_NAME, "countAll" );
+	// }
+	// /**
+	// * 获取总记录数
+	// */
+	// public function addReport($report) {
+	// return $this->post ( self::SERVICE_NAME, "addReport", $report, "application/json;charset=UTF-8" );
+	// }
+	// /**
+	// * 修改报表
+	// *
+	// * @param unknown_type $report
+	// */
+	// public function updateReport($param) {
+	// $urlParam = array (
+	// 'updateReport'
+	// );
+	// $url = implode ( '/', $urlParam );
+	// return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	// }
+	
+	// /**
+	// *
+	// * @author 20130808
+	// * 执行打印报表
+	// * @param string $nodePath
+	// * 节点Path
+	// * @param int $structureId
+	// * 结构ID
+	// * @param int $busiModelId
+	// * 业务ID
+	// * @param int $reportId
+	// * 报表ID
+	// * @param string $reportType
+	// * 表报类型
+	// * @param mixed $condition
+	// * 打印报表条件
+	// * @return string
+	// */
+	// public function runReport($data) {
+	// $urlParam = array (
+	// 'runReport'
+	// );
+	// $url = implode ( '/', $urlParam );
+	// return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	// }
+	
+	// /**
+	// *
+	// * @author fangjixiang
+	// * 移交清册目录报表
+	// */
+	// public function printTransferReport($param) {
+	// return $this->post ( self::SERVICE_NAME, 'printTransferReport', $param, "application/json;charset=UTF-8" );
+	// }
+	
+	// /**
+	// *
+	// * @author fangjixiang
+	// * 根据resourceLevel查询报表id
+	// */
+	// public function getReportIdByReporttype($reportModel) {
+	// $urlParam = array (
+	// 'getReportIdByReporttype'
+	// );
+	// $url = implode ( '/', $urlParam );
+	// // return $url.'******'.$resourceLevel;
+	// return $this->post ( self::SERVICE_NAME, $url, $reportModel, "application/json;charset=UTF-8" );
+	// }
+	// /**
+	// * 出入库报表的的勾选打印
+	// *
+	// * @author ldm
+	// */
+	// public function runSelectHoseReport($param) {
+	// return $this->post ( self::SERVICE_NAME, 'runSelectHoseReport', $param, 'application/json;charset=UTF-8' );
+	// }
+	// /**
+	// * 出入库报表的 筛选打印
+	// *
+	// * @author ldm
+	// */
+	// public function runHoseReport($param) {
+	// return $this->post ( self::SERVICE_NAME, 'runHoseReport', $param, 'application/json;charset=UTF-8' );
+	// }
+	// /**
+	// *
+	// * @author yzh
+	// * 打印借阅档案登记表
+	// */
+	// public function printBorrowForm($param) {
+	// return $this->post ( self::SERVICE_NAME, 'printUsingform', $param, 'application/json;charset=UTF-8' );
+	// }
+	
+	// /**
+	// * 查询目录报表文件
+	// * author: niyang
+	// * date: 2013-09-30
+	// * return json $jsonData
+	// */
+	// public function getInfomation($uid, $page, $pagesize) {
+	// $urlParam = array (
+	// 'getInfomation',
+	// $uid,
+	// $page,
+	// $pagesize
+	// );
+	// $url = implode ( '/', $urlParam );
+	// return $this->get ( self::SERVICE_NAME, $url );
+	// }
+	
+	// /**
+	// * 修改打印目录报表生成的文件的下载状态
+	// * author: niyang
+	// * date: 2013-09-30
+	// * return bool
+	// */
+	// public function updateInfomation($param) {
+	// $urlParam = array (
+	// 'updateInfomation'
+	// );
+	// $url = implode ( '/', $urlParam );
+	// return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	// }
+	// /**
+	// *
+	// * @author yzh 201307
+	// * 打印借阅档案登记表
+	// */
+	// public function printAccountBorrowForm($param) {
+	// return $this->post ( self::SERVICE_NAME, 'printUsingformAccount', $param, 'application/json;charset=UTF-8' );
+	// }
+	// /**
+	// *
+	// * @author yzh
+	// * 打印库房报表
+	// */
+	// public function printWarehouseForm($param) {
+	// return $this->post ( self::SERVICE_NAME, 'printRepository', $param, 'application/json;charset=UTF-8' );
+	// }
+	// /**
+	// *
+	// * @author yuanzhonghua 20130809
+	// * 文件校验---校验会计档案的数据---导出报表
+	// */
+	// public function printAccountReport($param) {
+	// $urlParam = array (
+	// 'printAccountingCompare'
+	// );
+	// $url = implode ( '/', $urlParam );
+	// return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	// }
+	// /**
+	// * wangtao
+	// * 获取报表的下载地址
+	// * 20131025
+	// */
+	// public function getFileUrl($fileId) {
+	// return $this->get ( self::SERVICE_NAME, 'getFileUrl/' . $fileId );
+	// }
+	// /**
+	// * wangtao
+	// * 情况报表文件
+	// */
+	// public function delReportFile($userId) {
+	// return $this->get ( self::SERVICE_NAME, 'clearInfomation/' . $userId );
+	// }
+	// public function downLoadFile($id) {
+	// return $this->get ( self::SERVICE_NAME, 'downLoadFile/' . $id );
+	// }
+	// /**
+	// * 获取报表列表
+	// *
+	// * @param unknown_type $start
+	// * @param unknown_type $end
+	// */
+	// public function listAllReportForSearch($postData) {
+	// $url = "list";
+	// return $this->post ( self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8" );
+	// }
+	// /**
+	// * 获取总记录数
+	// */
+	// public function countAllForSearch($postData) {
+	// $url = "countAllForSearch";
+	// return $this->post ( self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8" );
+	// }
+	// /**
+	// * guolanrui 20140830 编辑报表时的保存方法
+	// */
+	// public function checkReportDataIsExists($postData) {
+	// $url = "checkReportDataIsExists";
+	// return $this->post ( self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8" );
+	// }
+}

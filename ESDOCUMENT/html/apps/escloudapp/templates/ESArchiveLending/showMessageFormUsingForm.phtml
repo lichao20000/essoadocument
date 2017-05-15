@@ -1,0 +1,934 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+
+<style>
+ .formTable{width:600px; height:240px;float: left}
+  .storeTable{width:600px; height:250px;float: left}
+  .resPath{width:600px; height:240px;float: left}
+    .resForm{width:600px; height:250px;float: left}
+</style>
+<div style="width:600px;height:500px;">
+      <div class='formTable'>
+    	 <table id="formTable"></table>
+      </div>
+	  <div class='storeTable' >
+		<table id="storeTable"></table>
+	  </div>
+	</div>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	var formFiled =eval( '<?php echo json_encode($form)?>');
+	 var storeFiled = eval( '<?php echo json_encode($store)?>');
+    var formId = '<?php echo $formId?>';
+	
+	function relendDetail(){
+		//id3
+		var checkboxs = $("#storeTable").find("input[name='id3']:checked");
+		if (checkboxs.length > 0 ){
+			var ids = "";
+			checkboxs.each(function(){
+				ids += $(this).val() + ",";
+			});
+			ids = ids.substr(0,ids.length-1);
+			var formcheck = $("#formTable").find("input[name='id']");
+			var readerId = "";
+			var formId1 = "";
+			var readerName = "";
+			var identity = "";
+			if (formcheck.length > 0 ){
+				formcheck.each(function(){
+					formId1 = $(this).val().split('|')[0];
+					readerId = $(this).val().split('|')[1];
+					var trObj=$(this).closest("tr");
+					readerName=$("#flexme1").flexGetColumnValue(trObj,['Reader']);
+	                identity = $("#flexme1").flexGetColumnValue(trObj,['Identity']);
+                  
+				});
+				$.post(
+						$.appClient.generateUrl({ESArchiveLending:'checkCanLendArchive'},'x'),
+						{readerId:readerId,formId:formId1,ids:ids,identity:identity,readerName:readerName}, 
+						function(res){
+								if(res.successs){
+									 $.post(
+										$.appClient.generateUrl({ESArchiveLending:'updateDetailToOrder'},'x'),
+										{ids:ids,status:'续借',readerId:readerId,identity:identity,readerName:readerName}, 
+										function(data){
+											if(data){
+												$.dialog.notice({icon:'succeed',content:'续借数据成功',time:3,title:'3秒后自动关闭!'});
+											}else{
+												$.dialog.notice({title:'操作提示',content:'续借数据失败！',icon:'error',time:3});
+											}
+											$("#storeTable").flexReload();
+										}
+									 );
+								}else{
+									if(res.message != null && res.message != undefined){
+										$.dialog.notice({title:'操作提示',content:res.message,icon:'error',time:3});
+										}else if(res.data != null && res.data != undefined){
+
+			        						//resPage
+			        						var url=$.appClient.generateUrl({ESArchiveLending:'resPage'},'x');
+			        						$.ajax({
+			        						    url:url,
+			        						    success:function(data){
+			        						    var reslutData=$.dialog({
+			        						    	title:'查看结果',
+			        						    	width: '450px',
+			        						    	height:'200px',
+			        						    	padding:'0px',
+			        					    	   	fixed:  true,
+			        					    	    resize: false,
+			        						    	content:data,
+			        								init:showResultData
+			        							 });
+			  	      						function showResultData(){
+			  	      							var showcols1=[
+			  	  					        				{display: '操作结果', name : 'res', width : 150, align: 'center',metadata:'res'}, 
+			  	  					        				{display: 'path', name: 'path',width : 90,align: 'center',metadata:'path',hide:true},
+			  	  					        				{display: 'id', name: 'id',width : 90,align: 'center',metadata:'id',hide:true},
+			  	  					        				{display: '题名', name: 'title',width : 90,align: 'center',metadata:'title'},
+			  	  					        				{display: '档号', name: 'code',width : 90,align: 'center',metadata:'code'}
+			  	  					        			];
+			  	  				    			$("#resultData").flexigrid({
+			  	  				    				url:false,
+			  	  				    				dataType: 'json',
+			  	  				    				editable: false,
+			  	  				    				colModel: showcols1,
+			  	  				    				showTableToggleBtn: false,
+			  	  				    				pagetext: '第',
+			  	  				    				outof: '页 /共',
+			  	  				    				width: 450,
+			  	  				    				height: 200,
+			  	  				    			});
+			  		  				    			for(var i=0;i<res.data.length;i++){
+			  		  				    			$("#resultData").flexExtendData([{
+			  											'id':res.data[i].id,
+			  											'cell':{
+				  												'res':'已经没有续借次数了！',
+			  													'path':res.data[i].path,
+			  													'id':res.data[i].storeId,
+			  													'title':res.data[i].title,
+			  													'code':res.data[i].archiveCode
+			  												   }
+			  										}]);
+			  		      						}
+			  	      						}
+			  	      						}
+			        						});
+			        					
+										}
+								}
+						},
+						'json');
+			}
+		}else{
+			$.dialog.notice({title:'操作提示',content:'请选择您要的续借数据！',icon:'warning',time:3});
+			return false;
+		}
+	}
+	function returnDetail(){
+		var checkboxs = $("#storeTable").find("input[name='id3']:checked");
+		if (checkboxs.length > 0 ){
+			var ids = "";
+			var paths = "";
+			checkboxs.each(function(){
+				ids += $(this).val() + ",";
+				var trObj=$(this).closest('tr');
+				paths+= $("#storeTable").flexGetColumnValue(trObj,["path"]) +",";
+					
+			});
+			ids = ids.substr(0,ids.length-1);
+			var formcheck = $("#formTable").find("input[name='id']");
+			var readerId = "";
+			var formId1 = "";
+			var readerName = "";
+			var identity = "";
+			if (formcheck.length > 0 ){
+				formcheck.each(function(){
+					formId1 = $(this).val().split('|')[0];
+					readerId = $(this).val().split('|')[1];
+					var trObj=$(this).closest("tr");
+					readerName=$("#flexme1").flexGetColumnValue(trObj,['Reader']);
+	                identity = $("#flexme1").flexGetColumnValue(trObj,['Identity']);
+				});
+						//{readerId:readerId,formId:formId,ids:ids}, 
+			}
+			$.post(
+					$.appClient.generateUrl({ESArchiveLending:'updateDetailToOrder'},'x'),
+					{ids:ids,status:'归还'}, 
+					function(data){
+						$.post(
+								$.appClient.generateUrl({ESArchiveLending:'checkOrderPath'},'x'),
+								{paths:paths,readerId:readerId,formId:formId1,identity:identity,readerName:readerName}, 
+								function(res){
+									if(!res.success){
+										var htmlContent= "<div><div class='resPath'><table id ='resPath' ></table></div><div class='resForm'><table id ='resForm' ></table></div></div>";
+			    						    $.dialog({
+			    								title:'查看结果',
+			    								width: '600px',
+			    								padding:0,
+			    						    	height:'510px',
+			    								lock:true,
+			    								content:htmlContent,
+			    								init:showResultData
+			    						 });
+			    						 
+				      						function showResultData(){
+
+				      							function lendUsingDetail(){
+					      								var checkPaths = $("input[name='orderCheck']:checked");
+					      								if(checkPaths.length > 0 ){
+					      									
+					      								}
+				      								}
+				      							var showcols1=[
+															{display: '序号', name : 'num', width : 40, align: 'center',metadata:'num'}, 
+															{display: '', name : 'box', width : 40, align: 'center',metadata:'box'}, 
+				  					        				{display: 'path', name: 'path',width : 90,align: 'center',metadata:'path',hide:true},
+				  					        				{display: 'id', name: 'id',width : 90,align: 'center',metadata:'id',hide:true},
+				  					        				{display: '题名', name: 'title',width : 90,align: 'center',metadata:'title'},
+				  					        				{display: '档号', name: 'code',width : 90,align: 'center',metadata:'code'},
+				  					        				{display: '状态', name: 'status',width : 90,align: 'center',metadata:'status'}
+					  					        			];
+				  				    			$("#resPath").flexigrid({
+				  				    				url:false,
+				  				    				dataType: 'json',
+				  				    				editable: false,
+				  				    				colModel: showcols1,
+				  				    				showTableToggleBtn: false,
+				  				    				pagetext: '第',
+				  				    				outof: '页 /共',
+				  				    				width: 600,
+				  				    				height: 190,
+				  				    			});
+					  				    			for(var i=0;i<res.data.length;i++){
+					  				    			$("#resPath").flexExtendData([{
+														'id':res.data[i].id,
+														'cell':{
+															'num':i+1,
+		  													'box':'<input type="radio" name="orderCheck11"  value="'+res.data[i].path+'" onChange="changeOrderCheck(\''+res.data[i].path+'\')" />',
+																'path':res.data[i].path,
+																'title':res.data[i].title,
+																'code':res.data[i].archiveCode,
+																'status':'预约'
+															   }
+													}]);
+					      						}
+					  				    		function lendUsingFormData(name){
+													var radios = $("input[name='boxForForm']:checked");
+                                                    if(radios.length != 1){
+                                                    	$.dialog.notice({title:'操作提示',content:'请选择一条要要借出的数据！',icon:'warning',time:3});
+                                            			return false;
+                                                    }
+                                                    var idm = "";
+                                                    var path = "";
+                                                    var ids = "";
+                                                    var readerId = "";
+                                                    var readerName = "";
+                                                    var identity = "";
+                                                    radios.each(function(){
+													     idm = $(this).val().split('|')[0];
+													     path = $(this).val().split('|')[1];
+													     readerId = $(this).val().split('|')[2];
+													     ids = $(this).val().split('|')[3];
+	                                                    var trObj=$(this).closest("tr");
+	                                                    readerName=$("#flexme1").flexGetColumnValue(trObj,['Reader']);
+	                                                    identity = $("#flexme1").flexGetColumnValue(trObj,['Identity']);
+                                                        });
+					  				      		    $.post($.appClient.generateUrl({ESArchiveLending:'getMaxArchiveCount'},'x'),{idm:idm,idd:ids,path:path,readerId:readerId,identity:identity,readerName:readerName},function(res){
+					  				        			 if(res){ 
+					  				        				if(res.maxLendCount==0 || res.maxLendCount-1<0){
+					  				        					 $.dialog.notice({title:'操作提示',content:'最大的借出件数为：'+res.maxLendCount+'份,您勾选的数据的件数已经超出。',icon:'warning',time:3});
+					  				        					 return false;
+					  				        				}else{
+					  				        					if(res.data!=null&&res.data!=''){
+					  				        						//resPage
+					  				        						var url=$.appClient.generateUrl({ESArchiveLending:'resPage'},'x');
+					  				        						$.ajax({
+					  				        						    url:url,
+					  				        						    success:function(data){
+					  				        						    var reslutData=$.dialog({
+					  				        						    	title:'查看结果',
+					  				        						    	width: '600px',
+					  				        						    	height:'200px',
+					  				        						    	padding:'0px',
+					  				        					    	   	fixed:  true,
+					  				        					    	    resize: false,
+					  				        						    	content:data,
+					  				        								init:showResultData
+					  				        							 });
+					  				        						    function orderResultData(){
+					  				        						    	 var checkObj=$("#resultData").find("input[name='orderCheck']:checked");
+					  				   	        					   	  if(checkObj.length==0){
+					  				   	        					   		  $.dialog.notice({title:'操作提示',icon:'warning',content:'前选择预约数据！',time:3});
+					  				   	        					   		  return false;
+					  				   	        					   	  }else{
+					  				   	        					   		  var ids = [];
+					  				   	        					   	$("#resultData").find("input[name='orderCheck']:checked").each(function(){
+					  				   	        							ids.push($(this).val());
+					  				   	        						});
+					  				   	        					 ids=ids.join(',');
+					  				   	        					   		  $.post(
+					  				   	        					   			$.appClient.generateUrl({ESArchiveLending:'updateDetailToOrder'},'x'),
+					  				   	        					   			{ids:ids,status:'预约'},
+					  				   	        					   			function(res){
+					  					   	        					   			 if(res){
+					  					   	        					   				 reslutData.cancel= true;
+					  					   	        				        			 $("input[name='ids3']").attr('checked',false);
+					  					   	        				        			 $("#borrowDetails").flexReload();
+					  					   	        				        			 $.dialog.notice({
+					  					   	        										icon : 'succeed',
+					  					   	        										content :  '预约成功！',
+					  					   	        										time :2,
+					  					   	        										lock:false
+					  					   	        				        			 });
+					  					   	        								}else{
+					  					   	        									$.dialog.notice({
+					  					   	        										content:'预约失败！',
+					  					   	        										icon:'error',
+					  					   	        										time:2
+					  					   	        									});
+					  					   	        				        		 }
+					  				   	        					   			});
+					  				   	        					    	
+					  				        						    }
+					  				        						    }
+					  				  	      						function showResultData(){
+					  				  	      							var showcols11=[
+					  				  	  					        				{display: '序号', name : 'num', width : 40, align: 'center',metadata:'num'}, 
+					  				  	  					        				{display: '<input type="checkbox" name="ids3"/>', name : 'box', width : 40, align: 'center',metadata:'box'}, 
+					  				  	  					        				{display: 'path', name: 'path',width : 90,align: 'center',metadata:'path',hide:true},
+					  				  	  					        				{display: 'id', name: 'id',width : 90,align: 'center',metadata:'id',hide:true},
+					  				  	  					        				{display: '题名', name: 'title',width : 90,align: 'center',metadata:'title'},
+					  				  	  					        				{display: '档号', name: 'code',width : 90,align: 'center',metadata:'code'}
+					  				  	  					        			];
+					  				  	  				    		var allButtons11=[
+					  				  	  				    		        		{name: '预约', bclass: 'order',onpress:orderResultData}
+					  				  	  				    		        	];
+					  				  	  				    			$("#resultData").flexigrid({
+					  				  	  				    				url:false,
+					  				  	  				    				dataType: 'json',
+					  				  	  				    				editable: false,
+					  				  	  				    				colModel: showcols11,
+					  				  	  				    				buttons: allButtons11,
+					  				  	  				    				showTableToggleBtn: false,
+					  				  	  				    				pagetext: '第',
+					  				  	  				    				outof: '页 /共',
+					  				  	  				    				width: 450,
+					  				  	  				    				height: 200,
+					  				  	  				    			});
+					  				  		  				    			for(var i=0;i<res.data.length;i++){
+					  				  		  				    			$("#resultData").flexExtendData([{
+					  				  											'id':res.data[i].id,
+					  				  											'cell':{
+					  				  													'num':i+1,
+					  				  													'box':'<input type="checkbox" name="orderCheck" id="" value="'+res.data[i].id+'"/>',
+					  				  													'path':res.data[i].path,
+					  				  													'id':res.data[i].id,
+					  				  													'title':res.data[i].title,
+					  				  													'code':res.data[i].archive_code
+					  				  												   }
+					  				  										}]);
+					  				  		      						}
+					  				  	      						}
+					  				  	      						}
+					  				        						});
+					  				        					}else{
+					  				        						 $.post(
+					  														$.appClient.generateUrl({ESArchiveLending:'updateDetailToOrder'},'x'),
+					  														{ids:ids,status:name,readerId:readerId,identity:identity,readerName:readerName}, 
+					  														function(data){
+					  															if(data){
+					  																$.dialog.notice({icon:'succeed',content:name+'数据成功',time:3,title:'3秒后自动关闭!'});
+					  															}else{
+					  																$.dialog.notice({title:'操作提示',content:name+'数据失败！',icon:'error',time:3});
+					  															}
+					  															var obj = $("input:radio[name:'orderCheck11']:checked");
+					  															obj.each(function(){
+					  																$(this).closest('tr').remove();
+						  														});
+					  															$("#resForm tr").remove();
+					  														}
+					  													 ); 
+					  				        					}
+					  				        				}
+					  				        			 }
+					  				        		 },'json');
+					  				      	   
+
+
+															
+						  				    		}
+					  				    			var showColModel1=[
+					  				    			   				{display: '', name : 'id', width : 40, align: 'center'},
+					  				    			   				//{display:'操作', name : 'c3', width : 30, sortable : true, align: 'center',metadata:'edit'},
+					  				    			   				{display: '借阅单编号', name : 'c4', width : 100, sortable : true, align: 'center',metadata:'Code'},
+					  				    			   				{display: '借阅人', name : 'c5', width : 60, sortable : true, align: 'center',metadata:'Reader'},
+					  				    			   				{display: '单位', name : 'c6', width : 80, sortable : true, align: 'center',metadata:'Dept'},
+					  				    			   				{display: '电话', name : 'c7', width : 80, sortable : true, align: 'center',metadata:'Telephone'},
+					  				    			   				{display: '邮箱', name : 'c8', width : 150, sortable : true, align: 'center',metadata:'Email'},
+					  				    			   				{display: '利用目的', name : 'c9', width : 80, sortable : true, align: 'center',metadata:'Usepurpose'},
+					  				    			   				{display: '催还提前天数', name : 'c10', width : 60, sortable : true, align: 'center',metadata:'Validdate'},
+					  				    			   				{display: '登记人', name : 'c12', width : 60, sortable : true, align: 'center',metadata:'Register'},
+					  				    			   				{display: '登记日期', name : 'c13', width : 110, sortable : true, align: 'center',metadata:'Registdate'},
+					  				    			   				{display: '状态', name : 'c14', width : 60, sortable : true, align: 'center',metadata:'Status'},
+					  				    			   				{display: '身份证', name : 'c16', width : 60, sortable : true, align: 'center',metadata:'Identity'},
+					  				    			   				{display: '卷数', name : 'c17', width : 60, sortable : true, align: 'center',metadata:'FileCount'},
+					  				    			   				{display: '件数', name : 'c18', width : 60, sortable : true, align: 'center',metadata:'InnerFileCount'},
+					  				    			   				{display: '借阅人Id', name : 'readerId', width : 60, sortable : true, align: 'center',metadata:'readerId',hide:true},
+					  				    			   				{display: '备注', name : 'c15', width : 120, sortable : true, align: 'center',metadata:'Description'}
+					  				    			   		    ];
+					  				    			var allButtons1 = [
+																		{name: '借出', bclass: 'export',onpress:lendUsingFormData},
+																		{name: '借阅', bclass: 'tranlist',onpress:lendUsingFormData}
+																        	]
+					  				    			   		for(var i = 0;i<formFiled.length;i++){
+					  				    			   			showColModel1.push({display:formFiled[i].field,name:'d'+formFiled[i].id,width:80,sortable : true, align: 'center',metadata:'d'+formFiled[i].id});
+					  				    			   		}
+					  				    			 
+					  				    					$("#resForm").flexigrid({
+					  				    						url:false,
+					  				    						dataType: 'json',
+					  				    						editable: true,
+					  				    						colModel: showColModel1,
+					  				    						buttons:allButtons1,
+					  				    						usepager: true,
+					  				    						useRp: true,
+					  				    						rp: 20,
+					  				    						nomsg:"没有数据",
+					  				    						showTableToggleBtn: false,
+					  				    						pagetext: '第',
+					  				    						outof: '页 /共',
+					  				    						width:600,
+					  				    						height: 160,
+					  				    						pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+					  				    					});
+						      						
+				      						}
+									}
+									$("#storeTable").flexReload();
+									$.dialog.notice({content:'归还成功',icon : 'succeed',time:3});
+								},
+								'json'
+							 );
+						$("#storeTable").flexReload();
+					},
+					'json'
+				 );
+				
+		}else{
+			$.dialog.notice({title:'操作提示',content:'请选择您要的归还数据！',icon:'warning',time:3});
+			return false;
+		}
+	}
+	function relendDetailForForm(){
+		var formCheck = $("#formTable").find("input[name='id']:checked");
+		if(formCheck.length==1){
+			
+			var checkboxs = $("#storeTable").find("input[name='id3']");
+			if (checkboxs.length > 0 ){
+				var ids = "";
+				checkboxs.each(function(){
+					ids += $(this).val() + ",";
+				});
+				ids = ids.substr(0,ids.length-1);
+				var readerId = "";
+				var formId1 = "";
+				var identity = "";
+				var readerName = "";
+				formCheck.each(function(){
+						formId1 = $(this).val().split('|')[0];
+						readerId = $(this).val().split('|')[1];
+						 var trObj=$(this).closest("tr");
+                         readerName=$("#flexme1").flexGetColumnValue(trObj,['Reader']);
+                         identity = $("#flexme1").flexGetColumnValue(trObj,['Identity']);
+						
+					});
+				$.post(
+						$.appClient.generateUrl({ESArchiveLending:'checkCanLendArchive'},'x'),
+						{readerId:readerId,formId:formId1,ids:ids,identity:identity,readerName:readerName}, 
+						function(res){
+								if(res.successs){
+									 $.post(
+										$.appClient.generateUrl({ESArchiveLending:'updateDetailToOrder'},'x'),
+										{ids:ids,status:'续借',readerId:readerId,identity:identity,readerName:readerName}, 
+										function(data){
+											if(data){
+												$.dialog.notice({icon:'succeed',content:'续借数据成功',time:3,title:'3秒后自动关闭!'});
+											}else{
+												$.dialog.notice({title:'操作提示',content:'续借数据失败！',icon:'error',time:3});
+											}
+											$("#storeTable").flexReload();
+										}
+									 );
+								}else{
+									if(res.message != null && res.message != undefined){
+										$.dialog.notice({title:'操作提示',content:res.message,icon:'error',time:3});
+										}else if(res.data != null && res.data != undefined){
+	
+			        						//resPage
+			        						var url=$.appClient.generateUrl({ESArchiveLending:'resPage'},'x');
+			        						$.ajax({
+			        						    url:url,
+			        						    success:function(data){
+			        						    var reslutData=$.dialog({
+			        						    	title:'查看结果',
+			        						    	width: '450px',
+			        						    	height:'200px',
+			        						    	padding:'0px',
+			        					    	   	fixed:  true,
+			        					    	    resize: false,
+			        						    	content:data,
+			        								init:showResultData
+			        							 });
+			  	      						function showResultData(){
+			  	      							var showcols1=[
+			  	  					        				{display: '操作结果', name : 'res', width : 150, align: 'center',metadata:'res'}, 
+			  	  					        				{display: 'path', name: 'path',width : 90,align: 'center',metadata:'path',hide:true},
+			  	  					        				{display: 'id', name: 'id',width : 90,align: 'center',metadata:'id',hide:true},
+			  	  					        				{display: '题名', name: 'title',width : 90,align: 'center',metadata:'title'},
+			  	  					        				{display: '档号', name: 'code',width : 90,align: 'center',metadata:'code'}
+			  	  					        			];
+			  	  				    			$("#resultData").flexigrid({
+			  	  				    				url:false,
+			  	  				    				dataType: 'json',
+			  	  				    				editable: false,
+			  	  				    				colModel: showcols1,
+			  	  				    				showTableToggleBtn: false,
+			  	  				    				pagetext: '第',
+			  	  				    				outof: '页 /共',
+			  	  				    				width: 450,
+			  	  				    				height: 200,
+			  	  				    			});
+			  		  				    			for(var i=0;i<res.data.length;i++){
+			  		  				    			$("#resultData").flexExtendData([{
+			  											'id':res.data[i].id,
+			  											'cell':{
+				  												'res':'已经没有续借次数了！',
+			  													'path':res.data[i].path,
+			  													'id':res.data[i].storeId,
+			  													'title':res.data[i].title,
+			  													'code':res.data[i].archiveCode
+			  												   }
+			  										}]);
+			  		      						}
+			  	      						}
+			  	      						}
+			        						});
+			        					
+										}
+								}
+						},
+						'json');
+			}else{
+				$.dialog.notice({title:'操作提示',content:'请选择您要的续借数据！',icon:'warning',time:3});
+				return false;
+			}
+		}else{
+			$.dialog.notice({title:'操作提示',content:'请选择您要的续借数据！',icon:'warning',time:3});
+			return false;
+		}
+	}
+	function returnDetailForForm(){
+		var formCheck = $("#formTable").find("input[name='id']:checked");
+		if(formCheck.length==1){
+			var checkboxs = $("#storeTable").find("input[name='id3']");
+			if (checkboxs.length > 0 ){
+				var ids = "";
+				var paths = "";
+				checkboxs.each(function(){
+					ids += $(this).val() + ",";
+					var trObj=$(this).closest('tr');
+					paths+= $("#storeTable").flexGetColumnValue(trObj,["path"]) +",";
+						
+				});
+				ids = ids.substr(0,ids.length-1);
+				var readerId = "";
+				var formId1 = "";
+				var readerName = "";
+				var identity ="";
+				formCheck.each(function(){
+					formId1 = $(this).val().split('|')[0];
+					readerId = $(this).val().split('|')[1];
+					 var trObj=$(this).closest("tr");
+					readerName=$("#flexme1").flexGetColumnValue(trObj,['Reader']);
+                    identity = $("#flexme1").flexGetColumnValue(trObj,['Identity']);
+				});
+				$.post(
+						$.appClient.generateUrl({ESArchiveLending:'updateDetailToOrder'},'x'),
+						{ids:ids,status:'归还'}, 
+						function(data){
+							$.post(
+									$.appClient.generateUrl({ESArchiveLending:'checkOrderPath'},'x'),
+									{paths:paths,readerId:readerId,formId:formId1,identity:identity,readerName:readerName}, 
+									function(res){
+										if(!res.success){
+											var htmlContent= "<div><div class='resPath'><table id ='resPath' ></table></div><div class='resForm'><table id ='resForm' ></table></div></div>";
+				    						    $.dialog({
+				    								title:'查看结果',
+				    								width: '600px',
+				    						    	height:'510px',
+				    								lock:true,
+				    								content:htmlContent,
+				    								init:showResultData
+				    						 });
+				    						 
+					      						function showResultData(){
+
+					      							function lendUsingDetail(){
+						      								var checkPaths = $("input[name='orderCheck']:checked");
+						      								if(checkPaths.length > 0 ){
+						      									
+						      								}
+					      								}
+					      							var showcols1=[
+																{display: '序号', name : 'num', width : 40, align: 'center',metadata:'num'}, 
+																{display: '', name : 'box', width : 40, align: 'center',metadata:'box'}, 
+					  					        				{display: 'path', name: 'path',width : 90,align: 'center',metadata:'path',hide:true},
+					  					        				{display: 'id', name: 'id',width : 90,align: 'center',metadata:'id',hide:true},
+					  					        				{display: '题名', name: 'title',width : 90,align: 'center',metadata:'title'},
+					  					        				{display: '档号', name: 'code',width : 90,align: 'center',metadata:'code'},
+					  					        				{display: '状态', name: 'status',width : 90,align: 'center',metadata:'status'}
+						  					        			];
+					  				    			$("#resPath").flexigrid({
+					  				    				url:false,
+					  				    				dataType: 'json',
+					  				    				editable: false,
+					  				    				colModel: showcols1,
+					  				    				showTableToggleBtn: false,
+					  				    				pagetext: '第',
+					  				    				outof: '页 /共',
+					  				    				width: 450,
+					  				    				height: 190,
+					  				    			});
+						  				    			for(var i=0;i<res.data.length;i++){
+						  				    			$("#resPath").flexExtendData([{
+															'id':res.data[i].id,
+															'cell':{
+																'num':i+1,
+			  													'box':'<input type="radio" name="orderCheck11"  value="'+res.data[i].path+'" onChange="changeOrderCheck(\''+res.data[i].path+'\')" />',
+																	'path':res.data[i].path,
+																	'title':res.data[i].title,
+																	'code':res.data[i].archiveCode,
+																	'status':'预约'
+																   }
+														}]);
+						      						}
+						  				    		function lendUsingFormData(name){ 
+														var radios = $("input[name='boxForForm']:checked");
+	                                                    if(radios.length != 1){
+	                                                    	$.dialog.notice({title:'操作提示',content:'请选择一条要要借出的数据！',icon:'warning',time:3});
+	                                            			return false;
+	                                                    }
+	                                                    var idm = "";
+	                                                    var path = "";
+	                                                    var ids = "";
+	                                                    var readerId = "";
+	                                                    var readerName = "";
+	                                                    var identity = "";
+	                                                    radios.each(function(){
+														     idm = $(this).val().split('|')[0];
+														     path = $(this).val().split('|')[1];
+														     readerId = $(this).val().split('|')[2];
+														     ids = $(this).val().split('|')[3];
+														     var trObj=$(this).closest("tr");
+														     readerName=$("#flexme1").flexGetColumnValue(trObj,['Reader']);
+											                    identity = $("#flexme1").flexGetColumnValue(trObj,['Identity']);
+	                                                        });
+						  				      		    $.post($.appClient.generateUrl({ESArchiveLending:'getMaxArchiveCount'},'x'),{idm:idm,idd:ids,path:path,readerId:readerId,identity:identity,readerName:readerName},function(res){
+						  				        			 if(res){ 
+						  				        				if(res.maxLendCount==0 || res.maxLendCount-1<0){
+						  				        					 $.dialog.notice({title:'操作提示',content:'最大的借出件数为：'+res.maxLendCount+'份,您勾选的数据的件数已经超出。',icon:'warning',time:3});
+						  				        					 return false;
+						  				        				}else{
+						  				        					if(res.data!=null&&res.data!=''){
+						  				        						//resPage
+						  				        						var url=$.appClient.generateUrl({ESArchiveLending:'resPage'},'x');
+						  				        						$.ajax({
+						  				        						    url:url,
+						  				        						    success:function(data){
+						  				        						    var reslutData=$.dialog({
+						  				        						    	title:'查看结果',
+						  				        						    	width: '450px',
+						  				        						    	height:'200px',
+						  				        						    	padding:'0px',
+						  				        					    	   	fixed:  true,
+						  				        					    	    resize: false,
+						  				        						    	content:data,
+						  				        								init:showResultData
+						  				        							 });
+						  				        						    function orderResultData(){
+						  				        						    	 var checkObj=$("#resultData").find("input[name='orderCheck']:checked");
+						  				   	        					   	  if(checkObj.length==0){
+						  				   	        					   		  $.dialog.notice({title:'操作提示',icon:'warning',content:'前选择预约数据！',time:3});
+						  				   	        					   		  return false;
+						  				   	        					   	  }else{
+						  				   	        					   		  var ids = [];
+						  				   	        					   	$("#resultData").find("input[name='orderCheck']:checked").each(function(){
+						  				   	        							ids.push($(this).val());
+						  				   	        						});
+						  				   	        					 ids=ids.join(',');
+						  				   	        					   		  $.post(
+						  				   	        					   			$.appClient.generateUrl({ESArchiveLending:'updateDetailToOrder'},'x'),
+						  				   	        					   			{ids:ids,status:'预约'},
+						  				   	        					   			function(res){
+						  					   	        					   			 if(res){
+						  					   	        					   				 reslutData.cancel= true;
+						  					   	        				        			 $("input[name='ids3']").attr('checked',false);
+						  					   	        				        			 $("#borrowDetails").flexReload();
+						  					   	        				        			 $.dialog.notice({
+						  					   	        										icon : 'succeed',
+						  					   	        										content :  '预约成功！',
+						  					   	        										time :2,
+						  					   	        										lock:false
+						  					   	        				        			 });
+						  					   	        								}else{
+						  					   	        									$.dialog.notice({
+						  					   	        										content:'预约失败！',
+						  					   	        										icon:'error',
+						  					   	        										time:2
+						  					   	        									});
+						  					   	        				        		 }
+						  				   	        					   			});
+						  				   	        					    	
+						  				        						    }
+						  				        						    }
+						  				  	      						function showResultData(){
+						  				  	      							var showcols11=[
+						  				  	  					        				{display: '序号', name : 'num', width : 40, align: 'center',metadata:'num'}, 
+						  				  	  					        				{display: '<input type="checkbox" name="ids3"/>', name : 'box', width : 40, align: 'center',metadata:'box'}, 
+						  				  	  					        				{display: 'path', name: 'path',width : 90,align: 'center',metadata:'path',hide:true},
+						  				  	  					        				{display: 'id', name: 'id',width : 90,align: 'center',metadata:'id',hide:true},
+						  				  	  					        				{display: '题名', name: 'title',width : 90,align: 'center',metadata:'title'},
+						  				  	  					        				{display: '档号', name: 'code',width : 90,align: 'center',metadata:'code'}
+						  				  	  					        			];
+						  				  	  				    		var allButtons11=[
+						  				  	  				    		        		{name: '预约', bclass: 'order',onpress:orderResultData}
+						  				  	  				    		        	];
+						  				  	  				    			$("#resultData").flexigrid({
+						  				  	  				    				url:false,
+						  				  	  				    				dataType: 'json',
+						  				  	  				    				editable: false,
+						  				  	  				    				colModel: showcols11,
+						  				  	  				    				buttons: allButtons11,
+						  				  	  				    				showTableToggleBtn: false,
+						  				  	  				    				pagetext: '第',
+						  				  	  				    				outof: '页 /共',
+						  				  	  				    				width: 450,
+						  				  	  				    				height: 200,
+						  				  	  				    			});
+						  				  		  				    			for(var i=0;i<res.data.length;i++){
+						  				  		  				    			$("#resultData").flexExtendData([{
+						  				  											'id':res.data[i].id,
+						  				  											'cell':{
+						  				  													'num':i+1,
+						  				  													'box':'<input type="checkbox" name="orderCheck" id="" value="'+res.data[i].id+'"/>',
+						  				  													'path':res.data[i].path,
+						  				  													'id':res.data[i].id,
+						  				  													'title':res.data[i].title,
+						  				  													'code':res.data[i].archive_code
+						  				  												   }
+						  				  										}]);
+						  				  		      						}
+						  				  	      						}
+						  				  	      						}
+						  				        						});
+						  				        					}else{
+						  				        						 $.post(
+						  														$.appClient.generateUrl({ESArchiveLending:'updateDetailToOrder'},'x'),
+						  														{ids:ids,status:name,readerId:readerId,identity:identity,readerName:readerName}, 
+						  														function(data){
+						  															if(data){
+						  																$.dialog.notice({icon:'succeed',content:name+'数据成功',time:3,title:'3秒后自动关闭!'});
+						  															}else{
+						  																$.dialog.notice({title:'操作提示',content:name+'数据失败！',icon:'error',time:3});
+						  															}
+						  															$("#resForm tr").remove();
+						  															var obj = $("input:radio[name:'orderCheck11']:checked");
+						  															obj.each(function(){
+						  																$(this).closest('tr').remove();
+							  														});
+						  														}
+						  													 ); 
+						  				        					}
+						  				        				}
+						  				        			 }
+						  				        		 },'json');
+						  				      	   
+
+
+																
+							  				    		}
+						  				    			var showColModel1=[
+						  				    			   				{display: '', name : 'id', width : 40, align: 'center'},
+						  				    			   				//{display:'操作', name : 'c3', width : 30, sortable : true, align: 'center',metadata:'edit'},
+						  				    			   				{display: '借阅单编号', name : 'c4', width : 100, sortable : true, align: 'center',metadata:'Code'},
+						  				    			   				{display: '借阅人', name : 'c5', width : 60, sortable : true, align: 'center',metadata:'Reader'},
+						  				    			   				{display: '单位', name : 'c6', width : 80, sortable : true, align: 'center',metadata:'Dept'},
+						  				    			   				{display: '电话', name : 'c7', width : 80, sortable : true, align: 'center',metadata:'Telephone'},
+						  				    			   				{display: '邮箱', name : 'c8', width : 150, sortable : true, align: 'center',metadata:'Email'},
+						  				    			   				{display: '利用目的', name : 'c9', width : 80, sortable : true, align: 'center',metadata:'Usepurpose'},
+						  				    			   				{display: '催还提前天数', name : 'c10', width : 60, sortable : true, align: 'center',metadata:'Validdate'},
+						  				    			   				{display: '登记人', name : 'c12', width : 60, sortable : true, align: 'center',metadata:'Register'},
+						  				    			   				{display: '登记日期', name : 'c13', width : 110, sortable : true, align: 'center',metadata:'Registdate'},
+						  				    			   				{display: '状态', name : 'c14', width : 60, sortable : true, align: 'center',metadata:'Status'},
+						  				    			   				{display: '身份证', name : 'c16', width : 60, sortable : true, align: 'center',metadata:'Identity'},
+						  				    			   				{display: '卷数', name : 'c17', width : 60, sortable : true, align: 'center',metadata:'FileCount'},
+						  				    			   				{display: '件数', name : 'c18', width : 60, sortable : true, align: 'center',metadata:'InnerFileCount'},
+						  				    			   				{display: '借阅人Id', name : 'readerId', width : 60, sortable : true, align: 'center',metadata:'readerId',hide:true},
+						  				    			   				{display: '备注', name : 'c15', width : 120, sortable : true, align: 'center',metadata:'Description'}
+						  				    			   		    ];
+						  				    			var allButtons1 = [
+																			{name: '借出', bclass: 'back',onpress:lendUsingFormData},
+																			{name: '借阅', bclass: 'back',onpress:lendUsingFormData}
+																	        	]
+						  				    			   		for(var i = 0;i<formFiled.length;i++){
+						  				    			   			showColModel1.push({display:formFiled[i].field,name:'d'+formFiled[i].id,width:80,sortable : true, align: 'center',metadata:'d'+formFiled[i].id});
+						  				    			   		}
+						  				    			 
+						  				    					$("#resForm").flexigrid({
+						  				    						url:false,
+						  				    						dataType: 'json',
+						  				    						editable: true,
+						  				    						colModel: showColModel1,
+						  				    						buttons:allButtons1,
+						  				    						usepager: true,
+						  				    						useRp: true,
+						  				    						rp: 20,
+						  				    						nomsg:"没有数据",
+						  				    						showTableToggleBtn: false,
+						  				    						pagetext: '第',
+						  				    						outof: '页 /共',
+						  				    						width:600,
+						  				    						height: 160,
+						  				    						pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+						  				    					});
+							      						
+					      						}
+										}
+										$("#storeTable").flexReload();
+										$.dialog.notice({content:'归还成功',icon : 'succeed',time:3});
+									},
+									'json'
+								 );
+							$("#storeTable").flexReload();
+						},
+						'json'
+					 );
+				
+			}else{
+				$.dialog.notice({title:'操作提示',content:'请选择您要的归还数据！',icon:'warning',time:3});
+				return false;
+			}
+		}else{
+			$.dialog.notice({title:'操作提示',content:'请选择您要归还的数据！',icon:'warning',time:3});
+			return false;
+		}
+	}
+   function show_FormUsingData(){
+		
+   }
+	 var showColModel=[
+	   				{display: '<input type="checkbox" name="ids" onclick=selectAll(this.checked,"id","#formTable")>', name : 'id', width : 40, align: 'center'},
+	   				{display: '借阅单编号', name : 'c4', width : 100, sortable : true, align: 'center',metadata:'Code'},
+	   				{display: '借阅人', name : 'c5', width : 60, sortable : true, align: 'center',metadata:'Reader'},
+	   				{display: '单位', name : 'c6', width : 80, sortable : true, align: 'center',metadata:'Dept'},
+	   				{display: '电话', name : 'c7', width : 80, sortable : true, align: 'center',metadata:'Telephone'},
+	   				{display: '邮箱', name : 'c8', width : 150, sortable : true, align: 'center',metadata:'Email'},
+	   				{display: '利用目的', name : 'c9', width : 80, sortable : true, align: 'center',metadata:'Usepurpose'},
+	   				{display: '催还提前天数', name : 'c10', width : 60, sortable : true, align: 'center',metadata:'Validdate'},
+	   				{display: '登记人', name : 'c12', width : 60, sortable : true, align: 'center',metadata:'Register'},
+	   				{display: '登记日期', name : 'c13', width : 110, sortable : true, align: 'center',metadata:'Registdate'},
+	   				{display: '状态', name : 'c14', width : 60, sortable : true, align: 'center',metadata:'Status'},
+	   				{display: '身份证', name : 'c16', width : 60, sortable : true, align: 'center',metadata:'Identity'},
+	   				{display: '卷数', name : 'c17', width : 60, sortable : true, align: 'center',metadata:'FileCount'},
+	   				{display: '件数', name : 'c18', width : 60, sortable : true, align: 'center',metadata:'InnerFileCount'},
+	   				{display: '借阅人Id', name : 'readerId', width : 60, sortable : true, align: 'center',metadata:'readerId',hide:true},
+	   				{display: '备注', name : 'c15', width : 120, sortable : true, align: 'center',metadata:'Description'}
+	   		    ];
+	 var colButtons=[
+	            	 //wanghongchen 20140826 修改bgclass为export
+		        		{name: '续借', bclass: 'export',onpress:relendDetailForForm},
+		        		{name: '归还', bclass: 'back',onpress:returnDetailForForm}
+		        	];
+	   		for(var i = 0;i<formFiled.length;i++){
+	   			showColModel.push({display:formFiled[i].field,name:'d'+formFiled[i].id,width:80,sortable : true, align: 'center',metadata:'d'+formFiled[i].id});
+	   		}
+	 
+	   		var uri=$.appClient.generateUrl({ESArchiveLending:'form_jsonForUsingForm',formId:formId});
+			$("#formTable").flexigrid({
+				url:uri,
+				dataType: 'json',
+				editable: true,
+				colModel: showColModel,
+				buttons:colButtons,
+				usepager: true,
+				useRp: true,
+				rp: 20,
+				nomsg:"没有数据",
+				showTableToggleBtn: false,
+				pagetext: '第',
+				outof: '页 /共',
+				width:600,
+				height: 160,
+				pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+			});
+			$("#formTable").flexReload();
+	var showcols=[
+  				{display: '序号', name : 'num', width : 40, align: 'center',metadata:'num'}, 
+  				{display: '<input type="checkbox" name="ids3" id="" onclick=selectAll(this.checked,"id3","#storeTable") >', name : 'id3', width : 40, align: 'center'},
+  				{display: '档号', name : 'c3', width : 60, align: 'left',metadata:'ACodeMeta'},
+  				{display: '题名', name: 'c4',width : 80,align: 'left',metadata:'titleMeta'},
+  				{display: '借阅类型', name: 'c5',width : 183,align: 'left',metadata:'type'},
+  				{display: '状态', name: 'c6',width : 50,align: 'center',metadata:'status'},
+  				{display: '发生日期', name: 'c8',width : 60,align: 'center',metadata:'date'},
+  				{display: '应归还日期', name: 'shouldReturnDate',width : 60,align: 'center',metadata:'shouldReturnDate'},
+  				{display: '卷数', name: 'c9',width : 90,align: 'center',metadata:'fileCount'},
+  				{display: '件数', name: 'c10',width : 90,align: 'center',metadata:'innerFileCount'},
+  				{display: 'path', name: 'path',width : 90,align: 'center',metadata:'path',hide:true},
+  				{display: 'idParent', name: 'idParent',width : 90,align: 'center',metadata:'idParent',hide:true},
+  				{display: '备注', name: 'c7', width :90,align: 'center',metadata:'mark'}
+  			];
+	for(var i = 0;i<storeFiled.length;i++){
+		showcols.push({display:storeFiled[i].field,name:'d'+storeFiled[i].id,width:80,sortable : true, align: 'center',metadata:'d'+storeFiled[i].id});
+	}
+	var allButtons=[
+					//wanghongchen 20140826 修改bgclass为export
+	        		{name: '续借', bclass: 'export',onpress:relendDetail},
+	        		{name: '归还', bclass: 'back',onpress:returnDetail}
+	        	];
+	$("#storeTable").flexigrid({
+		url:$.appClient.generateUrl({ESArchiveLending:'showDetailsFormUsing',formId:formId},'x'),
+		dataType: 'json',
+		editable: true,
+		colModel: showcols,
+		buttons: allButtons,
+		usepager: true,
+		useRp: true,
+		rp: 20,
+		nomsg:"没有数据",
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: 600,
+		height: 140,
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	$("#storeTable").flexReload();
+});
+function changeOrderCheck(v){
+$("#resForm").flexOptions({url:$.appClient.generateUrl({ESArchiveLending:'getFormDataOfPath',path:v},'x')}).flexReload();
+}
+function selectAll(status,name,obj){
+var formObj=$("input[name="+name+"]",$(obj));
+	formObj.attr('checked',status);
+	if(status){
+		$(obj).find("tr").addClass("trSelected");
+	}else{
+		$(obj).find("tr").removeClass("trSelected");
+	}
+}
+</script>

@@ -1,0 +1,64 @@
+<table id="pack"></table>  
+<script type="text/javascript">
+	// var uri="<?php echo url($this->getUrl($esaction->generateUrl(Array('ESIdentify'=>'set_json'))));?>";
+	$("#pack").flexigrid({
+	//url: uri,
+	//dataType: 'json',
+	colModel : [
+		{display: '序号', name : 'num', width : 40, align: 'center'}, 
+		{display: '<input type="checkbox" name="ids">', name : 'id', width : 40, align: 'center'},
+		{display: '盒号', name : 'c3', width : 80, sortable : true, align: 'center'},
+		{display: '盒厚度', name : 'c4', width : 60, sortable : true, align: 'center'},
+		{display: '盒容量', name : 'c5', width : 80, sortable : true, align: 'center'},
+		{display: '当前容量', name : 'c6', width : 80, sortable : true, align: 'center'},
+		{display: '保管期限', name : 'c7', width : 80, sortable : true, align: 'center'},
+		{display: '年度', name : 'c8', width : 60, sortable : true, align: 'center'},
+		{display: '位置', name : 'c8', width : 80, sortable : true, align: 'center'}
+		],
+	buttons : [
+		{name: '添加', bclass: 'add',onpress:add_packet},
+		{name: '删除', bclass: 'delete'},
+		{name: '保存', bclass: 'modify'},
+		{name: '过滤', bclass: 'delete'},
+		{name: '库位设置', bclass: 'delete'}
+		],
+	sortname: "c3",
+	sortorder: "asc",
+	usepager: true,
+	title: '装盒信息',
+	useRp: true,
+	rp: 20,
+	nomsg:"没有数据",
+	pagetext: '第',
+	outof: '页 /共',
+	width: 600,
+	height: 200,
+	pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+});
+	//添加盒信息
+	function add_packet()
+	{
+		$.ajax({
+			url:'<?php echo url($this->getUrl($esaction->generateUrl(array('ESCatalogue'=>'add_packet'),'x')));?>',
+			success:function(data){
+				$.dialog({
+					title:'添加面板',
+					content:data,
+					padding:'0px 10px',
+		    	   	fixed:true,
+		    	    resize: false,
+		    	    okVal:'保存',
+				    ok:true,
+				    cancelVal: '取消',
+				    cancel: true
+					});
+				
+
+
+				}
+
+
+		});
+		
+	}
+</script>

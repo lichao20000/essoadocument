@@ -1,0 +1,4 @@
+@CHARSET "UTF-8";
+.editbtn {display:inline-block; width:16px; height:16px; background:url(../../public/img/edit.jpg) no-repeat no-repeat; cursor:pointer;}
+#addForm table td{padding-top:0px;}
+.netSegmentContainer{width:96%;margin-left:2%;}

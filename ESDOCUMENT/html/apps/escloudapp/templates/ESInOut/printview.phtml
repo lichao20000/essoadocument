@@ -1,0 +1,20 @@
+<form id="myprint">
+<h2>报表格式选择</h2>
+<div class="mytype">
+<?php foreach ($lists as $k=>$val){
+	//guolanrui 20140909 将报表的输出格式显示方式修改
+	$reportStyleForOut = '';
+	if (($val->reportstyle) == 'pdf') {
+		$reportStyleForOut = 'PDF';
+	}elseif (($val->reportstyle) == 'xls'){
+		$reportStyleForOut = 'EXCEL';
+	}elseif (($val->reportstyle) == 'rtf'){
+		$reportStyleForOut = 'WORD';
+	}
+?>
+
+<p><label for="<?php echo $val->id;?>"><input type="radio" style="vertical-align:middle;" id="<?php echo $val->id;?>" <?php if ($k==0)echo 'checked="checked"';?> name="type" value="<?php echo $val->reportstyle;?>" /><span><?php echo "$val->title($reportStyleForOut)";?></span></label></p>
+<?php }?>
+</div>
+
+</form>

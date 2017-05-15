@@ -1,0 +1,462 @@
+<?php 
+	$user = $esaction->exec("getProxy", "user")->getUserInfo($esaction->getUser()->getId())->displayName;
+?>
+<div style="width:580px;height:500px;overflow-y:auto;overflow-x:hidden;position:relative;">
+	<form id="form_add" method="post" action="" enctype="multipart/form-data">
+      <input type="hidden" name="submit" value="add"/>
+      <input type="hidden" name="readerid" value=""/>
+      <input type="hidden" name="deptcode" value=""/>
+      <div class="contentDiv">
+      	<ul>
+      		<li class="leftTv">借阅人&nbsp;<font color="red" size="3">*</font></li>
+      		<li id="btnIn">
+      			<input type="text" value="" title="请输入外来借阅人" name="reader"/>
+      			<span><img id="btn" title="单击我,可选择系统内借阅人信息" src="<?php echo $tplPath;?>/ESArchiveLending/images/group.png"/></span>
+      		</li>
+      		<li class="rightTv">单位</li>
+      		<li id="dept">
+      			<input type="text" value="" name="dept"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">电话</li>
+      		<li>
+      			<input type="text" value="" name="tel"/>
+      		</li>
+      		<li class="rightTv">邮箱</li>
+      		<li>
+      			<input type="text" value="" name="email"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">利用目的</li>
+      		<li>
+      			<select name="usepurpose" id="selectSty" style="width:184px;height:23px;line-height:23px;">
+					<option value="编史修志">编史修志</option>
+					<option value="工作查考">工作查考</option>
+					<option value="学术研究">学术研究</option>
+					<option value="经济建设">经济建设</option>
+					<option value="宣传教育">宣传教育</option>
+					<option value="其他">其他</option>
+				</select>
+      		</li>
+      		<li class="rightTv">催还提前天数&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+	      	<!-- <select name="select" id="select" style="clip:rect(0 184 22 162);" onchange="validdate.value=select.options[select.selectedIndex].text;validdate.select()">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3" selected="selected">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+			</select> -->
+			<input type="text" name="validdate" value="3"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">登记人</li>
+      		<li>
+      			<input type="text" value="<?php echo $user?>" name="register" readonly="readonly"/>
+      		</li>
+      		<li class="rightTv">登记日期</li>
+      		<li>
+      			<input type="text" id='times' readonly='readonly' value="<?php echo date("Y-m-d H:i:s");?>" name="registdate"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">状态</li>
+      		<li>
+      			<input type="text" value="未提交" readonly="readonly" name="status"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">备注</li>
+      		<li>
+      			<textarea style="resize:none;text-indent:2px;width:488px;height:50px;font-size:12px;font-family:Arial, Helvetica, sans-serif, 宋体" name="description"></textarea>
+      		</li>
+      	</ul>
+      </div>
+     </form>
+     <div class="bottom" >
+     	<table id="borrowDetails"></table>
+     </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("input[name='tel']").keyup(function(){
+		var regTel=/^((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})$))$/g;
+		if((!regTel.test(this.value))&&(this.value!='')){
+			$("input[name='tel']").addClass("invalid-text").attr("title","请输入合法的电话号码");
+			return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+	$("input[name='email']").keyup(function(){
+		var regEmail=/^[\w]+([-.][\w]+)*@[\w]+([-.]\w+)*\.[\w]+(\.[\w]+)?$/;
+		if((!regEmail.test(this.value))&&(this.value!='')){
+			$("input[name='email']").addClass("invalid-text").attr("title","请输入合法的邮箱");
+			return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+	$("input[name='validdate']").keyup(function(){
+		var reg=/^[1-9]\d*$/;
+		if(!reg.test(this.value)){
+			$("input[name='validdate']").addClass("invalid-text").attr("title","此项不能为空且只能输入大于零的数字");
+			return false;
+		}else if(this.value > 30){
+			$("input[name='validdate']").addClass("invalid-text").attr("title","借出天数不能超过30天");
+			return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+	/*$("select[name='select']").change(function(){
+		$("input[name='validdate']").removeClass("invalid-text").attr("title","");
+	});*/
+	//单位点击事件触发focus/click
+	var foo=function(){
+		var content = [];
+		content.push("<table>");
+		content.push("<tr>");
+		content.push("<td>");
+		content.push("<div id='orgtreebox' style='width:200px; height:350px;overflow:auto;'><ul id='orgtree' class='ztree'></ul></div>");
+		content.push("</td>");
+		content.push("<td>");
+		content.push("<div id='personlistbox' style='height:350px;overflow:auto;'>");
+		content.push("<table id='personlist'></table>");
+		content.push("</div>");
+		content.push("</td>");
+		content.push("</tr>");
+		content.push("</table>");
+		$.dialog({
+			title:'选择单位和借阅人',
+    		width: '700px',
+    	   	height: '350px',
+    	   	padding: '0px',
+    	    fixed:true,
+    	    resize: false,
+    		content:content.join(""),
+    		cancelVal: '取消',
+    		cancel: true,
+    		okVal: '保存',
+    		ok: function(){
+    			// 填入单位和借阅人信息
+	    		var radioId = $("#personlist").find("input:checked").attr('id');
+				if(radioId=='' || radioId==undefined){
+					$.dialog.notice({title:'操作提示',icon:'warning',content:'请选择单位下的借阅人！'});
+					return false;
+				}
+				var listId=radioId.split('|');
+				$("input[name='readerid']").val(listId[0]);
+				$("input[name='deptcode']").val(listId[1]);
+				var radioName = $("#personlist").find("input:checked").attr('value');
+				var list=radioName.split('|');
+				$("input[name='reader']").val(list[0]);
+				$("#dept input[name='dept']").val(list[1]);
+				$("input[name='tel']").val(list[2]);
+				$("input[name='email']").val(list[3]);
+	    		
+	    		this.close();
+	    		IreaderD=1;
+	    		$("input[name='reader']").removeClass("invalid-text").attr({"title":""});
+	    		return false;
+	    	},
+			init:initSelectOrg
+    	});
+	};
+	$("#btnIn img").bind("click",foo);
+	$("input[name='reader']").keyup(function(){
+		$("#dept input[name='dept']").val("");
+		$("input[name='tel']").val("");
+		$("input[name='email']").val("");
+		$(this).removeClass("invalid-text").attr("title","您输入的借阅人为外来人员");
+		IreaderD=0;
+	});
+	// 初始化选择单位和借阅人界面
+	function initSelectOrg(){
+		createOrgTree();
+		createPersonList();
+	}
+	// 创建机构树目录
+	function createOrgTree(){
+		var setting = {
+				view: {
+					dblClickExpand: false,
+					showLine: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				async: {
+					enable: true,
+					dataType: 'json',
+					url: $.appClient.generateUrl({ESArchiveLending:'getSubOrgList'},'x'),
+					autoParam: ["id"]
+				},
+				callback: {
+					onClick : nodeClick
+				}
+			};
+			function nodeClick(event, treeId, treeNode){
+				zTree = $.fn.zTree.getZTreeObj("orgtree");
+				zTree.expandNode(treeNode);
+				$("#personlist").flexOptions({url:$.appClient.generateUrl({ESArchiveLending:'getPersonList',orgid:treeNode.id},'x')}).flexReload();	
+			};
+			var url = $.appClient.generateUrl({ESArchiveLending:'initOrg'},'x');
+			$.ajax({
+				url:url,
+				dataType: 'json',
+				success:function(nodes){
+					$.fn.zTree.init($("#orgtree"), setting, nodes);
+				},
+				cache:false
+			});
+	};
+	// 显示人员列表
+	function createPersonList(){
+		$("#personlist").flexigrid({
+			url:false,
+			dataType: 'json',
+			editable: true,
+			colModel : [
+				{display: '操作', name : 'id2', width : 40, align: 'center'},
+				{display: '姓名', name: 'c1',  width : 68, align: 'center'},
+				{display: '联系电话', name: 'c2',width:110,align:'center'},
+				{display: '邮箱', name: 'c3',width:120,align:'center'},
+				{display: '所属机构', name: 'c4', width:100,align:'center'}
+			],
+			usepager: true,
+			rp: 50,
+			useRp: true,
+			width: 500,
+			height: 290
+		});
+	}
+	//借阅明细全选按钮
+	$("input[name='ids3']").die().live('click',
+		function(){
+			$("input[name='id3']").attr('checked',$(this).is(':checked'));
+		}
+	);
+	//添加借阅明细查看
+	var __colMol=[
+			{display: '序号', name : 'num', width : 40, align: 'center',metadata:'num'}, 
+			{display: '<input type="checkbox" name="ids3" id="">', name : 'id3', width : 40, align: 'center'},
+			{display: '凭证编号', name : 'c3', width : 60,align: 'left',metadata:'RecordID'},
+			{display: '摘要', name: 'c4',width : 80,align: 'left',metadata:'Summary'},
+			{display: '借阅类型', name: 'c5',width : 183,align: 'left',metadata:'type'},
+			{display: '状态', name: 'c6',width : 50,align: 'center',metadata:'status'},
+			{display: '备注', name: 'c7', width :90,align: 'center',metadata:'mark'}
+		];
+	$("#borrowDetails").flexigrid({
+		url:false,
+		dataType: 'json',
+		editable: true,
+		colModel :__colMol,
+		buttons : [
+			{name: '选择系统档案', bclass: 'add',onpress:addDetails},
+			{name: '手工录入', bclass: 'add',onpress:addLineDetail},
+			{name: '删除', bclass: 'delete',onpress:delDetails}
+		],
+		title: '借阅明细列表',
+		showTableToggleBtn: false,
+		width: 580,
+		height: 190
+	});
+	function addDetails(){
+		var url=$.appClient.generateUrl({ESArchiveLending:'record'},'x');
+		$.ajax({
+		    url:url,
+		    success:function(data){
+		    var linkdialog=$.dialog({
+			    	title:'添加借阅明细',
+			    	width: '800px',
+			    	height:'380px',
+			    	padding:'0px',
+		    	   	fixed:  true,
+		    	    resize: false,
+		    	    okVal:'保存',
+				    ok:true,
+				    cancelVal: '取消',
+				    cancel: true,
+			    	content:data,
+			    	ok:function()
+			    	{
+						linkBorrowDetail();
+						return false;
+					 },
+					 init:createFileTree
+			    });
+		    	// 挂接借阅文件信息
+				function linkBorrowDetail(){
+					var ACode='';
+					var title='';
+					var files = [];
+					var checkboxs = $("#borrowlist").find("input[name='path']:checked");
+					if (checkboxs.length > 0 ){
+						var types=[];
+						var voidTypes='';
+						var nums='';
+						var paths = [];
+						
+						//根据元数据获取相应的标题top
+						var ACodeName='';
+						var ACodeMeta='';
+						var titleName='';
+						var titleMeta='';
+						if(archiveType=='document'){
+							ACodeMeta='ArchivalCode';
+							titleMeta='Title';
+							ACodeName=$("#borrowlist").flexGetColumnDisplay(['ArchivalCode']);
+							titleName=$("#borrowlist").flexGetColumnDisplay(['Title']);
+						}else if(archiveType=='accounting'){
+							ACodeMeta='RecordID';
+							titleMeta='Summary';
+							ACodeName=$("#borrowlist").flexGetColumnDisplay(['RecordID']);
+							titleName=$("#borrowlist").flexGetColumnDisplay(['Summary']);
+						}else if(archiveType=='contract'){
+							ACodeMeta='RecordID';
+							titleMeta='Title';
+							ACodeName=$("#borrowlist").flexGetColumnDisplay(['RecordID']);
+							titleName=$("#borrowlist").flexGetColumnDisplay(['Title']);
+						}/*else if(archiveType=='technical'){
+							ACodeMeta='RecordID';
+							titleMeta='Title';
+							ACodeName=$("#borrowlist").flexGetColumnDisplay(['RecordID']);
+							titleName=$("#borrowlist").flexGetColumnDisplay(['Title']);
+						}else if(archiveType=='auditfiles'){
+							ACodeMeta='RecordID';
+							titleMeta='Title';
+							ACodeName=$("#borrowlist").flexGetColumnDisplay(['RecordID']);
+							titleName=$("#borrowlist").flexGetColumnDisplay(['Title']);
+						}*/
+						//根据元数据获取相应的标题top
+						
+						var trs=$("#borrowDetails").find("input[name='id3']");
+						nums=trs.length;
+						if(trs.length==0){
+							$(".bottom").html('<table id="borrowDetails"></table>');
+							$("#borrowDetails").flexigrid({
+									url:false,
+									dataType: 'json',
+									editable: true,
+									colModel :[
+											{display: '序号', name : 'num', width : 40, align: 'center',metadata:'num'}, 
+											{display: '<input type="checkbox" name="ids3" id="">', name : 'id3', width : 40, align: 'center'},
+											{display: ACodeName, name : 'c3', width : 60,align: 'left',metadata:ACodeMeta},
+											{display: titleName, name: 'c4',width : 80,align: 'left',metadata:titleMeta},
+											{display: '借阅类型', name: 'c5',width : 183,align: 'left',metadata:'type'},
+											{display: '状态', name: 'c6',width : 50,align: 'center',metadata:'status'},
+											{display: '备注', name: 'c7', width :90,align: 'center',metadata:'mark'}
+									],
+									buttons : [
+										{name: '选择系统档案', bclass: 'add',onpress:addDetails},
+										{name: '手工录入', bclass: 'add',onpress:addLineDetail},
+										{name: '删除', bclass: 'delete',onpress:delDetails}
+									],
+									title: '借阅明细列表',
+									showTableToggleBtn: false,
+									width: 580,
+									height: 190
+								});
+								$("#borrowDetails").flexReload();
+						}else{
+							trs.each(function(){
+								var path=$(this).val();
+								var bothPath=path.split('|');
+								paths.push(bothPath[0]);
+								types.push(bothPath[2]);
+							});
+							paths=paths.join(',');
+							voidTypes=types.join('');
+						}
+						if(voidTypes!='' && types[0]!=archiveType){
+							switch(types[0]){
+								case 'document': types[0]='文书档案';
+									break;
+								case 'accounting': types[0]='会计档案';
+									break;
+								case 'contract': types[0]='合同档案';
+									break;
+								case 'technical': types[0]='科技档案';
+									break;
+								case 'auditfiles': types[0]='审计档案';
+									break;
+							}
+							$.dialog.notice({title:'操作提示',content:'请选择 '+types[0]+' 类型的档案！',icon:'warning',time:3});
+							return false;
+						}
+						checkboxs.each(function(){
+							var trObj=$(this).closest('tr');
+							var checkpath = $(this).val();
+							if(paths.length>0){
+									if (paths.indexOf(checkpath)==-1) {
+										ACode=$("#borrowlist").flexGetColumnValue(trObj,[ACodeMeta]);
+				    		         	title=$("#borrowlist").flexGetColumnValue(trObj,[titleMeta]);
+				    					files.push(ACode+'|'+title+'|'+checkpath);
+									}
+							}else{
+								 ACode=$("#borrowlist").flexGetColumnValue(trObj,[ACodeMeta]);
+				    		     title=$("#borrowlist").flexGetColumnValue(trObj,[titleMeta]);
+		    					 files.push(ACode+'|'+title+'|'+checkpath);
+							}
+						});
+						if(files==''){
+							$.dialog.notice({title:'操作提示',content:'您添加的数据重复，请重新选择！',icon:'warning',time:3});
+							return false;
+						}else{
+							for(var t=0;t<files.length;t++){
+								var i=1;
+								var getFile=files[t].split('|');
+								$("#borrowDetails").flexExtendData([{
+									'id':i++,
+									'cell':{'num':++nums,
+											'id3':'<input type="checkbox" name="id3" id="" value="'+getFile[2]+'|'+' '+'|'+archiveType+'"/>',
+											'c3':getFile[0],
+											'c4':getFile[1],
+											'c5':'<input type="radio" name='+getFile[2]+' checked value="电子借阅"/>电子借阅<input type="radio" name='+getFile[2]+' value="实体借阅"/>实体借阅<input type="radio" name='+getFile[2]+' value="实体借出"/>实体借出',
+											'c6':'未借阅',
+											'c7':'<input name="mark" type="text" size="12" value="" placeholder="请填写备注"/>'
+										   }
+								}]);
+							}
+							linkdialog.close();
+						}
+					}else{
+						$.dialog.notice({title:'操作提示',content:'请选择您要添加的数据！',icon:'warning',time:3});
+						return false;
+					}
+				};
+			},
+			cache:false
+		});
+	}
+	//去除挂接借阅文件信息
+	function delDetails(){
+		var checkboxes=$("#borrowDetails").find("input[name='id3']:checked");
+		if(checkboxes.length==0){
+			$.dialog.notice({icon:'warning',content:"请选择要删除的数据！",time:3});
+			return;
+		}
+		$.dialog({
+			content:'确认要删除吗?',
+			ok:true,
+			okVal:'确认',
+			cancel:true,
+			cancelVal:'取消',
+			ok:function(){
+				if(checkboxes.length > 0){
+					checkboxes.each(function(){
+						$(this).closest("tr").remove();
+					});
+					$("input[name='ids3']").attr("checked",false);
+				}
+			},
+			cache:false
+		});
+	}
+});
+</script>

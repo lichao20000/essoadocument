@@ -1,0 +1,420 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<div class="espakcet">
+<form id="packet">
+<ul>
+<li><span>盒号<font color="red" size="3">*</font></span><input type="text" name="fileBoxNumber" id="fileBoxNumber" boxnolength="<?php echo $boxNoLength;?>" value="<?php echo $boxNo;?>" verify="text/20/1/0" style="line-height:20px;"></li>
+<li><span>盒厚度</span>
+<select name="boxthickness">
+<?php 
+	$boxcapability = 0;
+	foreach($boxThicknessMetadataAttrs as $val){
+		if($boxcapability == 0){
+			$boxcapability = intval($val, 10)*100 ;
+		}
+		echo "<option value = ".intval($val, 10)." ".($boxcapability == 0?"selected":"").">".$val."</option>";
+	}
+?>
+<!-- <option value = "2">2cm</option> -->
+<!-- <option value = "3">3cm</option> -->
+<!-- <option value = "4">4cm</option> -->
+<!-- <option value = "5" selected >5cm</option> -->
+<!-- <option value = "6">6cm</option> -->
+</select>
+
+</li>
+<li><span>盒容量<font color="red" size="3">*</font></span><input type="text" name="boxcapability" value="<?php echo $boxcapability;?>" verify="number/9/1/0" style="line-height:20px;"></li>
+<?php foreach ($formData as $value){
+	if($value['isnull']==1)
+	{
+		if(array_key_exists('options', $value)){
+			/** xiaoxiong 20140825 将下载框组件修改为可编辑组件 **/
+			$selectAllStr = '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><div class="editSelect">' ;
+			$selectStr = '' ;
+			$inputStr = '' ;
+			if(!array_key_exists('isLimitUse', $value)){
+				if($value['isCombinfield']){
+					if($value['isComputeField']){
+						$selectStr = '<select onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupField(this);setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" value="'.$value['value'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupField(this)" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" verify="'.$value['verify'].'" value="'.$value['value'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}else{
+						$selectStr = '<select onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupField(this)" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input value="'.$value['value'].'" verify="'.$value['verify'].'"  type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupField(this)" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}
+				}else{
+					if($value['isComputeField']){
+						$selectStr = '<select isCombinfield="'.$value['isCombinfield'].'" onchange="document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupField(this);setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input value="'.$value['value'].'" verify="'.$value['verify'].'" type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupField(this)" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}else{
+						$selectStr = '<select isCombinfield="'.$value['isCombinfield'].'" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input value="'.$value['value'].'" verify="'.$value['verify'].'" type="text" name="'.$value['name'].'" class="selectInput" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}
+				}
+			}else{
+				$selectStr = '<select onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;">';
+				$inputStr = '<input value="'.$value['value'].'" type="text" name="'.$value['name'].'" class="selectInput">' ;
+			}
+			$selectStr = $selectStr.'<option value="">--请选择--</option>';
+			foreach ($value['options'] as $key=>$val){
+				if($value['value']==$val){
+					$selectStr = $selectStr.'<option value="'.$val.'" selected>'.$key.'</option>';
+				}else{
+					$selectStr =$selectStr.'<option value="'.$val.'">'.$key.'</option>';
+				}
+			}
+			$selectStr = $selectStr.'</select>';
+			$selectAllStr = $selectAllStr.'<div class="selectInputSpan">'.$inputStr.'</div>' ;
+			$selectAllStr = $selectAllStr.'<div class="selectSpan">'.$selectStr.'</div></div></li>' ;
+			echo $selectAllStr;
+		}else{
+			if($value['isreadonly']){
+				if($value['length']>=300){
+					if($value['isComputeField']){
+						echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+					}else{
+						echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+					}
+				}else{
+					if($value['isComputeField']){
+						echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" readonly  value="'.$value['value'].'" style="background:#eee;"></li>';
+					}else{
+						echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" readonly  value="'.$value['value'].'" style="background:#eee;"></li>';
+					}
+		
+				}
+			}else{
+				if($value['length']>=300){
+					if($value['isCombinfield']){
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onkeyup="groupField(this)" onchange="addZero(this,1,'.$value['zeroLength'].');setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}else{
+								echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onkeyup="groupField(this)" onchange="addZero(this,1,'.$value['zeroLength'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}
+						}else{
+							if($value['isComputeField']){
+								echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onkeyup="groupField(this)" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}else{
+								echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onkeyup="groupField(this)" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}
+						}
+					}else{
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onchange="addZero(this,0,'.$value['zeroLength'].');setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}else{
+								echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onchange="addZero(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}
+						}else{
+							if($value['isComputeField']){
+								echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}else{
+								echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}
+						}
+					}
+				}else{
+					if($value['isCombinfield']){
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onkeyup="groupField(this)" onchange="addZero(this,1,'.$value['zeroLength'].');setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}else{
+								echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onkeyup="groupField(this)" onchange="addZero(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}
+						}else{
+							if($value['isComputeField']){
+								echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onkeyup="groupField(this)" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'"  verify="'.$value['verify'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}else{
+								echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onkeyup="groupField(this)" name="'.$value['name'].'"  verify="'.$value['verify'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}
+						}
+					}else{
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onchange="addZero(this,0,'.$value['zeroLength'].');setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}else{
+								echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onchange="addZero(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}
+						}else{
+							if($value['isComputeField']){
+								echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')"  verify="'.$value['verify'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}else{
+								echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'"  verify="'.$value['verify'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}
+						}
+					}
+						
+				}
+			}
+		}
+	}else{
+		//shimiao 20140805 如果当前字段是系统字段设置为不能输入
+		if(array_key_exists('options', $value) && !$value['isreadonly']){
+			/** xiaoxiong 20140825 将下载框组件修改为可编辑组件 **/
+			$selectAllStr = '<li><span>'.$value['lable'].'</span><div class="editSelect">' ;
+			$selectStr = '' ;
+			$inputStr = '' ;
+			if(!array_key_exists('isLimitUse', $value)){
+				if($value['isCombinfield']){
+					if($value['isComputeField']){
+						$selectStr = '<select onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupField(this);setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" value="'.$value['value'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupField(this)" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" verify="'.$value['verify'].'" value="'.$value['value'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}else{
+						$selectStr = '<select onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupField(this)" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input value="'.$value['value'].'" verify="'.$value['verify'].'"  type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupField(this)" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}
+				}else{
+					if($value['isComputeField']){
+						$selectStr = '<select isCombinfield="'.$value['isCombinfield'].'" onchange="document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupField(this);setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input value="'.$value['value'].'" verify="'.$value['verify'].'" type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupField(this)" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}else{
+						$selectStr = '<select isCombinfield="'.$value['isCombinfield'].'" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input value="'.$value['value'].'" verify="'.$value['verify'].'" type="text" name="'.$value['name'].'" class="selectInput" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}
+				}
+			}else{
+				$selectStr = '<select onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;">';
+				$inputStr = '<input value="'.$value['value'].'" type="text" name="'.$value['name'].'" class="selectInput">' ;
+			}
+			$selectStr = $selectStr.'<option value="">--请选择--</option>';
+			foreach ($value['options'] as $key=>$val){
+				if($value['value']==$val){
+					$selectStr = $selectStr.'<option value="'.$val.'" selected>'.$key.'</option>';
+				}else{
+					$selectStr =$selectStr.'<option value="'.$val.'">'.$key.'</option>';
+				}
+			}
+			$selectStr = $selectStr.'</select>';
+			$selectAllStr = $selectAllStr.'<div class="selectInputSpan">'.$inputStr.'</div>' ;
+			$selectAllStr = $selectAllStr.'<div class="selectSpan">'.$selectStr.'</div></div></li>' ;
+			echo $selectAllStr;
+		}else{
+			if($value['isreadonly']){
+				if($value['length']>=300){
+					if($value['isComputeField']){
+						echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+					}else{
+						echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+					}
+				}else{
+					if($value['isComputeField']){
+						echo '<li><span>'.$value['lable'].'</span><input type="text" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" readonly  value="'.$value['value'].'" style="background:#eee;"></li>';
+					}else{
+						echo '<li><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" readonly  value="'.$value['value'].'" style="background:#eee;"></li>';
+					}
+				}
+			}else{
+				if($value['length']>=300){
+					if($value['isCombinfield']){
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onkeyup="groupField(this)" onchange="addZero(this,1,'.$value['zeroLength'].');setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}else{
+								echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onkeyup="groupField(this)" onchange="addZero(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}
+						}else{
+							if($value['isComputeField']){
+								echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onkeyup="groupField(this)" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}else{
+								echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onkeyup="groupField(this)" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}
+						}
+					}else{
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onchange="addZero(this,0,'.$value['zeroLength'].');setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}else{
+								echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onchange="addZero(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}
+						}else{
+							if($value['isComputeField']){
+								echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" isCombinfield="'.$value['isCombinfield'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}else{
+								echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+							}
+						}
+					}
+				}else{
+					if($value['isCombinfield']){
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								echo '<li><span>'.$value['lable'].'</span><input type="text" onkeyup="groupField(this)" onchange="addZero(this,1,'.$value['zeroLength'].');setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}else{
+								echo '<li><span>'.$value['lable'].'</span><input type="text" onkeyup="groupField(this)" onchange="addZero(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}
+						}else{
+							if($value['isComputeField']){
+								echo '<li><span>'.$value['lable'].'</span><input type="text" onkeyup="groupField(this)" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'"></li>';
+							}else{
+								echo '<li><span>'.$value['lable'].'</span><input type="text" onkeyup="groupField(this)" name="'.$value['name'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'"></li>';
+							}
+						}
+					}else{
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								echo '<li><span>'.$value['lable'].'</span><input type="text" onchange="addZero(this,0,'.$value['zeroLength'].');setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}else{
+								echo '<li><span>'.$value['lable'].'</span><input type="text" onchange="addZero(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}
+						}else{
+							if($value['isComputeField']){
+								echo '<li><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleVal(this,'.$value['structureId'].','.$value['busiModelId'].')" combinfieldKey="'.$value['combinfieldKey'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldVal="'.$value['combinfieldVal'].'" isCombinfield="'.$value['isCombinfield'].'" verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}else{
+								echo '<li><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" combinfieldKey="'.$value['combinfieldKey'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+							}
+						}
+					}
+						
+				}
+			}
+		}
+	}
+}?>
+<li style="width:550px"><span>盒名称</span><input type="text" name="boxname" value="" verify="text/100/0/0" style="width:430px;line-height:20px;font-family:Arial, Helvetica, sans-serif, 宋体"></li>
+<li style="width:550px"><span>备注</span><textarea style="width:430px;height:50px;font-size:12px;float:left;font-family:Arial, Helvetica, sans-serif, 宋体" name="memo" verify="text/100/0/0"></textarea></li>
+</ul>
+</form>
+</div>
+<script>
+	//根据选择的盒厚度计算盒容量
+	$('[name="boxthickness"]').change(function(){
+		
+		$('[name="boxcapability"]').val(parseInt($(this).val()*100));
+
+	});
+	$(function(){
+		$("input[metadata='ClassificationCode']").focus(function(){
+					var offset=$(this).offset();
+					$(this).attr("readonly",true);
+					$('#catagory').show().offset({top:offset.top+24,left:offset.left});
+					$("body").bind("mousedown", clickBodyDown);
+			});
+		var obj=$("input[verify^='date']");
+		//shimiao 20140805 如果当前日期字段是系统字段，则不能输入
+		if(!obj.attr('readonly')){
+			obj.addClass('Wdate');
+			//obj.css('background','#eee');
+			obj.click(function(){
+				WdatePicker();
+			});
+		}
+	});
+	//补零规则
+	function addZero(inputObject,isGroup,length){
+		if(length==0 || inputObject.value.length>=length){
+			return;
+		}else{
+			var zeroStr = "";
+			var zeroLen = length - inputObject.value.length;
+			for(var i=0;i<zeroLen; i++){
+				zeroStr = zeroStr+"0";
+			}
+			inputObject.value = zeroStr+inputObject.value;
+		}
+		if(isGroup==1){
+			groupField(inputObject);
+		}
+	}
+	//组合字段
+	function groupField(inputThisObject){
+		//先拿到所有要分组的Key的值
+		//然后循环这些值，通过这个Key  去相应的INPUT上获取规则
+		//拿到规则后，循环规则
+		//是C开头的，按照|拆分，然后比对替换值
+		//最后拼接，赋值
+		var combinfieldKey = inputThisObject.getAttribute("combinfieldKey");
+		if(combinfieldKey=="no"){
+			return;
+		}else{
+			if(combinfieldKey.length>2){
+				combinfieldKey=combinfieldKey.substring(1,combinfieldKey.length-1);
+				var combinfieldKeys = combinfieldKey.split(",");
+				for(var i=0;i<combinfieldKeys.length;i++){
+					if(document.getElementsByName($.trim(combinfieldKeys[i]))[0]){
+						//最后要把拼好的值给combinfieldKeys[i]
+						var combinfieldVal = document.getElementsByName($.trim(combinfieldKeys[i]))[0].getAttribute("combinfieldVal");
+						if(combinfieldVal.length>2){
+							combinfieldVal = combinfieldVal.substring(1,combinfieldVal.length-1);
+							var combinfieldVals = combinfieldVal.split(",");
+							var finalVal = "";//最终给赋值的那个值
+							for(var j=0;j<combinfieldVals.length;j++){
+								if($.trim(combinfieldVals[j]).substring(0,1)=="C"){
+									var needVal = $.trim(combinfieldVals[j]).split("|");
+									var txtVal = '';
+									if(document.getElementsByName(needVal[0])[0]){
+										txtVal = document.getElementsByName(needVal[0])[0].value;
+									}
+									for(var z=0;z<needVal.length;z++){
+										if(z>0){
+											var replaceVal = needVal[z].split("_");
+											if(txtVal==replaceVal[0]){
+												txtVal = replaceVal[1];
+											}
+										}
+									}
+									finalVal = finalVal+txtVal;
+								}else{
+									//直接拼接
+									finalVal = finalVal + $.trim(combinfieldVals[j]);
+								}
+							}
+							if(finalVal!=""){
+								document.getElementsByName($.trim(combinfieldKeys[i]))[0].value=finalVal;
+							}
+						}
+					}
+				}
+			}else{
+				return;
+			}
+		}	
+		
+	}
+	//字段值规则
+	function setComputeFieldRuleVal(thisObject,strId,busiId){
+		var editselect= $(thisObject).closest(".editSelect")[0];
+		if(editselect != undefined){
+			var selectInputSpan =$(editselect).find(".selectInputSpan")[0];
+			if(selectInputSpan != undefined){
+				$(selectInputSpan).removeAttr("style"); 
+			}
+		}
+		var computeFieldKey = thisObject.getAttribute("computeFieldKey");
+		var computeFieldKeys = computeFieldKey.split(",");
+		var jsonVal = "{\"fileBoxNumber\":[";
+		for(var j=0;j<computeFieldKeys.length;j++){
+			if(j>0){
+				jsonVal += ",";
+			}
+			jsonVal = jsonVal + "{\"" + computeFieldKeys[j]+"\":\""+document.getElementsByName(computeFieldKeys[j])[0].value+"\"}";
+		}
+		jsonVal += "]}";
+		//发送JS请求，去获取值取
+		var url=$.appClient.generateUrl({ESIdentify:'getBoxNoVal',nodePath:nodePath},'x');
+		$.post(url,{strId:strId,busiId:busiId,jsonVal:jsonVal,boxNoLength:$('#fileBoxNumber').attr('boxnolength')},function(result){
+			if(result){
+				$('#fileBoxNumber').val(result);
+			}
+		});
+	}
+	var packetZZ= /^[^<>\'\"]+$/;
+	$("#fileBoxNumber").bind('blur',function(){
+		var fileBoxNumber = $(this).val();
+		fileBoxNumber=fileBoxNumber.replace(/[ ]/g,"");
+		if(packetZZ.test(fileBoxNumber)==false){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","不能输入尖括号，单引号，双引号！");
+	 		return false;
+		 }
+		$(this).removeClass("warnning");
+	});
+	$("#packet input[name='boxname']").bind('blur',function(){
+		var boxname = $(this).val();
+		boxname=boxname.replace(/[ ]/g,"");
+		if(packetZZ.test(boxname)==false){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","不能输入尖括号，单引号，双引号！");
+	 		return false;
+		 }
+		$(this).removeClass("warnning");
+	 })
+</script>

@@ -1,0 +1,127 @@
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>1));?>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexpaper/css/flexpaper.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexpaper/js/flexpaper.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexpaper/js/flexpaper_handlers.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESAnnualInspection/js/highcharts.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESAnnualInspection/js/exporting.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"系统首页", content:"#ESSystemIndex"});
+	$("#estabs").esTabs("open", {title:"fdsafdsa", content:"#fdsafdsa", canClose:true});
+	$("#estabs").esTabs("open", {title:"dddddddd", content:"#dddddddd", canClose:true, activated:true});
+
+
+	// 上传电子文件
+	$("#uploadfile").click(function(){
+		$.dialog({
+			title:'上传文件',
+    		width: '450px',
+    	   	height: '250px',
+    	    fixed:true,
+    	    resize: false,
+    		content:"<div id='content'>一次最多选择上传10个文件<div class='fieldset flash' id='fsUploadProgress'></div></div>",
+    		cancelVal: '关闭',
+    		cancel: true,
+    		padding: '10px',
+			button: [
+	    		{id:'btnAdd', name: '添加文件'},
+	            {id:'btnCancel', name: '删除所有', disabled: true},
+	            {id:'btnStart', name: '开始上传', disabled: true, callback: function(){return false;}}
+			],
+			init:createSWFUpload
+    	});	    	
+	});
+$('#haha').click(function (){
+var t='before';
+	//wanghongchen 20141017 修改消息提醒图标
+	$.get($.appClient.generateUrl({ESDefault:'ajaxTest',name:'hahha'},'x')).done(function(data){
+		$.dialog.notice({icon:'success',content:'success1'});
+	}).done(function(data){
+		$.dialog.notice({icon:'success',content:'success2'});
+	})
+	
+})
+	function createSWFUpload(){
+		var upload = new SWFUpload({
+			//提交路径
+			upload_url: $.appClient.generateUrl({ESDefault:'printut'},'x'),
+			//upload_url: "http://10.3.189.145:8080/escloud/rest/escloud_fileoperationws/fileUpload",
+			//向后台传递额外的参数
+			//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+			//上传文件的名称
+			file_post_name: "file.txt",
+			
+			file_size_limit : "1048576",	// 100MB  longjunhao 20140905 修改为1024MB=1GB
+			file_types : "*.*",
+			file_types_description : "所有文件",
+			file_upload_limit : "10",
+			file_queue_limit : "0",
+
+			// 事件处理
+			swfupload_loaded_handler : swfuploadLoaded,
+			file_dialog_start_handler : fileDialogStart,
+			file_queued_handler : fileQueued,
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : imageDialogComplete,
+			upload_start_handler : uploadStart,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+
+			// 按钮的处理
+			button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+			button_placeholder_id : "btnAdd",
+			button_width: 72,
+			button_height: 28,
+			
+			// Flash文件地址设置
+			flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+			
+			custom_settings : {
+				progressTarget : "fsUploadProgress",
+				cancelButtonId : "btnCancel",
+				startButtonId : "btnStart",
+				// 上传成功的回调函数
+				uploadSuccess : function(file, data){
+					var data=jQuery.parseJSON(data);
+					$("#returndata").html($("#returndata").html() + "<br/>" + "<img title='原图' src="+data.src_image+"><br/>"+ "<img title='缩放图' src="+data.dst_image+"><br/>");
+					$.dialog({content:file.name+'-----'+data});
+				}
+			},
+			
+			// Debug 设置
+			debug: true
+		});
+		$("#btnCancel").click(function(){cancelQueue(upload);});
+		$("#btnStart").click(function(){startQueue(upload);});
+	};
+});
+</script>
+
+<div id="ESSystemIndex" style="background:red;">系统首页</div>
+<div id="fdsafdsa" style="background:green;">fdsafdas</div>
+<div id="dddddddd" style="background:blue;">dddddddd</div>
+
+<br/>
+<form method="post" enctype="multipart/form-data">
+<input id="uploadfile" type="button" value=" 上传 " />
+<input id="linkfile" type="button" value=" 挂接 "/>
+<div id="returndata"></div>
+</form>
+<button id="haha">你敢点我吗</button>
+<pre>
+<?php 
+//$userinfo = $esaction->exec("getProxy", "user")->getUserInfo($esaction->getUser()->getId());
+//print_r($userinfo);
+echo $esaction->exec("getPublicPath")."/aa.txt<br/>";
+echo file_exists($esaction->exec("getPublicPath")."/aa.txt");
+?>
+</pre>

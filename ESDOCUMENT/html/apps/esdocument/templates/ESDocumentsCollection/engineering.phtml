@@ -1,0 +1,140 @@
+<table>
+		<tr>
+		<td>
+		<div id='parttreebox' style='width:200px; height:375px;overflow:auto;'>
+		<ul id='parttree' class='ztree'></ul>
+		<input type="hidden" id="pId" name="pId" value="<?php echo isset ( $_GET ['pId'] ) ? $_GET ['pId'] : ''?>"/>
+		</div>
+		</td>
+		<td>
+			<div id='engineeringList' style='height:380px;overflow:auto;clear:both;'>
+				<table id='selectEngineering'></table>
+			</div>
+		</td>
+		</tr>
+</table>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var treeid='';
+	if($("#pId").val() != ''){
+		treeid = $("#pId").val();
+	}
+	 $("#selectEngineering").flexigrid({
+			url:$.appClient.generateUrl({
+		    	ESEngineering: 'findEngineeringList',
+		    	participatoryId: treeid,
+		        selectType:'radio'
+		    }),
+	        dataType: 'json',
+	        colModel: [{
+	            display: '序号',
+	            name: 'num',
+	            width: 30,
+	            align: 'center'
+	        },
+	        {
+	            display: '选择',
+	            name: 'ids',
+	            width: 35,
+	            align: 'center'
+	        },
+	        {
+	            display: '文件专业名称',
+	            name: 'typeName',
+	            metadata: 'typeName',
+	            width: 200,
+	            align: 'left'
+	        },
+	        {
+	            display: '文件专业代码',
+	            name: 'typeNo',
+	            metadata: 'typeNo',
+	            width: 200,
+	            align: 'left'
+	        }],
+	        buttons: [],
+	        singleSelect: true,
+	        usepager: true,
+	        title: '文档类型管理',
+	        useRp: true,
+	        rp: 20,
+	        nomsg: "没有数据",
+	        showTableToggleBtn: false,
+	        pagetext: '第',
+	        outof: '页 /共',
+	    	width: 550,
+			height:250,
+	        pagestat: ' 显示 {from} 到 {to}条 / 共{total} 条'
+	    });
+		$('div[class="tDiv2"]').css("height","28px");
+        $("#engineeringList").find('div[class="tDiv2"]').append('<div class="find-dialog"><input id="KeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="KeyWord" value="请输入关键字" /><span  onclick="engineeringQuery();"></span></div>');
+     
+   
+    });
+	var setting = {
+        view: {
+            dblClickExpand: false,
+            showLine: false,
+            fontCss :{"color":"#000"}
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        async: {
+            autoParam: ['id', 'column', 'path', 'number'],
+            enable: true
+        },
+        callback: {
+            onClick: onClick
+        }
+    };
+    function onClick(e, treeId, treeNode) {
+        var treeObj = $.fn.zTree.getZTreeObj("parttree");
+		treeid=treeNode.id;
+        if(treeNode.pId==-1){
+        	treeObj.cancelSelectedNode(treeNode);
+        	return false;
+        }
+        engineeringQuery();
+    };
+
+    // 获取参建单位树目录
+    flushTree();
+    function flushTree() {
+        // 获取参建单位树目录
+        $.getJSON($.appClient.generateUrl({
+            ESParticipatory: "getTree",pId: $("#pId").val()
+        },
+        'x'),
+        function(zNodes) {
+            $.fn.zTree.init($("#parttree"), setting, zNodes);
+        });
+    };
+    
+	function engineeringQuery() {
+	    var keyword = $.trim($('input[name="KeyWord"]').val());
+	    if (keyword == '' || keyword == '请输入关键字') {
+	        keyword = '';
+	    }
+	    var url = $.appClient.generateUrl({
+	    	ESEngineering: 'findEngineeringList',
+            participatoryId: treeid,
+	        selectType:'radio'
+	    },
+	    'x');
+	    $("#selectEngineering").flexOptions({
+	        url: url,
+	        query:keyword,
+	        newp: 1
+	    }).flexReload();
+	    return false;
+	};
+	$(document).keydown(function(event) {
+	    if (event.keyCode == 13 && document.activeElement.id == 'KeyWord') {
+	        engineeringQuery();
+	    }
+	});
+</script>

@@ -1,0 +1,18 @@
+<div>
+	<form id="zipImport" action="" enctype="multipart/form-data" method="post">
+    	<div style="border:solid 1px #AAAAAA;padding:0 0 20px 20px;margin:20px;width:400px;height:95px;">
+			<span style="position: relative;left:10px; top:-10px;background-color:#FFF;font-weight:bold;color:#909090;">包含XML文件的ZIP包数据文件</span><br/>
+			<div style="margin-top:8px;">
+				<div style="height:20px;line-height:20px;float:left;">请选择ZIP包文件：</div>
+				<input type="file" style="width:240px;height:19px;" name="zip" />
+			</div>
+			<!-- wanghongchen 20141020 注掉上传原文选项 -->
+			<!-- <div style="margin:20px 0 20px 0;">
+				<input type="radio" name="document" value="yes" checked="true" id="updateDocumentId" /><label for="updateDocumentId" style="display:inline;"> 上传原文</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="document" value="no" id="NoUpdateDocumentId" /><label for="NoUpdateDocumentId" style="display:inline;"> 不上传原文</label>
+ 			</div> -->
+		</div>
+		<input type="hidden" name="userId" value="<?php echo $userId;?>">
+		<input type="hidden" name="path" value="<?php echo $path;?>">
+	</form>
+</div>

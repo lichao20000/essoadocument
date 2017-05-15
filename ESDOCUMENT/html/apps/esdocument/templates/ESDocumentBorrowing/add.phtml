@@ -1,0 +1,150 @@
+<style>
+<!--
+.button {cursor: pointer;padding: 5px;background-color: #6F6E81;color: #FFF;border: 0px none;outline: 0px none;}
+-->
+
+</style>
+<?php 
+	$user = $esaction->exec("getProxy", "user")->getUserInfo($esaction->getUser()->getId())->userid;
+?>
+<div>
+	<form id="form_add" method="post" action="" enctype="multipart/form-data" style='padding-bottom: 5px; '>
+	<input type="hidden" id="uid" value=""/>
+	<input type="hidden" id="readerId" value=""/>
+	<div style="width:594px;height:230px;margin:5px;border:1px solid #ccc;padding:5px 12px; overflow-y:auto;overflow-x:hidden;position:relative;float: left;" class="contentDiv">
+		<ul>
+      		<li class="leftTv">借阅人&nbsp;<font color="red" size="3">*</font></li>
+      		<li id="btnIn">
+      			<input type="text" id="bName" value="" title="请输入借阅人" name="reader" readonly="readonly" verify="text/100/1/0"/>
+      			<span><img id="btn" title="单击我,可选择系统内借阅人信息" src="<?php echo $tplPath;?>/ESDocumentBorrowing/images/group.png"/></span>
+      		</li>
+      		<li class="rightTv">单位</li>
+      		<li id="dept">
+      			<input type="text" value="" name="dept" verify="unspecial/50/0/0"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">电话</li>
+      		<li>
+      			<input type="text" value="" name="tel" verify="mobile/11/0/0"/>
+      		</li>
+      		<li class="rightTv">邮箱</li>
+      		<li>
+      			<input type="text" value="" name="email" verify="email/50/0/0"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">状态&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+      			<input type="text" value="未提交" readonly="readonly" name="status" verify="unspecial/10/1/0"/>
+      		</li>
+      		<li class="rightTv">催还提前天数&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+			<input type="text" name="validdate" value="3" verify="number/10/1/0"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">登记人&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+      			<input type="text" value="<?php echo $user;?>" name="register" readonly="readonly" verify="text/50/1/0"/>
+      		</li>
+      		<li class="rightTv">登记日期&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+      			<input type="text" id='times' readonly='readonly' value="<?php echo date("Y-m-d");?>" name="registdate" verify="date/50/1/0"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		
+      		<li class="leftTv">身份证&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+      			<input type="text" value="" name="identity" verify="identity/18/1/0"/>
+      		</li>
+      	</ul>
+      	
+      	<ul>
+      		<li class="leftTv">备注</li>
+      		<li>
+      			<textarea style="resize:none;text-indent:2px;width:488px;height:50px;font-size:12px;font-family:Arial, Helvetica, sans-serif, 宋体" name="description" verify="unspecial/512/0/0"></textarea>
+      		</li>
+      	</ul>
+	</div>
+	</form>
+	<div class="bottom" style="margin: 5px;">
+	  <form id="add_borrowDetails">
+		<table id="borrowDetails"></table>
+	  </form>
+	</div>
+</div>
+<link href="<?php echo $tplPath?>/ESDocumentBorrowing/css/index.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDocumentBorrowing/js/menu.js"></script>
+<script>
+var __colMol=[
+  			{display: '序号', name : 'num', width : 20, align: 'center',metadata:'num'}, 
+  			{display: '<input type="checkbox" name="ids3" id="">', name : 'id3', width : 20, align: 'center'},
+  			{display: '文件id', hide:true, name : 'docId', width : 40, align: 'center',metadata:'docId'},
+  			{display: '文件标题', name : 'title', width : 100, align: 'left',metadata:'title'},
+			{display: '文件编码', name : 'docNo', width : 100, align: 'left',metadata:'docNo'},
+  			{display: '借阅类型', name: 'borrowtype',width : 50,align: 'left',metadata:'borrowtype'},
+  			{display: '状态', name: 'status',width : 50,align: 'center',metadata:'status'},
+  			{display: '发生日期', name: 'happen_date',width : 60,align: 'center',metadata:'happen_date'},
+  			{display: '应归还日期', name: 'shouldReturnDate',width : 60,align: 'center',metadata:'shouldreturndate'},
+  			{display: '归还日期', name: 'return_date',width : 60,align: 'center',metadata:'return_date'},
+  			{display: '项目名称', name : 'itemName', width : 120, align: 'left',metadata:'itemName'},
+  			{display: '收集范围代码', hide:true, name : 'stageCode', width : 40, align: 'left',metadata:'stageCode'},
+			{display: '收集范围名称', name : 'stageName', width : 120, align: 'left',metadata:'stageName'},
+			{display: '装置分类代码', hide:true, name : 'deviceCode', width : 40, align: 'left',metadata:'deviceCode'},
+			{display: '装置分类名称', name : 'deviceName', width : 120, align: 'left',metadata:'deviceName'},
+			{display: '拟定部门代码', hide:true, name : 'participatoryCode', width : 40, align: 'left',metadata:'participatoryCode'},
+			{display: '拟定部门名称', name : 'participatoryName', width : 120, align: 'left',metadata:'participatoryName'},
+			{display: '文件类型代码', hide:true, name : 'documentCode', width : 50, align: 'left',metadata:'documentCode'},
+			{display: '文件类型名称', name : 'documentTypeName', width : 100, align: 'left',metadata:'documentTypeName'},
+			{display: '文件专业代码', hide:true, name : 'engineeringCode', width : 50, align: 'left',metadata:'engineeringCode'},
+			{display: '文件专业名称', name : 'engineeringName', width : 100, align: 'left',metadata:'engineeringName'},
+			{display: '件数', name: 'pnum',width : 90,align: 'right',metadata:'pnum'},
+  			{display: '备注', name: 'remark', width :90,align: 'left',metadata:'remark'},
+			{display: '是否改变颜色', name : 'changeColor', width : 120, sortable : true, align: 'center',metadata:'changeColor',hide:true}
+	  	];
+$("#borrowDetails").flexigrid({
+	url:false,
+	dataType: 'json',
+	editable: true,
+	colModel :__colMol,
+	buttons : [
+		{name: '选择文件', bclass: 'add',onpress:addDetails},
+		//{name: '手工录入', bclass: 'add',onpress:addLineDetail},
+		{name: '删除', bclass: 'delete',onpress:delDetails}
+	],
+	title: '借阅明细列表',
+	showTableToggleBtn: false,
+	width: 620,
+	height: 210
+});
+//去除挂接借阅文件信息
+function delDetails(){
+	var checkboxes=$("#borrowDetails").find("input[name='changeId']:checked");
+	if(checkboxes.length==0){
+		$.dialog.notice({content:"请选择要删除的数据！",time:3});
+		return;
+	}
+	$.dialog({
+		content:'确认要删除吗?',
+		ok:true,
+		okVal:'确认',
+		cancel:true,
+		cancelVal:'取消',
+		ok:function(){
+			if(checkboxes.length > 0){
+				checkboxes.each(function(){
+					$(this).closest("tr").remove();
+				});
+				$("input[name='changed']").attr("checkeId",false);
+			}
+		},
+		cache:false
+	});
+}
+//手动添加挂接文件
+function addLineDetail(){
+	
+}
+</script>

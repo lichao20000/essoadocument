@@ -1,0 +1,382 @@
+<style>
+<!--
+.button {
+	cursor: pointer;
+	padding: 5px;
+	background-color: #6F6E81;
+	color: #FFF;
+	border: 0px none;
+	outline: 0px none;
+}
+
+-->
+.selectztree {
+	margin-top: 0px;
+	border: 1px solid #808080;
+	border-top: 0px;
+	background: #f0f6e4;
+	width: 342px;
+	height: 300px;
+	overflow: auto;
+}
+</style>
+<div style="width: 100%;" id="flowChart">
+	<div
+		style="float: left; width: 100%; height: 50px; line-height: 50px; padding-left: 50px;">
+		<select id="flowType" name="flowType" style="width: 120px;">
+			<option value="part" selected="selected">参建单位部门</option>
+			<option value="user">用户</option>
+		</select> <font color="red" size="3px">*</font>&nbsp;&nbsp;&nbsp; <input
+			id="selPart" style="height: 20px; width: 220px; padding-left: 5px;"
+			code="" readonly="readonly"> </input>&nbsp;&nbsp;&nbsp;&nbsp; 份数<font
+			color="red" size="3px">*</font>&nbsp;&nbsp; <input type='text'
+			id="copies" style="height: 15px; width: 50px; padding-left: 5px;" />&nbsp;&nbsp;&nbsp;&nbsp;
+		<span class="button addPart" style="padding-right:22px; background:#6F6E81 url(<?php echo $tplPath?>/public/flexigrid/css/images/add.png) no-repeat right;">&nbsp;添加</span>
+	</div>
+	<div
+		style="float: left; width: 700px; height: 200px; border-top: 1px solid silver; padding: 20px 0px 20px 50px; overflow-y: auto;">
+		<div class="part_left">
+			<span class="sp1"><font color="white">文件生成单位</font></span> <span
+				class="sp2">&nbsp;</span> <span class="sp1"><font color="white">DCC文控中心</font></span>
+			<span class="sp2" style="width: 30px;">&nbsp;</span>
+		</div>
+		<div style="float: left; width: 340px;">
+			<div
+				style="float: left; width: 2px; height: 2px; margin-top: 24px; background-color: #6699FF;">&nbsp;</div>
+			<div id="part"
+				style="float: left; width: 330px; text-align: left; height: 40px; line-height: 40px;">
+			</div>
+			<input type="hidden" id="result" name="matrix"
+				value='<?php echo  isset($result->flow_matrix)?$result->flow_matrix:"";?>' />
+		</div>
+	</div>
+</div>
+<div id="menuContent" class="menuContent"
+	style="margin-top: 2px; display: none; position: fixed;">
+	<ul id="treeDemo" class="ztree selectztree"></ul>
+</div>
+<div class='receiveUser' id='receiveUser'>
+	<div id="receiveUserTB"></div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	loadPart();//默认选择单位部门，初始加载下拉树
+
+	//下拉框改变事件
+	$("#flowType").die().live("change",function(){
+		$("#selPart").val("");
+	});
+
+	//添加输入框点击事件
+	$("#selPart").die().live("click",function(){
+		if($("#flowType").val()=="user"){			
+			$("#menuContent").hide();
+			var offset=$("#selPart").offset();
+			$('#receiveUser').show().offset({top:offset.top+28,left:offset.left});
+		}else{
+			$("#receiveUser").fadeOut("fast");
+			$("#menuContent").show();
+		}
+	});
+
+	//参见单位部门选择树
+	function loadPart(){
+		$("#selPart").selectInput({
+	        url: $.appClient.generateUrl({ESParticipatory: "getTree"},'x'),
+	        chkStyle: "checkbox",
+	        width:300,
+	        onCheck:function(treeNode,obj){
+	        	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	    		nodes = zTree.getCheckedNodes(true);
+	    		$("#selPart").attr("value", "");
+	    		$("#selPart").attr("code", "");
+	    		var names = '';
+	    		var codes = '';
+	    		if(nodes.length>0){
+		    		for(var i = 0;i<nodes.length;i++){
+			    		if(i==0){
+			    			names += nodes[0].name;
+				    		codes += nodes[0].code;
+				    	}else{
+					    	names += ","+nodes[i].name;
+				    		codes += ","+nodes[i].code;
+				    	}
+			    		$("#selPart").attr("value", names);
+			    		$("#selPart").attr("code", codes);
+		    		}
+	    		}
+			}
+	 	});
+	}
+
+	loadResult();//加载初始结果
+    
+	//加载初始结果
+	function loadResult(){
+		var matrix = $('#matrix').val();//文件发放模块自定义跳转时获取
+		var result = "";
+		//没有自定义发送 就走流程原始的发送对象
+		if(matrix == "" || matrix=="undefined" || matrix==null){
+			result = jQuery.parseJSON($("#result").val());//流程默认
+		}else{
+			result = jQuery.parseJSON(matrix);
+		}
+		if(result!=null && result.length>0){
+			var url=$.appClient.generateUrl({ESSendReceiveFlow: "loadPartAndUser"},'x');
+			$.post(url,{result:result},function(data){
+				if(data){
+					for(var i=0;i<data.length;i++){
+						setSelectedPart(data[i].code,data[i].copies,data[i].type,data[i].name+" "+data[i].copies+"份");
+						autoChart();
+					}
+				}
+			},"json");					
+		}
+	}
+
+	//份数格式验证
+	$("#copies").die().live("keyup",function(){
+		if(!checkMatch($(this))){
+			return false;
+		}
+	});
+
+	//添加接收单位部门
+	$("#flowChart .addPart").die().live("click",function(){
+		if(!checkIfNull($("#selPart"))){
+			return false;
+		}
+		
+		if(!checkMatch($("#copies"))){
+			return false;
+		}
+		
+		var codes=$("#selPart").attr("code").split(",");	
+		var values=$("#selPart").val().split(",");
+		var mes="";
+		var type=$("#flowType").val();
+		for(var i=0;i<codes.length;i++){	
+			var code=codes[i];
+			var flag=true;
+			$("#part .confirmPart").each(function(i){
+				if(code==$(this).attr("code")){
+					flag=false;
+					return false;
+				}
+			});			
+			if(flag){
+				var copies=$("#copies").val();			
+				var value=values[i]+" "+copies+"份";
+				setSelectedPart(code,copies,type,value);
+				autoChart();
+			}else{
+				mes+=","+values[i];
+			}
+		}
+		if(mes!="" && mes.length>1){			
+			if(type=="user"){
+				mes="用户("+mes.substring(1)+")已添加";
+			}else{
+				mes="单位部门("+mes.substring(1)+")已添加";
+			}
+			$.dialog.notice({icon:"warning",content:mes,time:3});
+			return false;
+		}
+	});
+
+	//设置已被添加的单位部门
+	function setSelectedPart(code,copies,type,value){		
+		$("#part").append('<p style="padding:5px 0px 5px 0px;"><span style="float:left;width:40px;background-color: #6699FF;height:2px;">&nbsp;</span><span code="'+code+'" copies="'+copies+'" receiveType="'+type+'" class="confirmPart" title="'+value+'"><font color="white">'+autoAddEllipsis(value,30)+'</font></span><span class="delPart" title="删除" style="padding-right:22px; background: url(<?php echo $tplPath?>/public/img/del.gif) no-repeat right;"></span></p>');
+	}
+
+	//验证份数格式
+	function checkMatch(val){
+		if(!checkIfNull($("#copies"))){
+			return false;
+		}
+		
+		if(val.val()!=""){
+			if(val.val().search(/^[1-9]\d{0,3}$/)==-1){
+				val.addClass("invalid-text");
+				val.attr('title','格式必须为1-9999之间的整数类型');
+				return false;
+			}
+		}
+		val.removeClass("invalid-text");
+		val.attr('title','');
+		return true;
+	}
+	
+	//验证是否为空
+	function checkIfNull(val){
+		if(val.val()==""){
+			val.addClass("invalid-text");
+			val.attr('title','此项不能为空');
+			return false;
+		}
+		val.removeClass("invalid-text");
+		val.attr('title','');
+		return true;
+	}
+
+	//删除接收单位部门
+	$("#flowChart .delPart").die().live("click",function(){
+		$(this).parent("p").remove();
+		autoChart();
+	});
+
+	//自动对齐图形
+	function autoChart(){
+		var p=$("#part p");
+		var hei=0;
+		for(var i=0;i<p.length;i++){
+			var m=$(p[i]).css("height").split("px")[0]*1;
+			$(p[i]).children("span").first().css("margin-top",m/2-1);
+			hei=hei+m+10;
+		}
+		$("#part").css("height",hei);
+		$(".part_left").css("margin-top",p.length>0?(hei/2-25):0);
+		if(p.length>0){
+			var top=$(p[0]).css("height").split("px")[0]/2+4;
+			var bottom=$(p[p.length-1]).css("height").split("px")[0]/2+4;
+			$("#part").prev("div").css("margin-top",top).css("height",hei-top-bottom);
+		}
+	}
+
+	//字符截取填充
+	function autoAddEllipsis(pStr, pLen) {  
+	    var _ret = cutString(pStr, pLen);  
+	    var _cutFlag = _ret.cutflag;  
+	    var _cutStringn = _ret.cutstring;  
+	    if ("1" == _cutFlag) {  
+	        return _cutStringn + "...";  
+	    } else {  
+	        return _cutStringn;  
+	    }  
+	}  
+
+	//字符截取
+	function cutString(pStr, pLen) {  
+	    // 原字符串长度  
+	    var _strLen = pStr.length;  
+	    var _tmpCode;  
+	    var _cutString;  
+	    // 默认情况下，返回的字符串是原字符串的一部分  
+	    var _cutFlag = "1";  
+	    var _lenCount = 0;  
+	    var _ret = false;  
+	    if (_strLen <= pLen/2) {  
+	        _cutString = pStr;  
+	        _ret = true;  
+	    }  
+	    if (!_ret) {  
+	        for (var i = 0; i < _strLen ; i++ ) {  
+	            if (isFull(pStr.charAt(i))) {  
+	                _lenCount += 2;  
+	            } else {  
+	                _lenCount += 1;  
+	            }  
+	            if (_lenCount > pLen) {  
+	                _cutString = pStr.substring(0, i);  
+	                _ret = true;  
+	                break;  
+	            } else if (_lenCount == pLen) {  
+	                _cutString = pStr.substring(0, i + 1);  
+	                _ret = true;  
+	                break;  
+	            }  
+	        }  
+	    }  
+	    if (!_ret) {  
+	        _cutString = pStr;  
+	        _ret = true;  
+	    }  
+	    if (_cutString.length == _strLen) {  
+	        _cutFlag = "0";  
+	    }  
+	    return {"cutstring":_cutString, "cutflag":_cutFlag};  
+	}  
+
+	//全角半角判断
+	function isFull (pChar) {  
+	    if ((pChar.charCodeAt(0) > 128)) {  
+	        return true;  
+	    } else {  
+	        return false;  
+	    }  
+	}  
+
+	//所有角色
+	var colModelUsers = [
+		    {display: '序号', name : 'num', width : 30, align: 'center'}, 
+		    {display: '', name : 'ids', width : 30, align: 'center'}, 
+		    {display: 'ID', name : 'id',metadata:'id',hide:true, width : 50, align: 'right'},
+			{display: '用户名', name : 'userid',metadata:'userid', width : 150, align: 'left'},
+			{display: '姓名', name : 'name',metadata:'name', width : 150, align: 'left'},
+			{display: '邮箱', name : 'emailAddress', width : 150, align: 'left'},
+			{display: '手机', name : 'mobtel', width : 120, align: 'left'}
+		];
+	
+	//查询所有角色
+	$("#receiveUserTB").flexigrid({
+		url : $.appClient.generateUrl({ESParticipatory : 'findControlerList'}, 'x'),
+		dataType : 'json',
+		border:true,
+		colModel : colModelUsers,
+		singleSelect : true,
+		usepager : true,
+		useRp : true,
+		rp : 20,
+		nomsg : "没有数据",
+		showTableToggleBtn : false,
+		pagetext : '第',
+		outof : '页 /共',
+		width : 'auto',
+		height : 135,
+		pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+
+	//初始加载用户搜索框
+	$('#receiveUser .nDiv').after('<div style="height:42px;line-height:42px;"><div class="find-dialog" style="margin-top:9px;"><input id="userKeyWordCond" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="userKeyWord" value="请输入关键字" /><span class="searchUser"></span></div></div>');
+	
+	//角色数据单击事件
+	$('#receiveUserTB').find("tr").die().live("click", function(){
+		var ids="";
+		var names="";
+		$('#receiveUserTB').find(".checkbox:checked").each(function(){
+			var TR=$(this).closest("tr");
+			ids += ","+$('#receiveUserTB').flexGetColumnValue(TR,['id']);
+			names += ","+$('#receiveUserTB').flexGetColumnValue(TR,['name']);
+		});		
+		$("#selPart").attr("code",ids.length>1?ids.substring(1):"");
+		$("#selPart").val(names.length>1?names.substring(1):"");
+	});
+
+	//鼠标按下事件捕获
+	$("body").bind("mousedown", clickBodyDown);
+
+	function clickBodyDown(event) {
+		if (!(event.target.id == "receiveUser" || event.target.id == "receiveUserTB" || $(event.target).parents("#receiveUser").length>0)) {
+			$("#receiveUser").fadeOut("fast");//隐藏用户选择弹出框
+		}
+	}
+
+	//用户搜索
+	$('#receiveUser .searchUser').die().live("click",function(){
+		var userKeyword = $('#receiveUser #userKeyWordCond').val();
+		if (userKeyword == '请输入关键字') {
+			userKeyword = '';
+		}
+		$("#receiveUserTB").flexOptions({url:$.appClient.generateUrl({ESParticipatory : 'findControlerList',keyWord:userKeyword}, 'x'),newp:1}).flexReload();	
+	});
+
+	$(document).keydown(function(event){
+		var activeId = document.activeElement.id;
+		if(event.keyCode == 13 && activeId == 'userKeyWordCond') {
+			jQuery("#receiveUser .searchUser").click();  
+			return false;
+		}
+	});
+});
+</script>

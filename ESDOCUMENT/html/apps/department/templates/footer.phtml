@@ -1,0 +1,43 @@
+<div class="footer">
+  <div class="footerL"><img src="/templates/cu/images/logo_copyright.gif" width="107" height="60" alt="中国联通" /></div>
+  <?php if(isset($menuitem) && $menuitem == 'menu_company'){?>
+      <?php
+      $mainSiteArr = array('hq'=>'总部',
+                           'hb'=>'湖北省',
+                           'hi'=>'海南省',
+                           'cq'=>'重庆市',
+                           'qh'=>'青海省',
+                           'gz'=>'贵州省',
+                           'xz'=>'西藏',
+                           'hn'=>'湖南省',
+                           'jx'=>'江西省',
+                           'gs'=>'甘肃省',
+                           'xj'=>'新疆',
+                           'nx'=>'宁夏',
+                           'sn'=>'陕西省',
+                           'gx'=>'广西省',
+                           'tj'=>'天津市',
+                           'ah'=>'安徽省',
+                           'sc'=>'四川省',
+                           'js'=>'江苏省',
+                           'yn'=>'云南省',
+                           'fj'=>'福建省',
+                           );
+      $mainSite = strtolower($mainSite);
+      $province = $mainSiteArr[$mainSite];
+      ?>
+  <div id="onlineIcon"><img src="/templates/cu/images/online_nubmer.gif" width="50" height="40" alt="在线人数" /></div>
+  <div id="onlineNumber">
+  <p class="font14">当前在线人数</p>
+  <p><span class="textAlignRight color555"><?php echo $province?></span><span class="color369"><?php echo $online?></span></p>
+  </div>
+  <?php }?>
+  <div class="footerR">
+     <ul>
+      <li><a href="<?php echo url('guide/about.html') ?>">关于云门户</a></li>
+      <li><a href="<?php echo url('guide/contacts.html') ?>">运维联系方式</a></li>
+      <li><a href="mailto:hq-eipwh@chinaunicom.cn" target="_blank">建议反馈</a></li>
+    </ul>
+    <p>&copy; 2012 中国联合网络通信有限公司</p>
+  </div>
+</div>

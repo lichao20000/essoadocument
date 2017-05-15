@@ -1,0 +1,23 @@
+<style>
+<!--
+.button {cursor: pointer;padding: 5px;background-color: #6F6E81;color: #FFF;border: 0px none;outline: 0px none;}
+-->
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="editDataForm" method="post" enctype="multipart/form-data">
+		<input type="hidden" id="id" name="id" value="<?php echo $id; ?>" />
+			<table id="table_detail" style="height: 150px;">
+				<tr>
+					<td>文件类型名称：</td>
+					<td><input type="text" name="typeName" id="typeName" verify="unspecial/200/1/0" value="<?php echo $typeName; ?>" class="inputtext" /></td>
+				</tr>
+				<tr>
+					<td>文件类型代码：</td>
+					<td><input type="text" name="typeNo" id="typeNo" verify="english-num/200/1/0" value="<?php echo $typeNo; ?>" class="inputtext" />
+					<input type="hidden" name="oldTypeNo" id="oldTypeNo" value="<?php echo isset($typeNo)?$typeNo:''; ?>"/></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

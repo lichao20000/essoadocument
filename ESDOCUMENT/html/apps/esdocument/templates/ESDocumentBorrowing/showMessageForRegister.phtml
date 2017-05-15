@@ -1,0 +1,99 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+
+<style>
+ .formTable{width:600px; height:240px;float: left}
+  .storeTable{width:600px; height:250px;float: left}
+  .resPath{width:450px; height:240px;float: left}
+    .resForm{width:450px; height:250px;float: left}
+</style>
+<div style="width:600px;height:500px;">
+      <div class='formTable'>
+    	 <table id="formTable"></table>
+      </div>
+	  <div class='storeTable' >
+		<table id="storeTable"></table>
+	  </div>
+	</div>
+<script type="text/javascript">
+$(function(){
+	var formId = '<?php echo $formId;?>';
+	var showColModel=[
+	   				{display: '借阅单编号', name : 'borrowNum', width : 120, align: 'left',metadata:'borrowNum'},
+	   				{display: '借阅人', name : 'borrowPerson', width : 80, align: 'left',metadata:'borrowPerson'},
+	   				{display: '登记日期', name : 'regDate', width : 100, align: 'center',metadata:'regDate'},
+	   				{display: '单位', name : 'unit', width : 180, align: 'left',metadata:'unit'},
+	   				{display: '电话', name : 'telphone', width : 80, align: 'left',metadata:'telphone'},
+	   				{display: '邮箱', name : 'email', width : 120, align: 'left',metadata:'email'},
+	   				{display: '催还提前天数', name : 'overdueDays', width : 60, align: 'right',metadata:'overdueDays'},
+	   				{display: '登记人', name : 'regPerson', width : 80, align: 'left',metadata:'regPerson'},
+	   				{display: '状态', name : 'status', width : 60, align: 'center',metadata:'status'},
+	   				{display: '身份证', name : 'idcardnum', width : 150, align: 'left',metadata:'idcardnum'},
+	   				{display: '件数', name : 'pnum', width : 60, align: 'right',metadata:'pnum'},
+	   				{display: '备注', name : 'remark', width : 120, align: 'left',metadata:'remark'}
+	   			];
+	 
+			var uri=$.appClient.generateUrl({ESDocumentBorrowing:'getFormDataByFormID',formId:formId});
+			$("#formTable").flexigrid({
+				url:uri,
+				dataType: 'json',
+				editable: true,
+				colModel: showColModel,
+				usepager: true,
+				useRp: true,
+				rp: 20,
+				nomsg:"没有数据",
+				showTableToggleBtn: false,
+				pagetext: '第',
+				outof: '页 /共',
+				width:600,
+				height: 160,
+				pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+			});
+			$("#formTable").flexReload();
+			var showcols=[
+			  				{display: '序号', name : 'num', width : 20, align: 'center',metadata:'num'}, 
+			  				{display: '文件id', hide:true, name : 'docId', width : 40, align: 'center',metadata:'docId'},
+			  	  			{display: '文件标题', name : 'title', width : 100, align: 'left',metadata:'title'},
+			  				{display: '文件编码', name : 'docNo', width : 100, align: 'left',metadata:'docNo'},
+			  	  			{display: '借阅类型', name: 'borrowtype',width : 50,align: 'left',metadata:'borrowtype'},
+			  	  			{display: '状态', name: 'status',width : 50,align: 'center',metadata:'status'},
+			  	  			{display: '发生日期', name: 'happen_date',width : 60,align: 'center',metadata:'happen_date'},
+			  	  			{display: '应归还日期', name: 'shouldreturndate',width : 60,align: 'center',metadata:'shouldreturndate'},
+		  	  				{display: '项目名称', name : 'itemName', width : 120, align: 'left',metadata:'itemName'},
+			  	  			{display: '收集范围代码', hide:true, name : 'stageCode', width : 40, align: 'left',metadata:'stageCode'},
+			  				{display: '收集范围名称', name : 'stageName', width : 120, align: 'left',metadata:'stageName'},
+			  				{display: '装置分类代码', hide:true, name : 'deviceCode', width : 40, align: 'left',metadata:'deviceCode'},
+			  				{display: '装置分类名称', name : 'deviceName', width : 120, align: 'left',metadata:'deviceName'},
+			  				{display: '拟定部门代码', hide:true, name : 'participatoryCode', width : 40, align: 'left',metadata:'participatoryCode'},
+			  				{display: '拟定部门名称', name : 'participatoryName', width : 120, align: 'left',metadata:'participatoryName'},
+			  				{display: '文件类型代码', hide:true, name : 'documentCode', width : 50, align: 'left',metadata:'documentCode'},
+    		    			{display: '文件类型名称', name : 'documentTypeName', width : 100, align: 'left',metadata:'documentTypeName'},
+    		    			{display: '文件专业代码', hide:true, name : 'engineeringCode', width : 50, align: 'left',metadata:'engineeringCode'},
+    		    			{display: '文件专业名称', name : 'engineeringName', width : 100, align: 'left',metadata:'engineeringName'},
+    		    			{display: '件数', name: 'pnum',width : 90,align: 'right',metadata:'pnum'},
+			  	  			{display: '备注', name: 'remark', width :90,align: 'left',metadata:'remark'}
+			  	  		];
+	
+	$("#storeTable").flexigrid({
+		url:$.appClient.generateUrl({ESDocumentBorrowing:'getDetailsByFormId',formId:formId},'x'),
+		dataType: 'json',
+		editable: true,
+		colModel: showcols,
+		usepager: true,
+		useRp: true,
+		rp: 20,
+		nomsg:"没有数据",
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: 600,
+		height: 140,
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	$("#storeTable").flexReload();
+});
+
+</script>

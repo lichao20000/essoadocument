@@ -1,0 +1,277 @@
+<?php
+/**
+ * 定制文件收发流程模块
+ *  @author gengqianfeng
+ *
+ */
+class ProxyEsdocumentSendreceiveflow extends AgentProxyAbstract {
+	const SERVICE_NAME = "sendreceiveflow";
+	const SERVICE_NAME_USER = "userqueryservice";
+	
+	/**
+	 * 加载文件收发流程类型树
+	 *
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getTree() {
+		$urlParam = array (
+				'getTree' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 根据树父节点加类型所有获取树
+	 */
+	public function getTreeByParentName($param) {
+		$urlParam = array (
+				'getTreeByParentName' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 添加文件收发流程类型
+	 *
+	 * @param unknown $type        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function addTree($type) {
+		$urlParam = array (
+				'addTree' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $type, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 通过id获取文件收发流程类型
+	 *
+	 * @param unknown $type        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getTreeById($id) {
+		$urlParam = array (
+				'getTreeById',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 修改文件收发流程类型
+	 *
+	 * @param unknown $type        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function updateTree($type) {
+		$urlParam = array (
+				'updateTree' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $type, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除文件收发流程类型
+	 *
+	 * @param unknown $id        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function delTree($ids, $userId, $ip) {
+		$urlParam = array (
+				'delTree',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取文件收发流程总条数
+	 *
+	 * @param unknown $pid
+	 *        	父级节点id
+	 * @param unknown $where
+	 *        	筛选条件
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getCount($pid, $where) {
+		$urlParam = array (
+				'count',
+				$pid 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 分页加载文件收发流程列表
+	 *
+	 * @param unknown $page
+	 *        	第几页
+	 * @param unknown $pre
+	 *        	每页显示多少条
+	 * @param unknown $pid
+	 *        	父节点id
+	 * @param unknown $where
+	 *        	筛选条件
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findSendReceiveFlowList($page, $pre, $pid, $where) {
+		$urlParam = array (
+				'list',
+				$page,
+				$pre,
+				$pid 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 添加收发流程
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function addSendReceiveFlow($flow) {
+		$urlParam = array (
+				'addFlow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $flow, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 通过id获取收发流程
+	 *
+	 * @param unknown $id        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getSendReceiveFlowById($id) {
+		$urlParam = array (
+				'getFlowById',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 修改收发流程
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function updateSendReceiveFlow($flow) {
+		$urlParam = array (
+				'updateFlow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $flow, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除收发流程
+	 *
+	 * @param unknown $ids        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function delSendReceiveFlow($ids) {
+		$userId = $this->getUserId ();
+		$ip = $_SERVER ['REMOTE_ADDR'];
+		$urlParam = array (
+				'delFlow',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 发布或关闭收发流程
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function pubOrCloseFlow($flow) {
+		$urlParam = array (
+				'pubOrCloseFlow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $flow, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 添加收发流程矩阵
+	 *
+	 * @param unknown $matrix        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function editMatrix($params) {
+		$urlParam = array (
+				'editMatrix' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取默认选择单位部门
+	 *
+	 * @param unknown $code        	
+	 */
+	public function getPartByCode($code) {
+		$urlParam = array (
+				'getPartByCode' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $code, 'text/plain;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取默认选择用户
+	 *
+	 * @param unknown $code        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getUserByCode($code) {
+		$urlParam = array (
+				'getUserInfoById',
+				$code 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME_USER, $url );
+	}
+	
+	/**
+	 * 通过收集范围代码获取收集范围实体对象
+	 *
+	 * @param unknown $code        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getStageByCode($code) {
+		$urlParam = array (
+				'getStageByCode',
+				$code 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 唯一验证
+	 */
+	public function uniqueName($params){
+		$urlParam = array (
+				'uniqueName'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+		
+	}
+}

@@ -1,0 +1,14 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESArchivePermission/css/index.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'档案权限管理'));?>
+<div id="ESSystemIndex" >
+	<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5, "autoHide"=>true));?>
+	<div id='roles_div' class='roles-div'><table id="roles"></table></div>
+</div>
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESArchivePermission/js/template.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.excheck.min.js"></script>

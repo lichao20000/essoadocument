@@ -1,0 +1,67 @@
+<div class='destroy_list'>
+	<div class='destroyed_tree_box'>
+		<div class='ztree' id='functionTree'></div>
+	</div>
+	<form class='destroy_cont_box hide' id="FORM">
+		<h2 id='like-title'></h2>
+		<div class='buttons'>
+			<div class='button'><div><span title='保存表单' id='newSubmit' class='save'>保存</span></div></div>
+			<div class='button'><div><span title='提交表单' class='submit' id='newProcess'>提交鉴定申请</span></div></div>
+			<div class='button'><div><span class='print'>打印</span></div></div>
+			<input type='hidden' name='EXAMINATION_RECORD' value='defalut' />
+		</div>
+		
+		<div class='rows'>
+			<p>
+			<span>标题：</span>
+			<input type='text' class='extendInput' name='TITLE' value='档案销毁鉴定' /></p>
+		</div>
+		
+		<div class='rows'>
+			<p>
+				<span>档案类别：</span>
+				<input name='ARCHIVE_TYPE' value="<?php echo $DT; ?>" readonly='readonly' class='not_allowed' />
+			</p>
+			<p>
+				<span>销毁数量：</span>
+				<input name='DESTROY_NUMBER' value="<?php echo $DN; ?>" readonly='readonly' class='not_allowed' />
+			</p>
+			<!-- 
+			<p>
+				<span>保留数量：</span>
+				<input name='RETENTION_NUMBER' value="<?php echo $RN; ?>" readonly='readonly' class='not_allowed' />
+			</p>
+			-->
+		</div>
+		
+		<div class='rows'>
+			<p>
+				<span>报告内容：</span>
+				<textarea class='main' name='REPORT_CONTENT'>报告内容</textarea>
+			</p>
+		</div>
+		<div class='rows'>
+			<p>
+				<span>销毁日期：</span>
+				<input type='text' name='DESTROY_DATE' value="<?php echo date('Y-m-d') ?>" class='Wdate' id="E_DESTROY_DATE" />
+			</p>
+			<p class='position'>
+				<span>销毁负责人：</span>
+				<input type='text' name='LEADER' value='' />
+				<b id='fuzr' class='user_bg'></b>
+			</p>
+			<p class='position'>
+				<span>监销人：</span>
+				<input type='text' name='SUPERINTENDENT' value=''/>
+				<b id='jianxr' class='user_bg'></b>
+			</p>
+		</div>
+		<div class='rows'>
+			<p>
+				<span>备注：</span>
+				<textarea class='remark' name='DESCRIPTION'>备注</textarea>
+			</p>
+		</div>
+	</form>
+	<div class='destroy_cont_box removeBorder hide' id="TBL"></div>
+</div>

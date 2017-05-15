@@ -1,0 +1,49 @@
+<!-- wangbo 20140403-->
+<form id="addOrg" action=""	method="post">
+<div class="estransferorg">
+<ul>
+<li><span>机构名称<font color="red" size="3">*</font></span><input  type="text" name="orgname"     value="">
+<input type="hidden" name="id"    value="-1"  >
+<input type="hidden" name="appid"    value= "<?php echo $data[0];?>" >
+<input type="hidden" name="parentid"     value= "<?php echo $data[1];?>">
+<input type="hidden" name="idseq"    value= "<?php echo $data[2];?>">
+</li>
+<li><span>地址<font color="red" size="3">*</font></span><input type="text" name="address"    value=""></li>
+<li><span>顺序<font color="red" size="3">*</font></span><input type="text" name="orgsort"  title="123"  value=""></li>
+</ul>
+</div>
+</form>
+ <script type="text/javascript">
+ var orgsortZZ =  /^[0-9]*$/;
+ $("#addOrg input[name='orgname']").bind('blur',function(){
+ 	var orgname = $(this).val();
+ 	orgname=orgname.replace(/[ ]/g,"");
+ 	if(orgname==''){
+ 		$(this).addClass("warnning");
+ 		return false;
+ 	}
+ 	$(this).removeClass("warnning");
+ });
+ $("#addOrg input[name='address']").bind('blur',function(){
+		var address = $(this).val();
+		address=address.replace(/[ ]/g,"");
+		if(address==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+ $("#addOrg input[name='orgsort']").bind('blur',function(){
+	 	var orgsort = $(this).val();
+	 	orgsort=orgsort.replace(/[ ]/g,"");
+	 	if(orgsort==''){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+	 	if(orgsortZZ.test(orgsort)==false){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+	 	$(this).removeClass("warnning");
+	 });
+ </script>

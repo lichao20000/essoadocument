@@ -1,0 +1,164 @@
+<script>
+	//获取筛选条件
+	function filterValue()
+	{
+		var $where='';
+		$("#sift tr:gt(0)").each(function(i){
+			 var esfields=$("[name='esfields']").eq(i).val();
+			 var comparison=$("[name='comparison']").eq(i).val();
+			 var esfieldvalue=$("[name='esfieldvalue']").eq(i).val();
+			 var relation=$("[name='relation']").eq(i).val();
+  			 if(esfieldvalue){
+// 				 if(relation=="AND"){
+// 					 relation='true';
+// 				 }else{
+// 					 relation='false';
+// 				 }
+			 $where+=esfields+','+comparison +','+esfieldvalue+','+relation+'@';
+			 }
+		})
+		return $where;
+	}
+	function cnFilterValue()
+	{
+		var $where='';
+		$("#sift tr:gt(0)").each(function(i){
+			 var esfields=$("[name='esfields']").eq(i).find("option:selected").text();
+			 var comparison=$("[name='comparison']").eq(i).find("option:selected").text();
+			 var esfieldvalue=$("[name='esfieldvalue']").eq(i).val();
+			 var relation=$("[name='relation']").eq(i).val();
+			 if(esfieldvalue){
+				 if(relation=="AND"){
+					 relation='并且';
+				 }else{
+					 relation='或者';
+				 }
+				 $where+="["+esfields+"]"+comparison+"\""+esfieldvalue+"\""+relation;
+			 }
+		})
+		return $where.substring(0,$where.length-2);
+	}//条件设置
+    function setCondition(){
+        var trlength=6;
+        var filtervalue= $("#hcond").val();
+        if(filtervalue!=''){
+        	  var conds = filtervalue.substring(0,filtervalue.length-1).split('@');
+        	  var length=conds.length;
+        	  trlength=trlength<length?length:trlength;
+        }
+      
+		$.ajax({
+		    url: $.appClient.generateUrl({ESStatistics:'setCondition',itemId:'<?php echo $itemId;?>',treeId:'<?php echo $treeId;?>',treeType:'<?php echo $treeType;?>',trlength:trlength},'x'),
+		    success:function(data){
+		    	$.dialog({
+			    	title:'设置条件',
+		    		width: '50%',
+		    	    height: '40%',
+		    	   	fixed:true,
+		    	    resize: false,
+			    	content:data,
+			    	okVal:'确定',
+				    ok:function(){
+				    	var form=$('#esfilter');
+					    $("#textarea").val(cnFilterValue());
+						$("#hcond").val(filterValue());
+				    },
+				    cancelVal: '关闭',
+				    cancel: true 
+			    });
+			    },
+	    
+	    cache:false
+		});
+     }
+	$(function(){
+		//wanghongchen 20140821 规则设置中统计项和统计方式默认选中
+		<?php if($collItem != null){?>
+			<?php if($collItem->ruleField != null && $collItem->ruleField != ""){?>
+				$("#countField").val("<?php echo $collItem->ruleField;?>");
+				$("#countType").val("<?php echo $collItem->ruleMethod;?>");
+			<?php }?>
+			$("#hcond").val("<?php echo $collItem->encondition;?>");
+			$("textarea").val('<?php echo $collItem->cncondition;?>');
+		<?php }?>
+		_init();
+		$("#countField").live("change",function(){
+			_init();
+		})
+		$("#countType").live("change",function(){
+			var obj=$("#packet");
+			var objValue=$("input[name='countObj']",obj).val();
+			var fieldValue=$("[name='countField'] option:selected",obj).html();
+			var typeValue=$("[name='countType'] option:selected",obj).html();
+			var temp=objValue+'('+fieldValue+'-'+typeValue+')';
+			var objValue=$("input[name='countIdentity']",obj).val(temp).css('border','1px solid #ccc').attr('title','');
+		})
+		
+	});
+	//初始化统计标识
+	function _init(){
+		var type = $("#countField").find("option:selected").attr("type");
+		var content="";
+		if(type=='NUMBER' || type=='FLOAT'){
+			 $("#countType").html("");
+			countent = "<option value='count'>计数</option><option value='distinct'>唯一计数</option>";
+			$("#countType").append(countent);
+			}else{
+			$("#countType").html("");
+			countent = "<option value='sum'>合计</option><option value='count'>计数</option><option value='distinct'>唯一计数</option><option value='avg'>平均值</option>";
+			$("#countType").append(countent); 
+		}
+		<?php if($collItem != null){?>
+		<?php if($collItem->ruleField != null && $collItem->ruleField != ""){?>
+			$("#countField").val("<?php echo $collItem->ruleField;?>");
+			$("#countType").val("<?php echo $collItem->ruleMethod;?>");
+		<?php }?>
+		<?php }?>
+		var obj=$("#packet");
+		var objValue=$("input[name='countObj']",obj).val();
+		var fieldValue=$("[name='countField'] option:selected",obj).html();
+		var typeValue=$("[name='countType'] option:selected",obj).html();
+		var temp=objValue+'('+fieldValue+'-'+typeValue+')';
+		var objValue=$("input[name='countIdentity']",obj).val(temp).css('border','1px solid #ccc').attr('title','');
+		
+	}
+</script>
+<div class="espakcet" style="width: 500px;">
+	<form id="packet">
+		<ul>
+			<li style="width: 420px">
+				<span>统计对象</span>
+				<input type="text" name="countObj" value="<?php echo $nodeInfo->name;?>" readonly="readonly" style="width: 352px">
+			</li>
+			<li>
+				<span>统计项</span>
+				<select id="countField" name="countField">
+					<?php
+						foreach ( $list as $value ) {
+							echo '<option value="'.$value->code.'" type="'.$value->type.'">'.$value->name.'</option>';
+						}
+					?>
+
+				</select>
+			</li>
+			<li>
+				<span>统计方式</span>
+				<select id="countType" name="countType">
+					<option value="sum">合计</option>
+					<option value="count">计数</option>
+					<option value="distinct">唯一计数</option>
+					<option value="avg">平均值</option>
+				</select>
+			</li>
+			<li style="width: 420px">
+				<span>统计标识</span>
+				<input type="text" name="countIdentity" style="width: 352px" value="" onKeyUp=this.style.border= '1pxsolid #ccc';this.setAttribute('title','') readonly="readonly" />
+			</li>
+			<li style="width: 420px">
+				<span>统计条件 <input type="button" value="设置" style="width: 60px;" onclick="setCondition();"></span>
+				<textarea id="textarea" readonly="readonly" style="width: 352px; height: 80px; float: left" name="condition"></textarea>
+				<input type="hidden" id="hcond" name="hcond">
+			</li>
+		</ul>
+	</form>
+</div>

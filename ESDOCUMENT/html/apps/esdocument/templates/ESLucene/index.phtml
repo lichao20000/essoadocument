@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESLucene/css/index.css" />
+<link rel='stylesheet' type='text/css' href='<?php echo $tplPath;?>/ESLucene/css/filter.css' />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" charset="UTF-8" src="<?php echo $tplPath;?>/ESLucene/js/template.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php 
+	if($status==4){
+		$expand=2;
+	}else{
+		$expand=1;
+	}
+echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>$expand));?>
+
+<div id="ESLuceneIndex" class = "ESLuceneIndexContainer">
+	
+	<!-- xiaoxiong 20140805 添加宽度与滚动条设置 -->
+	<div id="Lucene_treeDiv" class='init-style' style="padding-top:10px;">
+		<div id='lucene_tree' class='ztree'  style="overflow:auto;"></div>
+	</div>
+	<div class='init-style'>
+		<div id='tableCreated'></div>
+		<div id='tableNoCreate'></div>
+	</div>
+</div>

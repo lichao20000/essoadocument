@@ -1,0 +1,130 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexpaper/css/flexpaper.css" />
+<link href="<?php echo $tplPath?>/ESDocumentsCollection/css/viewfile.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexpaper/js/flexpaper.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexpaper/js/flexpaper_handlers.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.globalEx.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){	
+	var interval = null; // longjunhao 20140922 add 电子文件转换轮询对象
+	var intervalCount = 0; // 电子文件转换轮询次数
+	var prevLi = {}; // 存储当前被点击的li对象
+	var curFile;
+	var files = <?php echo json_encode($files);?>;
+	var $filelist = $("#esfilelist");
+	var $documentViewer = $('#documentViewer');
+	$.each(files,function( i, file){
+		var num=i+1;
+		var essType = file.estype=='' ? '' : file.estype+':';
+		var li = $("<li title="+essType+ file.estitle+">"+num+"、"+essType+ file.estitle + "</li>");
+		$(li).prop("file", file);
+		$filelist.append(li);
+	});
+	var lis = $filelist.find("li");
+    if(lis.length > 0) {
+        lis.click(function(){
+        	var file = $(this).prop("file");
+        	if(file.fileRead == "false"){
+        		$.dialog.notice({content: '您对文件['+file.estitle+']没有文件浏览权限，不能进行此操作！', time: 5, icon: 'warning', lock: false});
+        		return ;
+        	}
+            switchFile(file);
+            prevLi.style.background = '';
+            $(this)[0].style.background = '#aaa';
+            prevLi = $(this)[0];
+        });
+       	var indexLi = $filelist[0].children[<?php echo $index; ?>];
+        	indexLi.style.background = '#aaa';
+        	prevLi = indexLi;
+        switchFile(files[<?php echo $index; ?>]); // 在浏览原文时用户勾选数据时选择用户勾选的第一条
+    }
+    function switchFile(file) {
+    	curFile = file;
+    	$('#attachments').html(file.estitle);
+    	viewFile(file.originalId,file.filePrint, file.fileDown);
+    }
+    function createFlexpaper(fileId,filePrint,fileDown){
+    	$documentViewer.FlexPaperViewer(
+    			{ config : {
+        			fileId: fileId,
+        			baseUrl: escape($.appClient.generateUrl({ESEFile:'getViewUrl',filePrint:filePrint,fileDownload:fileDown}, 'x')),
+    				jsDirectory : '<?php echo $tplPath;?>/public/flexpaper/js/'
+    			}
+    		}
+    	);
+	}
+    function viewFile(fileId,filePrint,fileDown){
+		$.ajax({
+			type:'POST',
+	        url : $.appClient.generateUrl({ESEFile : 'getFileUrl'},'x'),
+	        data: {fileId:fileId},
+		    success:function(data){
+			    if(data=='true') {				    
+			    	if($documentViewer.find("object").length){
+			        	getDocViewer("documentViewer").loadFile(fileId);
+					} else {						
+						createFlexpaper(fileId,filePrint,fileDown);
+			        }
+			    	// 文件列表高度
+			        $('#esfilelist').height($("#fileheader").height() - 31);
+			    } else {
+				    $.dialog.notice({content:'文件比较复杂，可能需要较长时间读取，请您耐心等候...',icon:'success',title:'温馨提示',time:8});
+			    	interval = setInterval(function(){viewChat(fileId,filePrint,fileDown);}, "15000");
+			    }
+		    },
+		    cache:false
+		});
+	}
+
+    // longjunhao 20140922 add 解决超时
+	function viewChat(fileId,filePrint,fileDown) { 
+		intervalCount++;
+		if (intervalCount > 40) {
+			clearInterval(interval); // 退出轮询
+	    	interval = null;
+	    	$.dialog.notice({content:'系统后台正在努力转换文件，您可以稍候再试。',icon:'success',title:'温馨提示',time:8});
+	    	return;
+		}
+		$.ajax({
+			type:'POST',
+	        url : $.appClient.generateUrl({ESEFile : 'checkSwfFile'},'x'),
+	        data: {fileId:fileId},
+		    success:function(data){
+			    if(data=='true') {
+			    	if($documentViewer.find("object").length){
+			        	getDocViewer("documentViewer").loadFile(fileId);
+					} else {
+						createFlexpaper(fileId,filePrint,fileDown);
+			        }
+			    	clearInterval(interval); // 退出轮询
+			    	interval = null;
+			    }
+		    },
+		    cache:false
+		});
+	}  
+});
+</script>
+<div class='esmain' style = "margin:0px;">
+<table id="fileviewtable" style="border-collapse:collapse">
+<tr>
+<td>
+<div id="fileheader" class="esfilehead">
+	<?php foreach ($title as $value){
+		echo '<span class="estitle">'.$value.'</span>';
+	}?>	
+	<div class="hh">
+	<?php foreach ($formData as $value){
+		echo '<span><span class="field">'.$value['lable'].'：</span><span>'.$value['value'].'</span></span>';
+	}?>
+	</div>
+	<div id="documentViewer" class="flexpaper_viewer"></div></div>
+</td>
+<td>
+<div class="esfileinfo">
+	<div class="title">相关电子文档</div>
+	<ul class="filelist" id="esfilelist" style="margin: 0px;"></ul>
+</div>
+</td>
+</tr>
+</table>
+</div>

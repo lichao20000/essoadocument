@@ -1,0 +1,14 @@
+<link href="<?php echo $tplPath?>/ESContractItem/css/index.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESContractItem/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"合同工程", content:"#eslist"});
+});
+</script>
+<div id="eslist" class = "essContainer">
+    <table id="itemGrid"></table> 
+</div> 

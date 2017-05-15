@@ -1,0 +1,39 @@
+@charset "utf-8";
+/**按钮样式**/
+
+.btnClassfication{
+	height:30px; 
+	float:left;
+	margin-left:5px;
+	padding-left:20px;
+	width:60px;
+	cursor: pointer;
+	background-color:#4a8bc2;
+	border:none;
+	color:#fff;
+}
+
+.btnClassfication:hover{
+	background-color:#133959;
+}
+
+.add{ background:url(../../public/flexigrid/css/images/add.png) no-repeat 3px center; background-color: #6f6e81;}	/* 添加 */
+.remove{ background:url(../../public/flexigrid/css/images/close.png) no-repeat 3px center; background-color: #6f6e81;}
+.edit{ background:url(../../public/flexigrid/css/images/Grid_Data_Batch_Edit.gif) no-repeat 3px center; background-color: #6f6e81;}
+.import{ background:url(../../public/flexigrid/css/images/Grid_Data_Import.gif) no-repeat 3px center;background-color:#4a8bc2;}
+.export{ background:url(../../public/flexigrid/css/images/Grid_Data_Export.gif) no-repeat 3px center;background-color:#4a8bc2;}
+
+/***添加编辑弹出框样式**/
+.estransfer{width:620px;overflow-y:auto;overflow-x:hidden}
+.estransfer ul{width: 560px;text-align:center;}
+.estransfer ul li{width:250px;margin-left:20px;float:left;margin-top:10px;}
+.estransfer span{width:80px;height:30px;line-height:30px;text-align:left;float:left;}
+.estransfer ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.estransfer ul li select{width:160px;height:22px;float:left;}
+.estransfer .esbottom{width:100%;float:left;margin-top:20px;}
+.estransfer button{width:60px;height:30px;cursor:pointer}
+.buttons{
+	margin-top:10px;
+	padding-top:10px;
+}
+.warnning{border:solid 2px #f00;}

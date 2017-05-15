@@ -1,0 +1,526 @@
+<?php
+/**
+ * 年报服务代理
+ * @author dengguoqi 2012-11-05
+ */
+class ProxyEscloudappEscloud_yearnewspaperservice extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_yearnewspaperservice";	//移交清册
+	
+	/**
+	 * @author dengguoqi
+	 * wanghongchen 20140617 edit 修改为map传参
+	 * 根据指定ID获取年报树子级节点
+	 */
+	public function findDirTree($param)
+	{
+		return $this->post(self::SERVICE_NAME, "findDirTree", $param,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @author dengguoqi
+	 * 添加年报树子节点
+	 */
+	public function addChildNode($node)
+	{
+		return $this->post(self::SERVICE_NAME, "addChildNode", $node,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @author dengguoqi
+	 * 修改子节点名称
+	 */
+	public function updateNode($node)
+	{
+		return $this->post(self::SERVICE_NAME, "updateNode", $node,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @author dengguoqi
+	 * 删除子节点
+	 */
+	public function deleteNode($param)
+	{
+		//wanghongchen 20140829 修改post请求
+		return $this->post(self::SERVICE_NAME, "deleteNode", $param,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取指定分页的年报
+	 * @author dengguoqi 20121105
+	 * @param unknown_type $pageNum
+	 * @param unknown_type $pageSize
+	 */
+	public function getYearnewspaperList($treeNodeId, $pageNum, $pageSize)
+	{
+		$urlParam = array('getYearnewspaperList', $treeNodeId, $pageNum, $pageSize);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * 获取指定节点先年报总数
+	 * @author dengguoqi 20121107
+	 * @param unknown_type $treeNodeId
+	 */
+	public function yearnewspaperGridbyid($treeNodeId)
+	{
+		$urlParam = array('yearnewspaperGridbyid', $treeNodeId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * 根据年报ID获取年报信息
+	 * @author dengguoqi 20121107
+	 * @param unknown_type $yearId
+	 */
+	public function getYearnewspaper($yearId)
+	{
+		$urlParam = array('getYearnewspaper', $yearId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * 添加新年报
+	 * @author dengguoqi 20121108
+	 * @param unknown_type $yearnews
+	 */
+	public function addYearnewspaperGrid($userId,$yearnews)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('addYearnewspaperGrid',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $yearnews, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 更新年报
+	 * @param unknown_type $yearnews
+	 */
+	public function updateYearnewspaperGrid($userId,$yearnews)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('updateYearnewspaperGrid',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $yearnews, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 批量删除年报 
+	 * @author dengguoqi 20121112
+	 * @param unknown_type $ids
+	 */
+	public function deleteBacthYearnewspaperGrid($userId,$ids)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteBacthYearnewspaperGrid',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $ids, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取指定年报的年报条件
+	 * @param unknown_type $yearId
+	 */
+	public function getYearnewspaperCondition($yearId)
+	{
+		$urlParam = array('getYearnewspaperCondition', $yearId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 设置统计条件
+	 * @author dengguoqi 20121113
+	 * @param unknown_type $yearId
+	 * @param unknown_type $condition
+	 */
+	public function setStatCondition($yearId, $condition)
+	{
+		$urlParam = array('setStatCondition', $yearId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $condition, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取统计条件
+	 * @author longjunhao 20140912
+	 */
+	public function getStatCondition($param)
+	{
+		$url = 'getStatCondition';
+		return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 删除统计条件
+	 * @author dengguoqi 20121113
+	 * @param unknown_type $yearId
+	 * @param unknown_type $field
+	 */
+	public function deleteCondition($yearId, $field)
+	{
+		$urlParam = array('deleteCondition', $yearId, $field);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, null, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 自动统计年报
+	 * @author dengguoqi 20121115
+	 * @param unknown_type $yearId
+	 */
+	public function autoStatYearnewspaper($yearId, $orgId, $userId)
+	{
+		$urlParam = array('autoStatYearnewspaper', $yearId, $orgId, $userId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 查询人员信息列表
+	 * @author dengguoqi 20121116
+	 * @param unknown_type $page
+	 * @param unknown_type $psize
+	 */
+	public function findEssYearnewspaperPersonnelList($page, $psize)
+	{
+		$urlParam = array('findEssYearnewspaperPersonnelList', $page, $psize);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 添加人员信息
+	 * @author dengguoqi 20121116
+	 */
+	public function addEssYearnewspaperPersonnel($userId,$person)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('addEssYearnewspaperPersonnel',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $person, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 更新人员信息
+	 * @author dengguoqi 20121116
+	 */
+	public function updateEssYearnewspaperPersonnel($userId,$person)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('updateEssYearnewspaperPersonnel',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $person, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 批量删除人员
+	 * @author dengguoqi 20121116
+	 * @param unknown_type $ids
+	 */
+	public function deleteBatchEssYearnewspaperPersonnel($userId,$ids)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteBatchEssYearnewspaperPersonnel',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $ids, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 查询人员总数
+	 * @author dengguoqi 20121116
+	 */
+	public function personnelCountAll()
+	{
+		return $this->get(self::SERVICE_NAME, "personnelCountAll");
+	}
+	
+	/**
+	 * 筛选人员信息
+	 * @author dengguoqi 20121119
+	 * @param unknown_type $page
+	 * @param unknown_type $psize
+	 * @param unknown_type $condition
+	 */
+	public function personnelScreening($page, $psize, $condition)
+	{
+		$urlParam = array('personnelScreening', $page, $psize);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $condition, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取指定条件下数据条数
+	 */
+	public function personnelScreeningcountall($condition)
+	{
+		return $this->post(self::SERVICE_NAME, "personnelScreeningcountall", $condition, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 查询设备信息列表
+	 * @author dengguoqi 20121116
+	 * @param unknown_type $page
+	 * @param unknown_type $psize
+	 */
+	public function findEssYearnewspaperDiviceList($page, $psize)
+	{
+		$urlParam = array('findEssYearnewspaperDiviceList', $page, $psize);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 添加设备信息
+	 * @author dengguoqi 20121116
+	 */
+	public function addEssYearnewspaperDivice($userId,$device)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('addEssYearnewspaperDivice',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $device, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 更新设备信息
+	 * @author dengguoqi 20121116
+	 */
+	public function updateEssYearnewspaperDivice($userId,$device)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('updateEssYearnewspaperDivice',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $device, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 批量删除设备
+	 * @author dengguoqi 20121116
+	 * @param unknown_type $ids
+	 */
+	public function deleteBatchEssYearnewspaperDivice($userId,$ids)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteBatchEssYearnewspaperDivice',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $ids, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 查询设备总数
+	 * @author dengguoqi 20121116
+	 */
+	public function diviceCountAll()
+	{
+		return $this->get(self::SERVICE_NAME, "diviceCountAll");
+	}
+
+	/**
+	 * 筛选设备信息
+	 * @author dengguoqi 20121119
+	 * @param unknown_type $page
+	 * @param unknown_type $psize
+	 * @param unknown_type $condition
+	 */
+	public function diviceScreening($page, $psize, $condition)
+	{
+		$urlParam = array('diviceScreening', $page, $psize);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $condition, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取指定条件下数据条数
+	 */
+	public function diviceScreeningcountall($condition)
+	{
+		return $this->post(self::SERVICE_NAME, "diviceScreeningcountall", $condition, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 年报汇总
+	 */
+	public function yearnewspaperSummary($userId,$params)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('yearnewspaperSummary',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 年报导出 
+	 * @author dengguoqi 20121127
+	 * @param unknown_type $yearId
+	 */
+	public function yearnewspaperExport($params)
+	{
+		return $this->post(self::SERVICE_NAME, "yearnewspaperExport", $params, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 形成上报盘
+	 * @param unknown $treeId
+	 * @param unknown $params
+	 */
+	public function reportedPlateExport($treeId, $params)
+	{
+		$urlParam = array('reportedPlateExport', $treeId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 更新年报上报状态
+	 * @param unknown_type $yearId
+	 * @param unknown_type $isReport
+	 */
+	public function updateIsreported($yearId, $isReport)
+	{
+		$urlParam = array('updateIsreported', $yearId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $isReport, "application/json;charset=UTF-8");
+	}
+	
+	public function getRestClient ()
+	{
+		return $this->getResult();
+	}
+	/**
+	 * 查询某个数据项的统计条件
+	 * @param 年报id
+	 * @param 数据项名字field
+	 */
+	public function getConditions($yearId,$field){
+		$urlParam = array('getConditions',$yearId,$field);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * 保存设置统计条件
+	 */
+	public function updateConditions($list){
+		$url = 'updateConditions';
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @yzh  20130729
+	 * 年报提交审批
+	 */
+	public function startYearnews($userId,$vars,$approveUserId){
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$authId = $this->getAppId();
+		$authToken = $this->getAppToken();
+		$processDefinitionKey = 'fileYearReportProcess';
+		$businessKey = time();
+		$urlParam = array('startYearnewspaperProcessInstanceByKey',$authId,$authToken,$processDefinitionKey,$businessKey,$userId,$ip,$approveUserId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$vars,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 获取年报某条记录的详细信息
+	 */
+	public function YearDetail($workid,$taskid){
+		$appId = $this->getAppId();
+		$urlParam = array('listYearnewspaperTaskDetail',$appId,$workid,$taskid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 年报领导审批
+	 */
+	public function taskOperation($taskId,$userId,$operation,$localvar,$vars){
+		$appId = $this->getAppId();
+		$appToken = $this->getAppToken();
+		$urlParam = array('taskOperationYearnewspaper',$appId,$appToken,$taskId,$userId,$operation,$localvar);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$vars,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 年报复制
+	 */
+	public function dataCopy($userId,$yearId,$treeId){
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('yearnewspaperCopy', $yearId, $treeId,$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,"", "application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao 
+	 * @date 20130327
+	 * 导出年报txt格式
+	 * @return mixed
+	 */
+	public function yearnewspaperExports($param)
+	{
+		//wanghongchen 20140829 修改为post请求
+		return $this->post(self::SERVICE_NAME,"yearnewspaperExports",$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 只显示年报待办数据
+	 * @author yzh
+	 */
+	public function listTasksYearReport($start,$size,$sort,$order,$param){
+		$appId = $this->getAppId();
+		$appToken = $this->getAppToken();
+		$urlParam = array('listTasksYearnewspaper',$appId,$appToken,$start,$size,$sort,$order);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 已发和已办的一条年报详细信息
+	 * @author yzh
+	 */
+	public function findTodoDetail($workflowInstId){
+		$appId = $this->getAppId();
+		$urlParam = array('listYearnewspaperTaskDetails',$workflowInstId,$appId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 获取检测导入上报盘文件功能rest服务地址
+	 * @author longjunhao 20140603
+	 */
+	public function checkBeforeAcceptReportedPlate(){
+		$urlParam=array('checkBeforeAcceptReportedPlate');
+		$url=implode('/',$urlParam);
+		$restUrl = $this->getUri(self::SERVICE_NAME, $url);
+		return $restUrl;
+	}
+	
+	/**
+	 * 获取接收上报盘文件功能rest服务地址
+	 * @author longjunhao 20140603
+	 */
+	public function acceptReportedPlate(){
+		$urlParam=array('acceptReportedPlate');
+		$url=implode('/',$urlParam);
+		$restUrl = $this->getUri(self::SERVICE_NAME, $url);
+		return $restUrl;
+	}
+	
+	/**
+	 * 获取指定年报的年报条件 中文
+	 * @author longjunhao 20140807
+	 */
+	public function getConditionYearNewspaper($yearId)
+	{
+		$urlParam = array('getConditionYearNewspaper', $yearId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 根据id删除条件
+	 * @author longjunhao 20140913
+	 */
+	public function deleteConditionByIds($postData){
+		$url = 'deleteConditionByIds';
+		return $this->post(self::SERVICE_NAME,$url,$postData,'application/json;charset=UTF-8');
+	}
+}

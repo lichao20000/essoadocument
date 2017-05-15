@@ -1,0 +1,52 @@
+<div id="addnew">
+	<div class="addtop">
+		<div class='buttons'>
+			<input type='button' value='保存' class='basebtn basebtn_border btn save' />
+			<input type='button' value='提交' class='basebtn basebtn_border btn submit' />
+			<input type='button' value='返回' class='basebtn basebtn_border btn back' />
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="addcenter" >
+		<div class="centerleft">
+			<div style="width:450px;">
+			<label>题名：</label><input type="text" name="title"/>
+			<label>编研类别：</label><select class="select" name="type"><option>专题</option><option>年鉴</option><option>大事记</option><option>组织沿革</option><option>其他</option></select>
+			</div>
+			<div style="margin-top:10px;width:450px;">
+			<label>摘要：</label><textarea name="summary"></textarea>
+			</div>
+			<div style="margin-top:10px;width:450px;">
+				<label>状态：</label><span>编辑</span>
+				<label>创建机构：</label><span>联通总部</span>
+				<label>创建人：</label><span>王**</span>
+			
+			</div>
+			<div style="margin-top:10px;width:450px;">
+				<label>创建日期：</label><span>2013-01-07</span>
+				<label>提交日期：</label><span>2013-01-07</span>
+				<label>发布日期：</label><span>2013-01-07</span>
+			</div>
+		</div>
+		<div class="centerright">
+			<label style="display:block;float:left;">封面图片：</label>
+			<div class="img"><a href="javascript:void(0);"><img src="<?php echo $tplPath?>/ESReadingRoom/img/example0.gif" /></a></div>
+			<button style="float:left;">上传图片</button>
+		</div>
+	
+	</div>
+	<div class="clear"></div>
+	<div class="centerbottom">
+		<div class="linetitle"><span >在线编研</span></div>
+		<div class="mybuttons"><button>插入档案</button><button>插入编研</button><button>插入本地文件</button></div>
+		<div class="onlineeditor"><textarea id="oneditor" class="oneditor" name="myeditor"></textarea></div>
+	
+	</div>
+
+</div>
+<script type="text/javascript">
+$(function(){
+
+});
+
+</script>

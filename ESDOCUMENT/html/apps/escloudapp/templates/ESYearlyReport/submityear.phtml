@@ -1,0 +1,75 @@
+<style type="text/css">
+	.clear:after{content:".";height:0px;visibility:hidden;display:block;clear:both;}
+	.inputw{width: 140px; height: 19px; line-height: 20px;}
+	.divtop{width: 520px; height: 400px; overflow-y: auto;}
+	.divtop ul,li{list-style: none;}
+	.divtop ul{float: left; margin-top: 10px;}
+	.divtop ul li{float: left;}
+	.liwidtw{width: 100px; line-height: 25px; padding-right: 5px;}
+	.liwidtwt{width: 100px; line-height: 25px; text-align: right; padding-right: 5px;}
+	.cle{clear: both;}
+</style>
+<!-- <script type="text/javascript">
+	function datacs(){
+		var yearId = $("#yearid").val();
+		var datacs = $("#datacs").val();
+		if(yearId){
+			scanYear(yearId,datacs);
+		}
+	}
+	function scanYear(yearId,datacs){
+		$.ajax({
+		    url:$.appClient.generateUrl({ESYearlyReport:'datacs', yearId:yearId},'x'),
+		    type:'post',
+		    data:'datacs=' + datacs,
+		    success:function(data){
+		    	$.dialog({
+		    		id:"yearDialog",
+			    	title:'查看年报',
+			    	width:750,
+			    	height:500,
+			    	padding:'0px',
+			    	content:data
+			    });
+			},
+			cache:false
+		});
+    };
+</script> -->
+<div>
+	<div><form id="form" method="post" action="" enctype="multipart/form-data">
+		<div class="divtop">
+			<ul>
+				<li class="liwidtw">填报单位</li>
+				<li>
+					<input type="text" value="<?php echo $list[0]['yearunit'];?>" readonly="readonly" class="inputw"/>
+				</li>
+				<li class="liwidtwt">制表人</li>
+				<li>
+					<input type="text" value="<?php echo $list[0]['yearperson'];?>" readonly="readonly" class="inputw"/>
+				</li>
+			</ul>
+			<ul>
+				<li class="liwidtw">年报类型</li>
+				<li>
+					<input type="text" value="<?php echo $list[0]['datacs'];?>" readonly="readonly" class="inputw"/>
+				</li>
+				<li class="liwidtwt">年度</li>
+				<li>
+					<input type="text" value="<?php echo $list[0]['yeary'];?>" readonly="readonly" class="inputw"/>
+				</li>
+			</ul>
+			<ul>
+				<li class="liwidtw">描述</li>
+				<li><textarea id="bewrite" name="bewrite" cols="3" rows="3" style="width:490px;"></textarea></li>
+			</ul>
+			<!-- <ul>
+				<li class="liwidtw"><a href="javascript:datacs();">浏览附件</a></li>
+				<li></li>
+			</ul> -->
+		</div>
+		<div class="cle"></div>
+	</form></div>
+	<input id="yearid" type="hidden" value="<?php echo $list[0]['yearid'];?>" /><input id="datacs" type="hidden" value="<?php echo $list[0]['datacs'];?>" />
+</div>
+

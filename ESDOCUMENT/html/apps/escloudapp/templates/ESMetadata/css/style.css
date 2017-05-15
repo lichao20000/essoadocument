@@ -1,0 +1,46 @@
+.subnav{width:270px;}
+.subnav a{display:block;height:24px;text-decoration:none;font-weight:bold;color:#fff;}
+.subnav li{background:#666666;float:left;width:80px;line-height:24px;text-align:center;margin-left:5px;}
+table .st{width:70px;}
+table .st span{width:40px;}
+#subadd input,#attr input{height:20px;width:186px;}
+#subadd table,#attr{width:100%;}
+
+#subadd table td{padding-top:15px;}
+#attr td{padding-top:15px;}
+
+.subnav .back{background: #133959;}
+.clear{clear:both;}
+.editbtn,.editattr {display:inline-block; width:16px; height:16px; background:url(../../public/img/edit.jpg) no-repeat no-repeat; cursor:pointer;}
+#subadd table .fuck{width:140px; float:left;}
+#subadd table .fuck input.it{ width:50px; height:20px; float:left; line-height:20px; border:1px solid #aaa;}
+#subadd table .fuck i{ width:60px; line-height:30px; font-style:normal; float:left; vertical-align:middle;}
+#subsave{
+	width:53px;
+	height:28px;
+	background-color: #6f6e81;
+	border:0px;
+	margin-top: 5px;
+	margin-left: 15px;
+	color:#ffffff;
+}
+#subsave:hover{
+	background-color: #133959;
+}
+
+.spliteLine{
+	margin-top:15px;
+	width:630px;
+	height:1px;
+	background-color:gray;
+	margin-left:10px;
+}
+#discribe{
+	width:500px;
+	height:70px;
+}
+
+.metadataContainer{
+	width:96%;
+	margin-left:2%;
+}

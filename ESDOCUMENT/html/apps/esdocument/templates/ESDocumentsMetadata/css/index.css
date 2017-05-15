@@ -1,0 +1,189 @@
+@CHARSET "UTF-8";
+
+html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
+	pre, a, address, big, cite, code, del, em, font, img, ins, small,
+	strong, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form,
+	label, legend {
+	margin: 0;
+	padding: 0;
+}
+.estransfer{width:560px;height:auto!important;overflow:hidden;margin-bottom:20px;}
+.estransfer ul{width: 550px; height:auto; overflow:hidden; text-align:center;}
+.estransfer ul li{width:250px;height:40;margin-left:20px;float:left;margin-top:10px;_display:inline}
+.estransfer span{width:80px;height:40px;line-height:30px;text-align:left;float:left;}
+.estransfer ul li input, .estransfer ul li select{float:left;line-height:20px;width:160px;}
+.estransfer ul li .select-acc-range{ width:168px; padding:0;}
+.estransfer ul li select{width:162px;height:26px;float:left;}
+.estransfer ul li textarea{width:430px;height:40px;line-height:18px;font-size:13px;float:left}
+
+textarea {
+	resize: none;
+}
+
+input, textarea {
+	outline: 0;
+}
+
+select {
+	_font-size: 12px;
+}
+
+html, body {
+	overflow: hidden;
+}
+
+a {
+	text-decoration: none;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+.esmain {
+	width: 96%;
+	margin-left: 2%;
+}
+
+.esmain .eshead {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #ccc;
+}
+
+.esmain .esleft {
+	background: #fff;
+	width: 220px;
+	float: left;
+	overflow: auto;
+	/* border-left: 1px solid #ccc; */
+	background-color: #133959;
+	margin-right: 10px;
+	border-radius: 5px;
+	padding-top: 12px;
+}
+
+.contbox {
+	width: 610px;
+	height: 30px;
+	float: left;
+	margin-left: 5px;
+	_display: inline;
+}
+
+.contbox input {
+	height: 20px;
+	padding: 0;
+	border: 1px solid #ccc;
+}
+
+.contbox input:hover {
+	border: 1px solid #5599ff;
+}
+
+.w14090 {
+	font-size: 13px;
+	color: #555;
+	float: left;
+	margin-right: 10px;
+	display: block;
+}
+
+.hei30 {
+	line-height: 30px;
+}
+
+.w140 {
+	width: 130px;
+	padding-left: 2px;
+}
+
+.w90 {
+	width: 70px;
+}
+
+.hei20 {
+	height: 20px;
+	line-height: 20px;
+	margin-top: 4px;
+	border: 1px solid #aaa;
+}
+
+.newfilter, .delfilter {
+	margin-left: 17px;
+	margin-right: 20px;
+	width: 22px;
+	height: 22px;
+	line-height: 22px;
+	text-indent: 22px;
+	color: #555;
+	float: left;
+	margin-top: 3px;
+	cursor: pointer;
+}
+
+.newfilter {
+	background: url(../../public/img/add.png) no-repeat 4px 4px;
+}
+
+.delfilter {
+	background: url(../../public/img/del.gif) no-repeat 4px 4px;
+}
+
+.newfilter:hover, .delfilter:hover {
+	width: 22px;
+	line-height: 22px;
+	text-indent: 22px;
+}
+
+.inputtext {
+	width: 380px;
+	height: 20px;
+}
+.inputselect {
+	width: 380px;
+	height: 25px;
+}
+.selectInput {
+	height: 20px;
+	border: 1px solid #ccc;
+	background-image: url('../../public/img/drop_down_tab.gif');
+	background-repeat: no-repeat;
+	background-position: 99% 50%;
+	background-size: 20px20px;
+}
+.inputtextnoedit {
+	height: 20px;
+	border: 1px solid #ccc;
+	
+}
+/*文件编码规则*/
+.useLis,.selBut{ height:auto; overflow:hidden; float:left;}
+.useLis{ width:193px;}
+.selBut{ width:120px; padding-top:35px; position:relative;}
+.selBut span{width:20px; height:20px; float:left; margin:0 50px 10px; cursor:pointer; background:url(../img/button.bg.gif) no-repeat;}
+.selBut .endspan{ margin-bottom:0;}
+.selBut .estop{ background-position:0px 0px;}
+.selBut .esup{ background-position:0px -20px;}
+.selBut .esleft{ background-position:0px -40px;}
+.selBut .esright{ background-position:0px -60px;}
+.selBut .esdown{ background-position:0px -80px;}
+.selBut .endspan{ background-position:0px -100px;}
+/*gengqianfeng 20140910 修改排序样式图标*/
+.selBut .A-Z{ background-position:0px -140px;}
+.selBut .Z-A{ background-position:0px -120px;}
+.selBut .esleftall{background-position:0px -180px;}
+.selBut .esrightall{background-position:0px -160px;}
+
+.searchRole{ width:187px; height:20px; float:left; padding-left:2px; border:1px solid #ccc;}
+.searchusername{ width:165px; height:16px; float:left; border:0; font-size:13px; color:#555;}
+.searchuserbutton{ width:20px; height:20px; float:right; border:none;}
+.userList{ width:190px; height:190px; float:left; margin-top:10px; border:1px solid #ccc; overflow-y:scroll;}
+.userList li{ width:170px; height:22px;line-height:22px;color:#555; text-indent:4px; cursor:pointer;}
+
+.zerorule{ width:120px; height:22px; position:absolute; top:0; left:0; z-index:200}
+.selBut .zerorule .spa{ width:45px; line-height:22px; text-align:center; float:left; font-size:12px;}
+.selBut .zerorule .inpu{ width:30px; height:16px; line-height:20px; float:left;}
+.esselected{background:#CCC;color:#fff;}
+.warning{border:solid 2px #DD0000;}

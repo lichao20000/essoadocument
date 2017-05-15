@@ -1,0 +1,25 @@
+<link href="<?php echo $tplPath?>/ESRegulations/css/index.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESRegulations/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/autovalidate/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/autovalidate/validate.js"></script>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"规定规范", content:"#esmenu,#esone,#eslist"});
+});
+</script>
+<div id="eslist" class="essContainer">
+	<table id="regulationsGrid"></table>
+</div>

@@ -1,0 +1,35 @@
+
+.formAccredit_main {
+	width:96%;
+	margin-left:2%;
+}
+
+.formAccredit_main .formAccredit_grid{
+	width:100%;
+}
+
+.formAccreditPage_main{
+	float:left;
+	width:1000px;
+}
+
+.formAccreditPage_main .notAccreditGrid{
+	width:497px;
+	background: #fff;
+	float:left;
+	margin-right:5px;
+}
+
+.formAccreditPage_main .accreditedGrid{
+	width:498px;
+	background: #fff;
+	float:left;
+}
+
+.formAccredit_yes {
+	display:inline-block; width:16px; height:16px; background:url(../img/yes.gif) no-repeat no-repeat; cursor:pointer;
+}
+
+.formAccredit_no {
+	display:inline-block; width:16px; height:16px; background:url(../img/no.gif) no-repeat no-repeat; cursor:pointer;
+}

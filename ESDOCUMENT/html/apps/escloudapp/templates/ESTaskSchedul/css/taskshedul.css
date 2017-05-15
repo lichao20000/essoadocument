@@ -1,0 +1,228 @@
+.subnav{width:270px;}
+.subnav a{display:block;height:24px;text-decoration:none;font-weight:bold;color:#fff;}
+.subnav li{background:#666666;float:left;width:80px;line-height:24px;text-align:center;margin-left:5px;}
+textarea{width:100%;height:70px;}
+table .st{width:60px;}
+table .st span{width:60px;}
+#subadd input,#attr input{height:20px;width:186px;}
+#subadd table,#attr{width:100%;}
+
+#subadd table td{padding-top:15px;}
+#attr td{padding-top:15px;}
+
+.subnav .back{background:#A11212;}
+.clear{clear:both;}
+.editbtn,.editattr {display:inline-block; width:16px; height:16px; background:url(../../public/img/edit.jpg) no-repeat no-repeat; cursor:pointer;}
+#subadd table .fuck{width:140px; float:left;}
+#subadd table .fuck input.it{ width:50px; height:20px; float:left; line-height:20px; border:1px solid #aaa;}
+#subadd table .fuck i{ width:50px; line-height:30px; font-style:normal; float:left; vertical-align:middle;}
+
+.pause{background: url(img/pause.png) no-repeat center left;}
+.restart{background: url(img/restart.png) no-repeat center left;}
+
+
+@CHARSET "UTF-8";
+/*wangbo 20140325*/
+body,html {
+	margin: 0px;
+	overflow: hidden;
+}
+
+input {
+	margin: 0;
+	padding: 0;
+}
+
+ol,ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+h2,p,form,table {
+	margin: 0;
+	padding: 0;
+	font-weight: normal;
+}
+
+#paper {
+	margin: 0 auto;
+}
+
+#fileEquipGrid img {
+	cursor: pointer;
+}
+
+a {
+	text-decoration: none;
+}
+
+.estransfer {
+	width: 600px;
+	overflow-y: auto;
+	overflow-x: hidden
+}
+
+.estransfer ul {
+	width: 600px;
+	text-align: center;
+}
+
+.estransfer ul li {
+	width: 270px;
+	margin-left: 20px;
+	float: left;
+	margin-top: 10px;
+}
+
+.estransfer span {
+	width: 100px;
+	height: 30px;
+	line-height: 30px;
+	text-align: left;
+	float: left;
+}
+
+.estransfer ul li input {
+	height: 20px;
+	float: left;
+	line-height: 20px;
+	width: 160px;
+}
+
+.estransfer ul li select {
+	width: 165px;
+	height: 25px;
+	float: left;
+	line-height: 25px;
+}
+
+.estransfer .esbottom {
+	width: 100%;
+	float: left;
+	margin-top: 20px;
+}
+
+.estransfer button {
+	width: 60px;
+	height: 30px;
+	cursor: pointer
+}
+
+.esmain {
+	width: 100%;
+}
+
+.esmain .eshead {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #ccc;
+}
+
+.esmain .esleft {
+	background: #fff;
+	width: 150px;
+	float: left;
+	overflow: auto;
+}
+
+.esmain .esright {
+	background: #fff;
+}
+
+.deleteAll {
+	background: url(../img/deleteAll.png) no-repeat 2px center;
+}
+
+.warnning {
+	border: solid 2px #f00;
+}
+
+.find-dialog {
+	width: 203px;
+	height: 20px;
+	border: 1px solid #aaa;
+	background: #fff;
+	float: left;
+	margin-top: 2px;
+	line-height: 20px;
+	position: absolute;
+	right: 2px;
+}
+
+.find-dialog input {
+	width: 180px;
+	height: 20px;
+	line-height: 20px;
+	float: left;
+	border: 0;
+	_line-height: 23px;
+	color: gray;
+}
+
+.find-dialog span {
+	width: 20px;
+	height: 20px;
+	float: left;
+	background: url(../img/search.gif) no-repeat center center;
+	cursor: pointer;
+}
+
+.fieldset_taskschedul {
+	border: 1px solid #ccc;
+	padding: 10px;
+	width: 410px;
+	margin-top: 10px;
+}
+
+.legend_taskshedul {
+	font-size: 12px;
+	border-bottom: 0px;
+	margin-bottom: 0px;
+	width: auto;
+	font-weight: bold;
+}
+
+.label_taskshedul {
+	margin: 8px;
+	margin-top: 0px;
+}
+
+.text_taskschedul {
+	width: 200px;
+	margin-left: 10px;
+	padding: 3px;
+	required: true;
+}
+
+.select_taskshedul {
+	width: 208px;
+	margin-left: 10px;
+	padding: 3px;
+}
+
+.form_taskshedul {
+	
+}
+p{
+	margin-top:8px;
+}
+.radio_taskshedul {
+	margin: 0 5px 0 20px;
+}
+
+.radio_selectNumber {
+	margin: 0 5px 0 20px;
+}
+.jobform{
+	height:500px;
+	width:490px;
+	margin-left:45px;
+	overflow-y:auto;
+}
+
+.ESTaskSchedulContainer,.triggerServiceSettingContaienr{
+	width:96%;
+	margin-left:2%;
+}

@@ -1,0 +1,99 @@
+<link rel="stylesheet"href="<?php echo $tplPath;?>/public/css/appmenu.css" type="text/css"/>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/css/appmenuRight.css" type="text/css"/>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css"	type="text/css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script	type="text/javascript" src="<?php echo url('js/jquery.json-2.3.min.js');?>"></script>
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.core.min.js"></script>
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+
+<div class="sidebar-scroll" tabindex="5000" id="sidebarContainer"
+	style="overflow: hidden; outline: none;">
+	<div id="sidebar" class="nav-collapse collapse"
+		style="z-index: -100; position: absolute;">
+		<ul id="menu">
+			<li><a class="subFuncs" controller="ESDefault" action="index" href="javascript:;"><i class='icon-home icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>系统首页</a></li>
+			<li><a class="subFuncs" controller="ESAppSetting" action="index" href="javascript:;"><i class='icon-cog icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>系统应用管理</a></li>
+			<li><a class="subFuncs" controller="ESConsoleServer" action="index" href="javascript:;"><i class='icon-exchange icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>REST服务管理</a></li>
+			<li><a class="subFuncs" controller="ESUserRegistration" action="index" href="javascript:;"><i class='icon-user icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>用户注册</a></li>
+			<li class = "SAASManageLi"><a class="subFuncs" controller="ESOrgRegister" action="index" href="javascript:;"><i class='icon-hdd icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>SAAS注册</a></li>
+			<li><a class="subFuncs" controller="ESUserInstanceAuth" action="index" href="javascript:;"><i class='icon-flag icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>用户应用实例授权</a></li>
+			<li><a class="subFuncs" controller="ESFileEquipment" action="index" href="javascript:;"><i class='icon-folder-open icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>文件存储设备管理</a></li>
+			<li><a class="subFuncs" controller="ESSyncConfig" action="index" href="javascript:;"><i class='icon-group icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>同步配置</a></li>
+			<li><a class="subFuncs" controller="ESLoginNetSegment" action="index" href="javascript:;"><i class='icon-group icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>网段登录IP设置</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- 暂时注释掉右边的菜单 -->
+<!-- 
+<div class="sidebar-scroll-right" tabindex="5000"
+	id="sidebarContainerRight" style="overflow: hidden; outline: none;">
+	<div id="sidebarRight" class="nav-collapse collapse"
+		style="z-index: -100; position: absolute;">
+		<ul id="menuRight">
+			<li><a class="subFuncs" controller="ESAppSetting" action="index" href="javascript:;"><i class='icon-cog icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>系统应用管理</a></li>
+			<li><a class="subFuncs" controller="ESConsoleServer" action="index" href="javascript:;"><i class='icon-th icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>REST服务管理</a></li>
+			<li><a class="subFuncs" controller="ESUserRegistration" action="index" href="javascript:;"><i class='icon-group icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>用户注册</a></li>
+			<li class = "SAASManageLi"><a class="subFuncs" controller="ESOrgRegister" action="index" href="javascript:;"><i class='icon-group icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>SAAS注册</a></li>
+			<li><a class="subFuncs" controller="ESUserInstanceAuth" action="index" href="javascript:;"><i class='icon-group icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>用户应用实例授权</a></li>
+			<li><a class="subFuncs" controller="ESFileEquipment" action="index" href="javascript:;"><i class='icon-group icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>文件存储设备管理</a></li>
+		</ul>
+	</div>
+</div>
+ -->
+<script>
+	var isAdmin  = "<?php global $user; echo $user->id;?>";
+	/**  对于不是admin用户的特殊处理，隐藏SAAS用户注册 **/
+	
+	if(null != isAdmin && isAdmin != "admin"){
+		$(".SAASManageLi").html("");
+	}
+	
+	$(".subFuncs").click(function() {
+		var url = {};
+		var controller = $(this).attr("controller");
+		var action = $(this).attr("action");
+		if(typeof controller === "string" && controller.length > 0){
+			url[$(this).attr("controller")] = $(this).attr("action");
+			window.open($.appClient.generateUrl(url), "_self");
+		}
+	});
+	(function(){
+		
+		$('#sidebar,#sidebarContainer').css({
+			'margin-left' : '-240px',
+			'left' : '0px'		
+		});
+		$('#sidebar > ul').hide();
+		$("#container").addClass("sidebar-closed");
+		
+		$("#sidebarContainer").hover(function(){
+			$('#sidebar > ul').show(500);
+			$('#sidebar').css({
+				'margin-left' : '0'
+			});
+			$(this).stop(true,false);
+			$(this).animate({marginLeft:0},300);
+		},function(){
+			$('#sidebar').css({
+				'margin-left' : '-240px'
+			});
+			$('#sidebar > ul').hide();
+			$("#container").addClass("sidebar-closed");
+			$(this).animate({marginLeft:-240},300);
+		});
+		
+	})();
+	
+	$("#sidebarContainerRight").hover(function(){
+		
+		$(this).stop(true,false);
+		$(this).animate({right:0},300);
+	},function(){
+		
+		$(this).animate({right:-240},300);
+	});
+</script>

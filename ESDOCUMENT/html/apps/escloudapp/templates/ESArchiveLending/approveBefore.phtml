@@ -1,0 +1,117 @@
+<style type="text/css">
+.borrowing_message .positionbtn{ width:403px; height:auto; overflow:hidden; float:right;}
+.topGap{padding-top:16px;}
+</style>
+<div class='borrowing_message'>
+	<div class='message_list topGap'>
+	<form id="myform">
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>借阅人：</span>
+				<input name="reader" type='text' value="<?php echo $list['reader'];?>" readonly="readonly"/>
+			</p>
+			<p class='like_input'>
+				<span>利用目的：</span>
+				<input name="purpose" type='text' value="<?php echo $list['purpose'];?>" readonly="readonly"/>
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>单位：</span>
+				<input type='text' name="unit" value="<?php echo $list['unit'];?>" readonly="readonly"/>
+			</p>
+			<p class='like_input'>
+				<span>电话：</span>
+				<input type='text' name="phone" value="<?php echo $list['phone'];?>" readonly="readonly"/>
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>邮箱：</span>
+				<input type='text' name="email" value="<?php echo $list['email'];?>" readonly="readonly"/>
+			</p>
+			<p class='like_input'>
+				<span>催还提前天数(天)：</span>
+				<input type='text' name="time" value="<?php echo $list['time'];?>" readonly="readonly"/>
+			</p>
+		</div>
+		<div class='like_textarea'>
+			<h2>借阅描述：</h2>
+			<textarea name="describe"  class='extextarea'  readonly="readonly"><?php echo $list['describe'];?></textarea>
+		</div>
+		<div class='like_textarea'>
+			<h2>审批意见：<font color="red" size="3">*</font></h2>
+			<textarea name="approveOpinion" id="approveOpinion" class='extextarea'></textarea>
+		</div>
+		</form>
+	</div>
+	<div class='borrowing_detailed_tbl'>
+		<div class='borrowing_detailed_tbl_child'>
+			<table id="application"></table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var details="<?php echo $details;?>";
+	var typesour="<?php echo $typesour;?>";
+	var ACodeMeta='';
+	var titleMeta='';
+	if(typesour=='' || typesour=='accounting'){
+		ACodeMeta='RecordID';
+		titleMeta='Summary';
+		typesour='accounting';
+	}else if(typesour=='document'){
+		ACodeMeta='ArchivalCode';
+		titleMeta='Title';
+	}else if(typesour=='contract'){
+		ACodeMeta='RecordID';
+		titleMeta='Title';
+	}/*else if(typesour=='technical'){
+		ACodeMeta='RecordID';
+		titleMeta='Title';
+	}else if(typesour=='auditfiles'){
+		ACodeMeta='RecordID';
+		titleMeta='Title';
+	}*/
+	$.post($.appClient.generateUrl({ESAccountingArchive:'getTagByMetadata'},'x'),{arType:typesour,ACodeMeta:ACodeMeta,titleMeta:titleMeta},function(result){
+		result=jQuery.parseJSON(result);
+		if(result){
+			for(var i=0;i<result.length;i++){
+				if(result[i].esidentifier==ACodeMeta){
+					var ACodeName=result[i].tagChineseName;
+				}else if(result[i].esidentifier==titleMeta){
+					var titleName=result[i].tagChineseName;
+				}
+			}
+			var displayColModel=[
+							{display: '序号', name : 'c3', width : 40, sortable : true, align: 'center'},
+							{display: ACodeName, name : 'c4', width : 150, sortable : true, align: 'center',metadata:ACodeMeta},
+							{display: titleName, name : 'c5', width : 160, sortable : true, align: 'center',metadata:titleMeta},
+							{display: '借阅类型', name : 'c6', width : 100, sortable : true, align: 'center'},
+							{display: '备注', name : 'c7', width : 134, sortable : true, align: 'center'}
+				];
+			$("#application").flexigrid({
+				url:$.appClient.generateUrl({ESArchiveLending:'approveGet_json'},'x'),
+				dataType:'json',
+				colModel : displayColModel,
+				query:details,
+				usepager: true,
+				title: '借阅明细',
+				useRp: true,
+				rp: 20,
+				procmsg:"正在加载，请稍等",
+				nomsg:"没有数据",
+				resizable:false,
+				minColToggle:0,
+				showTableToggleBtn: false,
+				pagetext: '第',
+				outof: '页 /共',
+				width: 665,
+				height: 160,
+				pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+			});
+		}
+	});
+});
+</script>

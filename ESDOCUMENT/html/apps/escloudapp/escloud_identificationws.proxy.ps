@@ -1,0 +1,366 @@
+<?php
+
+/*
+ * date 20130115
+ * author fangjixiang
+ * 
+ */
+class ProxyEscloudappEscloud_identificationws 
+extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_identificationws";
+	
+	// 查找销毁数量、保留数量
+	public function getCounts($path)
+	{
+		$urlParam = array('getCounts',$path);
+	  	$url = implode('/', $urlParam);
+	  	return $this->get(self::SERVICE_NAME, $url);
+		
+	}
+	
+	// 根据状态分页查询所有的鉴定销毁单
+	public function getIdentificationList($params)
+	{
+		return $this->post(self::SERVICE_NAME, "getIdentificationList", $params, "application/json;charset=UTF-8");
+	}
+	
+	// 添加或修改鉴定销毁单
+	public function saveOrUpdateIdentification($params)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveOrUpdateIdentification',$ip);
+		$url = implode('/', $urlParam);
+		//return $params;
+		return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+		
+	}
+	
+	// 根据id批量删除鉴定销毁单
+	public function deleteIdentification($userId,$ids)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteIdentification',$userId,$ip);
+		$url = implode('/', $urlParam);
+		//return $params;
+		return $this->post(self::SERVICE_NAME, $url, $ids, "application/json;charset=UTF-8");
+		
+	}
+	
+	// 根据id查询一个鉴定销毁单
+	public function getIdentification($id)
+	{
+		$urlParam = array('getIdentification',$id);
+	  	$url = implode('/', $urlParam);
+	  	return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	// 发起鉴定流程
+	public function startProcessInstanceAndSubmitIdentifyByKey($processDefinitionKey,$businessKey,$userId,$formId,$approveUserId)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$appId = $this->getAppId();
+		$appToken = $this->getAppToken();
+		$urlParam = array('startProcessInstanceAndSubmitIdentifyByKey',$appId,$appToken,$processDefinitionKey,$businessKey,$userId,$formId,$ip,$approveUserId);
+		$url = implode('/', $urlParam);
+		//return array($urlParam);
+		return $this->post(self::SERVICE_NAME, $url, '', "application/json;charset=UTF-8");
+	}
+	
+	// 发起销毁流程20130730
+	public function startProcessOfDestroy($processDefinitionKey,$businessKey,$userId,$formId,$approveUserId)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$appId = $this->getAppId();
+		$appToken = $this->getAppToken();
+		$urlParam = array('startProcessOfDestroy',$appId,$appToken,$processDefinitionKey,$businessKey,$userId,$formId,$ip,$approveUserId);
+		$url = implode('/', $urlParam);
+		//return array($urlParam);
+		return $this->post(self::SERVICE_NAME, $url, '', "application/json;charset=UTF-8");
+	}
+	
+	// 根据流程id查询审批单数据
+	public function findForm($workflowId, $difference)
+	{
+		$appId = $this->getAppId();
+		$urlParam = array('findForm',$workflowId, $difference,$appId);
+	  	$url = implode('/', $urlParam);
+	  	return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	// 根据鉴定销毁单id及状态分页查询所有的销毁(保留)清单
+	public function getDetailList($identificationId,$status,$pageNum,$pageSize)
+	{
+		$urlParam = array('getDetailList',$identificationId,$status,$pageNum,$pageSize);
+	  	$url = implode('/', $urlParam);
+	  	return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	// 保存鉴定小组人员信息
+	public function saveUserGroup($params)
+	{
+		
+		$urlParam = array('saveUserGroup');
+		$url = implode('/', $urlParam);
+		//return array($params,$urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+	
+	}
+	
+	// 根据销毁清册id查询鉴定小组人员列表
+	public function getUserGroupList($formId)
+	{
+		$urlParam = array('getUserGroupList',$formId);
+	  	$url = implode('/', $urlParam);
+	  	//return $url;
+	  	return $this->get(self::SERVICE_NAME, $url);
+	
+	}
+	
+	// 领导审批
+	public function taskOperationIdentification($taskId,$userId,$operation,$localvar,$params)
+	{
+		$appId = $this->getAppId();
+		$appToken = $this->getAppToken();
+		
+		$urlParam = array('taskOperationIdentification',$appId,$appToken,$taskId,$userId,$operation,$localvar);
+		$url = implode('/', $urlParam);
+		//return array($urlParam,$params);
+		return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+	
+	}
+	
+	// 获取任务详细信息
+	public function findTaskDetail($workId,$taskId,$userId,$difference)
+	{
+		$appId = $this->getAppId();
+		$urlParam = array('findTaskDetail',$appId,$workId,$taskId,$userId,$difference);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+		
+	}
+	
+	// 根据流程id和用户id判断用户是否是组长
+	public function iszz($workId,$userId)
+	{
+		$urlParam = array('iszz',$workId,$userId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/*
+	 * 添加或修改销毁(保留)清单
+	 * 修改$params = [{ID:'','STATUS':''},{ID:'','STATUS':''}...]
+	 */
+	public function saveOrUpdateIdentificationDetail($params)
+	{
+		$urlParam = array('saveOrUpdateIdentificationDetail');
+		$url = implode('/', $urlParam);
+		//return array($urlParam,$params);
+		return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+		
+	}
+	
+	/*
+	 * 修改销毁(保留)清单
+	 * $ids = [12,12,12,33];
+	 * 
+	 */
+	public function updateDetailStatus($userId,$status,$params)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('updateDetailStatus',$status,$userId,$ip);
+		$url = implode('/', $urlParam);
+		//return array($urlParam,$params);
+		return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 根据销毁清册id修改组员待办标识
+	 * @author fangjixiang 20130311
+	 * @param $formId 表单ID
+	 * @param $userId 登录人ID
+	 * @return
+	 */
+	public function updateMark($formId,$userId)
+	{
+		$urlParam = array('updateMark',$formId,$userId);
+		$url = implode('/', $urlParam);
+		//return array($urlParam,$params);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 销毁列表筛选方法
+	 * @author fangjixiang 20130311
+	 * @param start 分页开始位置
+	 * @param size 每页显示数量
+	 * @param condition 筛选条件:['author,like,xingyuan,true','number,like,123,false'...]
+	 * @return
+	 */
+	public function getIdentificationListByCondition($start,$size,$condition)
+	{
+		$urlParam = array('getIdentificationListByCondition',$start,$size);
+		$url = implode('/', $urlParam);
+		//return $condition;
+		return $this->post(self::SERVICE_NAME, $url, $condition, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取鉴定待办列表
+	 * @author fangjixiang 20130311
+	 * @param appId np046
+	 * @param appToken wwwwww
+	 * @param start 分页开始位置
+	 * @param size 每页显示数量
+	 * @param sort 排序
+	 * @param order 排序方式
+	 * @param map 
+	 * @return
+	 */
+	public function listTasksIdentification($start,$size,$sort,$order,$params)
+	{
+		$appId = $this->getAppId();
+		$appToken = $this->getAppToken();
+		$urlParam = array('listTasksIdentification',$appId,$appToken,$start,$size,$sort,$order);
+		$url = implode('/', $urlParam);
+		//return array($url,$params);
+		return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 筛选档案
+	 * @author fangjixiang 20130311
+	 * @param condition 筛选的条件
+	 * @param start 页数
+	 * @param size 每页显示数量
+	 * @return Map
+	 */
+	public function getArchiveByCondition($start,$size,$condition)
+	{
+		$urlParam = array('getArchiveByCondition',$start,$size);
+		$url = implode('/', $urlParam);
+		//return array($url,$params);
+		return $this->post(self::SERVICE_NAME, $url, $condition, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 20130730
+	 * 申请人再次提交申请(鉴定和销毁共用)
+	 * @author fangjixiang 20130315
+	 * @param appId np046
+	 * @param appToken wwwwww
+	 * @param taskId 任务ID
+	 * @param userId 登陆的用户ID
+	 * @param operation complete
+	 * @param localvar false
+	 * @param vars workflowId(流程ID)
+	 * @return
+	 */
+	public function startProcessAgain($taskId, $userId, $operation, $localvar, $vars,$approveUserId)
+	{
+		$appId = $this->getAppId();
+		$appToken = $this->getAppToken();
+		
+		$urlParam = array('startProcessAgain',$appId, $appToken, $taskId, $userId, $operation, $localvar,$approveUserId);
+		$url = implode('/', $urlParam);
+		//return array($url,$params);
+		return $this->post(self::SERVICE_NAME, $url, $vars, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 添加销毁单
+	 * @author wanghongchen 20140517
+	 */
+	public function saveIdentification($params)
+	{
+		return $this->post(self::SERVICE_NAME, 'saveIdentification', $params, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 创建销毁单
+	 * @author wanghongchen 20140707
+	 */
+	public function createDestroyForm($params)
+	{
+		return $this->post(self::SERVICE_NAME, 'createDestroyForm', $params, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取历史销毁单
+	 * @param unknown $param
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getHistoryIdentificationList($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'getHistoryIdentificationList', $param, "application/json;charset=UTF-8");
+	}
+	/**
+	 * 销毁数据
+	 */
+	public function destroy($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'destroy', $param, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 提交表单时执行方法
+	 */
+	public function destroyWorkflowStart($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'destroyWorkflowStart', $param, "application/json;charset=UTF-8");
+	}
+	/**
+	 * 根据数据path获取可销毁的path集合
+	 * @param unknown $param
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getDestroyDataList($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'getDestroyDataList', $param, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 新建协同中发起销毁流程，保存销毁单
+	 * wanghongchen 20140806
+	 */
+	public function createDestroyFormForStart($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'createDestroyFormForStart', $param, "application/json;charset=UTF-8");
+	}
+	/**
+	 * 更新销毁单中销毁数量
+	 * @param unknown $param
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function updateDestroyNum($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'updateDestroyNum', $param, "application/json;charset=UTF-8");
+	}
+	/**
+	 * 更改数据销毁状态
+	 * wanghongchen 20140807
+	 */
+	public function updateDataDestroyStatus($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'updateDataDestroyStatus', $param, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 删除销毁单
+	 */
+	public function deleteDestroyForm($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'deleteDestroyForm', $param, "application/json;charset=UTF-8");
+	}
+	/**
+	 * 获取可销毁数据的path
+	 * @author wanghongchen 20140916
+	 */
+	public function getDestroyPathList($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'getDestroyPathList', $param, "application/json;charset=UTF-8");
+	}
+}

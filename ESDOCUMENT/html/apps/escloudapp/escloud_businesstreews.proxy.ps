@@ -1,0 +1,204 @@
+<?php
+/*
+ * 模板定义节点操作
+ * 张吉日木图
+ */
+
+class ProxyEscloudappEscloud_businesstreews extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_businesstreews";
+  public function getlist($id,$status)
+  {
+    //return self::SERVICE_NAME;exit;
+    $urlParam = array('getBusinessTree',$id,$status);
+    $url = implode('/', $urlParam);
+    //return $url;
+    //采用GET方式访问
+    return $this->get(self::SERVICE_NAME, $url);
+    
+  }
+  public function getBusiTree($id,$status)
+  {
+  	$urlParam = array('getBusinessStrucTree',$id,$status);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * @author wangtao
+   * 根据用户ID获取树结构
+   * @param int $id 业务ID
+   * @param int $modelId 
+   * @param string $userId 用户ID
+   */
+  public function getBusinessAuthorTree($id,$modelId,$userId)
+  {
+  	$urlParam = array('getBusinessAuthorTree',$id,$modelId,$userId);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  
+  /**
+   * 根据用户ID获取树结构(不包含分组)
+   * @author longjunhao 20141011
+   * @param int $id 业务ID
+   * @param int $modelId
+   * @param string $userId 用户ID
+   */
+  public function getBusinessAuthorTreeForWFAttachData($id,$modelId,$userId)
+  {
+  	$urlParam = array('getBusinessAuthorTreeForWFAttachData',$id,$modelId,$userId);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  
+  /**
+   * 获取所有树节点，不走权限，暂时只有索引库管理中用到了
+   * @param unknown_type $id
+   * @param unknown_type $modelId
+   */
+  public function getAllTree($id,$modelId,$bigOrgId)
+  {
+  	$urlParam = array('getBusinessTree',$id,$modelId,$bigOrgId);//liqiubo 20140618 支持saas 加入bigOrgId进行查询
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+   
+  /**
+   * @author wangtao
+   * 获取文件级树结构
+   * @param int $id 业务ID
+   * @param int $status 业务状态
+   * @return mixed
+   */
+   public function getBusinessStrucTreeJustOne($id,$status)
+   {
+   	$urlParam = array('getBusinessStrucTreeJustOne',$id,$status);
+   	$url = implode('/', $urlParam);
+   	return $this->get(self::SERVICE_NAME, $url);
+   
+   }
+   /**
+    * @author wangtao
+    * 获取案卷级树结构
+    * @param int $id 业务ID
+    * @param int $status 业务状态
+    * @return mixed
+    */
+   public function getBusinessStrucTreeJustTwo($id,$status)
+   {
+   	$urlParam = array('getBusinessStrucTreeJustTwo',$id,$status);
+   	$url = implode('/', $urlParam);
+   	return $this->get(self::SERVICE_NAME, $url);
+   	 
+   }
+   //某个树节点的子节点
+    public function getChildById($id)
+   {
+   	$urlParam = array('getChildBusinessTreeNode',$id);
+   	$url = implode('/', $urlParam);
+   	return $this->get(self::SERVICE_NAME, $url);  
+   }
+   //编辑节点setTreeNode
+   public function setTreeNode($params)
+   {
+ 
+   	$urlParam = array('setBusinessTreeNode');
+   	$url = implode('/', $urlParam);
+   	//return $params;
+   	return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+   }
+   //添加编辑子节点
+   public function setChildadd($params,$userId)
+   {
+   	$urlParam = array('saveBusinessTreeNodeList',$userId);
+   	$url = implode('/', $urlParam);
+   	//return $params;
+   	return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+   }
+   /**
+    * xiewenda 20140916 添加方法用于添加节点保存时弹出授权框 
+    */
+   //添加编辑子节点
+   public function setChildaddBefore($params,$userId)
+   {
+   	$urlParam = array('saveBusinessTreeNodeListBefore',$userId);
+   	$url = implode('/', $urlParam);
+   	//return $params;
+   	return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+   }
+ //删除子节点
+   public function deleteTreeNodeList($params)
+   {
+   	$urlParam = array('deleteBusinessTreeNode');
+   	$url = implode('/', $urlParam);
+   	return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+   }
+   
+   // 根据用户获取档案类型
+   public function getNewBusinessAuthTree($id,$modelId,$userId)
+  {
+  	$urlParam = array('getNewBusinessAuthTree',$id,$modelId,$userId);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+
+	/** 
+	 * fangjixiang 20130509  获得自己所在省的业务树所有节点 
+	 * @param businessId 业务id 
+	 * @return 树节点组成的list
+	 */
+	public function getOwnBusinessTree($id, $modelId, $mainSite, $userid)
+	{
+		$urlParam = array('getOwnBusinessTree',$id, $modelId, $mainSite, $userid);
+	  	$url = implode('/', $urlParam);
+	  	return $this->get(self::SERVICE_NAME, $url);
+		
+	}
+	
+	/** 
+	 * shimiao 20140402 
+	 * @param businessId 业务id 
+	 * @return 树节点组成的list
+	 */
+	public function getBusinessNotLeafTree($params)
+	{
+		$urlParam = array('getBusinessNotLeafTree');
+	  	$url = implode('/', $urlParam);
+	  	return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+		
+	}
+	
+	/** 
+	 * shimiao 20140402 
+	 * @param businessId 业务id 
+	 * @return 树节点组成的list
+	 */
+	public function getStructureModel($nodeId,$structureId,$userId,$page,$rp)
+	{
+		$urlParam = array('getStructureModel',$nodeId,$structureId,$userId,$page,$rp);
+	  	$url = implode('/', $urlParam);
+	  	return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	public function getChildOfStructure($sId,$type)
+	{
+		$urlParam = array('getChildOfStructure',$sId,$type);
+	  	$url = implode('/', $urlParam);
+	  	return $this->get(self::SERVICE_NAME, $url);
+	}
+	public function saveRoleForTreeNodes($map){
+		$urlParam = array('saveRoleForTreeNodes');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$map,"application/json;charset=UTF-8");
+		
+	}
+	/**
+	 * 获取子节点
+	 * wanghongchen 20140819
+	 * @param unknown $params
+	 */
+	public function getChildTreeNode($params)
+	{
+	  	return $this->post(self::SERVICE_NAME, "getChildTreeNode",$params,"application/json;charset=UTF-8");
+	}
+}

@@ -1,0 +1,49 @@
+<script type="text/javascript" >
+$(document).ready(function(){
+	// 生成树目录
+	//alert(curSelectedNode+'------'+treeObject);
+	//var curSelectedNode, treeObject;
+	againSelectedNode=curSelectedNode;
+	againTreeObject=treeObject;
+	var managerLevel = $("#managerLevel").val();
+	var provinceCode = $("#provinceCode").val();
+	var orgId = $("#orgId").val();
+	var settingFiling = {
+		async: {
+			enable: true,
+			dataType: 'json',
+			url: $.appClient.generateUrl({ESYearlyReport:'getTree', managerLevel:managerLevel, provinceCode:provinceCode, orgId:orgId},'x'),
+			autoParam: ["id"]
+		},
+		view: {
+			dblClickExpand: false,
+			showLine: false
+		},
+		data: {
+			simpleData: {
+				enable: true,
+				pIdKey: 'parentid'
+			}
+		},
+		edit: {
+			enable: true
+		},
+		callback: {
+			onClick: treeClick
+		}
+	};
+
+	$.fn.zTree.init($("#copydata"), settingFiling);
+	againTreeObject =  $.fn.zTree.getZTreeObj("copydata");
+	
+	function treeClick(e,treeId, treeNode) {
+		againTreeObject.expandNode(treeNode);
+		againSelectedNode = treeNode;
+		$("input[name='copyid']").val(againSelectedNode.id);
+	}
+	
+});
+</script>
+<div><ul id="copydata" class="ztree"></ul></div>
+
+

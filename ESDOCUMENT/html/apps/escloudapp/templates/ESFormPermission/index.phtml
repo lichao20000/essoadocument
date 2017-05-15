@@ -1,0 +1,43 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'表单授权'));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"表单授权", content:"#ESSystemIndex"});
+	$("#estabs").esTabs("select", "表单授权");
+});
+</script>
+<div id="ESSystemIndex" >
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+
+<div  >
+  <table id="flexme1">
+  </table>
+  <script type="text/javascript">
+    var uri="<?php echo $esaction->generateUrl(Array('ESFormPermission'=>'set_json'));?>";
+    function edit(id)
+    {
+    	$.ajax({
+    	    url:"<?php echo $esaction->generateUrl(Array('ESFormPermission'=>'edit'),'x');?>",
+    	    success:function(data){
+    	    	$.dialog({
+    		    	title:'查看面板',
+    	    		width: '50%',
+    	    	    height: '50%',
+    	    	   	fixed:true,
+    	    	    resize: false,
+    		    	content:data
+    		    });
+    	    	
+    		    },
+    		    cache:false
+    	});	}
+    </script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESFormPermission/js/template.js"></script>
+</div>
+</div>

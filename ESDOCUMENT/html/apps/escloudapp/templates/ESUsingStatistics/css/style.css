@@ -1,0 +1,109 @@
+@CHARSET "UTF-8";
+fieldSet{margin-bottom:10px;text-align:left;padding:5px 10px }
+fieldSet table{width:700px;}
+fieldSet input{padding:0px;margin-top:0px;}
+fieldSet .sortNum{width:50px;}
+fieldSet tr{width:700px;height:25px;line-height:25px;}
+fieldSet tr th{width:80px;text-align:left;}
+fieldSet tr td{width:80px;}
+select{width: 50px;}
+.staticTable{height: 400px;overflow-y:auto;overflow-x:hidden;position:relative;font-size: 12px;}
+/**shimiao 20140715 **/
+.usingStatic{
+	margin:5px;
+	width:96%;
+	margin-left:2%;
+}
+.usingStatic .titleStatic  ul {
+	margin-left: 0px
+}
+
+.usingStatic .titleStatic {
+	height: auto;
+	float: left;
+}
+
+.usingStatic .titleStatic .subnav {
+	width: 100%;
+	height: 30px;
+	float: left;
+	padding-left: 10px;
+	border-bottom: 5px solid #41b3e5;
+}
+
+.usingStatic .titleStatic .subnav li {
+	line-height: 30px;
+	color: #fff;
+	float: left;
+	padding: 0 10px;
+	margin-right: 5px;
+	background: rgb(74, 139, 194);
+	cursor: pointer;
+	border-radius: 5px 5px 0 0;
+}
+
+.usingStatic .titleStatic .subnav li:hover {
+	background: #41b3e5;
+}
+
+.usingStatic .titleStatic .subnav .defalutTagOpen {
+	background: #41b3e5;
+}
+
+.usingStatic .usingFormContent{
+	float: left;
+}
+.usingStatic .usingFormContent .formGrid{
+	float: left;
+	margin: 0px;
+}
+.usingStatic .usingFormContent .formStaticGrid{
+	float: left;
+	margin: 0;
+}
+.usingStatic .usingStoreContent{
+	float: left;
+}
+.usingStatic .usingStoreContent .storeGrid{
+	float: left;
+	margin: 0px;
+}
+.usingStatic .usingStoreContent .storeStaticGrid{
+	float: left;
+	margin: 0;
+}
+.h2{ width:100%;  line-height:25px; text-indent:25px; color:#555; border-bottom:1px solid #f3f3f3; float:left; margin:5px 0; background:#f9f9f9 url(../../public/img/mess.png) no-repeat 5px 5px;}
+#addrolefree{ width:600px; height:auto; overflow:hidden; float:left;}
+#contents{ width:630px; height:auto; overflow:hidden; marign-left:5px; _dispaly:inline;}
+.contbox{ width:610px; height:30px; float:left; margin-left:5px; _display:inline;}
+/* gengqianfeng 20140926 文本框样式修改  */
+.contbox input{ height:20px; padding:0; border:1px solid #ccc;}
+.contbox input:hover{border:1px solid #5599ff; }
+.w14090{ font-size:13px; color:#555; float:left; margin-right:10px; display:block;}
+.hei30{ line-height:30px;}
+.w140{ width:130px; padding-left:2px;}
+/* gengqianfeng 20140926 宽度样式修改  */
+.w90{ width:70px;}
+.hei20{ height:20px; line-height:20px; margin-top:4px; border:1px solid #aaa;}
+
+/*分类号的目录树start*/
+.escatagory{height:220px;width:162px;background:#fff;border:1px solid #aaa;display:none;z-index:888;position:absolute;overflow:auto;}
+/*分类号的目录树end*/
+
+/* 添加行删除行按钮样式 */
+/* gengqianfeng 20140926 添加删除样式修改  */
+.newfilter,.delfilter{margin-left:17px;margin-right:20px; width:22px;height:22px; line-height:22px; text-indent:22px; color:#555; float:left; margin-top:3px;cursor:pointer;}
+.newfilter{ background:url(../../public/img/add.png) no-repeat 4px 4px;}
+.delfilter{ background:url(../../public/img/del.gif) no-repeat 4px 4px;}
+.newfilter:hover,.delfilter:hover{ width:22px; line-height:22px; text-indent:22px;}
+/* .newfilter:hover,.delfilter:hover{ width:68px; line-height:22px; text-indent:23px; border:1px solid #e3e3e3;}
+.newfilter:hover{ background:#f3f3f3 url(../../public/img/add.png) no-repeat 3px 3px;cursor:pointer;}
+.delfilter:hover{ background:#f3f3f3 url(../../public/img/del.gif) no-repeat 3px 3px;cursor:pointer;}
+*/
+.leftDiv1{width:230px; float: left;border:1px solid #aaa;}
+.orderUsingPath{width:450px; float: left;}
+.orderUsingForm{width:450px; float: left;}
+
+.dataListRes{margin:0px;}
+
+.flexigrid div.tDiv{border-top: 1px solid #ccc;}

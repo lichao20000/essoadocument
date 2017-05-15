@@ -1,0 +1,19 @@
+<table id="note"></table>
+<script type="text/javascript">
+	$("#note").flexigrid({
+	url: $.appClient.generateUrl({ESIdentify:'getNote',path:'<?php echo $path;?>'}),
+	dataType: 'json',
+	colModel : [
+		{display: '序号', name : 'num', width : 20, align: 'center'}, 
+		{display: '操作', name : 'operation', width : 200,  align: 'center'},
+		{display: '操作人', name : 'operator', width : 140,  align: 'center'},
+		{display: '操作日期', name : 'dateline', width : 160,  align: 'center'}
+		],
+		usepager: true,
+		title: "<?php foreach ($title as $val){echo trim($val);}?>",
+		useRp: true,
+		width: 600,
+		height:200
+		
+});
+</script>

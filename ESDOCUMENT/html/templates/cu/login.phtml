@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>联通云门户</title>
+<link href="<?php echo $tplPath?>/css/contentFont.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath?>/css/header.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath?>/css/content.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath?>/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo url('js/jquery.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath?>/js/jquery.cycle.js"></script>
+<style type="text/css">
+label{
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.form-text{
+  font-size:16px;
+  height:38px;
+  line-height:38px;
+  border:1px solid #939292;
+  width:330px;
+  background: url(<?php echo $tplPath?>/images/loginBg1.jpg); margin-bottom:20px;
+}
+.form-submit{
+  width:100px;
+  height:41px;
+  line-height:41px;
+  text-align:center;
+  background:url(<?php echo $tplPath?>/images/loginBut.gif) no-repeat;
+  font-size:14px;
+  font-weight:bold;
+  color:#fff;
+  border:0;
+  cursor:pointer;
+  margin-left:4px;
+}
+</style>
+</head>
+<body>
+  <div class="loginBg">
+    <div class="loginWarp">
+      <div class="loginL">
+        <div class="loginLogo">
+          <a href="<?php echo url('') ?>"><img src="<?php echo $tplPath?>/images/loginLogo.jpg" width="234" height="130" alt="logo" /> </a>
+        </div>
+        <div class="loginText">
+          <form action="<?php echo $ssoLoginPost?>" method="post" id="sso-login-form" accept-charset="UTF-8">
+            <div>
+              <input type="hidden" name="success" value="<?php echo $ssoLoginSuccessPath?>" />
+              <input type="hidden" name="error" value="<?php echo $ssoLoginErrorPath?>" />
+              <input type="hidden" name="appId" value="eip.agent.sec" />
+              <div class="form-item form-type-textfield form-item-login">
+                <label for="edit-login">用户名 <span class="form-required">*</span></label>
+                <input type="text" id="edit-login" name="login" value="" size="60" maxlength="60" class="form-text required" />
+              </div>
+              <div class="form-item form-type-password form-item-password">
+                <label for="edit-password">密码 <span class="form-required">*</span></label>
+                <input type="password" id="edit-password" name="password" size="60" maxlength="128" class="form-text required" />
+              </div>
+              <div class="form-item form-type-textfield form-item-captcha">
+                <label for="edit-captcha">验证码 <span class="form-required">*</span></label>
+                <input type="text" id="edit-captcha" name="captcha" value="" size="12" maxlength="12" class="form-text required" />
+              </div>
+              <img src="<?php echo $ssoCaptchaPath?>" alt="Image CAPTCHA" title="Image CAPTCHA" />
+              <div class="form-actions form-wrapper" id="edit-actions">
+                <input type="submit" id="edit-submit" name="op" value="" class="form-submit" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="loginR">
+        <div class="loginAd">
+          <div id="loginAd2">
+            <img src="<?php echo $tplPath?>/images/loginAd.jpg" width="430" height="291" alt="让一切自由联通" />
+            <img src="<?php echo $tplPath?>/images/loginAd1.jpg" width="430" height="291" alt="让一切自由联通" />
+          </div>
+        </div>
+        <div class="loginAd3">&nbsp;</div>
+      </div>
+    </div>
+    <div class="foot">
+      <img src="<?php echo $tplPath?>/images/logo_copyright.gif"
+        class="foot_logo" alt="中国联通" />
+      <div class="foot_menu">
+        <ul>
+          <li><a href="#">关于联通</a></li>
+          <li class="dot">·</li>
+          <li><a href="#">使用指南</a></li>
+          <li class="dot">·</li>
+          <li><a href="#">建议反馈</a></li>
+          <li class="dot">·</li>
+          <li>© 2011 中国联通 EIP平台</li>
+        </ul>
+      </div>
+      <div class="foot_text">Copyright © 2011 Howlett Packard Development Company.L.P</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<?php
+/**
+ * @author xiaoxiong 20140823
+ * 全文检索外挂词管理代理服务
+ */
+class ProxyEscloudappEscloud_extraKeyword extends AgentProxyAbstract{
+	const SERVICE_NAME='escloud_luceneservice';
+	
+	public function getExtraKeywords($postData){
+		return $this->post(self::SERVICE_NAME, "getExtraKeywords",$postData,"application/json;charset=UTF-8");
+	}
+	
+	public function isHased($postData){
+		return $this->post(self::SERVICE_NAME, "isHased",$postData,"application/json;charset=UTF-8");
+	}
+	
+	public function addExtraKeyword($keyword){
+		return $this->post(self::SERVICE_NAME, "addExtraKeyword",$keyword,"application/json;charset=UTF-8");
+	}
+	
+	public function updateExtraKeyword($postData){
+		return $this->post(self::SERVICE_NAME, "updateExtraKeyword",$postData,"application/json;charset=UTF-8");
+	}
+	
+	public function removeExtraKeywords($ids){
+		return $this->post(self::SERVICE_NAME, "removeExtraKeywords",$ids,"application/json;charset=UTF-8");
+	}
+	
+	public function GetImportUrl($userId,$userIp){
+		$urlParam=array('getImportUrl',$userId,$userIp);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	public function exportData($userId,$userIp){
+		
+		$urlParam=array('exportData',$userId,$userIp);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+}

@@ -1,0 +1,44 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath?>/ESCollaborative/css/index.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/DatePicker/skin/WdatePicker.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/collaborativeHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>0));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"我的待办", content:"#leftDiv,#rightDiv"});
+});
+</script>
+<div id='ESSystemIndex' style="width:96%;margin-left:2%">
+	<div class='leftDiv' id='leftDiv'>
+		<div id='type_all'>
+			<a href='javascript:;' class='selected' id='todo'>待办业务</a>
+			<a href='javascript:;' id='send'>待发业务</a>
+			<a href='javascript:;' id='have_send'>已发业务</a>
+			<a href='javascript:;' id='have_todo'>已办业务</a>
+		</div>
+		<div id='type_list'>
+		</div>
+	</div>
+	<div class='rightDiv' id='rightDiv' >
+		<table id='mylist' selectType='todo'></table>
+	</div>
+</div>
+<script type="text/javascript">
+var windowW=($(window).width()*0.96-230)*0.6;
+//窗口大小变动事件
+$(window).resize(function() {
+	var wdth=$(window).width()*0.96-230;
+	if(wdth<windowW){
+		wdth=windowW;
+	}
+	$('#rightDiv').css("width",wdth);
+	$(".flexigrid").css("width",wdth);
+	$("#estabs").css("padding-left",wdth/2-54).css("width",wdth/2+54);
+	$(".seporateLine").css("width",wdth);
+	$(".seporateArea").css("width",wdth);
+});
+</script>

@@ -1,0 +1,33 @@
+<?php
+/**
+ * xiaoxiong 20140529
+ * 表单授权代理类
+ */
+class ProxyEscloudappEscloud_formaccredit extends AgentProxyAbstract{
+	
+	const SERVICE_NAME = "escloud_workflowws";
+	
+	/** 获取角色数据 **/
+	public function getRoles($postData){
+		$url = "getRoles";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取一个角色授权与未授权表单列表 **/
+	public function getAccreditFormBuilder($postData){
+		$url = "getAccreditFormBuilder";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 授权处理方法 **/
+	public function addAccredit($postData){
+		$url = "addAccredit";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 取消授权处理方法 **/
+	public function deleteAccredit($postData){
+		$url = "deleteAccredit";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+}

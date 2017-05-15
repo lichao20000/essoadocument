@@ -1,0 +1,79 @@
+<link href="<?php echo $tplPath?>/ESOrder/css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<form id="registerForm" action="" method="post">
+	<div class="estransfer">
+		<ul>
+			<li class="merge">
+				<span>机构组织名称<font color="red" size="3">*</font></span>
+				<input type="text" name="bigOrgName" verify="text/60/1/0" title="例如:北京东方飞扬软件股份有限公司" value="">
+				<input name="id" type="hidden" value="-1">
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>申请应用<font color="red" size="3">*</font></span>
+				<select id="attachApp" name="attachApp" ></select>
+			</li>
+			<li>
+				<span>管理员名称<font color="red" size="3">*</font></span>
+				<input type="text" name="superUserName" verify="text/50/1/0" value="" title="例如:fy@flyingsoft.cn">
+			</li>
+		</ul>
+		
+		<ul>
+			<li>
+				<span>密码<font color="red" size="3">*</font></span>
+				<input id="password" type="password" name="password" verify="text/50/1/0" >
+			</li>
+			<li>
+				<span>确认密码<font color="red" size="3">*</font></span>
+				<input id="confirmPassword" type="password" name="confirmPassword" verify="text/50/1/0" value="">
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>姓<font color="red" size="3">*</font></span>
+				<input type="text" name="lastName" verify="text/50/1/0" value="">
+			</li>
+			<li>
+				<span>名<font color="red" size="3">*</font></span>
+				<input type="text" name="firstName" verify="text/50/1/0" value="">
+			</li>
+		</ul>
+		<ul>
+			<li class="merge">
+				<span>手机</span>
+				<input type="text" name="cellPhone" verify="number/11/1/0" value="">
+			</li>
+		</ul>
+	</div>
+</form>
+<script type="text/javascript">
+$(document).ready(function(){
+	$.ajax({
+		url:$.appClient.generateUrl({ESOrder:'getAppName'},'x'),
+		success:function(data){
+			var datas = eval(data);
+			mark = 1;
+			$.each(datas,function(index,myData){
+			    $("#registerForm select[name='attachApp']").append("<option myValue='"+myData.appToken+"' value='"+myData.id+"'>"+myData.appNameCn+"</option>"); 
+			});
+		}
+	});
+	var emailaddressZZ = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	 $("#registerForm input[name='superUserName']").bind('blur',function(){
+	 	var emailaddress = $(this).val();
+	 	emailaddress=emailaddress.replace(/[ ]/g,"");
+	 	if(emailaddress==''){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+	 	if(emailaddressZZ.test(emailaddress)==false){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+	 	$(this).removeClass("warnning");
+	 });
+});
+</script>

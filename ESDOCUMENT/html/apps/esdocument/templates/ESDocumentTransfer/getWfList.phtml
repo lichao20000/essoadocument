@@ -1,0 +1,10 @@
+<div id='selectUsingWfPanel'>
+	<?php
+		echo '<select id=\'searchWfSelect\'>';
+		foreach ($data as $key)
+			{
+					echo '<option value="'.$key->flowId.'" >'.$key->flowName.'</option>';
+			}
+		echo '</select>';
+	?>
+</div>

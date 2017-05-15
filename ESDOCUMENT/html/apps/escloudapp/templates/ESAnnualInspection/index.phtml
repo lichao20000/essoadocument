@@ -1,0 +1,238 @@
+<link href="<?php echo $tplPath;?>/ESAnnualInspection/css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESAnnualInspection/js/highcharts.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESAnnualInspection/js/exporting.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"档案年检"});
+	$(".esleft").css("height",esleftH);//设置左侧菜单
+	$(".buttoncss").css("width",esRightW-10);//设置左侧菜单
+	$(".esright").css("width",esRightW);//设置左侧菜单
+	$(".esright").css("height",esleftH);
+	//container
+	
+});
+</script>
+
+<div  class='esmain'>
+		<div id="esmenu" class="esleft">
+			<ul id="ESArchiveEditing" class="ztree"></ul>
+		</div>
+	<div class="esright" id ="esone">
+	
+	<div class= "buttoncss">
+	<ul>
+		<li style="float:left;margin-left:10px;"><span>档案类型</span>
+		<select name="archiveType">
+		<option value="document">文书档案</option>
+		<option value="contract">合同档案</option>
+		<option value="project">工程档案</option>
+		<option value="accounting">会计档案</option>
+		<option value="purchase">采购档案</option>
+		<option value="technical">科技档案</option>
+		<option value="carrierfiles">多媒体档案</option>
+		<option value="personal">员工档案</option>
+		<option value="auditfiles">审计档案</option>
+		</select>
+		</li>
+		<li><span>归档年度</span><input type="text" name="year" onclick="WdatePicker({dateFmt:'yyyy',readOnly:false})"></li>
+		<li><span id ='look' class='buttonForAnn not-allowed' onclick="getOrgArchive()">查询</span>
+		<span id ='send' class='buttonForAnn not-allowed' onclick="startSupervision()">发起督办</span></li>
+	</ul>
+
+	</div>
+		<div id="container1" style="min-width:700px;height:400px; float: left;margin: 30px;"></div>
+	</div>
+
+	
+</div>
+<script type="text/javascript">
+var winH=$(window).height();
+var winW=$(window).width()-5;
+var eslefttop=$(".esleft").offset().top;
+ var esRightW= winW-240;
+var esleftH=winH-eslefttop-1;
+
+		var setting = {
+				view: {
+					dblClickExpand: false,
+					showLine: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				async: {
+					enable: true,
+					dataType: 'json',
+					url: $.appClient.generateUrl({ESArchiveLending:'getSubOrg1'},'x'),
+					autoParam: ["id"]
+				},
+				callback: {
+					onClick : nodeClick,
+				}
+			};
+		function nodeClick(event, treeId, treeNode){
+			
+			zTree = $.fn.zTree.getZTreeObj("ESArchiveEditing");
+			zTree.expandNode(treeNode);
+			orgID=treeNode.id;
+			nodeName=treeNode.name;
+		};
+			var url = $.appClient.generateUrl({ESArchiveLending:'initOrg'},'x');
+			$.ajax({
+				url:url,
+				dataType: 'json',
+				success:function(nodes){
+					$.fn.zTree.init($("#ESArchiveEditing"), setting, nodes);
+					$("#ESArchiveEditing_1_span").click();		
+				},
+				cache:false
+			});
+
+function startSupervision()
+{
+	$.ajax({
+		    url: $.appClient.generateUrl({ESAnnualInspection:'supervision'},'x'),
+		    success:function(data){
+		    	var dialog=$.dialog({
+			    	id:'artStartSupervisionPanel',
+			    	title:'添加督办',
+		    	   	fixed:false,
+		    	   	padding:'10px 0px',
+		    	    resize:false,
+			    	content:data,
+			    	ok:function(){
+			    		var obj=$("#pending");
+			    		var title=$('input[name="pendingTitle"]',obj).val();
+			    		var year=$('input[name="year"]',obj).val();
+			    		var level=$('[name="pendingLevel"]',obj).val();
+			    		var pendingUserID=$('input[name="pendingUserID"]',obj).val();
+			    		var desc=$('[name="desc"]',obj).val();
+			    		var pendingUserName = $('[name="pendingUserName"]',obj).val();
+			    		var receive_company = $('#belongOrg').text();
+			    		var start_user = $('[name="start_user"]',obj).val();
+			    		var start_company=$('[name="start_company"]',obj).val();
+			    		if(obj.validate()){
+				    		var url= $.appClient.generateUrl({ESAnnualInspection:'addTask'},'x');
+				    		$.post(url,{title:title,year:year,level:level,pendingUserID:pendingUserID,pendingUserName:pendingUserName,receive_company:receive_company,start_company:start_company,start_user:start_user,desc:desc},function(data){
+					    		if(data.status){
+					    			dialog.close();
+					    			$.dialog.notice({content:data.msg,icon: 'succeed',time:2});
+					    		}else{
+					    			//var tips=data.replace(/^\d-/,'');
+					    			$.dialog.notice({content:data.msg,icon: 'error'});
+					    		}
+				    		})
+			    		}
+			    		return false;
+			    	},
+			    	okVal:'发起督办',
+			    	cancel:true,
+			    	cancelVal:'关闭',
+			    	init:function(){
+			    			var obj=$("#pending");
+							obj.autovalidate();
+			    	}
+			    });
+			   },
+			    cache:false
+		});
+}
+//获取当前机构的归档情况
+function getOrgArchive()
+{
+	//alert(typeof orgID );return;
+	var archiveType=$("[name='archiveType']").val();
+	var html=$("[name='archiveType'] option:selected").html();
+	var year=$("input[name='year']").val();
+	var url= $.appClient.generateUrl({ESAnnualInspection:'getOrgArchive'},'x');
+	if(typeof orgID == 'undefined'){$.dialog.notice({icon:'warning',content:'请选择机构节点',time:2});return false;}
+	if(!year){$.dialog.notice({icon:'warning',content:'请选择查询的年份',time:2});return false;}
+	$.post(url,{orgID:orgID,archiveType:archiveType,year:year},function(result){
+		var chart;
+        var colors = Highcharts.getOptions().colors,
+          categories = [],
+            name = year+'年'+nodeName+html+'归档情况';
+            var i=0;
+            var data=[];
+            var t=[];
+            if(result){
+	    		for(key in result){
+					categories.push(key);
+					var temp=parseFloat (result[key].percent);
+					data.push({y: temp,color: colors[i]});
+					i++;
+				}
+			}
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container1',
+                type: 'column'
+            },
+            title: {
+                text: year+'档案年检'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: categories
+            },
+            yAxis: {
+                title: {
+                    text: '档  案  归  档  情  况'
+                }
+            },
+            plotOptions: {
+                column: {
+                    dataLabels: {
+                        enabled: true,
+                        color: colors[0],
+                        style: {
+                            fontWeight: 'bold'
+                        },
+                        formatter: function() {
+                            return this.y +'%';
+                        }
+                    }
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                     return '<b>'+ this.x +'</b>: '+ parseInt(result[this.x].num)+'份文件' ;
+                }
+              
+            },
+            series: [{
+                name: name,
+                data: data,
+                color: 'red'
+            }],
+            exporting: {
+                enabled: false
+            }
+        });
+	
+	},'json');
+}
+function setChart(name, categories, data, color) {
+			chart.xAxis[0].setCategories(categories, false);
+			chart.series[0].remove(false);
+			chart.addSeries({
+				name: name,
+				data: data,
+				color: color || 'white'
+			}, false);
+			chart.redraw();
+        }
+</script>
+
+

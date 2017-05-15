@@ -1,0 +1,181 @@
+<link href="<?php echo $tplPath?>/ESDocumentBorrowing/css/index.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDocumentBorrowing/js/menu.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php 
+echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"文件借阅", content:"#esmenu, #esone, #eslist"});
+	$(".esleft").css("height",esleftH);//设置左侧菜单
+	
+});
+
+</script>
+<input type="hidden" id="condition">
+<div  class='esmain'>
+	<div id="escontent">
+			<div id="esmenu" class="esleft">
+				<div id="esHead" style="text-align: center;">
+					<input id="lendtype" type="hidden" value=""/>
+					<input id="lenddate" type="hidden" value=""/>
+					<input name="dealType" class ="deal" id="undealOrder" type="radio"  value="0" checked/><label for="undealOrder" style="display:inline;color:white;">未结束</label>
+				  	<input name="dealType" class ="deal" id="dealOrder" type="radio"  value="1" /><label for="dealOrder" style="display:inline;color:white;">结束</label>
+				  	<input name="dealType" class ="deal" id="allOrder" type="radio" value="all"/><label for="allOrder" style="display:inline;color:white;">全部</label>
+			  	</div>
+				<ul id="esStageTree" class="ztree" treenodeid=''></ul>
+			</div>
+			<div class="esright" id ="esone">
+					<div id="eslist">
+					  <table id="esDataList"></table>
+			       </div>
+			</div>
+			<div id="esfileview"></div>
+			<div id="esnotfiling"></div>
+	</div>
+	<div id="transfer"></div>
+</div>
+
+<script type="text/javascript">
+
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".esleft").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".esleft").offset().top;
+var esleftH=winH-eslefttop-11;
+var height=winH-eslefttop-115;
+window.onresize=function()
+{
+	var winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".esleft").width()-5;
+	}
+	var winH=$(window).height();
+	var height=winH-eslefttop-115;
+	$(".flexigrid").css({width:width});	
+}
+</script>
+<script type="text/javascript">
+
+$("#esDataList").flexigrid({
+		url: $.appClient.generateUrl({ESDocumentBorrowing:'getfieldData'},'x'),
+		dataType: 'json',
+		colModel : [
+		    {display: '数据标识', name: 'id',width : 90,align: 'center',metadata:'id',hide:true},
+			{display: '序号', name : 'num', width : 20, align: 'center',metadata:'num'}, 
+			{display: '<input type="checkbox" name="paths">', name : 'ids', width : 20, align: 'center',metadata:'box'},
+			{display: '操作', name : 'operate', width : 60, align: 'center',metadata:'operate'},
+			{display: '借阅单编号', name : 'borrowNum', width : 120, align: 'left',metadata:'borrowNum'},
+			{display: '借阅人', name : 'borrowPerson', width : 80, align: 'left',metadata:'borrowPerson'},
+			{display: '登记日期', name : 'regDate', width : 100, align: 'center',metadata:'regDate'},
+			{display: '单位', name : 'unit', width : 180, align: 'left',metadata:'unit'},
+			{display: '电话', name : 'telphone', width : 80, align: 'left',metadata:'telphone'},
+			{display: '邮箱', name : 'email', width : 120, align: 'left',metadata:'email'},
+			{display: '催还提前天数', name : 'overdueDays', width : 60, align: 'right',metadata:'overdueDays'},
+			{display: '登记人', name : 'regPerson', width : 80, align: 'left',metadata:'regPerson'},
+			{display: '状态', name : 'status', width : 60, align: 'left',metadata:'status'},
+			{display: '身份证', name : 'idcardnum', width : 150, align: 'left',metadata:'idcardnum'},
+			{display: '文件数', name : 'pnum', width : 60, align: 'right',metadata:'pnum'},
+			{display: '备注', name : 'remark', width : 120, align: 'left',metadata:'remark'},
+			{display: '是否改变颜色', name : 'changeColor', width : 120, sortable : true, align: 'center',metadata:'changeColor',hide:true}
+		],
+		buttons : [{name: '添加', bclass: 'add',onpress:addBorrowForm},
+			{name: '删除', bclass: 'delete',onpress:delBorrowForm},
+			{name: '筛选', bclass: 'filter',onpress:filterBorrowForm},
+			{name: '还原数据', bclass: 'back',onpress:backIndex},
+			{name: '借阅报表', bclass: 'report',onpress:printBorrowPage},
+			{name: '查看预约', bclass: 'filter',onpress:showOrderData},
+			{name: '结束', bclass: 'wf_delete',onpress:endUsingForm},
+			{name: '续借', bclass: 'export',onpress:relendForForm},
+			{name: '归还', bclass: 'back',onpress:returnForForm}
+		],
+		usepager: true,
+		title: '&nbsp;',
+		useRp: true,
+		width: width,
+		height:height
+	});
+//初始化日期树
+var settingDate = {
+		view: {
+			dblClickExpand: true,
+			showLine: false
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		},
+		async: {
+			enable: true,
+			dataType: 'json',
+			url: $.appClient.generateUrl({ESDocumentBorrowing:'getTree',statusForTree:'0'},'x'),
+			autoParam: ["id","pId"]
+		},
+		callback: {
+			onClick : nodeDateClick
+		}
+	};
+	var url = $.appClient.generateUrl({ESDocumentBorrowing:'initTree'},'x');
+	$.ajax({
+		url:url,
+		dataType: 'json',
+		success:function(nodes){
+			$.fn.zTree.init($("#esStageTree"), settingDate, nodes);
+			$("#esStageTree_1_span").click();
+		},
+		cache:false
+	});	
+
+var treeNodeForGrid;
+function nodeDateClick(event, treeId, treeNode){
+	zTree = $.fn.zTree.getZTreeObj("esStageTree");
+	zTree.expandNode(treeNode);
+	treeNodeForGrid = treeNode;
+	var statusForTree = $('input[name="dealType"]:checked').val();
+	$('#lendtype').val(statusForTree);
+	$("#esDataList").flexOptions({url:$.appClient.generateUrl({ESDocumentBorrowing:'getfieldData',id:treeNode.id,pId:treeNode.pId},'x'),newp:1,query:{statusForTree:statusForTree}}).flexReload();
+};
+//状态改变事件
+$('.deal').die().live('change',function(){
+	var statusForTree = $(this).val();
+	$('.esStageTree li').remove();
+	var settingDate = {
+		view: {
+			dblClickExpand: true,
+			showLine: false
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		},
+		async: {
+			enable: true,
+			dataType: 'json',
+			url: $.appClient.generateUrl({ESDocumentBorrowing:'getTree',statusForTree:statusForTree},'x'),
+			autoParam: ["id","pId"]
+		},
+		callback: {
+			onClick : nodeDateClick
+		}
+	};
+	var url = $.appClient.generateUrl({ESDocumentBorrowing:'initTree'},'x');
+	$.ajax({
+		url:url,
+		dataType: 'json',
+		success:function(nodes){
+			$.fn.zTree.init($("#esStageTree"), settingDate, nodes);
+			$("#esStageTree_1_span").click();
+		},
+		cache:false
+	});
+});
+//全选
+$("input[name='paths']:checkbox").die().live('click',function(){
+	$("#esDataList").find("input[type='checkbox']").attr('checked',$(this).is(':checked'));
+});
+</script>

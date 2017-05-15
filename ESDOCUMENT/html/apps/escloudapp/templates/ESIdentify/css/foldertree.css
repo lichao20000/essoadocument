@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+.ztree li span.button.folder_ico_open{margin-right:2px; background-position:-110px -16px;vertical-align:top; *vertical-align:middle}
+.ztree li span.button.folder_ico_close{margin-right:2px; background-position:-110px 0;vertical-align:top; *vertical-align:middle}
+
+.ztree li span.button.folder_ico_docu{margin-right:2px; background-position:-110px 0;vertical-align:top; *vertical-align:middle}

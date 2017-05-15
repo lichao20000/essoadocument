@@ -1,0 +1,26 @@
+<?php
+/**
+ * 合同工程服务代理
+ * @author gaoyide
+ *
+ */
+class ProxyEsdocumentCatalogcheck extends AgentProxyAbstract {
+	const SERVICE_NAME = "catalogcheck";
+	/**
+	 * 获取 目录检查结构 返回文件不齐全的目和文件 树形表格
+	 * xuekun 2014年12月12日 add
+	 * 
+	 * @param unknown $stageId        	
+	 * @param unknown $deviceId        	
+	 * @return return_type
+	 */
+	public function findNoDataNodeList($stageId, $deviceId) {
+		$urlParam = array (
+				'findNoDataNodeList',
+				$stageId,
+				$deviceId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+}

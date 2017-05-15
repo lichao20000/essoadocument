@@ -1,0 +1,56 @@
+<fieldset class='a-fieldset'
+	style="width: 670px; border: 1px solid #B5B8C8; margin-left: 40px; padding-left: 10px; padding-bottom: 20px; margin-bottom: 20px;">
+	<legend class="s-fieldsetlegend">分组条件</legend>
+	<div id='groupFilter' style='margin-left: 30px;'>
+		<p class='contbox'>
+			<span class='w140 w14090 hei30'>字段名</span> <span
+				class='w90 w14090 hei30'>比较符</span> <span class='w140 w14090 hei30'>字段值</span>
+			<span class='w90 w14090 hei30'>关系符</span> <span
+				class='w90 w14090 hei30'
+				style="text-align: center; margin-right: 0px; width: 60px;">添加行</span>
+			<span class='w90 w14090 hei30'
+				style="text-align: center; margin-right: 0px; width: 60px;">删除行</span>
+		</p>
+		<div id='groupContents'>
+			<?php for($fly=1;$fly<6;$fly++){ ?>
+			<p class='contbox creatediv' style="overflow: hidden;">
+				<select name="esfields" class='w140 w14090 hei20 filedname'>
+				</select> <select name="comparison"
+					class='w90 w14090 hei20 comparison'>
+					<option value="equal">等于</option>
+					<option value="greaterThan">大于</option>
+					<option value="lessThan">小于</option>
+					<option value="notEqual">不等于</option>
+					<option value="greaterEqual">大于等于</option>
+					<option value="lessEqual">小于等于</option>
+					<option value="like" selected>包含</option>
+					<option value="notLike">不包含</option>
+				</select> <input type='text' class='w140 w14090 hei20 filedvalue'
+					name="esfieldvalue" /> <select id=''
+					class='w14090 w90 hei20 relationship' name="relation">
+					<option value="AND" selected="selected">并且</option>
+					<option value="OR">或者</option>
+				</select> <a class='newfilter'></a><a class='delfilter'></a>
+			</p>
+			<?php }?>
+		</div>
+	</div>
+</fieldset>
+<script type="text/javascript">
+(function($){
+	//分组条件字段点击事件
+	$("#groupContents .filedname").die().live('mouseover',function(){
+		var str="<option value=''>请选择</option>";
+		$("#g_fieldList2 li").each(function(index){
+			str+="<option value='"+$(this).find("span").attr("code")+"'>"+$(this).find("span").html()+"</option>";
+		});
+		var sel=$(this).val();
+		if($(this).html()!=str){
+			$(this).html(str);
+			if(sel!=""){
+				$(this).val(sel);
+			}
+		}		
+	});	
+})(jQuery);
+</script>

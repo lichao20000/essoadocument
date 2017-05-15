@@ -1,0 +1,139 @@
+<link href="<?php echo $tplPath;?>/ESYearlyReport/css/layout.css" rel="stylesheet" type="text/css">
+<script>
+/*
+ * @author zhangyanxin
+ * 年报管理统计
+ */
+function tj(){
+	$.ajax({
+	    url:"<?php echo $esaction->generateUrl(Array('ESYearlyReport'=>'statistics'),'x');?>",
+	    success:function(data){
+	    	$.dialog({
+		    	title:'统计条件',
+	    		width: '40%',
+	    	    height: '60%',
+	    	    zIndex: '2000',
+	    	    left: 450,
+	    	    top: '50%',
+	    	   	fixed:false,
+	    	    resize: true,
+		    	content:data
+		    });},
+		    cache:false
+	});
+ }
+</script>
+<script type="text/javascript" >
+	    var $div_li =$("div.tab_menu ul li");
+	    $div_li.click(function(){
+			$(this).addClass("selected")            
+				   .siblings().removeClass("selected"); 
+            var index =  $div_li.index(this); 
+			$("div.tab_box > div")   	
+					.eq(index).show()  
+					.siblings().hide();
+		}).hover(function(){
+			$(this).addClass("hover");
+		},function(){
+			$(this).removeClass("hover");
+		});
+</script>
+<div class="tab">
+	<div class="tab_menu">
+		<ul>
+			<li class="selected">档案室情况年报</li>
+			<li>全国年报续表一</li>
+			<li>全国年报续表二</li>
+		</ul>
+	</div>
+	<div class="tab_box"> 
+		 <div>
+		 	<div>
+		 		<div style="background-color:#E0E0E0">年报预览</div>
+		 	</div>
+		 	<div>
+		 		<input type="button" name="save"  value="保存">
+		 		<input type="button" name="tongji" onclick="tj()" value="统计条件" />
+		 		<input type="button" name="auto"  value="自动条件">
+		 		<input type="button" name="auto"  value="提交审批">
+		 	</div>
+		 	<div style="width:950px;height:550px;margin-left:20px;border:1px solid #898989;">
+		 		<div style="text-align:center;margin:5px;">
+		 			<span ><h4>档案室基本情况</h4></span>
+		 		</div>
+		 		<hr>
+		 		<div style="width:950px;border-bottom:1px solid #898989;">
+		 		<div style="width:50px;height:20px;float:left;border-right:1px solid #898989;">
+		 		a
+		 		</div>
+		 		<div style="width:300px;height:20px;float:left;">
+		 			<span><font>填报单位:</font></span>
+		 		</div>
+		 		<div style="width:600px;height:20px;">
+		 			<span><font>年度:</font></span>
+		 		</div>
+		 		</div>
+		 	</div>
+		 </div>
+		 <div class="hide">
+		 			 <div>
+		 	<div>
+		 		<div style="background-color:#E0E0E0">年报预览</div>
+		 	</div>
+		 	<div>
+		 		<input type="button" name="save"  value="保存">
+		 		<input type="button" name="tongji" onclick="tj()" value="统计条件" />
+		 		<input type="button" name="auto"  value="自动条件">
+		 		<input type="button" name="auto"  value="提交审批">
+		 	</div>
+		 	<div style="width:950px;height:550px;margin-left:20px;border:1px solid #898989;">
+		 		<div style="text-align:center;margin:5px;">
+		 			<span ><h4>档案室基本情况</h4></span>
+		 		</div>
+		 		<hr>
+		 		<div style="width:950px;border-bottom:1px solid #898989;">
+		 		<div style="width:50px;height:20px;float:left;border-right:1px solid #898989;">
+		 		a
+		 		</div>
+		 		<div style="width:300px;height:20px;float:left;">
+		 			<span><font>填报单位:</font></span>
+		 		</div>
+		 		<div style="width:600px;height:20px;">
+		 			<span><font>年度:</font></span>
+		 		</div>
+		 		</div>
+		 	</div>
+		 </div>
+		 </div>
+		 <div class="hide">
+		 		 <div>
+		 	<div>
+		 		<div style="background-color:#E0E0E0">年报预览</div>
+		 	</div>
+		 	<div>
+		 		<input type="button" name="save"  value="保存">
+		 		<input type="button" name="tongji" onclick="tj()" value="统计条件" />
+		 		<input type="button" name="auto"  value="自动条件">
+		 		<input type="button" name="auto"  value="提交审批">
+		 	</div>
+		 	<div style="width:950px;height:550px;margin-left:20px;border:1px solid #898989;">
+		 		<div style="text-align:center;margin:5px;">
+		 			<span ><h4>档案室基本情况</h4></span>
+		 		</div>
+		 		<hr>
+		 		<div style="width:950px;border-bottom:1px solid #898989;">
+		 		<div style="width:50px;height:20px;float:left;border-right:1px solid #898989;">
+		 		a
+		 		</div>
+		 		<div style="width:300px;height:20px;float:left;">
+		 			<span><font>填报单位:</font></span>
+		 		</div>
+		 		<div style="width:600px;height:20px;">
+		 			<span><font>年度:</font></span>
+		 		</div>
+		 		</div>
+		 	</div>
+		 </div>
+		 </div>
+	</div>
+</div>

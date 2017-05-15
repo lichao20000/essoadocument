@@ -1,0 +1,262 @@
+<link href="<?php echo $tplPath?>/ESTemplate/css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTemplate/js/jumpwindow.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'模板定义'));?>
+
+
+<div id="ESSystemIndex">
+	<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+	<!-- 左侧 -->
+	<div id="leftdiv" class="leftdiv">
+		<div id="lefttop" class="left-box-tree">
+			<h2 class='left-box-title' >树结构</h2>
+			<ul id="treeDemo" class="ztree tree-stru" style = "margin-top:10px;"></ul>
+		</div>
+		<div id="leftbottom" class="left-box-tree" style = "margin-top:10px;">
+			<h2 class='left-box-title'>结构树</h2>
+			<ul id="leftbottomul" class="ztree stru-tree" style = "margin-top:10px;"></ul>
+		</div>
+	</div>
+	<div id="rightdiv" class="rightdiv">
+		<div id="righttopdiv" class="righttopdiv">
+			<!-- 标签切换 -->
+			<ul id="subnav" class="subnav">
+				<li id='EDIT_NODE' class='not-allowed'><span class='img-TreeEdit' id="img_TreeEdit"> 树节点编辑</span></li>
+				<li id='EDIT_STRU' class='not-allowed'><span class='img-StructureEdit' id="img_StructureEdit">结构编辑</span></li>
+				<li id='EDIT_RULE' class='not-allowed'><span class='img-RuleEdit' id="img_RuleEdit">规则编辑</span></li>
+			</ul>
+		</div>
+		
+		<div class='treedit'>
+			<!-- 树节点编辑 第一个标签 -->
+			<div id='Tag1' class='Tags'>
+			    <form id="treechildedit" action=""	method="post">
+			
+				<div id='NODE_BTN' class='buttoncss'>
+				 	<div><span id='CHOOSE_STRU_NODE' class='chooseModel not-allowed'>选择模板</span></div> 
+				 	<div><span id='QUOTE_STRU_NODE' class='quoteModel not-allowed'>引用模板</span></div> 
+				 	<div><span id='DELETE_STRU_NODE' class='deleteModel not-allowed'>取消模板</span></div> 
+					<div><span class='delete not-allowed' id="DEL_NODE">删除</span></div>
+					<div><span id='SAVE_NODE' class='save not-allowed'>保存</span></div>
+					<div><span class='reset not-allowed'id="RESET_NODE">重置</span></div>
+				</div>
+				<div id='info1' class='filedit'>
+					<div id='f1' class='floatand3'>
+						<div class='float2'>
+							<div class='fileditdiv'>
+								<p class='filedname'>节点名称：</p>
+								<p class='filedvalue'><input type='text' class='input' id='NODENAME' name="biaoti" /></p>
+							</div>
+							<div class='fileditdiv'>
+								<p class='filedname'>节点标识：</p>
+								<p class='filedvalue'><input type='text' class='input' id='NODEIDENT' name="identification" /></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				</form>
+				<div id="EDIT_NODE_TBL" class='tblfloat'></div>
+			</div>
+			<!-- 结构编辑 第二个标签 -->
+			<div id='Tag2' class='Tags'>
+			<form id="strnodeadd" action="" method="post">
+				<div id='STRU_BTN' class='buttoncss'>
+					<!--<div><span class='addchild not-allowed' id='ADD_STRU_CHILD_NODE'>添加子结构</span></div>
+					<div><span class='delete not-allowed' id="DEL_STRU_NODE">删除</span></div>-->
+					<div><span class='save not-allowed' id='SAVE_STRU_NODE'>保存</span></div>
+					<!-- <div><span class='reset not-allowed' id="RESET_STRU_NODE">重置</span></div> -->
+				</div>
+				<div id='structureedit' class='filedit'>
+					<div id='f2' class='floatand3'>
+						<div class='float3'>
+						    <div class='fileditdiv'>
+								<p class='filedname'>标  &nbsp;  &nbsp;题：</p>
+								<p class='filedvalue'><input type='text' class='input' id='ESTITLE' name="ESTITLE" /></p>
+							</div>
+						   <div class='fileditdiv'>
+								<p class='filedname'>描   &nbsp;  &nbsp; &nbsp;  &nbsp;述：</p>
+								<p class='filedvalue'><input type='text' class='input' id='ESDESCRIPTION' name="ESDESCRIPTION" /></p>
+							</div>
+							<div class='fileditdiv'>
+								<p class='filedname'>结构类型：</p>
+								<p class='filedvalue'>
+									<select class='input' id='ESTYPE' name="ESTYPE">
+										<option value="file">案卷</option>
+										<option value="innerFile">卷内</option>
+									
+									</select>
+								</p>
+							</div>
+						</div>
+					
+						<div class='float3'>
+							<div class='fileditdiv'>
+								<p class='filedname'>  &nbsp;创建人：</p>
+								<p class='filedvalue'><input class='input' type="text"  readonly='readonly' id='ESCREATOR' name="ESCREATOR" />
+							</div>
+							<div class='fileditdiv'>
+								<p class='filedname'>创建时间：</p>
+								<p class='filedvalue'><input class='input' type='text' readonly='readonly' id='ESDATE' name="ESDATE"  />
+							</div>
+							<div class='fileditdiv'>
+								<p class='filedname'>档案类型：</p>
+								<p class='filedvalue'>
+									<select class='input' id='ESCLASS' name="ESCLASS">
+										<!-- xiaoxiong 20140729 修改为动态获取 -->
+										<?php 
+											foreach ($archiveTypes as $list){
+												echo '<option value="'.$list->SKUNumber.'">'.$list->className.'</option>';
+											}
+										?>
+									</select>
+								</p>
+							</div>
+						</div>
+					</div>			
+				</div>
+			</form>
+			<div id="EDIT_STRU_TBL" class='tblfloat'></div>
+		</div>
+			<!-- 规则编辑 第三个标签 -->
+			<div id='Tag3' class='Tags'>
+				<div class='headmess'>
+					<select id="select" onchange="changemolid()" class='temselect'>
+						<option value="-1">默认状态</option>
+						<option value="1">文件鉴定</option>
+						<option value="6">案卷整理</option>
+						<option value="7">案卷编目</option>
+						<option value="2">整理编目</option>
+						<option value="3">归档入库</option>
+						<option value="4">档案著录</option>
+					</select>
+				</div>
+				<div id='EDIT_RULE_TBL' class='tblfloat'></div>
+			</div>	
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTemplate/js/template.js"></script>
+<script	type="text/javascript" src="<?php echo $tplPath;?>/ESTemplate/js/definedrules.js"></script>
+
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<script type="text/javascript">
+var structureID="",$_uInfo;
+
+
+//获取busnissid
+var molid="-1";
+function changemolid(){
+	var obs = document.getElementById("select");
+    molid = obs.options[obs.selectedIndex].value;
+    load_edit_rule_tbl();
+}
+/*保存,删除,重置,添加子结构按钮鼠标经过离开调整样式脚本*/
+//$('.buttoncss span').live('mouseover',function (){
+	//$(this).css({'borderTop':'1px solid #fff','borderLeft':'1px solid #fff'});
+	//$(this).parent().css({'border':'1px solid #aaa'});
+	//$(this).addClass('extbtncsspan');
+	//$(this).parent().addClass('extbtncssdiv');
+//});
+//$('.buttoncss span').live('mouseout',function (){
+	//$(this).css({'borderTop':'1px solid transparent','borderLeft':'1px solid transparent'});
+	//$(this).parent().css({'border':'1px solid transparent'});
+	//$(this).removeClass('extbtncsspan');
+	//$(this).parent().removeClass('extbtncssdiv');
+//});
+
+var __serviceIP;
+
+$.get(
+		$.appClient.generateUrl({ESTemplate:'GetServiceIP'},'x'),
+		function (ip){
+			__serviceIP = ip;
+		}
+	);
+function createSWFUpload(){
+
+
+	var upload = new SWFUpload({
+		//提交路径
+		upload_url: __serviceIP,
+		//upload_url: "http://10.3.189.147:8080/escloud/rest/escloud_structurews/importModel",
+		
+		//向后台传递额外的参数
+		//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+		//上传文件的名称
+		
+		file_size_limit : "1048576",	// 100MB  longjunhao 20140905 修改为1024MB=1GB
+		file_types : "*.*",
+		file_types_description : "所有文件",
+		file_upload_limit : "10",
+		file_queue_limit : "0",
+		post_params:{userid:$_uInfo.uId, structureid:structureID},
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnAdd",
+		button_width: 72,
+		button_height: 28,
+		
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel",
+			startButtonId : "btnStart",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data){
+				$('#edit_stru_tbl').flexReload();				
+			}
+		}
+	});
+	$("#btnCancel").click(function(){cancelQueue(upload);});
+	$("#btnStart").click(function(){startQueue(upload);});
+	//alert(filename);
+};
+
+// 字段导入执行方法 longjunhao 20140725 add
+function importFieldsForm() {
+	// 检测两个个文件是否已经选择
+	if(!$("#importFieldsForm [name='file']").val() || !$("#importFieldsForm [name='file']").val()) {
+		$.dialog.notice({icon:'warning',content:"请选择文件！", time:2});
+		return false;
+	}
+	var structureid = "";
+	$("#importFieldsForm [name='userid']").val($_uInfo.uId);
+	$("#importFieldsForm [name='structureid']").val(structureID);
+	$('#importFieldsForm').ajaxSubmit({
+		url:__serviceIP,
+		dataType:"text",
+		success:function(data){
+			//wanghongchen 20140822 修改提示消息
+			$.dialog.notice({title:'操作提示',icon:'success',content:data, time:5});
+			$('#edit_stru_tbl').flexReload();
+			art.dialog.list['importFieldsDialog'].close();
+		},
+		error:function(){
+			$.dialog.notice({title:'操作提示',icon:'error',content:"系统错误，请联系管理员!", time:2});
+		}
+	});
+}
+</script>

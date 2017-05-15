@@ -1,0 +1,78 @@
+﻿@CHARSET "UTF-8";
+body,html{ margin:0; padding:0; overflow:hidden;}
+ul,ol,p,h2{ margin:0; padding:0;}
+li{list-style-type:none;}
+
+.ESSystemIndex{
+	width:96%;
+	margin-left:2%;
+}
+.leftDiv{ float:left; overflow:auto;border-radius:5px;background-color:#133959;}
+#statusTree{margin-top:10px;}
+.rightDiv{ float:left;}
+
+/* 生成销毁清册 */
+.destroy_list{ width:900px; height:500px; float:left;}
+.destroy_list .destroyed_tree_box{ width:230px; height:500px; overflow:auto; float:left;}
+.destroy_list .destroy_cont_box{ width:669px; height:500px; float:left; border-left:1px solid #ccc; overflow:hidden;}
+.destroy_list .removeBorder{ border-left:0; width:670px;}
+
+.destroy_cont_box h2{ width:100%; line-height:28px; text-indent:6px; float:left; background:url("../../public/flexigrid/css/images/wbg.gif") repeat-x scroll center top transparent;}
+
+.destroy_cont_box .buttons{ width:100%; float:left; padding:1px 0; background:url("../../public/flexigrid/css/images/bg.gif") repeat-x scroll center top #FAFAFA;}
+.destroy_cont_box .buttons .button{ float:left; padding:1px; margin-left:1px; _display:inline;}
+.destroy_cont_box .buttons .extbutton{ padding:0; border:1px solid #ccc;}
+.destroy_cont_box .buttons div{ float:left; padding-left:1px;}
+.destroy_cont_box .buttons .div{ padding:0; border-left:1px solid #fff; background:url("../../public/flexigrid/css/images/bg.gif") repeat-x scroll center top #FAFAFA;}
+.destroy_cont_box .buttons span{ float:left; padding:4px 5px 4px 22px;}
+.red_prompt{ padding:0 2px; line-height:26px; color:red; float:left;}
+
+.edit_see,.identify_see,.destroy_see,.destroyed_see{ width:16px; height:16px; border:0; background:url(../img/see.gif); cursor:pointer}
+
+.buttons .submit{ background:url("../../public/flexigrid/css/images/tick.png") no-repeat 2px center; cursor:pointer;}
+.buttons .print{ background:url("../../public/img/print.gif") no-repeat 2px center; cursor:pointer;}
+.buttons .save{ background:url("../../public/flexigrid/css/images/save.gif") no-repeat 2px center; cursor:pointer;}
+
+.destroy_cont_box .rows{ width:100%; height:auto; float:left; margin:5px 0; overflow:hidden;}
+.rows p{ width:auto; height:auto; float:left; overflow:hidden;}
+.rows p span{ width:90px; line-height:22px; text-align:right; float:left;}
+.rows p input{ width:121px; height:22px; line-height:22px; font-weight:normal; font-size:13px; float:left; padding-left:2px; border: 1px solid #7F9DB9;}
+.rows p .extendInput{width:550px;}
+.rows p .not_allowed{ background:#eee; cursor:not-allowed;}
+.rows p .extendB{ width:550px;}
+.rows p textarea{ width:550px; line-height:20px; font-size:13px; float:left; padding:0 2px; border: 1px solid #7F9DB9; resize:none;}
+.rows p .main{height:190px;}
+.rows p .remark{height:80px;}
+
+
+.hide{ display:none;}
+.position{ position:relative;}
+.position b{ width:16px; height:16px; position:absolute; top:4px; right:4px; cursor:pointer;}
+.position .user_bg{ background:url(../../public/flexigrid/css/images/group.png);}
+.Wdate{ border:#999 1px solid; height:20px; font-family:微软雅黑,arial; background:#fff url('../../public/DatePicker/skin/datePicker.gif') no-repeat right; cursor:pointer;}
+.wdate{ background:#fff url('../../public/DatePicker/skin/datePicker.gif') no-repeat right; cursor:pointer;}
+/* flexigrid */
+.flexigrid div.fbutton .see{background:url(../img/see.gif) no-repeat center left;}
+.flexigrid div.fbutton .print{background:url(../img/print.gif) no-repeat center left;}
+.flexigrid div.fbutton .redo{background:url(../img/redo.gif) no-repeat center left;}
+.flexigrid div.fbutton .undo{background:url(../img/undo.gif) no-repeat center left;}
+
+/* 选择鉴定授权人员窗口样式 */
+.select_user_box{ width:900px; height:auto; float:left; overflow:hidden;}
+.org_tree{ width:250px; height:490px; float:left; overflow:auto;}
+.user_list{ width:640px; height:500px; float:left;}
+.link{ width:16px; height:16px; border:0; background:url('../img/link.png'); cursor:pointer;}
+/* 选择鉴定授权人员窗口样式结束 */
+
+/* 移入保留清册延长时间和延长说明框 */
+.write_reason{ width:370px; height:auto; float:left;}
+.write_reason .items{ width:350px; height:auto; float:left; padding:10px;}
+.write_reason .items h2,.write_reason .items p{ width:100%; float:left;}
+.write_reason .items h2{ line-height:24px; font-size:14px;}
+.write_reason .items p input,.write_reason .items p textarea{ width:340px; height:18px; line-height:18px; font-size:14px; letter-spacing:1px; padding:3px; border:1px solid gray;}
+.write_reason .items p textarea{ height:100px; resize:none;}
+/* 移入保留清册延长时间和延长说明框结束 */
+.destroyopens{ width:16px; height:16px; display:inline-block; background:url(../img/editor.gif) no-repeat no-repeat; cursor:pointer;}
+#destroyListGridView div.tDiv2{height:30px;}
+
+.opens{ width:16px; height:16px; display:inline-block; background:url(../img/editor.gif) no-repeat no-repeat; cursor:pointer;}

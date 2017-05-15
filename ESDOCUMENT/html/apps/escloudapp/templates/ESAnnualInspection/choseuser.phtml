@@ -1,0 +1,78 @@
+<table>
+		<tr>
+		<td>
+		<div id='filetreebox' style='width:250px; height:350px;overflow:auto;'><ul id='orgtree' class='ztree'></ul></div>
+		</td>
+		<td>
+		<div id='filelistbox' style='height:350px;overflow:auto;'>
+		<table id='userlist'></table>
+		</div>
+		</td>
+		</tr>
+</table>
+<script>
+		function nodeClick(event, treeId, node){
+			zTree = $.fn.zTree.getZTreeObj("orgtree");
+			zTree.expandNode(node);
+			$("#userlist").flexOptions({url:$.appClient.generateUrl({ESArchiveLending:'getUserList',orgid:node.id},'x')}).flexReload();	
+		};
+
+		var setting = {
+				view: {
+					dblClickExpand: false,
+					showLine: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				async: {
+					enable: true,
+					dataType: 'json',
+					url: $.appClient.generateUrl({ESArchiveLending:'getSubOrg1'},'x'),
+					autoParam: ["id"]
+				},
+				callback: {
+					onClick : nodeClick
+				}
+			};
+			var url = $.appClient.generateUrl({ESArchiveLending:'initOrg'},'x');
+			$.ajax({
+				url:url,
+				dataType: 'json',
+				success:function(nodes){
+					$.fn.zTree.init($("#orgtree"), setting, nodes);
+					$("#orgtree_1_span").click();		
+				},
+				cache:false
+			});
+		
+$("#userlist").flexigrid({
+			url: false,
+			dataType: 'json',
+			colModel : [
+				/*{display: '操作 ', name : 'id', width : 40, align: 'center'},
+				{display: '用户名', name : 'userid', width : 80, sortable : true, align: 'left',metadata:'userid'},
+				{display: '姓名', name : 'displayName', width : 80, sortable : true, align: 'left',metadata:'username'},
+				{display: '电话', name : 'mobTel', width : 100, sortable : true, align: 'left'},
+				{display: '邮箱地址', name : 'emailAddress', width : 120, sortable : true, align: 'left'},
+				{display: '办公电话', name : 'officeTel', width : 120, sortable : true, align: 'left'},
+				{display: '家庭电话', name : 'telephonenumber', width : 120, sortable : true, align: 'left'},
+				{display: '机构', name : 'orgName', width : 60, sortable : true, align: 'left',metadata:'orgname'}*/
+				//userid','username','orgname'
+				{display: '操作', name : 'id2', width : 40, align: 'center'},
+				{display: '用户名', name : 'userid', width : 80, sortable : true, align: 'left',metadata:'userid'},
+				{display: '姓名', name: 'c1',  width : 80, align: 'center',metadata:'userid'},
+				{display: '联系电话', name: 'c2',width:120,align:'center'},
+				{display: '邮箱', name: 'c3',width:160,align:'center'},
+				{display: '所属机构', name: 'c4', width:120,align:'center',metadata:'orgname'}
+			],
+			usepager: true,
+			rp: 50,
+			title:'用户列表',
+			useRp: true,
+			width: 500,
+			height: 265
+		});
+</script>

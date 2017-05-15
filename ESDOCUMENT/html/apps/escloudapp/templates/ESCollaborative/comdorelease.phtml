@@ -1,0 +1,148 @@
+<style type="text/css">
+.borrowing_message .positionbtn{ width:403px; height:auto; overflow:hidden; float:right;}
+</style>
+
+
+
+
+<div class='borrowing_message' style="float:none;">
+	<div class='positionbtn'>
+		<div class='buttons'>
+			<input type='button' id="comrelease" value='发布' class='basebtn basebtn_border btn comrelease' />
+			<input type='button' value='流程图' class='basebtn basebtn_border image process' />
+		</div>
+	</div>
+	
+	<div class='message_list'>
+	<!-- 
+	-->
+	<form id="mycomform">
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>创建人：</span>
+				<input type='text' readonly='readonly' name="createperson" value="<?php echo $list->borrow_base->display_name;?>" />
+			</p>
+			<p class='like_input'>
+				<span>创建机构：</span>
+				<input type='text' readonly='readonly' name="createorg" value="<?php echo $list->borrow_base->create_org;?>" />
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>题名：</span>
+				<input readonly='readonly'  name="tm" type='text' value="<?php echo $list->borrow_base->tm;?>"/>
+			</p>
+			<p class='like_input'>
+				<span>编研类别：</span>
+				<select class="target" readonly='readonly' name="type"><option <?php if($list->borrow_base->type=="专题")echo "selected='selected'";?>>专题</option><option <?php if($list->borrow_base->type=="年鉴")echo "selected='selected'";?>>年鉴</option><option <?php if($list->borrow_base->type=="大事记")echo "selected='selected'";?>>大事记</option><option <?php if($list->borrow_base->type=="组织沿革")echo "selected='selected'";?>>组织沿革</option><option <?php if($list->borrow_base->type=="其他")echo "selected='selected'";?>>其他</option></select>
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>摘要：</span>
+				<input type='text' value="<?php echo $list->borrow_base->summary;?>" readonly='readonly' />
+			</p>
+		</div>
+		</form>
+			<div class='like_textarea'>
+		<h2>附件：</h2>
+		<div id="loadfile" class="loadfile"><?php 
+			if($list->borrow_base->accessory!=null){
+				$sep = explode(';', $list->borrow_base->accessory);
+				$length = count($sep);
+				for($i=0;$i<$length;$i++){
+					if($sep[$i]!=""){
+						$source = explode('|', $sep[$i]);
+						$title = $source[1];
+						$html = '<div><a path="'.$source[0].'" fullpath="'.$sep[$i].';" href="#">'.$title.'</a></div>';
+						echo $html;
+					}
+				}
+			}else{
+				$html = '<div>无</div>';
+				echo $html;
+			}
+		?></div>
+		</div>
+		
+	<?php
+		//echo '<script type="text/javascript">nowuse = "fileClerkApprovalResult" ;</script>';
+		foreach ($list->borrow_opinion as $k=>$val){
+	?>
+	<div class='like_textarea'>
+			<h2><?php echo $val->opinion_user_name;?>审批意见：</h2>
+			<textarea readonly='readonly' class='extextarea'><?php echo $val->opinion_desc;?></textarea>
+	</div>
+	<?php 
+		}
+	?>
+	<div class="clear" style="">
+			<textarea disabled='disabled' id="oneditor" class="oneditor" name="myeditor"><?php echo $list->borrow_base->content;?></textarea>
+	</div>
+	</div>
+	<input type="hidden" name="workid" value="<?php echo $list->borrow_base->workflowid;?>" />
+	<input type="hidden" name="taskid" value="<?php echo $list->borrow_base->task_id;?>" />
+	<input type="hidden" name="creatime" value="<?php echo $list->borrow_base->create_time;?>" />
+	<input type="hidden" name="id" value="<?php echo $list->borrow_base->id;?>" />
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#comrelease").die().live('click',function(){
+		var workid = $("input[name='workid']").val();
+		var taskid = $("input[name='taskid']").val();
+		var creatime = $("input[name='creatime']").val();
+		var id = $("input[name='id']").val();
+    	var url = $.appClient.generateUrl({ESCollaborative:'comreleaseopreate'},'x');
+	    $.post(url,{taskid:taskid,operation:"complete",id:id,localvar:"false",workid:workid},function(result){
+			//alert(result);return;
+	    	if(result){
+				   $.dialog.notice({icon:"succeed",content:"成功",time:2});
+				   comdia.close();
+				   $("#mylist").flexOptions({newp:1}).flexReload();
+					  
+				}
+		});
+	});
+	$(".image").die().live('click',function(){
+		var workid = $("input[name='workid']").val();
+			var url = $.appClient.generateUrl({ESCollaborative:'imgview', workid:workid},'x');
+		var html = '<img src = "'+url+'" />';
+		$.dialog({
+		    	title:'详细信息',
+		    	padding:0,
+	    	   	fixed:true,
+	    	    resize: false,
+	    	   	width:580,
+	    	   	height:390,
+		    	content:html
+		    });
+		
+	});
+	 var editor ;  
+     if(!CKEDITOR.instances.oneditor){  //判定是否存在  
+          editor= CKEDITOR.replace("oneditor",{
+    		toolbar:[    				],
+    		height : '300', // 编辑器高度
+    		CheckBrowser : true, // 是否在显示编辑器前检查浏览器兼容性,默认为true
+    		resize_enabled : true
+    		
+    	});
+      	$('#cke_top_oneditor').css("display","none");
+     }else{
+            addCkeditor("oneditor");  
+     }  
+     $("#loadfile a").die().live('click',function(){
+    		var filepath = $(this).attr("path");
+    		var url = $.appClient.generateUrl({ESCompilation:'downloads'},'x');
+    		$.post(url,{path:filepath},function(res){
+    		//	var downFile=$.appClient.generateUrl({ESCompilation:'downFile',fileName:res});
+    			$.dialog.notice({width: 150,content: '<a onclick="javascript:myclose()" href="'+res+'">下载附件</a>',icon: 'success'});
+    		});
+    	});
+     function myclose(){
+  	 	downdia.close();
+  	}
+});
+
+
+</script>

@@ -1,0 +1,105 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<link rel='stylesheet' type='text/css' href='<?php echo $tplPath?>/ESExternalSystem/css/style.css'/>
+<div style="width:600px;height:240px;">
+	<form id="osForm" method="post" action="" enctype="multipart/form-data">
+	<input type="hidden" name="submit" value="add"/>
+	<input type="hidden" name="sysId" value="<?php if(isset($editSysForm['editId'])){echo $editSysForm['editId'];}?>"/>
+	<input type="hidden" name="ownerMainsite" value="<?php if(isset($editSysForm['ownerMainsite'])){echo $editSysForm['ownerMainsite'];}?>"/>
+		<div class="esContent">
+			<ul>
+				<li class="leftTitle">业务系统代码<font color="red" size="3">*</font></li>
+        		<li><input type="text" value="<?php if(isset($editSysForm['system'])){echo $editSysForm['system'];}?>" name="system" id="leftD" verify="text/60/1/0"/></li>
+        		<li class="rightTitle">业务系统名称<font color="red" size="3">*</font></li>
+        		<li><input type="text" value="<?php if(isset($editSysForm['sysName'])){echo $editSysForm['sysName'];}?>" name="sysName" id="rightD" verify="text/60/1/0"/></li>
+			</ul>
+			<ul>
+				<li class="leftTitle">业务系统范围</li>
+        		<li><select name="publicStatus" style="width:154px;height:24px;line-height:25px;">
+        				<option value="本省">本省</option>
+        				<option value="全国">全国</option>
+        			</select>
+        		</li>
+        		<li class="rightTitle">访问方式</li>
+        		<li><select name="accessType" style="width:154px;height:24px;line-height:25px;">
+        				<option value="ftp方式访问">ftp方式访问</option>
+        				<option value="本地读取">本地读取</option>
+        			</select>
+        		</li>
+			</ul>
+			<ul>
+				<li class="leftTitle">FTP/IP地址</li>
+        		<li><input type="text" value="<?php if(isset($editSysForm['ftpserver'])){echo $editSysForm['ftpserver'];}?>" name="ftpserver" id="leftD"/></li>
+        		<li class="rightTitle">FTP端口号</li>
+        		<li><input type="text" value="<?php if(isset($editSysForm['ftpport'])){echo $editSysForm['ftpport'];}?>" name="ftpport" id="rightD"/></li>
+			</ul>
+			<ul>
+				<li class="leftTitle">FTP用户名</li>
+        		<li><input type="text" value="<?php if(isset($editSysForm['ftpuser'])){echo $editSysForm['ftpuser'];}?>" name="ftpuser" id="leftD"/></li>
+        		<li class="rightTitle">FTP密码</li>
+        		<li><input style="font-size:14px; _font-size: 11px;" type="password" value="<?php if(isset($editSysForm['ftppw'])){echo $editSysForm['ftppw'];}?>" name="ftppw" id="rightD"/></li>
+			</ul>
+			<ul>
+        		<li class="leftTitle">启用状态</li>
+        		<li><select name="activting" style="width:154px;height:24px;line-height:25px;">
+        				<option value="启用">启用</option>
+        				<option value="不启用">不启用</option>
+        			</select>
+        		</li>
+			</ul>
+			<ul>
+				<li class="leftTitle">业务系统路径</li>
+        		<li><input type="text" value="<?php if(isset($editSysForm['sysPath'])){echo $editSysForm['sysPath'];}?>" name="sysPath" id="sysPath"/></li>
+			</ul>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	
+	//查看编辑信息的需要开始
+	var accessType=["<?php if(isset($editSysForm['accessType'])){echo $editSysForm['accessType'];}?>"];
+	$("[value="+accessType+"]").attr('selected',true);
+	var publicStatus=["<?php if(isset($editSysForm['publicStatus'])){echo $editSysForm['publicStatus'];}?>"];
+	$("[value="+publicStatus+"]").attr('selected',true);
+	var activting=["<?php if(isset($editSysForm['activting'])){echo $editSysForm['activting'];}?>"];
+	$("[value="+activting+"]").attr('selected',true);
+
+	var editId=$("#osForm input[name='sysId']").val();
+	if(editId){
+		$(".esContent input[name='system']").addClass("backcolor-text").attr({'readonly':true,'title':'此项编辑状态下不能修改'});
+	}else{
+		$(".esContent input[name='system']").removeClass("backcolor-text").attr({'readonly':false,'title':'此项不能为空'});
+	}
+	//查看编辑信息的需要结束
+	
+	$("input[name='ftpserver']").keyup(function(){
+		var regIp=/^(\d|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))(\.(\d|([1-9][0-9])|(1[0-9]{2})|(2[0-4][0-9])|(25[0-5]))){3}$/;
+		if((!regIp.test(this.value))&&(this.value!='')){
+			$("input[name='ftpserver']").addClass("novalid-text").attr("title","请输入合法的IP");
+			return false;
+		}
+		$(this).removeClass("novalid-text").attr("title","");
+	});
+	$("input[name='ftpport']").keyup(function(){
+		var regPort=/^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
+		if((!regPort.test(this.value))&&(this.value!='')){
+			$("input[name='ftpport']").addClass("novalid-text").attr("title","请输入合法的端口号");
+			return false;
+		}
+		$(this).removeClass("novalid-text").attr("title","");
+	});
+	$("input[name='ftpuser']").keyup(function(){
+		$(this).removeClass("novalid-text").attr("title","");
+	});
+	$("input[name='ftppw']").keyup(function(){
+		var regPW=/^[a-zA-Z0-9_]{6,22}$/;
+		if((!regPW.test(this.value))&&(this.value!='')){
+			$("input[name='ftppw']").addClass("novalid-text").attr("title","请输入含有字母、数字、下划线的6-22位密码");
+			return false;
+		}
+		$(this).removeClass("novalid-text").attr("title","");
+	});
+	//sysPath
+	$("input[name='sysPath']").keyup(function(){
+		$(this).removeClass("novalid-text").attr("title","");
+	});
+</script>

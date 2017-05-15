@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+.QQbox {
+    Z-INDEX: 9999; LEFT: -262px; WIDTH: 296px; POSITION: absolute
+}
+
+.OnlineBtn {
+    DISPLAY: inline; FLOAT: right; MARGIN: 161px 0px 0px; WIDTH:20px; padding:5px; text-align:center; font-size:12px;border:1px solid #666; cursor:pointer; background:#CCC; color:#369;
+}
+.OnlineBtn a{ text-decoration:none; color:#369;}
+.OnlineBtn  a:hover{ text-decoration:none; color:red}

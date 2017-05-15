@@ -1,0 +1,45 @@
+<style>
+	.myFormModelShowPkg{width:auto;height:280px;overflow-y:auto;overflow-x:hidden;position:relative;top:0px;}
+	.myFormModelShowPkg2{width:auto;height:500px;overflow-y:auto;overflow-x:hidden;position:relative;top:0px;}
+	.myFormModelShowPkgChild{width:780px;height:220px;position:relative;}
+	.myFormModelShowPkgChild2{hide:true;}
+	.myFormModelShowPkg2 table {border-collapse: separate;border-spacing: 1px;border-color: gray;} 
+</style>
+<div>
+	<div id="myFormModelShowPkgDIV" class="myFormModelShowPkg">
+			<?php echo $data[0]; ?>
+	</div><br/>
+	<div id="myFormModelShowPkgChildDIV" class="myFormModelShowPkgChild">
+		<table id='myFormModelShowPkgChildTABLE'></table>
+	</div>
+</div>
+<script type="text/javascript">
+
+$(function() {
+	if('<?php echo $data[2]; ?>'=='0' && '<?php echo $data[4]; ?>'=='false'){
+		$("#myFormModelShowPkgDIV").attr("class", "myFormModelShowPkg2");
+		$("#myFormModelShowPkgChildDIV").attr("class", "myFormModelShowPkgChild2");
+	}else{ 
+		var _url = $.appClient.generateUrl({ESFormStart:'getAttachDataChildDataList',parentPath:'<?php echo $data[5]; ?>'},'x');
+		$("#myFormModelShowPkgChildTABLE").flexigrid({
+			url :_url,
+			dataType: 'json',
+			editable: true,
+			colModel:[<?php echo $data[3]; ?>],
+			showTableToggleBtn: false,
+
+			usepager : true,
+   			useRp : true,
+   			rp : 20,
+   			nomsg : "没有数据",
+   			showTableToggleBtn : false,
+   			pagetext : '第',
+   			outof : '页 /共',
+//    			width: '780',
+   			width : 'auto',
+   			height : 140,
+   			pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条'	
+		});
+	}
+});
+</script>

@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="<?php echo $tplPath?>/ESYearlyReport/css/style.css" type="text/css"/>
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo $tplPath;?>/ESYearlyReport/css/layout.css" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeTbar.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/validate.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"年报管理", content:"#esymain"});
+	$("#esyrmenu").css("height",esleftH);
+});
+</script>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>4));?>
+<input type="hidden" id="managerLevel" value="<?php echo $managerLevel;?>"/>
+<input type="hidden" id="provinceCode" value="<?php echo $provinceCode;?>"/>
+<input type="hidden" id="orgId" value="<?php echo $orgId;?>"/>
+<div class='esymain' id="esymain">
+  <div id="esyrmenu" class="esyleft">
+  	<div id='modelTypeTreeTBar' class='treeTbar' >
+			<div class="tbarDiv" style= "margin-left:12px">
+				<div class="tbarButton">
+					<div>
+						<span id="yearnewsAdd" class="add" style="padding-left:20px;">添加</span>
+					</div>
+				</div>
+				<div class="tbarButton">
+					<div>
+						<span id="yearnewsEdit" class="edit" style="padding-left:20px;">编辑</span>
+					</div>
+				</div>
+				<div class="tbarButton">
+					<div>
+						<span id="yearnewsDel" class="delete" style="padding-left:20px;">删除</span>
+					</div>
+				</div>
+			</div>
+		</div>
+    <div><ul id="ESYearlyReport" class="ztree"></ul></div>
+  </div>
+  <div class = "seprateLine"></div>
+  <div id="esyrright" class="esyright" curNodeFullName="">
+
+    <table id="yearList"></table>
+  </div>
+
+</div>
+<div id="personalDiv" style="display:none;">
+</div>
+<div id="deviceDiv" style="display:none;">
+</div>
+<input name="copyid" type="hidden" value="" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESYearlyReport/js/ESYearlyReport.js"></script>

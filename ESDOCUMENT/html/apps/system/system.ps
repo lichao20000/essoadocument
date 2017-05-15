@@ -1,0 +1,264 @@
+<?php
+class AppSystem extends AppAbstract
+{
+	
+	// 路径定义
+	public function urls()
+	{
+		return array(
+			'getSoaMsgUrl' => array(
+					'access' => true,
+					'callback' => 'getSoaMsgUrl'
+			),
+			'updateMessageOver' => array(
+					'access' => true,
+					'callback' => 'updateMessageOver'
+			)
+		);
+	}
+	public function url_updateMessageOver(){
+		$id= $this->getContext()->getRequest()->getPost('id');
+		$param = array();
+		$param['id'] = $id;
+		$param['userId'] = $this->getContext()->getUser()->getId();
+		$proxy = $this->getProxy('message');
+		$proxy->updateMessageDownFile(json_encode($param));
+	}
+	public function url_getSoaMsgUrl()
+	{
+		//$currPage = $this->getContext()->getRequest()->getPost('currPage');//（页数1、2、3...）
+		//$limit = $this->getContext()->getRequest()->getPost('limit');
+		//$type = $this->getContext()->getRequest()->getPost('type');
+		//$proxy = $this->getProxy('message');
+		//$param = json_encode(array("currPage" => $currPage, "limit"=>$limit, "userId" => $this->getContext()->getUser()->getId(), "remoteAddr" => $_SERVER["REMOTE_ADDR"], "type"=>$type));
+		//$lists = $proxy->getSoaMsg($param);
+		//$total = $lists->total;
+		//$jsonData = array('total'=>$total,'msgs'=>array());
+		//foreach ($lists->list as $list){
+		//	$jsonData['msgs'][] = array(
+		//			'id'=>$list->id,
+		//			'sender'=> $list->sender,
+		//			'recevier'=> $list->recevier,
+		//			'content'=> $list->content,
+		//			'sendtime'=> $list->sendTime,
+		//			'msgType'=> $list->msgType,
+		//			'handler'=> $list->handler,
+		//			'handlerUrl'=> $list->handlerUrl,
+		//			'style'=> $list->style
+		//	);
+		//}
+		$proxy = $this->getProxy('message');
+		echo $proxy->getSoaMsgUrl();
+	}
+	
+// 	public function getSoaMsg($param){
+// 		$url = "getSoaMsg";
+// 		return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+// 	}
+	
+  public function getProxyInstance($proxyId)
+  {
+    return $this->getProxy($proxyId);
+  }
+
+  public function getContextInstance()
+  {
+    return $this->getContext();
+  }
+
+  public function invokePublic($appId, $method){
+    $args = func_get_args();
+    return call_user_func_array(array($this, 'invoke'), $args);
+  }
+
+  public function writeLog(AopException $e)
+  {
+    if ($e instanceof AppException) {
+      $appId = $e->getAppId();
+    } else {
+      $appId = $this->appInfo['appid'];
+    }
+    $logProxy = $this->getProxy('log');
+    $logProxy->writeLog($appId, $e->getMessage(), $e->getLevel());
+  }
+
+  public function __call($name, $arguments)
+  {
+    if(!method_exists($this, $name)) {
+      throw new AopException('Can not find method ' . $name . ' in class ' . __CLASS__);
+    }
+    return call_user_func_array(array($this, $name), $arguments);
+  }
+
+  public function layoutRender($appInstance, $pInstanceId = null, $config = array())
+  {
+    $router = AopCore::getRouter();
+
+    $uid = $this->getContext()->getUser()->getId();
+    $instanceId = $appInstance->getInstanceId();
+    $layoutUrl = '';
+    $editable = true;
+    if (isset($config['editable'])) {
+      $editable = $config['editable'];
+    }
+    if ($editable && isset($pInstanceId) && strlen($pInstanceId) > 0 && $pInstanceId != $appInstance->getInstanceId()) {
+      $editable = false;
+      $instanceId = $pInstanceId;
+    }
+    if ($editable) {
+      if (isset($config['layoutUrl']) && strlen($config['layoutUrl']) > 0) {
+        $layoutUrl = $config['layoutUrl'];
+      } else {
+        $vurl = $router['arguments'][2];
+        $layoutUrl = $appInstance->getId().'/'.$instanceId.'/'.$vurl;
+      }
+    }
+    $key = (isset($config['layoutKey']) && strlen($config['layoutKey']) > 0) ? $config['layoutKey'] : $layoutUrl;
+    $layout = $this->_getLayoutData($key);
+    $appList = $appInstance->getAppList();
+    $layoutProxy = $this->getProxy('layout');
+
+    $html = $layoutProxy->render($layout,$appList,$instanceId);
+    return $this->getView()->render('layout_render', array('html'=>$html, 'url'=>$layoutUrl, 'editable'=>$editable));
+  }
+
+  public function layout($action = null, $config = array()){
+    if ($action == 'edit'){
+      return $this->layoutEdit($this, null, $config);
+    }
+    return $this->layoutRender($this, null, $config);
+  }
+
+  public function layoutEdit($appInstance, $pInstanceId = null, $config = array())
+  {
+    $router = AopCore::getRouter();
+    $vurl = isset($router['arguments'][2]) ? $router['arguments'][2] : '';
+    $uid = $this->getContext()->getUser()->getId();
+    if (isset($config['layoutUrl']) && strlen($config['layoutUrl']) > 0) {
+      $layoutUrl = $config['layoutUrl'];
+      $baseUrl = $config['layoutUrl'];
+    } else {
+      $baseUrl = $appInstance->getId().'/'.$appInstance->getInstanceId();
+      $layoutUrl = $baseUrl.'/'.$vurl;
+    }
+    if (isset($pInstanceId) && strlen($pInstanceId) > 0 && $pInstanceId != $appInstance->getInstanceId()) {
+      gotoUrl($layoutUrl);
+    }
+    $request = $this->getContext()->getRequest();
+    $layoutKey = (isset($config['layoutKey']) && strlen($config['layoutKey']) > 0) ? $config['layoutKey'] : $layoutUrl;
+    if ($request->isPost()){
+      $data = $request->getPost('data', false);
+      if ($data) {
+        $data = json_decode($data);
+        $layoutProxy = $this->getProxy('layout');
+        $data = $layoutProxy->filterData($data);
+        $data = json_encode($data);
+
+        $sql = "insert into  layout (`url`,`uid`,`app`,`data`) values('$layoutKey','$uid','{$appInstance->getId()}','$data')";
+        $db = $this->getProxy('mysql');
+        $args = array('is_success'=>1);
+        if (isset($config['console']) && $config['console']) {
+          $db->query("DELETE FROM layout WHERE url='$layoutKey'");
+        }else {
+          $db->query("DELETE FROM layout WHERE uid='$uid' AND url='$layoutKey'");
+          $args['redirect_url'] = '/'.$layoutUrl;
+        }
+
+        $db->query($sql);
+        echo json_encode($args);
+        exit;
+      }
+    }
+    $urls = $appInstance->urls();
+    $urlLayout = array();
+    foreach($urls as $url => $setting) {
+      if(is_string($setting) && $setting == URL_CALLBACK_LAYOUT) {
+        $urlLayout[$url] = $url;
+      } else if(is_array($setting) && isset($setting['callback']) && $setting['callback'] == URL_CALLBACK_LAYOUT) {
+        $urlLayout[$url] = $url;
+      }
+    }
+
+
+    $applist = $this->_getAppList($appInstance);
+
+    $layout = $this->_getLayoutData($layoutKey);
+
+    $postUrl = url($layoutUrl.'/edit');
+    $layoutProxy = $this->getProxy('layout');
+    $layoutHtml = $layoutProxy->generateHtml($layout, $applist, $postUrl);
+
+    $args = array('baseUrl'=>$baseUrl,'urlList'=>$urlLayout, 'url'=>$vurl, 'layoutHtml'=>$layoutHtml, 'appInfo'=>$appInstance->getAppInfo(),'config'=>$config);
+    $args['config'] = $config;
+    return $this->getView()->render('layout_edit', $args);
+  }
+
+  public function getAppList() {
+    AopCore::loadLibrary('app');
+    $appList = AopApp::getList();
+    $list = array();
+    foreach($appList as $appid=>$info) {
+      $list[$appid] = $info;
+    }
+
+    return $list;
+  }
+
+  public function getAppInfo(){
+    return array('name'=>'页面', 'instance_id'=> 0, 'appid'=>'system');
+  }
+
+  private function _getAppList($appInstance){
+    $apps = $appInstance->getAppList();
+    $applist = array();
+    foreach ($apps as $appid => $info) {
+      $app = AopApp::getInstance($info);
+      $row = array(
+        'name' => $info['name'],
+        'views' => array(),
+      );
+      foreach ($app->views($this->getInstanceId()) as $viewid => $view) {
+        $row['views'][$viewid] = $view['title'];
+      }
+
+      if ($row['views']) {
+        $applist[$appid] = $row;
+      }
+    }
+    return $applist;
+  }
+
+  private function _getLayoutData($url){
+    //$uid = $this->getContext()->getUser()->getId();
+    $sql = "SELECT data FROM layout WHERE url='$url'";
+    $db = $this->getProxy('mysql');
+    $result = $db->fetchRow($sql);
+
+    return $result ? json_decode($result->data) : array();
+
+  }
+
+  public function hook_install($catalogId, $productId)
+  {
+    parent::hook_install($catalogId, $productId);
+
+    $mysql = $this->getProxy('mysql');
+    $sql = <<<SQL
+CREATE TABLE IF NOT EXISTS `layout` (
+    `url` varchar(255) NOT NULL DEFAULT '',
+    `uid` varchar(25) NOT NULL DEFAULT '',
+    `app` varchar(32) NOT NULL DEFAULT '',
+    `data` text NOT NULL,
+    KEY `url` (`url`,`uid`),
+    KEY `uid` (`uid`,`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+SQL;
+    $rs1 = $mysql->execute($sql);
+
+    if(strtolower($rs1) == 'success'){
+      return true;
+    }else{
+      return false;
+    }
+  }
+}

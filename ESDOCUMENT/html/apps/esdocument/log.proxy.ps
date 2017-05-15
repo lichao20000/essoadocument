@@ -1,0 +1,174 @@
+<?php
+/**
+ * 角色管理
+ *
+ */
+class ProxyEsdocumentLog extends AgentProxyAbstract
+{
+	const SERVICE_NAME="documentlog";
+
+	/**
+	 * 根据日志类型查询日志信息
+	 * @author fangjixiang
+	 */
+	public function findAuditLog($sort,$start,$size,$param){
+		$appId = $this->getAppId();
+		$appToken = $this->getAppToken();
+		$urlParam = array('findAuditLog',$appId,$appToken,$sort,$start,$size);
+		$url = implode('/', $urlParam);
+		// return $url.'--'.$param;
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author ldm
+	 * @param unknown_type $start
+	 * @param unknown_type $limit
+	 * @param unknown_type $logtype
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getLogList($start,$limit,$logtype){
+		$urlParam = array('getLogList',$start,$limit,$logtype);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	
+	/**
+	 * @author wangtao
+	 * 功能访问日志
+	 * @param mixed $map
+	 * @return
+	 */
+	public function addAccessLog($map)
+	{
+		$urlParam = array('addFunctionAccess',$this->getAppId(),$this->getAppToken());
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+		 
+	}
+	/**
+	 * 本地功能访问日志
+	 * @author ldm
+	 * @param unknown_type $map
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	//   public function saveLog($map)
+	//   {
+	//   	$urlParam = array('saveLog');
+	//   	$url = implode('/', $urlParam);
+	//   	return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	
+	//   }
+	
+	/*
+	 * 根据条件筛选日志
+	* author: fangjixiang 20140428 shimiao 对日志管理做了一些处理
+	* date: 20130426
+	*
+	*/
+	public function getLogListByCondition($map)
+	{
+		$urlParam = array('getLogListByCondition');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+		 
+	}
+	
+	/*
+	 * 根据ID查询日志
+	* author: fangjixiang
+	* date: 20130426
+	*/
+	public function getLogById($logId)
+	{
+	
+		$urlParam = array('getLogById',$logId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	
+	}
+	/*
+	 * 根据ids 导出数据
+	* author: shimiao
+	* date: 20140421
+	*/
+	public function exportLogData($map)
+	{
+	
+		$urlParam = array('exportLogData');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	/**
+	 * shimiao 20140424  用户访问其他应用服务时,map - userid appid apptoken ip model
+	 * @param map
+	 * */
+	public function saveAccessModel($map)
+	{
+		$url = 'saveAccessModel';
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	/**
+	 * shimiao 20140418 删除其他的应用服务
+	 */
+	public function deleteLogData($map){
+		$urlParam = array('deleteLogData');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	
+	}
+	public function getStatisticData($map){
+		$urlParam = array('getStatisticData');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	 
+	/**
+	 * guolanrui 20140901 记录日志
+	 * @param unknown $map{userid,module,type,ip,loginfo,operate}
+	 * userid 当前用户ID
+	 * module 当前模块的名称
+	 * type 日志类型     操作日志为：operation
+	 * ip 为当前用户的客户端IP
+	 * loginfo 日志内容
+	 * operate 日志名称
+	 */
+	public function saveLog($map){
+		$urlParam = array('saveLog');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	
+	public function addLoginLog($param){
+		$urlParam = array('addLoginLog');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,"application/json;charset=UTF-8");
+	}
+ //---------文控中对soa服务的直接引用--------------------------------
+	/**
+	 * 获取左侧的机构树
+	 */
+	public function getOrgListTree($canshu) {
+		$url = "findOrgListByParentid";
+		return $this->post ( "escloud_orgws", $url, $canshu, "application/json;charset=UTF-8" );
+	}
+	
+	public function isAdmin($userid){
+		$urlParam = array('isAdmin',$userid);
+		$url = implode('/', $urlParam);
+		return $this->get("escloud_authservice",$url);
+	}
+	public function getOrg($id){
+		$urlParam = array('getOrg',$id);
+		$url = implode('/', $urlParam);
+		return $this->get("escloud_usingformws", $url);
+	}
+	
+	public function findUserListByOrgid($orgid,$start,$limit)
+	{
+		$urlParam = array('findUserListByOrgid',$orgid,$start,$limit);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get("escloud_consumerservice", $url);
+	}
+}

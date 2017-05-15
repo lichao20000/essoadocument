@@ -1,0 +1,61 @@
+<div class="esright">
+<table id="notfiling"></table></div>
+<script type="text/javascript">
+var reg=/\d/;
+itemPath=nodePath.replace(reg,5);
+    $("#notfiling").flexigrid({
+	url: $.appClient.generateUrl({ESIdentify:'set_json',path:nodePath,itemPath:itemPath}),
+	dataType: 'json',
+	colModel : [
+		{display: '序号', name : 'num', width : 40, align: 'center'}, 
+		{display: '<input type="checkbox" name="path" onclick=selectAll(checked,name,"#notfiling")>', name : 'ids', width : 40, align: 'center'},
+		{display: '操作', name : 'operate', width : 80, align: 'left'},
+		<?php echo $fields;?>
+		],
+	buttons : [
+		{name: '删除', bclass: 'delete',tooltip:'删除所勾选的数据',onpress:delNotFiling},
+		{name: '查看日志', bclass: 'note',tooltip:'查看勾选数据的操作日志',onpress:showNotFilingLog},
+		{name: '目录报表', bclass: 'report',tooltip:'根据选择的数据或者输入的条件打印目录报表',onpress:printNotFiling},
+		{name: '退回', bclass: 'back',tooltip:'将选择的数据退回上一个业务',onpress:sendNotFilingBack},
+		{name: '筛选', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:notfilingFilter},
+		{name: '还原', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:reset}
+		],
+		usepager: true,
+		title: '不归档库',
+		useRp: true,
+		query:'',
+		onDoubleClick:modify,
+		height:height,
+		dblClickResize:true
+		//onSuccess: autoResize,
+});
+
+    /** xiaoxiong 20140806 添加不归档库模糊检索组件，及处理方法 **/
+	$('#esnotfiling div[class="tDiv2"]').append('<div class="find-dialog"><input onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="notfilingKeyword" value="请输入关键字" /><span onclick="notfilingQuery()"></span></div>');
+    function notfilingQuery(){
+    	var keyword=$.trim($('input[name="notfilingKeyword"]').val());
+    	if(keyword=='' || keyword=='请输入关键字') {
+    		keyword = '';
+    	}
+    	var query = {} ;
+    	query.keyword = keyword ;
+    	$('#notfiling').flexOptions({newp:1,query:query}).flexReload();
+      }
+    
+    function reset(){
+    	$('#notfiling').flexOptions({query:''}).flexReload();
+      }
+    /** xiaoxiong 20140904 根据用户权限控制按钮的权限 **/
+    (function(){
+		if(($('#escontent').attr("itemEditRight")+"") == "false"){
+			$(".back").addClass("not-allowed");
+			$(".back").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		}	
+		if(($('#escontent').attr("itemDeleteRight")+"") == "false"){
+			$(".delete").addClass("not-allowed");
+			$(".delete").attr("title", "您没有当前节点下的数据删除权限，此功能不可用！") ;
+		}
+	})();
+</script>
+		
+

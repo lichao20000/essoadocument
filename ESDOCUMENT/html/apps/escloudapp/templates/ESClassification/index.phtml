@@ -1,0 +1,44 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="<?php echo $tplPath;?>/ESClassification/css/index.css" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/autovalidate/validate.js"></script>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/autovalidate/style.css" type="text/css">
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'分类库维护'));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESClassification/js/template.js"></script>
+<style>
+
+.ztree li a span{
+	color:#444;
+}
+
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"分类库维护", content:"#ESSystemIndex"});
+
+});
+</script>
+<div id="ESSystemIndex" style="margin-left: 2%;background-color:#fff;">
+
+
+<!-- 左侧 -->
+<div class="buttons">
+  <input type="button" class="btnClassfication add"  value="添加" />
+  <input type="button" class="btnClassfication remove" value="删除" />
+  <input type="button" class="btnClassfication edit" value="编辑" />
+  <!--
+  <input type="button" class="btn import" onclick="" value="导入" />
+  <input type="button" class="btn export" onclick="" value="导出" />
+  -->
+</div>
+  <div style="clear:both;"></div>
+  <hr style="margin: 10px 0px 0px 5px;padding: 0px;">
+  <ul id="fication" class="ztree" style="overflow-y:auto;"></ul>	
+</div>
+
+<script type="text/javascript">
+	$("#fication").css("height",$(document).height()-207);
+</script>
+

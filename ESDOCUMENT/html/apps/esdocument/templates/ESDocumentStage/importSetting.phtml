@@ -1,0 +1,278 @@
+<script>
+$(document).ready(function(){
+    $( "#tabs" ).tabs();
+    /** wanghongchen 20140930 替换掉页面中的nth-child为eq，ie8不支持nth-child，导致自动对应速度慢**/
+<?php
+	foreach ($data as $value){
+		//用于存储已经对应的左侧数据tr对象.
+	    echo 'var source'.$value->type.' = new Array();';
+	    //点击左侧tr对象
+	    echo 'var tempTr'.$value->type.' = null;							';
+		//左侧表格
+	    echo 'var col'.$value->type.' = [ {';
+	    echo '	display : "源字段",';
+	    echo '	name : "sourceField",';
+	    echo '	width : 80,';
+	    echo '	align : "left"';
+	    echo '}, {';
+	    echo '	display : "类型",';
+	    echo '	name : "type",';
+	    echo '	width : 60,';
+	    echo '	align : "left"';
+	    echo '}, {';
+	    echo '	display : "最大长度",';
+	    echo '	name : "maxLength",';
+	    echo '	width : 60,';
+	    echo '	sortable : true,';
+	    echo '	align : "left"';
+	    echo '}, {';
+	    echo '	display : "最小长度",';
+	    echo '	name : "minLength",';
+	    echo '	width : 60,';
+	    echo '	sortable : true,';
+	    echo '	align : "left"';
+	    echo '}, {';
+	    echo '	display : "是否为空列",';
+	    echo '	name : "isnull",';
+	    echo '	width : 80,';
+	    echo '	sortable : true,';
+	    echo '	align : "left"';
+	    echo '} ];';
+	   	echo '$("#source-table-'.$value->type.'").flexigrid({';
+	    echo '	url : $.appClient.generateUrl({ESDocumentStage:"showFileColumn"},"x"),';
+	    echo '	dataType : "json",';
+	    echo '	width:430,';
+	    echo '	height:200,';
+// 	    echo '	striped:false,';
+	    echo '	colModel : col'.$value->type.',';
+	    echo '	showTableToggleBtn : false,';
+	    echo '	query : {';
+	    echo '		condition : \''.$value->path.'\'';
+	    echo '	}';
+	    echo '});';
+		//右侧表格
+	    echo 'var scol'.$value->type.' = [ {';
+	    echo '	display : "源字段",';
+	    echo '	name : "sourceField",';
+	    echo '	width : 80,';
+	    echo '	align : "left"';
+	    echo '}, {';
+	    echo '	display : "目标字段",';
+	    echo '	name : "targetField",';
+	    echo '	width : 60,';
+	    echo '	align : "left"';
+	    echo '}, {';
+	    echo '	display : "类型",';
+	    echo '	name : "type",';
+	    echo '	width : 60,';
+	    echo '	sortable : true,';
+	    echo '	align : "left"';
+	    echo '}, {';
+	    echo '	display : "长度",';
+	    echo '	name : "length",';
+	    echo '	width : 60,';
+	    echo '	sortable : true,';
+	    echo '	align : "left"';
+	    echo '}, {';
+	    echo '	display : "可不填项",';
+	    echo '	name : "isnull",';
+	    echo '	width : 80,';
+	    echo '	sortable : true,';
+	    echo '	align : "left"';
+	    echo '} ];';
+	   	echo '$("#structure-table-'.$value->type.'").flexigrid({';
+	    echo '	url : $.appClient.generateUrl({ESDocumentStage:"showStructureColumn"},"x"),';
+	    echo '	dataType : "json",';
+	    echo '	width:430,';
+	    echo '	height:200,';
+	    echo '	colModel : scol'.$value->type.',';
+	    echo '	showTableToggleBtn : false,';
+	    echo '	query : {';
+	    echo '		condition : \''.$value->path.'\'';
+	    echo '	}';
+	    echo '});';
+		//下方预览数据表格
+
+		/** wanghongchen 20140918 列模型修改为预先获取，提升性能 **/
+	   	echo '		$("#previewData-table-'.$value->type.'").flexigrid({';
+	    echo '			url : $.appClient.generateUrl({ESDocumentStage:"getPreFileData"},"x"),';
+	    echo '			dataType : "json",';
+	    echo '			width:860,';
+	    echo '			height:110,';
+	    echo '			colModel : '.json_encode($value->previewDataColumn).',';
+	    echo '			query : {';
+	    echo '				condition : \''.$value->path.'\'';
+	    echo '			}';
+	    echo '		});';
+	   	
+	   	//自动对应事件
+	   	autoMatchField($value->type);
+	   	//手动对应字段
+	   	matchByHand($value->type);
+	   	//双击撤销对应事件
+	   	cancelOrMatch($value->type);
+	   	//复位
+	   	resetMatch($value->type);
+   	}
+   	
+   	//重新设置左侧表格颜色
+   	function refreshColor($type){
+   		echo '	$("#source-table-'.$type.' tr:odd").attr("class","erow");						';
+		echo '	$("#source-table-'.$type.' tr:even").attr("class","");						';
+   	}
+   	
+   	//记录点击的左侧的tr
+   	function matchByHand($type){
+		echo '$("#source-table-'.$type.' tr").die().live("click",function(){						';
+		echo '	tempTr'.$type.' = $(this);					';
+		echo '});						';
+   	}
+   	
+   	//自动对应字段
+   	function autoMatchField($type){
+   		echo '$("#autoMatch-'.$type.'").die().live("click",function(){							';
+		echo '	var source = new Array();						';
+		echo '	var msg = new Array();						';
+		echo '	var typeMsg = new Array();						';
+		echo '	$("#source-table-'.$type.' tr").each(function(){						';
+		echo '		source.push($(this));					';
+		echo '	});					';
+		echo '	$("#structure-table-'.$type.' tr").each(function(){						';
+		echo '		var thisText = $(this).find("td:eq(1) div").text();					';
+		echo '		for(var i = 0; i < source.length; i++){			';
+		echo '			if(thisText == source[i].find("td:eq(0) div").text()){				';
+		echo '				if(parseInt($(this).find("td:eq(3) div").text()) < parseInt(source[i].find("td:eq(2) div").text())){			';
+		echo '					msg.push(thisText);';
+		echo '					continue;';
+		echo '				}			';
+		//wanghongchen 20140818 判断类型是否一致
+		echo '				if($(this).find("td:eq(2) div").text() != source[i].find("td:eq(1) div").text() && $(this).find("td:eq(2) div").text() != "文本"){			';
+		echo '					typeMsg.push(thisText);';
+		echo '					continue;';
+		echo '				}			';
+		echo '				var tempValue = $(this).find("td:eq(0) div").text();			';
+// 		echo '				if(tempValue != null && tempValue != ""){			';
+		cancelMatchDeal($type);
+// 		echo '				}			';
+		echo '				$(this).find("td:eq(0) div").text(thisText);			';
+		echo '				source'.$type.'.push(source[i]);			';
+		echo '				source[i].remove();			';
+		echo '			}				';
+		echo '		}					';
+		echo '	});					';
+		refreshColor($type);
+		echo '	var msgstr = "";				';
+		echo '	for(var i = 0; i < msg.length; i++){				';
+		echo '		msgstr += "源字段【"+msg[i]+"】字段最大长度大于目标字段【"+msg[i]+"】！</br>";				';
+		echo '	}				';
+		echo '	for(var i = 0; i < typeMsg.length; i++){				';
+		echo '		msgstr += "源字段【"+typeMsg[i]+"】字段类型与目标字段【"+typeMsg[i]+"】字段类型不一致！</br>";				';
+		echo '	}				';
+		echo '	if(msgstr.length > 0){				';
+		echo '		$.dialog({content:msgstr});				';
+		echo '	}							';
+		echo '});							';
+   	}
+   	
+   	//单击对应字段，双击撤销字段对应
+   	function cancelOrMatch($type){
+   		echo '$("#structure-table-'.$type.' tr").die().live("click dblclick",function(){						';
+   		echo '	var tempValue = $(this).find("td:eq(0) div").text();					';
+   		echo '	if(event.type=="click"){					';
+   		echo '		if(tempTr'.$type.' != null){					';
+   		echo '			if(tempValue != null && tempValue != ""){					';
+   		cancelMatchDeal($type);
+   		echo '			}					';
+   		echo '			var thisText = $(this).find("td:eq(1) div").text();					';
+   		echo '			if(parseInt($(this).find("td:eq(3) div").text()) < parseInt(tempTr'.$type.'.find("td:eq(2) div").text())){			';
+   		echo '				$.dialog.notice({content:"源字段【"+tempTr'.$type.'.find("td:eq(0) div").text()+"】字段最大长度大于目标字段【"+thisText+"】！",time:3,icon:"warning"});';
+   		echo '				tempTr'.$type.' = null;			';
+   		refreshColor($type);
+   		echo '				return;';
+   		echo '			}			';
+   		//wanghongchen 20140818 增加对字段类型的判断
+   		echo '			if($(this).find("td:eq(2) div").text() != tempTr'.$type.'.find("td:eq(1) div").text() && $(this).find("td:eq(2) div").text() != "文本"){			';
+   		echo '				var that = $(this);';
+   		echo '				$.dialog({content:"源字段【"+tempTr'.$type.'.find("td:eq(0) div").text()+"】字段类型与目标字段【"+thisText+"】不一致，是否继续？",';
+   		echo '					okVal:"继续",';
+   		echo '					ok:function(){';
+   		echo '						that.find("td:eq(0) div").text(tempTr'.$type.'.find("td:eq(0) div").text());				';
+   		echo '						source'.$type.'.push(tempTr'.$type.');				';
+   		echo '						tempTr'.$type.'.remove();				';
+   		echo '						tempTr'.$type.' = null;			';
+   		echo '					},';
+   		echo '					cancel:function(){';
+   		echo '						tempTr'.$type.' = null;			';
+   		echo '					}';
+   		echo '				});';
+   		echo '				return false;			';
+   		echo '			}';
+   		echo '			$(this).find("td:eq(0) div").text(tempTr'.$type.'.find("td:eq(0) div").text());				';
+   		echo '			source'.$type.'.push(tempTr'.$type.');				';
+   		echo '			tempTr'.$type.'.remove();				';
+   		echo '			tempTr'.$type.' = null;			';
+   		echo '		}					';
+   		echo '	}else{						';
+   		cancelMatchDeal($type);
+   		echo '	}					';
+   		refreshColor($type);
+   		echo '});						';
+   	}
+   	//取消对应
+   	function cancelMatchDeal($type){
+   		echo '		if(tempValue != null && tempValue !=""){					';
+		echo '			for(var ic = 0; ic < source'.$type.'.length; ic++){				';
+		echo '				if(source'.$type.'[ic].find("td:eq(0) div").text()==tempValue){			';
+		echo '					$("#source-table-'.$type.' tbody").append(source'.$type.'[ic]);				';
+		echo '				}			';
+		echo '			}				';
+		echo '			$(this).closest("tr").find("td:eq(0) div").text("");				';
+		echo '		}					';
+   	}
+   	
+   	//复位
+   	function resetMatch($type){
+   		echo '$("#reset-'.$type.'").die().live("click",function(){							';
+   		echo '	$("#source-table-'.$type.'").flexReload();							';
+   		echo '	$("#structure-table-'.$type.'").flexReload();							';
+   		echo '});								';
+   	}
+?>
+});
+</script>
+<div>
+	<form id="importStep1" action="" method="post">
+		<div id="tabs"
+			style="width: 860px; height: 460px; padding: 0; background: none ! important;">
+			<ul id="tagUl" style="border: none; border-bottom: 1px solid #AAAAAA; height: 30px; background: none ! important;">
+			<?php
+				foreach ($data as $value){
+					echo '<li id="'.$value->type.'~~'.$value->path.'" style="height:28px;"><a href="#tabs-'.$value->type.'">'.$value->title.'</a></li>';
+				}
+			?>
+			</ul>
+	<?php
+		foreach ($data as $value){
+			echo '<div id="tabs-'.$value->type.'" style="background: none ! important; padding: 0;">';
+			//wanghongchen 20140811 修改按钮样式
+			echo '	<div style="background-color: #F5F5F5; height: 30px; padding-left: 7px; font-size:12px; padding-top: 7px;">';
+			echo '		<input type="button" id="autoMatch-'.$value->type.'" value="自动对应" style="border: none; width: 60px; height: 23px; color: #FFF; background-color: #6f6e81;padding-bottom: 3px;" />&nbsp; ';
+			echo '		<input type="button" id="reset-'.$value->type.'" value="复位" style="border: none; width: 60px; height: 23px; color: #FFF; background-color: #6f6e81;padding-bottom: 3px;" />';
+			echo '	</div>';
+			echo '	<div>';
+			echo '		<div style="width: 50%; float: left;">';
+			echo '			<div id="source-table-'.$value->type.'"></div>';
+			echo '		</div>';
+			echo '		<div style="width: 50%; float: left;">';
+			echo '			<div id="structure-table-'.$value->type.'"></div>';
+			echo '		</div>';
+			echo '	</div>';
+			echo '	<div>';
+			echo '		<div id="previewData-table-'.$value->type.'"></div>';
+			echo '	</div>';
+			echo '</div>';
+	}
+	?>
+		</div>
+	</form>
+</div>

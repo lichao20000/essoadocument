@@ -1,0 +1,35 @@
+<?php
+class ProxyEscloudappEscloud_cachews extends AgentProxyAbstract
+{
+	const SERVICE_NAME='escloud_cachews';
+	/**
+	 * @author wangtao
+	 * 设置缓存值
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function setCache($key,$value)
+	{
+		$urlParam = array('set',$key);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$value,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 根据键值获得缓存的值
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function getCache($key)
+	{
+		$urlParam = array('get');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$key,'application/json;charset=UTF-8');
+	}
+	public function delCache($key)
+	{
+		$urlParam = array('del',$key);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url);
+	}
+}

@@ -1,0 +1,123 @@
+<div style="width: 100%;" id="flowChart">
+	<div
+		style="float: left; width: 700px; height: 200px; border-top: 1px solid silver; padding: 20px 0px 20px 50px; overflow-y: auto;">
+		<div class="part_left">
+			<span class="sp1"><font color="white">文件生成单位</font></span> <span
+				class="sp2">&nbsp;</span> <span class="sp1"><font color="white">DCC文控中心</font></span>
+			<span class="sp2" style="width: 30px;">&nbsp;</span>
+		</div>
+		<div style="float: left; width: 340px;">
+			<div
+				style="float: left; width: 2px; height: 2px; margin-top: 24px; background-color: #6699FF;">&nbsp;</div>
+			<div id="part"
+				style="float: left; width: 330px; text-align: left; height: 40px; line-height: 40px;">
+			</div>
+			<input type="hidden" id="result" name="matrix"
+				value='<?php echo isset($result->flow_matrix) ? $result->flow_matrix:(isset($result->matrix) ? $result->matrix:''); ?>' />
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	loadResult();//加载初始结果
+	//加载初始结果
+	function loadResult(){
+		var result = jQuery.parseJSON($("#result").val());//流程默认
+		if(result!=null && result.length>0){
+			var url=$.appClient.generateUrl({ESSendReceiveFlow: "loadPartAndUser"},'x');
+			$.post(url,{result:result},function(data){
+				if(data){
+					for(var i=0;i<data.length;i++){
+						setSelectedPart(data[i].code,data[i].copies,data[i].type,data[i].name+" "+data[i].copies+"份");
+						autoChart();
+					}
+				}
+			},"json");					
+		}
+	}
+	//设置已被添加的单位部门
+	function setSelectedPart(code,copies,type,value){		
+		$("#part").append('<p style="padding:5px 0px 5px 0px;"><span style="float:left;width:40px;background-color: #6699FF;height:2px;">&nbsp;</span><span code="'+code+'" copies="'+copies+'" receiveType="'+type+'" class="confirmPart" title="'+value+'"><font color="white">'+autoAddEllipsis(value,30)+'</font></span><span class="delPart" style="padding-right:22px;"></span></p>');
+	}
+	//自动对齐图形
+	function autoChart(){
+		var p=$("#part p");
+		var hei=0;
+		for(var i=0;i<p.length;i++){
+			var m=$(p[i]).css("height").split("px")[0]*1;
+			$(p[i]).children("span").first().css("margin-top",m/2-1);
+			hei=hei+m+10;
+		}
+		$("#part").css("height",hei);
+		$(".part_left").css("margin-top",p.length>0?(hei/2-25):0);
+		if(p.length>0){
+			var top=$(p[0]).css("height").split("px")[0]/2+4;
+			var bottom=$(p[p.length-1]).css("height").split("px")[0]/2+4;
+			$("#part").prev("div").css("margin-top",top).css("height",hei-top-bottom);
+		}
+	}
+
+	//字符截取填充
+	function autoAddEllipsis(pStr, pLen) {  
+	    var _ret = cutString(pStr, pLen);  
+	    var _cutFlag = _ret.cutflag;  
+	    var _cutStringn = _ret.cutstring;  
+	    if ("1" == _cutFlag) {  
+	        return _cutStringn + "...";  
+	    } else {  
+	        return _cutStringn;  
+	    }  
+	}  
+
+	//字符截取
+	function cutString(pStr, pLen) {  
+	    // 原字符串长度  
+	    var _strLen = pStr.length;  
+	    var _tmpCode;  
+	    var _cutString;  
+	    // 默认情况下，返回的字符串是原字符串的一部分  
+	    var _cutFlag = "1";  
+	    var _lenCount = 0;  
+	    var _ret = false;  
+	    if (_strLen <= pLen/2) {  
+	        _cutString = pStr;  
+	        _ret = true;  
+	    }  
+	    if (!_ret) {  
+	        for (var i = 0; i < _strLen ; i++ ) {  
+	            if (isFull(pStr.charAt(i))) {  
+	                _lenCount += 2;  
+	            } else {  
+	                _lenCount += 1;  
+	            }  
+	            if (_lenCount > pLen) {  
+	                _cutString = pStr.substring(0, i);  
+	                _ret = true;  
+	                break;  
+	            } else if (_lenCount == pLen) {  
+	                _cutString = pStr.substring(0, i + 1);  
+	                _ret = true;  
+	                break;  
+	            }  
+	        }  
+	    }  
+	    if (!_ret) {  
+	        _cutString = pStr;  
+	        _ret = true;  
+	    }  
+	    if (_cutString.length == _strLen) {  
+	        _cutFlag = "0";  
+	    }  
+	    return {"cutstring":_cutString, "cutflag":_cutFlag};  
+	}  
+
+	//全角半角判断
+	function isFull (pChar) {  
+	    if ((pChar.charCodeAt(0) > 128)) {  
+	        return true;  
+	    } else {  
+	        return false;  
+	    }  
+	}  	
+});
+</script>

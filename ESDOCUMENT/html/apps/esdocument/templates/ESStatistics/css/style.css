@@ -1,0 +1,42 @@
+@CHARSET "UTF-8";
+#esmain{width:96%;margin-left:2%;}
+.clear{clear:both;}
+#mylist{height:400px;width:800px;}
+.select ul{float:left;margin-bottom:0px;}
+.select ul li{float:left;width:100px;background:#6f6e81;margin-left:10px;line-height:30px;color:#fff;text-align:center}
+#mylist .selected{background:#133959;}
+.extra{border:3px solid #133959;}
+.list{width:800px;height:340px;}
+
+.liscon1{margin-top:100px;margin-left:200px;}
+.liscon1 span{font-size:14px;}
+.liscon1 input{width:230px;height:20px;}
+
+
+.espakcet{width:480px;overflow:auto;height:250px;}
+.espakcet ul{width: 460px;text-align:center;}
+.espakcet ul li{width:200px;height:30px;margin-left:20px;float:left;margin-top:10px;_display:inline}
+.espakcet span{width:60px;height:30px;line-height:30px;text-align:left;float:left;}
+.espakcet ul li input{height:20px;float:left;width:135px;}
+.espakcet ul li select{height:22px;float:left;width:137px;}
+#esfilter{height:230px;overflow-y:auto;overflow-x:hidden}
+#sift tr{height:30px;}
+td .es_add{width:22px;height:22px;background:url('../img/add.gif') no-repeat}
+td .es_del{width:22px;height:22px;background:url('../img/close.png') no-repeat}
+.delbtn {display:inline-block; width:16px; height:16px; background:url(../img/delete.png) no-repeat no-repeat; cursor:pointer;}
+.showbtn {display:inline-block; width:16px; height:16px; background:url(../img/show.png) no-repeat no-repeat; cursor:pointer;}
+.printbtn {display:inline-block; width:16px; height:16px; background:url(../img/plan.png) no-repeat no-repeat; cursor:pointer;}
+.escatagory{height:220px;width:166px;background:#fff;border:1px solid #aaa;display:none;z-index:888;position:absolute;overflow:auto;}
+#deadline{width:95px;background:#fff;display:none;position:absolute;z-index:901;text-align:left;border:1px #aaa solid}
+#deadline ul{margin:0;}
+#deadline ul li{margin:0;padding-left:5px;width:90px;height:18px;float:left;cursor:pointer;line-height:18px}
+#deadline ul li:hover{background:#eee;padding: 0px 2px;border-left: 1px solid #fff;border-top: 1px solid #fff;border-right: 1px solid #eee;border-bottom: 1px solid #eee;}
+
+/**wanghongchen 20140820 统计方案窗口第二步目录树添加滚动条**/
+#nodeTree{overflow-y:auto;overflow-x:hidden;position:relative;}
+/**wanghongchen 20140820 布局设置界面按钮样式**/
+#eslayout .tDiv2 .fbutton span{padding-left:0 !important;line-height:20px;height:20px;}
+/**数据节点设置 切换按钮样式**/
+#treeButton{ margin-left:20px; margin-top:10px; margin-bottom:10px;}
+
+#treeButton input {width:50px;height:25px; text-align: center;line-height: 20px;margin-right:10px;}

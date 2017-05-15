@@ -1,0 +1,89 @@
+<table id="readingroom"></table>
+<script type="text/javascript">
+$(function(){
+	$("#readingroom").flexigrid({
+		dataType: 'json',
+		<?php if($archiveType!='initialization') { ?>
+		url:$.appClient.generateUrl({ESReadingRoom:'getList',archiveType:encodeURI("<?php echo $archiveType;?>"),archiveTypeEngLish:"<?php echo $archiveTypeEngLish;?>"},'x'),
+		<?php } ?>
+		colModel : <?php if($archiveType==='编研成果阅览'){ ?>[
+			{display: '序号', name : 'lineNumber', width : 40, sortable : true, align: 'center'},
+			{display: '查看', name : 'reading', width : 40, sortable : true, align: 'center'},
+			{display: '标题', name : 'Title', width : 350, sortable : true, align: 'center'},
+			{display: '日期', name : 'Date', width :200, sortable : true, align: 'center'}
+			]<?php } else {echo $data;} ?>,
+		usepager: true,
+		title: '业务列表',
+		useRp: true,
+		rp: 20,
+		procmsg:"正在加载，请稍等",
+		nomsg:"没有数据",
+		resizable:false,
+		minColToggle:0,
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: 'auto',
+		height: height,
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+
+	$("#readingroom tr").die().live('dblclick',function(){
+		$(this).find('input[name="readme"]').click();
+	});
+
+	$('#readingroom input[name="readme"]').die().live('click',function (){
+		var archiveType = "<?php echo $archiveType;?>";
+		var id = $(this).attr('id');
+		//alert(typeof(temp));return;
+		if(archiveType!="编研成果阅览"){
+			reaing(id);
+		}else{
+			var orgid = $(this).attr("orgid");
+			//alert(orgid);return;
+			showedit(id,orgid);		
+		}
+		$('#readingroom tr').removeClass('trSelected');
+		$(this).closest('tr').addClass('trSelected');
+		return;
+	});
+
+	function reaing(path){
+		var url = $.appClient.generateUrl({ESIdentify:'file_view',path:path},'x');
+		$.ajax({
+			url:url,
+			cache:false,
+			success:function(data){
+				$.dialog({
+					id: 'reading',
+			    	title:'浏览电子文件',
+	    			width: '960px',
+	   	    	   	fixed: false,
+		    	    resize: false,
+		    	    padding: 0,
+			    	content:data
+			    });
+			}
+		});
+	}
+	function showedit(path,orgid){
+		var url = $.appClient.generateUrl({ESReadingRoom:'showedit',path:path,orgid:orgid},'x');
+		$.ajax({
+			url:url,
+			cache:false,
+			success:function(data){
+				$.dialog({
+					id: 'showedit',
+			    	title:'浏览编研文件',
+	    			width: '800px',
+	    			height:'300px',
+	   	    	   	fixed: false,
+		    	    resize: false,
+		    	    padding: 0,
+			    	content:data
+			    });
+			}
+		});
+	}
+});
+</script>

@@ -1,0 +1,747 @@
+<div id="packDiv"><table id="pack"></table></div>
+<script type="text/javascript">
+//var esstatus=0;//是否封盒标识0表示未封盒1表示封盒
+if(status==3){
+	var button=[
+		{name: '添加', bclass: 'add',tooltip:'添加新的档案盒',onpress:add_packet},
+		{name: '删除', bclass: 'delete',tooltip:'删除所勾选的数据',onpress:delpacket},
+		{name: '目录报表', bclass: 'report',tooltip:'根据选择的数据打印目录报表',onpress:packetReport},
+// 		{name: '筛选', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:filterpacket},
+// 		{name: '还原', bclass: 'refresh',tooltip:'把数据还原到筛选前的状态',onpress:refresh},
+		//{name: '打印二维码', bclass: 'printcode',tooltip:'打印盒二维码',onpress:printPacketCode},
+		{name: '上架', bclass: 'uptostore',tooltip:'把选中的盒上架到库房',onpress:uptostore}
+		
+	];
+	}else if (status==4){
+		/*var button=[
+				{name: '目录报表', bclass: 'report',tooltip:'根据选择的数据打印目录报表',onpress:packetReport},
+				{name: '过滤', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:filterpacket},
+				{name: '还原', bclass: 'refresh',tooltip:'把数据还原到筛选前的状态',onpress:refresh}
+			];*/
+		var button=[			
+			{name: '添加', bclass: 'add',tooltip:'添加新的档案盒',onpress:add_packet},
+			{name: '删除', bclass: 'delete',tooltip:'删除所勾选的数据',onpress:delpacket},
+			{name: '目录报表', bclass: 'report',tooltip:'根据选择的数据打印目录报表',onpress:packetReport},
+// 			{name: '筛选', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:filterpacket},
+// 			{name: '还原', bclass: 'refresh',tooltip:'把数据还原到筛选前的状态',onpress:refresh},
+			//{name: '打印二维码', bclass: 'printcode',tooltip:'打印盒二维码',onpress:printPacketCode},
+			{name: '手动鉴定', bclass: 'handIdentify',tooltip:'手动鉴定',onpress:boxHandIdentify},
+			{name: '上架', bclass: 'uptostore',tooltip:'把选中的盒上架到库房',onpress:uptostore},
+			{name: '下架', bclass: 'downToStore',tooltip:'下架',onpress:downToStore}
+			];	
+		//esstatus=1;
+	}else{
+		var button=[
+			{name: '添加', bclass: 'add',tooltip:'添加新的档案盒',onpress:add_packet},
+			{name: '删除', bclass: 'delete',tooltip:'删除所勾选的数据',onpress:delpacket},
+			{name: '移交盒', bclass: 'store',tooltip:'移交所勾选的盒',onpress:sendPacket},
+			{name: '目录报表', bclass: 'report',tooltip:'根据选择的数据打印目录报表',onpress:packetReport}
+// 			{name: '筛选', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:filterpacket},
+// 			{name: '还原', bclass: 'refresh',tooltip:'把数据还原到筛选前的状态',onpress:refresh}
+			//{name: '打印二维码', bclass: 'printcode',tooltip:'打印盒二维码',onpress:printPacketCode},
+			//{name: '查看所有盒', bclass: 'note',tooltip:'查看所有盒',onpress:showAllPack}
+		];
+	}
+	$("#pack").flexigrid({
+	url: $.appClient.generateUrl({ESIdentify:'getPacketList',path:nodePath,status:status,treeNodeId:$('#treeDemo').attr('treenodeid'),'itemEditRight':($('#escontent').attr("itemEditRight")+"")}),
+	dataType: 'json',
+	colModel : [
+		{display: '序号', name : 'num', width : 20, align: 'center'},
+		{display: '<input type="checkbox" name="path" onclick=selectAll(checked,name,"#pack")>', name : 'packetIds', width : 20, align: 'center'},
+		{display: '操作', name : 'opreate', width : 40, align: 'center'},
+		{display: '盒号', name : 'packetNum', width : 80, align: 'center',metadata:'CaseID'},
+		{display: '盒名称', name : 'boxname', width : 80, align: 'left'},
+		{display: '盒厚度', name : 'thickness', width : 40, align: 'center',metadata:'boxThickness'},
+		{display: '盒容量', name : 'volume', width : 40, align: 'center'},
+		{display: '当前容量', name : 'curVolume', width : 60,  align: 'center',metadata:'curVolume'},
+// 		{display: '保管期限', name : 'expires', width : 60, align: 'center'},
+// 		{display: '年度', name : 'year', width : 60, align: 'center'},
+		/** xiaoxiong 20140820 将其修改为动态列，根据盒号规则进行显示 **/
+		<?php echo $fields;?>
+		{display: '库位号', name : 'repositorypath', width : 200, align: 'left'},
+		/** gaoyide 20141008 bug1033 添加备注一列**/
+		{display: '备注', name : 'memo', width : 200,  align: 'center',metadata:'memo'}
+		],
+		
+	buttons : button,
+	
+		usepager: true,
+		useRp: true,
+		width: 700,
+		height:240,
+		dblClickResize:true
+});
+//打印盒二维码
+function printPacketCode(){
+		var boxid=[];
+		var checkboxObj=$("input[name='path']:checked",$('#pack'));
+		if(checkboxObj.length == 0 )
+		{
+			$.dialog.notice({content:'请选择盒',time:3,icon:'warning'});
+			return false;
+		}
+		//遍历选中的数据,如果盒当前容量为0不能打印二维码
+		checkboxObj.each(function(i){
+			var trObj=$(this).closest('tr');
+    		val=$("#pack").flexGetColumnValue(trObj,['curVolume']);
+    		if(val && val!=0){
+    			boxid.push($(this).val());
+    		}
+		})	
+		if(boxid.length == 0){
+			$.dialog.notice({content:'盒内不存在数据！',time:2,icon:'warning'});return false;
+    	}
+		$.dialog({
+			content:'确定要执行吗',
+			ok:function(){
+				var url=$.appClient.generateUrl({ESIdentify:'printPacketCode'},'x');
+				$.post(url,{path:nodePath,boxIdList:boxid},function(fileUrl){
+					if(fileUrl.search(/failure/gi)==-1){
+						var downFile=$.appClient.generateUrl({ESIdentify:'downFile',fileName:fileUrl});
+						$.dialog.notice({width: 150,icon:'success',content: '<a href="'+downFile+'">下载二维码文件</a>'});
+					}else{
+						$.dialog.notice({content:fileUrl.replace(/failure\:/gi,''),time:3,icon:'error'});
+					}
+					//var downFile=$.appClient.generateUrl({ESIdentify:'downFile',fileName:result});
+					//$.dialog.notice({width: 150,content: '<a href="'+downFile+'">下载二维码文件</a>'});
+				})
+			},
+			cancel:true
+			
+		})
+}
+	//查看所有盒 倪阳添加
+	function showAllPack(){
+		var isAll = 'true';
+		if($(this).find('span').attr('title')=='查看所有盒') {
+			isAll = 'true';
+			$(this).find('span').attr('title','查看自己盒').html('查看自己盒');
+		} else if($(this).find('span').attr('title')=='查看自己盒') {
+			isAll = 'false';
+			$(this).find('span').attr('title','查看所有盒').html('查看所有盒');
+		}
+		$("#pack").flexOptions({url:$.appClient.generateUrl({ESIdentify:'getPacketList',path:nodePath,status:status,isAll:isAll,treeNodeId:$('#treeDemo').attr('treenodeid')})}).flexReload();
+	}
+	//筛选后重置
+	function refresh()
+	{
+		$("#pack").flexOptions({query:''}).flexReload();
+	}
+	//添加盒信息
+	function add_packet()
+	{
+		var value=$("input[name='path']:checked",$('#flexme')).prop('value');
+		if(!value){
+			value=$("input[name='path']:last'",obj).val();
+			if(!value){
+				value=nodePath;
+			}
+		}
+		var reg=/\//g;
+		var pkgPath=value.replace(reg, '-');
+		
+		$.ajax({
+			url:$.appClient.generateUrl({ESIdentify:'add_packet',nodePath:pkgPath},'x'),
+			success:function(data){
+				if(data=='NoRetentionPeriod'){
+					$.dialog.notice({content:'请设置保管期限元数据',icon:'warning',time:3});
+					return false;
+				}
+				$.dialog({
+					id:'artAddPacketPanel',
+					title:'添加面板',
+					content:data,
+					padding:'10px 0px',
+					width:550,
+		    	   	fixed:true,
+		    	    resize: false,
+		    	    okVal:'保存',
+				    ok:function(){
+				    	setTimeout(function(){
+				    		var form=$('#packet');
+					    	var f=form.validate();
+							if(f&&judgeSubmmit()){
+							var data=form.serialize();
+							var url=$.appClient.generateUrl({ESIdentify:'savePacketInfo'},'x');
+								$.post(url,{archiveType:archiveType,path:nodePath,data:data,status:status,treeNodeId:$('#treeDemo').attr('treenodeid')},function(result){
+									var resultJson = eval("("+result+")");
+									if(resultJson.flag=='true'){
+										art.dialog.list['artAddPacketPanel'].close();
+										$.dialog.notice({width: 150,content: resultJson.msg,icon: 'succeed',time: 3});
+										$('#pack').flexReload();
+									}else{
+										if(resultJson.taglenght){
+											$("#packet input[name='fileBoxNumber']").attr("verify","text/"+resultJson.taglenght+"/1/0");
+										}
+										$("#packet input[name='fileBoxNumber']").addClass("warnning");
+										$("#packet input[name='fileBoxNumber']").attr("title",resultJson.msg);
+									}
+									
+								});
+							}
+					    }, 100, true);
+						return false;
+
+					},
+				    cancelVal: '取消',
+				    cancel: true,
+				    init:function(){
+				    	var form=$('#packet');
+							form.autovalidate();
+		    		}
+					});
+				}
+		});
+		
+	}
+	//删除盒
+	function delpacket()
+	{
+		var id='';
+		var checkboxObj=$("input[name='path']:checked",$('#pack'));
+		if(checkboxObj.length == 0 )
+		{
+			$.dialog.notice({content:'请选择要删除的盒',icon:'warning',time:3});
+			return false;
+		}else{
+			//遍历选中的数据
+			checkboxObj.each(function(i){
+				id+=$(this).val()+',';
+				})
+			}
+		$.dialog({
+				content:'确定要删除吗?',
+				ok:true,
+				okVal:'确定',
+				cancel:true,
+				cancelVal:'取消',
+				ok:function()
+				{
+					var url=$.appClient.generateUrl({ESIdentify:'delpacket'},'x');
+					$.get(url,{packetId:id,strucid:strucid,path:nodePath},function(data){
+						if(data=='hasdata'){
+							$.dialog.notice({width: 150,content: '该盒内已经存在数据,不能删除',icon: 'error',time: 3});
+						} else if(data=='success') {
+							//$("input[name='path']").attr("checked",false);//liqiubo 20140822 注掉，否则选中的数据变为了未选中，修复bug 542
+							$.dialog.notice({width: 150,content: '数据删除成功',icon: 'succeed',time: 3});
+							$('#pack').flexReload();
+						} else {
+							$.dialog.notice({width: 150,content: '数据删除失败',icon: 'error',time: 3});
+						}
+						});
+				}
+
+			})
+	}
+	//筛选盒
+	function filterpacket()
+	{
+		$.ajax({
+		    url:$.appClient.generateUrl({ESIdentify:'filterBox',status:status,strucid:strucid},'x'),
+		    success:function(data){
+		    	$.dialog({
+		    		id:'artFilterPacketPanel',
+			    	title:'筛选数据',
+		    		width: 800,
+		    	    height: '40%',
+		    	   	fixed:true,
+		    	    resize: false,
+			    	content:data,
+			    	okVal:'确定',
+				    ok:function(){
+				    	var condition=filterValue('flag');
+				    	/** xiaoxiong 20140809 添加newp:1属性值，使其在筛选时，能正常显示到第一页的值 **/
+						$('#pack').flexOptions({newp:1, query:condition}).flexReload();
+				    },
+				    cancelVal: '关闭',
+				    cancel: true 
+			    });
+			    },
+			    
+			    cache:false
+		});
+	}
+	//下架 
+	function downToStore(){
+
+		var boxid='';
+		var totalThickness = 0;
+		var checkboxObj=$("input[name='path']:checked",$('#pack'));
+		if(checkboxObj.length == 0 )
+		{
+			$.dialog.notice({content:'请选择下架的盒',icon:'warning',time:3});
+			return false;
+		}
+		if(checkboxObj.length > 1 )
+		{
+			$.dialog.notice({content:'请选择单条盒下架',icon:'warning',time:3});
+			return false;
+		}
+		//TODO 遍历选中的数据,如果盒当前的库位号为空，则不允许下架 
+		var repositorypath='';
+		checkboxObj.each(function(i){
+			var trObj=$(this).closest('tr').find("td[colname='repositorypath']");
+			if(trObj){
+				repositorypath=trObj.text();
+		    	boxid=$(this).val();
+			}
+			// longjunhao 20140827 add 盒厚度
+    		totalThickness = $("#pack").flexGetColumnValue($(this).closest('tr'),['boxThickness']);
+		});
+		if(!repositorypath){
+			$.dialog.notice({content:'当前盒尚未上架，无需下架',icon:'warning',time:3});
+	    	return false;
+		}
+		//整体修改为新版上架方法 
+		// longjunhao 20140916 packetDownToStore
+		var url=$.appClient.generateUrl({ESIdentify:'packetDownToStore'},'x');
+		$.post(url,{boxid:boxid,path:nodePath,status:status,storePath:repositorypath,totalThickness:totalThickness},function(result){
+			if(result){
+				setGroup();
+				$.dialog.notice({width: 150,content: '下架成功',icon: 'succeed',time: 3});
+				$('#pack,#flexme,#innerfile').flexReload();
+			} else {
+				$.dialog.notice({width: 150,content: '下架失败',icon: 'error',time: 3});
+			}
+			});
+		
+	}
+	//上架
+	function uptostore(){
+		var boxid='';
+		var totalThickness = 0;
+		var checkboxObj=$("input[name='path']:checked",$('#pack'));
+		if(checkboxObj.length == 0 )
+		{
+			$.dialog.notice({content:'请选择上架的盒',icon:'warning',time:3});
+			return false;
+		}
+		//遍历选中的数据,如果盒当前容量为0不能上架 
+		var path=[];
+		checkboxObj.each(function(i){
+			var trObj=$(this).closest('tr');
+			// longjunhao 20140827 add 盒厚度
+    		var colValues=$("#pack").flexGetColumnValue(trObj,['boxThickness','curVolume']);
+    		var colValuesArray = colValues.split("|");
+    		var boxThickness = colValuesArray[0];
+    		var curVolume = colValuesArray[1];
+    		if(curVolume && curVolume!=0){
+    			path.push($(this).val());
+    		}
+    		if (boxThickness && boxThickness != '') {
+    			totalThickness += parseInt(boxThickness);
+    		}
+		})	
+		if(path.length == 0){
+			$.dialog.notice({content:'空盒不能上架！',icon:'warning',time:2});return false;
+    	}
+    	boxid=path.join(',');
+    	// longjunhao 20140826 add 校验选择的数据是否可以上架
+    	if(!validateOnShelfIsOk(nodePath)){
+			return false;
+    	}
+		$.ajax({
+			url:$.appClient.generateUrl({ESIdentify:'uptostore'},'x'),
+			success:function(data){
+				$.dialog({
+					id:'artUpStorePanel',
+					title:'库房结构',
+					content:data,
+					ok:true,
+					okVal:'上架',
+					cancel:true,
+					cancelVal:'取消',
+					ok:function()
+					{
+						//整体修改为新版上架方法
+						var selectedNode = $(".activeSelected");
+						if(selectedNode.html()==null){
+							$.dialog.notice({icon:'warning',content:'必须选择层结构',time:2});
+							return false;
+						}
+						var selectedNodeParent = selectedNode.parent();
+						var storePath=selectedNodeParent.attr("espath");//取得当前节点的PATH
+						//xiewenda 20140926 添加生成的库位号的长度有效验证！
+						var strlength =storePath.replace(/[^\x00-\xff]/g,'**').length;
+						
+						// longjunhao 20140827 检测能否上架
+						$.post($.appClient.generateUrl({ESStoreroom:'checkRepositorypathThickness'},'x'),
+								{repositorypath:storePath,thickness:totalThickness},function(result){
+							var json = eval('('+result+')');
+							if(json.success){
+								$.post($.appClient.generateUrl({ESIdentify:'packetUpToStore'},'x'),
+										{boxid:boxid,struId:strucid,path:nodePath,status:status,storePath:storePath,totalThickness:totalThickness,upFlag:true},function(result){
+									//liqiubo 20141011 加入对返回值的判断，修复bug 1222 
+									if(result=='isGreaterThan'){
+										$.dialog.notice({width: 150,content: '上架失败！该结构中关联库位号元数据的字段长度不足以存储此库位编号，请联系管理员！',icon: 'error',time: 3});
+									}else if(result==true || result=="true"){
+										setGroup();
+										$.dialog.notice({width: 150,content: '上架成功',icon: 'succeed',time: 3});
+										$('#pack,#flexme,#innerfile').flexReload();
+									} else {
+										$.dialog.notice({width: 150,content: '上架失败',icon: 'error',time: 3});
+									}
+								});
+							} else {
+								$.dialog.notice({content: '盒厚度大于剩余宽度，不能上架！',icon: 'warning',time: 3});
+							}
+						});
+					}
+		
+				});
+			}
+			})
+
+	}
+
+	// longjunhao 20140826 校验选择的数据是否可以上架
+	function validateOnShelfIsOk(path) {
+		var flag = true;
+		$.ajax({
+			url:$.appClient.generateUrl({ESIdentify:'validateOnShelfIsOk'},'x'),
+			data:{path:path},
+			type:'post',
+			async:false,
+			success:function(data){
+				var json = eval('('+data+')');
+				if (!json.success) {
+					flag = false;
+					var msg = "上架失败" + json.errMsg;
+					$.dialog.notice({icon: 'warning',content: msg, time: 3});
+				}
+			}
+		});
+		return flag;
+	}
+	
+	//编辑盒信息
+	function modifyBoxInfo(boxId){
+		$.ajax({
+			url:$.appClient.generateUrl({ESIdentify:'modifyboxinfo',strucid:strucid,path:nodePath,boxId:boxId},'x'),
+			success:function(data){
+				$.dialog({
+					id:'artModifyBoxInfoPanel',
+					title:'编辑面板',
+					content:data,
+					padding:'10px 0px',
+					width:480,
+		    	   	fixed:true,
+		    	    resize: false,
+		    	    okVal:'保存',
+				    ok:function(){
+				    	setTimeout(function(){
+					    	var form=$('#packet');
+							var data=form.serialize();
+							var f=form.validate();
+							if(f&&judgeSubmmit()){
+							var url=$.appClient.generateUrl({ESIdentify:'updateBoxInfo'},'x');
+								$.post(url,{path:nodePath,strucid:strucid,data:data},function(result){
+									var resultJson = eval("("+result+")");
+									if(resultJson.flag=='true'){
+										art.dialog.list['artModifyBoxInfoPanel'].close();
+										$.dialog.notice({width: 150,content: '修改成功',icon: 'succeed',time: 3});
+										$('#pack').flexReload();
+										//$('#flexme').flexReload();//liqiubo 20140822 注掉，否则选中的数据变为了未选中，修复bug 542
+									}else{
+										if(resultJson.taglenght){
+											$("#packet input[name='fileBoxNumber']").attr("verify","text/"+resultJson.taglenght+"/1/0");
+										}
+										$("#packet input[name='fileBoxNumber']").addClass("warnning");
+										$("#packet input[name='fileBoxNumber']").attr("title",resultJson.msg);
+									}
+									
+								});
+							}
+				    	}, 100, true);
+							return false;
+
+					},
+				    cancelVal: '取消',
+				    cancel: true,
+				    init:function(){
+				    	var form=$('#packet');
+							form.autovalidate();
+		    		}
+					});
+				}
+		});
+	}
+	function judgeSubmmit(){
+		var flag=true;
+		$("input[type='text']",$("#packet")).each(function(){
+			if ($(this).hasClass("warnning")) {
+				flag=false;
+			}
+			return;
+		});
+       return flag;
+	}
+	//查看盒内的档案
+	function showBoxInnerFile(packetNum,pId){
+		packetNo=packetNum;
+		packetId=pId;
+		$.ajax({
+		    url:$.appClient.generateUrl({ESIdentify:'project'},'x'),
+		    type:'POST',
+		    data:"file=boxinnerfile&path="+nodePath,
+		    success:function(content){
+		    	$.dialog({
+		    		id:'artBoxInnerFilePanel',
+			    	title:'盒内档案',
+		    		width: '500px',
+		    	    padding:'0px',
+		    	   	fixed:true,
+		    	    resize: false,
+			    	content:content,
+				    cancelVal: '关闭',
+				    cancel: true 
+			    });
+			    },
+			    
+			    cache:false
+		});
+		
+	}
+	//封盒
+	function packageBox(){
+		var id='';
+		var checkboxObj=$("input[name='path']:checked",$('#pack'));
+		if(checkboxObj.length == 0 )
+		{
+			$.dialog.notice({content:'请选择封盒数据',icon:'warning',time:3});
+			return false;
+		}else{
+			//遍历选中的数据
+			checkboxObj.each(function(i){
+				id+=$(this).val()+',';
+				})
+			}
+		$.dialog({
+				content:'确定要封盒吗?',
+				ok:true,
+				okVal:'确定',
+				cancel:true,
+				cancelVal:'取消',
+				ok:function()
+				{
+					var url=$.appClient.generateUrl({ESIdentify:'packageBox'},'x');
+					$.post(url,{packetId:id,strucid:strucid},function(data){
+						if(data){
+							$("input[name='path']").attr("checked",false);
+							$.dialog.notice({width: 150,content: '封盒成功',icon: 'succeed',time: 3});
+							$('#pack').flexReload();
+						} else {
+							$.dialog.notice({width: 150,content: '封盒失败',icon: 'error',time: 3});
+						}
+						});
+				}
+
+			})
+
+	}
+	//目录报表
+	function packetReport(){
+		var checkboxObj=$("input[name='path']:checked",$('#pack'));
+		var flag="";
+		if(checkboxObj.length == 0 )
+		{
+			//$.dialog.notice({content:'请选择盒',time:3});
+			flag="flag";
+		}
+		var condition=[];
+		var boxThickness = [];
+		var name=$("#flexme").flexGetColumnName('CaseID');//获取盒号对应数据库中的字段
+		checkboxObj.each(function(){//将获得的盒号组合成"C1,equal,1,false"格式放入数据中
+			var trObj=$(this).closest('tr');
+			//var packetNo=$('#pack').flexGetColumnValue(trObj,['CaseID']);
+			boxThickness =$('#pack').flexGetColumnValue(trObj,['boxThickness']);
+			//if(packetNo){
+				condition.push('id'+',equal,'+this.value+',false');
+			//}
+		})
+		$.ajax({
+	    url: $.appClient.generateUrl({ESIdentify:'directory_reports'},'x'),
+	    type:"POST",
+	    data:'status='+status+'&strucid='+strucid+'&boxthick='+boxThickness+"&path="+flag+"&reportType=1",
+	    success:function(data){
+	    	/** guolanrui 20140813 打印时，当规则中没有设置报表规则时，添加提示消息BUG：675 **/
+	    	if(!data){
+	    		$.dialog.notice({title:'操作提示',content: '请先为该结构添加报表实例，再进行打印操作！',icon: 'warning',time:3});
+				return false;
+	    	}
+	    	$.dialog({
+	    		id:'artPacketReportPanel',
+		    	title:'目录报表',
+		    	height:'200px',
+		    	//padding:'',
+	    	   	fixed:true,
+	    	    resize: false,
+		    	content:data,
+		    	okVal:'确定',
+			    ok:function(){
+			             var con;
+			            if(flag!="flag"){
+			            	con={condition:condition};
+			            }else{
+			            	con=filterValue('flag');
+				          }
+						var esreport=$("#esreport");
+						var tmp=$("input[name='report_style']:checked",esreport).val();
+						if(tmp==undefined){
+							//gengqianfeng 20140912 修改未选择报表实例提示信息
+							$.dialog.notice({title:'操作提示',width: 150,content: '请选择报表实例',icon: 'warning',time:3});
+							return false;
+						}
+						var temp=tmp.split('-');
+						var reportTitle=$("input[name='report_style']:checked",esreport).closest('span').text();
+						var reportId=temp[0];
+						var style=temp[1];
+						/** guolanrui 20140923 打印前校验是否有符合条件的数据 start **/
+						var url1=$.appClient.generateUrl({ESIdentify:'checkReportDataIsExists'});
+						var isExists = true;
+						$.ajax({
+							  url:url1,
+							  type : 'POST',
+							  dataType:'json',
+							  async:false,
+							  data:{nodePath:nodePath,path:'flag',condition:con,strucid:strucid,status:status,reportId:reportId,style:style,reportTitle:reportTitle,reportBox:1},
+							  success: function(data1){
+								  var success = data1.success;
+								  if(success=='false'){
+									  isExists = false;
+									  $.dialog.notice({content: '没有满足条件的数据',icon: 'warning',time:3});
+								  }
+							  }
+						});
+						if(!isExists){
+							return;
+						}
+						/** guolanrui 20140923 打印前校验是否有符合条件的数据 end **/
+						$.dialog.notice({content: '正在努力打印中,稍后点击“消息提示”进行下载',icon:'success',time:2});
+						var url=$.appClient.generateUrl({ESIdentify:'do_report'});
+						$.post(url,{nodePath:nodePath,path:'flag',condition:con,strucid:strucid,status:status,reportId:reportId,style:style,reportTitle:reportTitle,reportBox:1},function(result){
+							if(result=='nodata'){
+								setTimeout(function(){
+									$.dialog.notice({content: '没有满足条件的数据',icon: 'error',time:3});
+								},2500);
+							}else if (result == 'error') {
+								setTimeout(function(){
+									$.dialog.notice({width: 150,content: '打印失败',icon: 'error',time:3});
+								},2500);
+							}
+							
+						});
+				    },
+			    cancelVal: '关闭',
+			    cancel: true 
+		    });
+		    },
+		    cache:false
+	});
+			
+	}
+	//移交盒
+	function sendPacket(){
+		var boxid='';
+		var checkboxObj=$("input[name='path']:checked",$('#pack'));
+		if(checkboxObj.length == 0 )
+		{
+			$.dialog.notice({content:'请选择移交的盒',icon:'warning',time:3});
+			return false;
+		}
+		//遍历选中的数据,如果盒当前容量为0不能上架
+		var path=[];
+		checkboxObj.each(function(i){
+			var trObj=$(this).closest('tr');
+    		val=$("#pack").flexGetColumnValue(trObj,['curVolume']);
+    		if(val && val!=0){
+    			path.push($(this).val());
+    		}
+		})	
+		if(path.length == 0){
+			$.dialog.notice({content:'空盒不能移交！',time:2,icon:'warning'});return false;
+    	}
+    	boxid=path.join(',');
+		$.dialog({
+			content:'确定要移交吗?',
+			ok:true,
+			okVal:'确定',
+			cancel:true,
+			cancelVal:'取消',
+			ok:function()
+			{
+				var url=$.appClient.generateUrl({ESIdentify:'sendPacket'},'x');
+				$.post(url,{boxid:boxid,path:nodePath},function(data){
+					if(data){
+						$("input[name='path']").attr("checked",false);
+						$.dialog.notice({width: 150,content: '移交成功',icon: 'succeed',time: 3});
+						$('#flexme,#pack,#innerfile').flexReload();
+					} else {
+						$.dialog.notice({width: 150,content: '移交失败',icon: 'error',time: 3});
+					}
+					});
+			}
+
+		})
+	}
+
+	/** xiaoxiong 20140917 添加针对盒数据进行手动鉴定 **/
+	function boxHandIdentify(){
+		var obj = $("#pack");
+		var checkboxObj=$("input[name='path']:checked",obj);
+		var val='';
+		var boxIds=[];
+		var condition = [];
+		var checkBoxLen = checkboxObj.length;
+		if(checkBoxLen == 0){
+			$.dialog.notice({content: '请先选择需要鉴定的数据，再进行此操作！',icon: 'warning',time: 3});
+			return ;
+		}
+		checkboxObj.each(function(i){
+			boxIds.push($(this).val());
+		});
+		var getDatasUrl=$.appClient.generateUrl({ESIdentify:'getPathsByBoxIds'},'x');
+		var checkUrl=$.appClient.generateUrl({ESIdentify:'checkIdentify'},'x');
+		$.post(getDatasUrl,{boxIds:boxIds,nodePath:nodePath},function(returnStr){
+			returnStr = returnStr+"" ;
+			if(returnStr == ""){
+				$.dialog.notice({content: '您选择的盒下没有数据或者没有数据的操作权限！',icon: 'warning',time: 5});
+				return ;
+			}
+			var paths = returnStr.split(",") ;
+			$.post(checkUrl,{paths:paths,nodePath:nodePath,autoIdentify:false},function(data){
+				identifyDestroyConfirm(data,paths,condition,false);
+			},"json");
+		});
+	}
+	
+    /** xiaoxiong 20140904 根据用户权限控制按钮的权限 **/
+    (function(){
+		if(($('#escontent').attr("itemEditRight")+"") == "false"){
+			$(".add").addClass("not-allowed");
+			$(".add").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".uptostore").addClass("not-allowed");
+			$(".uptostore").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".downToStore").addClass("not-allowed");
+			$(".downToStore").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".store").addClass("not-allowed");
+			$(".store").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".delete").addClass("not-allowed");
+			$(".delete").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".handIdentify").addClass("not-allowed");//liqiubo 20140928 加入手动鉴定按钮的控制 ，修复bug 1247 
+			$(".handIdentify").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		}
+	})();
+
+    /** xiaoxiong 20140913  **/
+    $('#packDiv div[class="tDiv2"]').append('<div class="find-dialog"><input onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="boxListQuery" value="请输入关键字" /><span onclick="boxListQuery()"></span></div>');
+
+	function boxListQuery(){
+		var keyword = $.trim($('input[name="boxListQuery"]').val());
+		if(keyword=='请输入关键字') {
+			keyword = '';
+		}
+		$("#pack").flexOptions({newp:1,query:keyword}).flexReload();
+	}
+    
+</script>

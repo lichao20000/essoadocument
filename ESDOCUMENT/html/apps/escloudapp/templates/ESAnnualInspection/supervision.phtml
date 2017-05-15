@@ -1,0 +1,68 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/validate.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<?php
+$userinfo = $esaction->exec("getProxy", "user")->getUserInfo($esaction->getUser()->getId());
+$org= $userinfo->deptEntry->orgName;
+$username=$userinfo->displayName;
+?>
+<div class="espakcet">
+<form id="pending">
+<ul>
+<li style="width:420px"><span>标题<font color="red" size="3">*</font></span><input type="text" name="pendingTitle" value="" style="width:352px" verify="text/500/1/0"></li>
+<li><span>年度<font color="red" size="3">*</font></span><input type="text" name="year" readonly onfocus="WdatePicker({dateFmt:'yyyy'});$(this).change()" verify="number/4/1/0"></li>
+<!-- <li><span>承办机构</span><input type="text" name="pendingOrg" value=""></li> -->
+<li><span>督办等级</span>
+<select name="pendingLevel">
+<option value="普通">普通</option>
+<option value="重要">重要</option>
+<option value="加急">加急</option>
+</select>
+</li>
+<li><span>承办人<font color="red" size="3">*</font></span><input type="text" name="pendingUserName" value="" readonly onfocus="selectPerson()" verify="text/50/1/0">
+<input type="hidden" name="pendingUserID" value="">
+</li>
+<li><span>所属机构</span><span id="belongOrg"></span></li>
+<li><span>督办机构</span><input type="text" name="start_company" readonly value="<?php echo $org;?>"></li>
+<li><span>督办人</span><input type="text" name="start_user" readonly value="<?php echo $username;?>"></li>
+<li style="width:420px"><span>督办说明</span><textarea style="width:350px;height:70px;float:left" name="desc"></textarea></li>
+</ul>
+</form>
+</div>
+<script>
+function selectPerson()
+{
+	$.ajax({
+	 url: $.appClient.generateUrl({ESAnnualInspection:'choseuser'},'x'),
+	    success:function(data){
+	    	$.dialog({
+		    	id:'artSelectPersonPanel',
+		    	title:'机构用户列表',
+	    	   	fixed:true,
+	    	   	padding:'0px 0px',
+	    	    resize: false,
+		    	content:data,
+		    	okVal:'确定',
+			    ok:function(){
+			    	var obj=$("#userlist");
+			    	var trObj=$('input:checked',obj).closest('tr');
+			    	if(trObj.length==0){
+			    		$.dialog.notice({icon:'warning',content:'请选择用户',time:2});
+			    		return false;
+			    	}
+			    	var val=obj.flexGetColumnValue(trObj,['userid','username','orgname']);
+			    	var temp=val.split('|');
+			    	$('input[name="pendingUserName"]',$("#pending")).val(temp[1]).change();
+			    	$('input[name="pendingUserID"]:hidden',$("#pending")).val(temp[0]);
+			    	$('#belongOrg',$("#pending")).text(temp[2]);
+			    },
+			    cancelVal: '关闭',
+			    cancel: true 
+		    });
+		    },
+		    cache:false
+	});
+}
+</script>
+
+
+

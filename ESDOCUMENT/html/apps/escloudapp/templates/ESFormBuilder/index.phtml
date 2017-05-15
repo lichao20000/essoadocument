@@ -1,0 +1,52 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link href="<?php echo $tplPath?>/ESFormBuilder/css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeTbar.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormBuilder/js/template.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormBuilder/js/formBuilderManage.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTemplate/js/jumpwindow.js"></script>
+
+<link href="<?php echo $tplPath?>/ESFormBuilder/js/autovalidate/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormBuilder/js/autovalidate/validate.js"></script>
+<!-- longjunhao 20140917 把这两个css文件放到此处加载，解决第一次打开表单时显示不全的bug -->
+  <link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ext/resources/css/ext-all.css" />
+  <link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESFormBuilder/js/main.css" />
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"表单管理", content:"#formBuilder_model_type,#formBuilderDataGridDiv,#formBuilderTypeTree"});
+});
+</script>
+<div class='formBuilder_manager_main'>
+	<div id='formBuilder_model_type' class='formBuilder_model_tree'>
+		<div id='modelTypeTreeTBar' class='treeTbar'>
+			<div class="tbarDiv">
+				<div class="tbarButton">
+					<div>
+						<span class="add" style="padding-left:20px;" hander="addFun()">添加</span>
+					</div>
+				</div>
+				<div class="tbarButton">
+					<div>
+						<span class="edit" style="padding-left:20px;" hander="editFun()">编辑</span>
+					</div>
+				</div>
+				<div class="tbarButton">
+					<div>
+						<span class="delete" style="padding-left:20px;" hander="deleteFun()">删除</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id='formBuilderTypeTree' class='ztree'></div>
+	</div>
+	<div id='formBuilderDataGridDiv' class='formBuilder_model_grid'>
+		<table id='formBuilderDataGrid'></table>
+	</div>
+</div>

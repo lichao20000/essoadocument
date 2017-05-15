@@ -1,0 +1,102 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<div class='data-into-box'>
+	<form id="recordRule">
+		<ul class='select-menu'>
+			<li>
+				<h2>凭证类型<b>*</b></h2>
+				<select name="classificationNameValue" verify="text/100/1/0" id="classficationName">
+					<option value = " " selected>-请选择-</option>
+					<option value = "应付发票凭证" >应付发票凭证</option>
+					<option value = "应付付款凭证">应付付款凭证</option>
+					<option value = "应收发票凭证">应收发票凭证</option>
+					<option value = "应收收款凭证">应收收款凭证</option>
+					<option value = "记账凭证（总账）">记账凭证（总账）</option>
+				</select>
+			</li>
+			<li class='fright'>
+				<h2>会计期间<b>*</b></h2>
+				<select name="accountingPeriodValue" verify="text/100/1/0" id="limitTime">
+					<option value = " ">-请先选择凭证类型-</option>
+				</select>
+			</li>
+		</ul>
+		<div class='recordid-list'><table id="minrecordCode"></table></div>
+	</form>
+</div>
+<script type="text/javascript">
+/*
+ * 根据用户输入的会计期间和选择的凭证类型自动生成最小凭证号
+ */
+ 	var html = '';
+	$('#classficationName').change(function(){
+		//var limitTime=$('#limitTime').val();
+		var classficationName=this.value;
+		if(!classficationName)return;
+		getAccountingPeriod(classficationName);
+		//getRecordCode(classficationName,limitTime);
+	});
+	$('#limitTime').change(function(){
+		var  limitTime=this.value;
+		var classficationName=$('#classficationName').val();
+		if(!limitTime || !classficationName)return;
+		var url = $.appClient.generateUrl({ESIdentify:'getRecordCode',nodePath:nodePath,classficationName:encodeURI(classficationName),limitTime:limitTime},'x');
+		$('#minrecordCode').flexOptions({url:url}).flexReload();
+	});
+	/*
+		获得最小凭证号回调方法
+	*/
+	function getRecordCode(classficationName,limitTime){
+		var url=$.appClient.generateUrl({ESIdentify:'getRecordCode'},'x');
+		$.post(url,{nodePath:nodePath,classficationName:classficationName,limitTime:limitTime},function(result){
+			if(result.length > 0){
+				for(var i=0; i<result.length; i++) {
+					$.each(result[i], function(k,v){
+						var minrecordname = k.split(',')[1];
+						html+= '<tr><td>'+minrecordname+'</td><td>'+v+'</td></tr>';								
+					});
+				}
+				view(html);
+			}					
+		});
+	}
+	//根据凭证类型动态获取会计期间列表
+	function getAccountingPeriod(param)
+	{
+		var url=$.appClient.generateUrl({ESIdentify:'getAccountingPeriod'},'x');
+		$.post(url,{nodePath:nodePath,classificationName:param},function(result){
+			$('option:gt(0)',$('#limitTime')).remove();
+			if(result.length >0){
+				var temp=[];
+				for(var i=0;i<result.length;i++){
+						temp.push('<option value ='+result[i]+' >'+result[i]+'</option>');
+					}
+				$('#limitTime').append(temp.join());
+				$("#minrecordCode").val();
+			}
+			
+		},'json');
+	
+	}
+
+	(function viewMinrecordCode() {
+	     $('#minrecordCode').flexigrid({
+	 		url: false,
+	 		editable: true,
+	 		width: 500,
+	 		height: 200,
+	 		dataType: 'json',	//返回的数据类型
+	 		//表头
+	 		colModel : [
+				{display: '序号', name : 'id', width : 35, align: 'center'},
+	 			{display: '公司名称', name : 'companyName', width : 100, align: 'center'},
+	 			{display: '最小凭证号', name : 'recordIdMin', width :158, align: 'center'},
+	 			{display: '最大凭证号', name : 'maxrecordCode', width :157, align: 'center'},
+	 			{display: '公司代码', name : 'companyCode', width :10, align: 'center', hide: true},
+	 			{display: '总账来源', name : 'ledgerSource', width :10, align: 'center', hide: true}	
+	 			],
+	 		resizable: false,
+	 		novstripe: false,
+	 		showToggleBtn : false
+	     });
+	})();
+</script>

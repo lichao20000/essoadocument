@@ -1,0 +1,939 @@
+<?php
+
+/*
+ * 结构服务
+* 张吉日木图
+*/
+class ProxyEscloudappEscloud_structurews extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_structurews";
+	//下面树
+	public function getStructureTreeBysId($sId)
+	{
+		$urlParam = array('getStructureTree',$sId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	public function getBusinessStrucTree($sId,$status)
+	{
+		$urlParam = array('getBusinessStrucTree',$sId,$status);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 获取结构树信息
+	 * @author longjunhao 20141013
+	 * @param unknown $postData
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getStructureTreeInfo($postData)
+	{
+		$url = 'getStructureTreeInfo';
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	//子节点信息
+	public function getStructureList($id,$page,$rp)
+	{
+		//return $id;
+		$urlParam = array('getStructureTagList',$id,$page,$rp);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	public function getStructureAllList($id)
+	{
+		//return $id;
+		$urlParam = array('getStructureAllTagList',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	//得到某个节点信息
+	public function information($id)
+	{
+		$urlParam = array('getStructure',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	
+	//添加编辑字段页面
+	public function addTagsForStru($params,$id)
+	{
+	
+		//return self::SERVICE_NAME;exit;
+		$urlParam = array('saveTagsForStru',$id);
+		$url = implode('/', $urlParam);
+		//return $url;
+		//采用GET方式访问
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	//目录树添加树结构addStructureForTreeNode
+	public function addStructureTreeNode($data,$businessTreeId)
+	{
+		$params=$data;
+		//return self::SERVICE_NAME;exit;
+		$urlParam = array('addStructureForTreeNode',$businessTreeId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		//采用GET方式访问
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	//结构树添加子结构addStructureChildNode
+	public function addStructureChildNode($data,$businessTreeId)
+	{
+		$params=$data;
+		//return self::SERVICE_NAME;exit;
+		$urlParam = array('addChildStruForStru',$businessTreeId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		//采用GET方式访问
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	//添加结构子结构addChildStruStru
+	public function addChildStruStru($data,$businessTreeId)
+	{
+		$params=$data;
+		//return self::SERVICE_NAME;exit;
+		$urlParam = array('addChildStruForStru',$businessTreeId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		//采用GET方式访问
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	//编辑结构setStructure
+	public function setStructureNode($params)
+	{
+		$urlParam = array('setStructure');
+		$url = implode('/', $urlParam);
+		//return $params;
+		//采用GET方式访问
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	
+	//删除结构
+	public function deleteStructureNodeList($data,$structureID,$modelId)
+	{
+		$params=$data;
+		$urlParam = array('deleteSelectedTags',$structureID,$modelId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 验证待删除字段是否可被删除
+	 * @param unknown_type $data
+	 * @param unknown_type $structureID
+	 */
+	public function deleteStructureNodeChecked($data,$structureID)
+	{
+		$params=$data;
+		$urlParam = array('deleteStructureNodeChecked',$structureID);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	
+	
+	// 删除结构节点@方吉祥
+	public function deleteStructure($params)
+	{
+		$urlParam = array('deleteStructure');
+		$url = implode('/', $urlParam);
+		//return $params;
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取列表显示字段左边
+	 * @author ldm
+	 */
+	public function listfieldleft($stid,$moid){
+		$urlParam = array('getNoDisplayFieldOfGrid',$stid,$moid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 获取列表显示字段右边
+	 * @author ldm
+	 */
+	public function listfieldright($stid,$molid){
+		$urlParam = array('getDisplayFieldOfGrid',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	public function getDisplayFieldOfFormEntityListForEdit($stid,$molid){
+		$urlParam = array('getDisplayFieldOfFormEntityListForEdit',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	//xiewenda 20140923 修改此方法的参数列表，添加type参数
+	public function getDisplayFieldOfFormEntityListForBatchEdit($stid,$molid,$type){
+		$urlParam = array('getDisplayFieldOfFormEntityListForBatchEdit',$stid,$molid,$type);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 列表显示字段的保存
+	 * @author ldm
+	 */
+	public function listfieldsave($stid,$molid,$param){
+		$urlParam = array('setDisplayFieldOfGridListByTagList',$stid,$molid);
+		$url = implode('/', $urlParam);
+		//	return $url;
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 获取表单显示字段左边
+	 * @author ldm
+	 */
+	public function formfieldleft($stid,$moid){
+		$urlParam = array('getNoDisplayFieldOfForm',$stid,$moid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 获取表单显示字段右边
+	 * @author ldm
+	 */
+	public function formfieldright($stid,$molid){
+		$urlParam = array('getDisplayFieldOfForm',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 表单显示字段的保存
+	 * @author ldm
+	 */
+	public function formfieldsave($stid,$molid,$param){
+		$urlParam = array('setDisplayFieldOfFormListByTagList',$stid,$molid);
+		$url = implode('/', $urlParam);
+		//	return $url;
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 排序规则的左边显示
+	 * @author ldm
+	 */
+	public function sortleft($stid,$molid){
+		$urlParam = array('getNoSortedFields',$stid,$molid);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 排序规则的右边显示
+	 * @author ldm
+	 */
+	public function sortright($stid,$molid){
+		$urlParam = array('getSortRuleNoDefault',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 排序规则的保存
+	 * @author ldm
+	 */
+	public function sortsave($stid,$molid,$param){
+		$urlParam = array('setSortRule',$stid,$molid);
+		$url = implode('/', $urlParam);
+		//	return $url;
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 代码值规则上表根据结构id显示
+	 * @author ldm
+	 */
+	public function codetop($stid){
+		$urlParam = array('getStructureAllTagList',$stid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 代码值规则下表根据id显示
+	 * @author ldm
+	 */
+	public function codebottom($stid,$molid,$id){
+		$urlParam = array('getCodeField',$stid,$molid,$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 代码值的保存
+	 * @author ldm
+	 */
+	public function codesave($param){
+		$urlParam = array('setCodeField');
+		$url = implode('/', $urlParam);
+		//	return $url;
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 代码值的删除
+	 * @author ldm
+	 */
+	public function codedel($param){
+		$urlParam = array('deleteCodeField');
+		$url = implode('/', $urlParam);
+		//	return $url;
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 补零规则的显示
+	 * @author ldm
+	 */
+	public function zeroshow($stid,$molid){
+		$urlParam = array('getZeroRule',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 补零规则的显示
+	 * @author ldm
+	 */
+	public function zeroRuleShow($stid,$molid){
+		$urlParam = array('zeroRuleShow',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 补零规则的保存
+	 * @author ldm
+	 */
+	public function zerosave($stid,$molid,$param){
+		$urlParam = array('setZeroRule',$stid,$molid);
+		$url = implode('/', $urlParam);
+		//	return $url;
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 综合查询字段左显示
+	 * @author ldm
+	 */
+	public function compreshowleft($stid,$molid){
+		$urlParam = array('getNoAdvanceSearchField',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 综合查询字段右显示
+	 * @author ldm
+	 */
+	public function compreshowright($stid,$molid){
+		$urlParam = array('getAdvanceSearchField',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 综合字段规则的保存
+	 * @author ldm
+	 */
+	public function compresave($stid,$molid,$param){
+		$urlParam = array('setAdvanceSearchFieldListByTagList',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+
+	/**
+	 * 组合字段的上方显示
+	 * @author ldm
+	 */
+	public function combineshowtop($stid,$molid){
+		$urlParam = array('getCombinFieldRule',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 组合字段的中间部分显示
+	 * @author ldm
+	 */
+	public function combineshowcenter($stid,$molid,$tagid){
+		$urlParam = array('getCombinReferenceFields',$stid,$molid,$tagid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	 /**
+	 * 组合字段的下表显示
+	 * @author ldm
+	 */
+	public function combineshowbottom($stid,$molid,$parid,$tagid){
+		$urlParam = array('getCombinFieldProp',$stid,$molid,$parid,$tagid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 保存组合字段属性值
+	 * @author ldm
+	 */
+
+	public function combineattrsave($stid,$molid,$parid,$tagid,$param){
+		$urlParam = array('setCombinFieldProp',$stid,$molid,$parid,$tagid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 保存组合字段属性值
+	 * @author ldm
+	 */
+	
+	public function combineattrUpdateOrSave($id,$stid,$molid,$parid,$tagid,$param){
+		$urlParam = array('combineattrUpdateOrSave',$id,$stid,$molid,$parid,$tagid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 保存组合字段
+	 * @author ldm
+	 */
+	public function combinesave($stid,$molid,$tagid,$param){
+		$urlParam = array('setCombinFieldRule',$stid,$molid,$tagid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 删除组合字段属性值
+	 * @author ldm
+	 */
+	public function combineattrdel($stid,$molid,$parid,$tagid,$param){
+		$urlParam = array('deleteCombinFieldProp',$stid,$molid,$parid,$tagid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 根据id获得组合字段属性值
+	 * @author ldm
+	 */
+	public function getcomattr($stid,$molid,$parid,$tagid){
+		$urlParam = array('getCombinFieldProp',$stid,$molid,$parid,$tagid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 获得属性值
+	 * @author ldm
+	 */
+	public function getinfo($id){
+		$urlParam = array('getCombinFieldProp',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 二维码规则显示
+	 * @author ldm
+	 */
+	public function towbarshow($stid,$molid){
+		$urlParam = array('getTwoBarRuleField',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 二维码规则保存
+	 * @author ldm
+	 */
+	public function towbarsave($stid,$molid,$param){
+		$urlParam = array('setTwoBarRule',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/* 
+   	 * 获得结构下定义的字段值字段
+   	 * key= left表示未定义的字段值
+     * key=right表示已定义的字段值
+     * param structureId busiModelId
+     * author fangjixiang
+   	 */
+
+	public function getcomputefieldslist($structureId,$busiModelId)
+   	{
+   		$urlParam = array('getComputeFieldsList',$structureId,$busiModelId);
+   		$url = implode('/',$urlParam);
+   		return $this->get(self::SERVICE_NAME,$url);
+   	}
+   
+   /* 
+   	* 获得结构下定义的字段值字段
+   	* object = left表示未定义的字段值
+    * object = right表示已定义的字段值
+    * param structureId busiModelId tagId
+    * author fangjixiang
+   	*/
+   public function getreferencetieldstortag($structureId,$busiModelId,$tagId)
+   {
+   		$urlParam = array('getReferenceFieldsForTag',$structureId,$busiModelId,$tagId);
+   		$url = implode('/',$urlParam);
+   		//return $url;
+   		return $this->get(self::SERVICE_NAME,$url);
+   }
+   
+   
+   
+   	/*
+	 * 保存字段值
+	 * @author fangjixiang
+	 */
+	public function setComputeFieldRule($structureId,$busiModelId,$tagId,$setparam)
+	{
+		$urlParam = array('setComputeFieldRule',$structureId,$busiModelId,$tagId);
+		$url = implode('/', $urlParam);
+		//return $url.$setparam;
+	  	return $this->post(self::SERVICE_NAME,$url,$setparam,"application/json;charset=UTF-8");
+	}
+	
+	/*
+	 * fangjixiang 20120903 根据结构id获取tag信息集合，包含系统字段
+	 * @param sId
+	 * @return HashMap 结构树 键值对 包含系统字段
+	 */
+	public function getStrucAllWithSysTagList($sId)
+	{
+		$urlParam = array('getStrucAllWithSysTagList',$sId);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/*
+   * @author guolanrui 20140728
+   * 获取结构字段和系统字段（不包括 限制利用、销毁状态、是否在库、业务系统标识、案卷卷内关联标识）
+   * @param sId
+   * @return HashMap 结构树 键值对 包含系统字段
+   */
+	public function getStrucAllWithSysTagListForRole($sId)
+	{
+		$urlParam = array('getStrucAllWithSysTagListForRole',$sId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * 获取结构字段和系统字段（不包括 限制利用、业务系统标识、案卷卷内关联标识）
+	 * @author longjunhao 20141011
+	 * @param sId
+	 * @return HashMap 结构树 键值对 包含系统字段
+	 */
+	public function getStrucAllWithSysTagListForAnnals($sId)
+	{
+		$urlParam = array('getStrucAllWithSysTagListForAnnals',$sId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/*
+	 * fangjixiang 20121224 删除字段值规则
+	 * @structureId
+	 * @busiModelId
+	 * @tagId
+	 */
+	public function deleteComputeFieldRule($sId,$mId,$tagId)
+	{
+		$urlParam = array('deleteComputeFieldRule',$sId,$mId,$tagId);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @author wangtao
+	 * 获取报表实例列表
+	 * @param int $structureId 结构ID
+	 * @param int $busiModelId
+	 * @return mixed
+	 */
+	public function getReportRule($structureId,$busiModelId)
+	{
+		$urlParam = array('getReportRule',$structureId,$busiModelId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * @author guolanrui 20140813
+	 * 获取报表实例列表
+	 * @param int $structureId 结构ID
+	 * @param int $busiModelId
+	 * @return mixed
+	 */
+	public function getReportRuleForPrint($structureId,$busiModelId)
+	{
+		$urlParam = array('getReportRuleForPrint',$structureId,$busiModelId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * 保存报表
+	 * @author ldm
+	 */
+	public function setReportRule($stid,$molid,$param){
+		$urlParam = array('setReportRule',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 删除报表规则
+	 * @author ldm
+	 */
+	public function deleteReportRule($stid,$molid,$param){
+		$urlParam = array('deleteReportRule',$stid,$molid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 关联规则数据显示
+	 * @author ldm
+	 */
+	public function getRelationRule($sId,$tarId,$molid)
+	{
+		$urlParam = array('getRelationRule',$sId,$tarId,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * 关联规则数据显示
+	 * @author ldm
+	 */
+	public function getRelationRuleNew($sId,$tarId,$molid)
+	{
+		$urlParam = array('getRelationRuleNew',$sId,$tarId,$molid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * 根据路径获取档案库中文名和结构中文名
+	 * @author dengguoqi 20121114
+	 */
+	public function getPathInfo($path){
+		return $this->post(self::SERVICE_NAME,"getPathInfo",$path,'text/plain;charset=UTF-8');
+	}
+	/**
+	 * 组合字段从右移出后删除
+	 * @author ldm 20121217
+	 */
+	public function deleteCombinFieldRule($stId,$busmolid,$tarId)
+	{
+		$urlParam = array('deleteCombinFieldRule',$stId,$busmolid,$tarId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * 根据案卷级获取卷内级id
+	 * @author ldm
+	 */
+	public function getChildStructure($stId){
+		$urlParam = array('getChildStructure',$stId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * 关联规则左边列表
+	 * @author ldm
+	 */
+	public function getNoRelationTags($stId,$busmolid){
+		$urlParam = array('getNoRelationTags',$stId,$busmolid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * 关联规则保存
+	 * @author ldm
+	 */
+	public function setRelationRule($sourceSid,$targetSid,$busiModelId,$param){
+		$urlParam = array('setRelationRule',$sourceSid,$targetSid,$busiModelId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 检查起止值源字段的长度
+	 * @author guolanrui 20140822
+	 */
+	public function checkMIN2MAXFieldLength($sourceSid,$targetSid,$busiModelId,$param){
+		$urlParam = array('checkMIN2MAXFieldLength',$sourceSid,$targetSid,$busiModelId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 自动修改起止值源字段的长度
+	 * @author guolanrui 20140822
+	 */
+	public function autoModifyTagLength($param){
+		$urlParam = array('autoModifyTagLength');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 扫描规则数据显示
+	 * @author ldm
+	 */
+	public function getScanRule($stId,$busmolid){
+		$urlParam = array('getScanRule',$stId,$busmolid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * 扫描规则数据保存
+	 * @author ldm
+	 */
+	public function setScanRule($targetSid,$busiModelId,$param){
+		$urlParam = array('setScanRule',$targetSid,$busiModelId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	// 批量导出著录项
+	public function exportModel($structureid)
+	{
+		$urlParam = array('exportModel',$structureid);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	
+	}
+	/**
+	 * 检索显示字段数据显示
+	 * @author ldm
+	 */
+	public function getUsingGridFieldRule($structureId,$busiModelId){
+		$urlParam = array('getUsingGridFieldRule',$structureId,$busiModelId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+
+	/**
+	 * 检索显示字段数据保存
+	 * @author ldm
+	 */
+	public function setUsingGridFieldRule($targetSid,$busiModelId,$param){
+		$urlParam = array('setUsingGridFieldRule',$targetSid,$busiModelId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 鉴定规则的列表显示字段（用于下拉列表）
+	 * @author fangjixing 20121227
+	 * @param structureId 结构id
+	 * @param busiModelId 
+	 * @return
+	 */
+	 public function getdispalyList($structureId,$busiModelId)
+	 {
+	 	$urlParam = array('getdispalyList',$structureId,$busiModelId);
+		$url = implode('/', $urlParam);
+		
+		//return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 /**
+	  * 鉴定规则的列表显示字段（用于下拉列表）
+	  * xuekun  added in  2014-8-27 
+	  * @param unknown_type $structureId
+	  * @param unknown_type $busiModelId
+	  */
+	 public function getdispalyListNew($structureId,$busiModelId){
+	 	$urlParam = array('getdispalyListNew',$structureId,$busiModelId);
+	 	$url = implode('/', $urlParam);
+	 	//return $url;
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 
+	 /**
+	 * 
+	 * @desc 获得鉴定参照字段实体
+	 * @author fangjixiang   20121010
+	 * @param structureId
+	 * @param busiModelId
+	 * @return
+	 */
+	 public function getCheckUpRule($structureId,$busiModelId)
+	 {
+	 	$urlParam = array('getCheckUpRule',$structureId,$busiModelId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 
+	 /**
+	 * 
+	 * @desc 获得代码值列表
+	 * @author fangjixiang   20121010
+	 * @param structureId
+	 * @param busiModelId
+	 * @return
+	 */
+	 public function getCheckUpRulekeyvalue($structureId,$busiModelId,$startDateTagId,$psTagId)
+	 {
+	 
+	 	$urlParam = array('getCheckUpRulekeyvalue',$structureId,$busiModelId,$startDateTagId,$psTagId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 
+	 /**
+	 * 
+	 * @desc 保存鉴定参照字段
+	 * @author fangjixiang   20121010
+	 * @param structureId
+	 * @param busiModelId
+	 * @param startDateTagId
+	 * @param psTagId
+	 * @return
+	 */
+	 public function setCheckUpRule($structureId,$busiModelId,$startDateTagId,$psTagId)
+	 {
+	 
+	 	$urlParam = array('setCheckUpRule',$structureId,$busiModelId,$startDateTagId,$psTagId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,'','application/json;charset=UTF-8');
+	 }
+	 
+	/**
+	 * 
+	 * @desc 设置鉴定规则
+	 * @author fangjixiang   20121010
+	 * @param structureId
+	 * @param busiModelId
+	 * @param startDateTagId
+	 * @param psTagId
+	 * @param hmList
+	 * @return
+	 */
+	 public function setCheckUpRulekeyvalue($structureId,$busiModelId,$startDateTagId,$psTagId,$params)
+	 {
+	 
+	 	$urlParam = array('setCheckUpRulekeyvalue',$structureId,$busiModelId,$startDateTagId,$psTagId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$params,'application/json;charset=UTF-8');
+	 }
+	 
+	 /**
+	 * 
+	 * @desc 删除鉴定规则
+	 * @author fangjixiang   20121010
+	 * @param structureId
+	 * @param busiModelId
+	 * @param startDateTagId
+	 * @param psTagId
+	 * @param hmList
+	 * @return
+	 */
+	 public function deleteCheckUpRulekeyvalue($structureId,$busiModelId,$startDateTagId,$psTagId,$params)
+	 {
+	 
+	 	$urlParam = array('deleteCheckUpRulekeyvalue',$structureId,$busiModelId,$startDateTagId,$psTagId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$params,'application/json;charset=UTF-8');
+	 }
+	 /**
+	  * @author wangtao
+	  * 获得模版定义追加携带规则字段
+	  * @date 2013-02-04
+	  * @param int $structureId
+	  * @param int $busiModelId
+	  * @return mixed
+	  */
+	 public function getBringFieldToAdd($structureId,$busiModelId)
+	 {
+	 	$urlParam = array('getBringFieldToAdd',$structureId,$busiModelId);
+	 	$url = implode('/', $urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	/**
+	 * @author wangtao
+	 * 设置模板定义追加规则字段
+	 * @date 2013-02-04
+	 * @param int $structureId
+	 * @param int $busiModelId
+	 * @param mixed $params
+	 * @return boolean
+	 */
+	 public function setBringFieldToAdd($structureId,$busiModelId,$params)
+	 {
+	 	$urlParam = array('setBringFieldToAdd',$structureId,$busiModelId);
+	 	$url = implode('/', $urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$params,'application/json;charset=UTF-8');
+	 }
+	 
+	/* 获取所有的规则的规则明细
+	 * @author fangjixiang 20130819
+	 * @param structureId
+	 * @param busiModelId
+	 * @return
+	 */
+	 public function getAllRuleItem($structureId, $busiModelId)
+	 {
+	 	$urlParam = array('getAllRuleItem',$structureId,$busiModelId);
+	 	$url = implode('/', $urlParam);
+	 	//return $url;
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 /**
+	  * 根据mainSite获取当前用户身份的档案类型
+	  * @author niyang 2013-10-25
+	  * @return
+	  */
+	 public function getArchiveTypeByMainSite($param){
+	  	return $this->post(self::SERVICE_NAME,"getArchiveTypeByMainSite",$param,'application/json;charset=UTF-8');
+	 }
+
+	 /**
+	  * 查询工程和采购 案卷和卷内
+	  * @author niyang 2013-10-28
+	  * @return
+	  */
+	 public function getProPurByIdStructure($param) {
+	  	return $this->post(self::SERVICE_NAME,"getProPurByIdStructure",$param,'application/json;charset=UTF-8');
+	 }
+	 
+	 /**
+	  * 获取电子阅览室的展示字段
+	  * @author niyang 2013-10-28
+	  * @return
+	  */
+	  public function getPathColumnByIdStructure($param) {
+	  	return $this->post(self::SERVICE_NAME,"getPathColumnByIdStructure",$param,'application/json;charset=UTF-8');
+	  } 
+	  public function chooseModelStructure($map){
+	  	$map['appid'] =  $this->getAppId();
+	  	$map['apptoken'] =  $this->getAppToken();
+	  	$urlParam = array('chooseModelStructure');
+	  	$url = implode('/', $urlParam);
+	  	return $this->post(self::SERVICE_NAME,$url,json_encode($map),'application/json;charset=UTF-8');
+	  }
+	  public function quoteModelForTreeNode($map){
+	  	$urlParam = array('quoteModelForTreeNode');
+	  	$url = implode('/', $urlParam);
+	  	return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	  }
+	  
+	  public function judgeData($map){
+	  	return $this->post(self::SERVICE_NAME,'judgeData',$map,'application/json;charset=UTF-8');
+	  }
+	  
+	  public function deleteRelationRule($map){
+	  	return $this->post(self::SERVICE_NAME,'deleteRelationRule',$map,'application/json;charset=UTF-8');
+	  }
+	  public function deleteModel($map){
+	  	return $this->post(self::SERVICE_NAME,'deleteModel',$map,'application/json;charset=UTF-8');
+	  }
+	  
+	  public function getBoxRole($stid,$moid){
+	  	$urlParam = array('getBoxRole',$stid,$moid);
+	  	$url = implode('/', $urlParam);
+	  	return $this->get(self::SERVICE_NAME, $url);
+	  }
+	  public function saveBoxRule($map){
+	  	return $this->post(self::SERVICE_NAME, "saveBoxRule",$map,"application/json;charset=UTF-8");
+	  }
+	  /**
+	   * 批量引用 批量更新方法
+	   * xuekun  added in  2014-8-27 
+	   * @param unknown_type $map
+	   */
+	  public function bachUpdateTags($map){
+	  	return $this->post(self::SERVICE_NAME, 'bachUpdateTags',$map,'application/json;charset=UTF-8');
+	  }
+	  
+	  /**
+	   * 根据结构id获取所有tag
+	   * wanghongchen 20140902
+	   */
+	  public function getAllTagListByStructureId($param){
+	  	return $this->post(self::SERVICE_NAME, 'getAllTagListByStructureId',$param,'application/json;charset=UTF-8');
+	  }
+}

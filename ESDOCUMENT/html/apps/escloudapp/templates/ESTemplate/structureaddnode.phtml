@@ -1,0 +1,61 @@
+
+<form id="structurenodeadd"action=""method="post">
+
+	<div id='structureedit' class='filedit'>
+		<div id='f2' class='floatand3'>
+			<div class='float3'>
+			    <div class='fileditdiv'>
+					<p class='filedname'>标  &nbsp;  &nbsp;题：</p>
+					<p class='filedvalue'><input type='text' class='input' name="ESTITLE" /></p>
+				</div>
+			   <div class='fileditdiv'>
+					<p class='filedname'>描   &nbsp;  &nbsp; &nbsp;  &nbsp;述：</p>
+					<p class='filedvalue'><input type='text' class='input' name="ESDESCRIPTION" /></p>
+				</div>
+				<div class='fileditdiv'>
+					<p class='filedname'>结构类型：</p>
+					<p class='filedvalue'>
+						<select class='input' name="ESTYPE">
+							<option value="file">案卷</option>
+							<option value="innerFile">卷内</option>
+							
+						</select>
+					</p>
+				</div>
+			</div>
+		
+			<div class='float3'>
+				<div class='fileditdiv'>
+					<p class='filedname'>  &nbsp;创建人：</p>
+					<p class='filedvalue'><input class='input'type="text"  readonly='readonly' value='' name="ESCREATOR" />
+				</div>
+				<div class='fileditdiv'>
+					<p class='filedname'>创建时间：</p>
+					<p class='filedvalue'><input class='input' type='text' readonly='readonly' name="ESDATE" value='' />
+				</div>
+				<div class='fileditdiv'>
+					<p class='filedname'>档案类型：</p>
+					<p class='filedvalue'>
+						<select class='input' name="ESCLASS">
+							<option value="document">文书档案</option>
+							<option value="contract">合同档案</option>
+							<option value="project">工程档案</option>
+							<option value="accounting">会计档案</option>
+							<option value="purchase">采购档案</option>
+							<option value="technical">科技档案</option>
+							<option value="carrierfiles">多种载体档案</option>
+							<option value="personal ">员工档案</option>
+							<option value="auditfiles">审计档案</option>
+						</select>
+					</p>
+				</div>
+			</div>
+		</div>			
+	</div>
+</form>
+<script type="text/javascript">
+var myDate=new Date();
+var newdate=myDate.getFullYear()+'-'+(myDate.getMonth()+1)+'-'+myDate.getDate()+' '+myDate.toLocaleTimeString(); 
+$("#structurenodeadd input[name='ESDATE']").val(newdate);
+
+</script>

@@ -1,0 +1,153 @@
+<!-- yanghuiqiang 20140522 消息编辑窗口-->
+
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<style type="text/css">
+.mydiv p {
+	margin: 0px;
+	padding: 0px;
+}
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="messagePushForm" method="post" enctype="multipart/form-data">
+			<table id="table_detail" style="height: 200px;">
+				<!-- 				<tr> -->
+				<!-- 					<td>接收方：</td> -->
+				<!-- 					<td><input type="text" name="receiver" id="receiver" value="" -->
+				<!--						style="width: 380px; height: 20px;" /></td>-->
+				<!-- 				</tr> -->
+				<tr>
+				<td><input type="hidden" name="id" id="id"
+						value="<?php echo $message->id;?>"
+						style="width: 380px; height: 0px;" /></td>
+				</tr>
+				<tr>
+					<td>说明：</td>
+					<td>目前只提供向全部用户推送消息的功能。</td>
+				</tr>
+				</tr>
+				<tr>
+					<td>消息类型：</td>
+					<td><select name="messagePushType" id="messagePushType"
+						style="width: 385px; height: 25px;">
+							<!-- <option value="1">系统消息</option>-->
+							<option value="0">活动公告</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td>消息内容：</td>
+					<!-- 					<td><div class="message" id="message" 
+							style="border: 1px #7f9db9 solid; word-break: break-all; width: 382px; height: 100px; cursor: text"
+							contentEditable="true"></div></td>-->
+					<td><textarea name="message" id="message"
+							style="width: 380px; height: 100px;"><?php echo $message->content;?></textarea></td>
+				</tr>
+				<tr>
+					<td>消息处理类型：</td>
+					<td><select name="messageHanderType" id="messageHanderType"
+						style="width: 385px; height: 25px;">
+							<option value="0" <?php echo $message->messageHanderType == 'APP' ? "selected=selected":"";?>>APP内部处理【附带数据为weburl】</option>
+							<option value="1" <?php echo $message->messageHanderType == 'BROWSER' ? "selected=selected":"";?>>APP外部浏览器处理【附带数据为weburl】</option>
+							<option value="2" <?php echo $message->messageHanderType == 'CUSTOM' ? "selected=selected":"";?>>自定义处理【附带数据请点击添加文章】</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td>消息附带数据：</td>
+					<td><textarea name="data" id="data"
+							style="width: 380px; height: 100px;"><?php echo $message->data;?></textarea></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><button name="addPublish" id="addPublish" style="display:none;">添加文章</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	//$('#table_detail input:text').attr("readOnly", true); 
+	//$('#table_detail textarea').attr("readOnly", true);
+	
+
+	$('#addPublish').click(function(){
+		url = "<?php echo $esaction->generateUrl(Array('ESAppClientPublish'=>'publish'),'x');?>";
+		$.ajax({
+		    url:url,
+		    success:function(data){
+		    	dia1 = $.dialog({
+			    	title:'添加文章',
+		    		width: '500px',
+		    	   	fixed:true,
+		    	    resize: false,
+		    	    padding:0,
+			    	content:data,
+				    cancelVal: '关闭',
+				    okVal:'确认添加',
+			    	ok:function()
+			    	{ 
+			    		getPublishId();
+					},cancel:function()
+					{
+
+					}
+			    });
+		    },
+		    cache:false
+		});
+		return false;
+	});
+
+	function getPublishId() {
+		var selectedId = '';
+		var checkboxlength = $('#publish input:checked').length;
+		if(checkboxlength<=0){
+			return;
+		}
+		
+		$("#publish input:checked").each(
+				function(i) {
+					selectedId += $('#publish input:checked:eq(' + i+ ')').val()+ ',';
+				}
+		);
+		selectedId = selectedId.substring(0,selectedId.length-1);
+		//alert(selectedId);
+		url = "<?php echo $esaction->generateUrl(Array('ESAppClientPublish'=>'getPublishTopicById'),'x');?>";
+		$.ajax({
+		    url:url,
+		    data:{
+				id:selectedId
+			},
+			type: "POST",
+		    success:function(data){
+		    	$('#data').val(data);
+		    },
+		    cache:false
+		});
+	}
+
+	function typeChange() {
+		if($("#messageHanderType").val()=="2") {
+			$('#addPublish').show();
+			$('#data').attr("readOnly", true); 
+		} else {
+			$('#addPublish').hide();
+			$('#data').attr("readOnly", false);
+		}
+	}
+
+	typeChange();
+	
+	$('#messageHanderType').change(function(){
+		typeChange();
+		$('#data').val("");
+	});
+});
+
+</script>

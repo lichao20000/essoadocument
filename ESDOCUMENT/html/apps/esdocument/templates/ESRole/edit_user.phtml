@@ -1,0 +1,286 @@
+<form id="editUser" action="" method="post">
+	<div class="estransfer">
+		<input type="hidden" name="roleIds" value="">
+		<ul>
+			<li>
+				<span>用户名<font color="red" size="3">*</font></span>
+				<input type="text" name="userid" readonly="readonly"  value="<?php echo $data[1];?>">
+				<input type="hidden" id="editUserid" name="id" value="<?php echo $data[0];?>">
+			</li>
+			<li>
+				<span>姓<font color="red" size="3">*</font></span>
+				<input type="text" name="lastname"  value="<?php   echo $data[2];?>">
+			</li>
+			<li>
+				<span>名<font color="red" size="3">*</font></span>
+				<input type="text" name="firstname" value="<?php echo $data[3];?>">
+			</li>
+			<li>
+				<span>状态<font color="red" size="3">*</font></span>
+				<input type="text" name="userstatus" value="<?php echo $data[4];?>"> 
+			</li>
+			<li>
+				<span>手机<font color="red" size="3">*</font></span>
+				<input type="text" name="mobtel" verify="mobile/20/1/0" value="<?php echo $data[5];?>">
+			</li>
+			<li>
+				<span>邮件</span>
+				<input type="text" name="emailaddress" verify="email/50/0/0" value="<?php echo $data[6];?>" >
+			</li>
+		</ul>
+	</div>
+</form>
+<div id="eslistEditUser" style="width: 600; margin-top: 25px;">
+	<table id="editUserRoleGrid"></table>
+</div>
+<script type="text/javascript">
+var lengthZZ= /.{50}|^\s*$/g;
+var selectedIds="";
+var mark = false;
+$(document).ready(function(){
+	    $("#editUserRoleGrid").flexigrid(
+	    	{url :false,
+			dataType : 'json',
+			colModel : [ 
+            {display : '',name : 'startNum',width : 30,align : 'center'}, 
+			{display : '<input type="checkbox" id="editUserRoleList">',name : 'ids',width : 50,align : 'center'},
+			{
+				display : 'ID',
+				name : 'id',
+				metadata:'id',
+				width : 30,
+				align : 'left',
+				hide:true
+			}, {
+				display : '角色标示',
+				name : 'roleId',
+				metadata:'roleId',
+				width : 80,
+				align : 'left'
+			},{
+				display : '角色名称',
+				name : 'roleName',
+				metadata:'roleName',
+				width : 80,
+				align : 'left'
+			},{
+				display : '创建时间',
+				name : 'createTime',
+				metadata:'createTime',
+				width : 60,
+				align : 'left',
+				hide:true
+			}, 
+			 {
+				display : '修改时间',
+				name : 'updateTime',
+				metadata:'updateTime',
+				width : 60,
+				sortable : true,
+				align : 'left',
+				hide:true
+			}, {
+				display : '是否为系统角色',
+				name : 'isSystem',
+				metadata:'isSystem',
+				width : 80,
+				sortable : true,
+				align : 'center'
+			},{
+				display : '角色描述',
+				name : 'roleRemark',
+				metadata:'roleRemark',
+				width : 160,
+				align : 'left'
+			}],
+				buttons : [{
+					name : '添加',
+					bclass : 'add',
+					onpress : addRoleToUserOnEdit
+				},{
+					name : '删除',
+					bclass : 'delete',
+					onpress : delRoleFromUserOnEdit
+				}],
+				singleSelect:true,
+				usepager : true,
+				title : '',
+				useRp : true,
+				rp : 20,
+				nomsg : "没有数据",
+				showTableToggleBtn : false,
+				pagetext : '第',
+				outof : '页 /共',
+				width : 'auto',
+				height : 'auto',
+				pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条' 
+		});
+		function sizeChanged(){
+			if($.browser.msie && $.browser.version==='6.0'){
+				$("html").css({overflow:"hidden"});
+			}
+			var h = $(window).height() - $("#eslistEditUser").position().top;
+			var flex = $("#editUserRoleGrid").closest("div.flexigrid");
+			var bDiv = flex.find('.bDiv');
+		    var contentHeight = bDiv.height();
+		    var headflootHeight = flex.height() - contentHeight; 
+		    bDiv.height(200 - headflootHeight);
+			flex.height(200);
+			flex.width(600);
+			// 修改IE表格宽度兼容
+			if($.browser.msie && $.browser.version==='6.0'){
+				flex.css({width:"-=3px"});
+			}
+		};
+		sizeChanged();
+		$('#eslistEditUser div[class="tDiv2"]').append('<div class="find-dialog"><input id="editUserRoleKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="editUserRoleKeyWord" value="请输入关键字" /><span onclick="getEditUserRoleQuery()"></span></div>');
+		//全选
+		$("#editUserRoleList").die().live('click',function(){
+			$("input[name='userRoleListId']").attr('checked',$(this).is(':checked'));
+		});
+		var url = $.appClient.generateUrl({ESRole : 'getUserRoles'}, 'x');
+		$.post(url,{userId:'<?php echo $data[0];?>'}, function(res){
+			  if(res==''){                  
+			   }else{
+				   selectedIds = res;
+				   mark = true;
+				   $("#editUserRoleGrid").flexOptions({url:$.appClient.generateUrl({ESRole: 'findUserRole',selectedRoleId:res}, 'x')}).flexReload();
+			   }
+		});
+		$('.estransfer input').each(function(){
+				$(this).attr("readonly",true);
+			});
+		$('.estransfer select').attr("readonly",true);
+});
+//在编辑用户时给用户添加角色
+function addRoleToUserOnEdit(){
+	var idStr='';
+	if(mark==false){
+	}else{
+		idStr = selectedIds;
+	}
+	var data = idStr;
+	$.ajax({
+        url : $.appClient.generateUrl({ESRole: 'listRole',data:data},'x'),
+	    success:function(data){
+		    	$.dialog({
+			    	title:'角色列表',
+		    	   	fixed:false,
+		    	    resize: false,
+		    	    lock : true,
+		    	    padding:0,
+					opacity : 0.1,
+			    	okVal:'保存',
+				    ok:true,
+				    cancelVal: '关闭',
+				    cancel: true,
+				    content:data,
+				    ok:function()
+			    	{ 
+				    	var selectedRoleId='';
+						$('#listRoleGrid input:checked').each(
+								function(i) {
+									selectedRoleId += $('#listRoleGrid input:checked:eq(' + i+ ')').val()+ ',';
+								}
+						);
+						if(selectedRoleId==''){//当在角色列表页面没有选择任何角色时，直接结束该方法
+							return;
+						}
+						
+						$.ajax({
+							url:$.appClient.generateUrl({ESRole: 'saveUserRole'},'x'),
+							type:'post',
+							data:{
+								roleIds:selectedRoleId,
+								id:$('#editUserid').val()
+							},
+							success:function(msg){
+								if(msg=="success"){
+									selectedIds = selectedRoleId+selectedIds;
+									if(selectedIds.charAt(selectedIds.length-1)==','){
+										selectedIds=selectedIds.substring(0,selectedIds.length-1);
+									}
+									mark = true;
+									$("#editUserRoleGrid").flexOptions({url:$.appClient.generateUrl({ESRole : 'findUserRole',selectedRoleId:selectedIds}, 'x')}).flexReload();
+									$.dialog.notice({content:'添加角色成功！',icon:'success',time:3});
+								}else{
+									$.dialog.notice({content:msg,icon:'warning',time:3});
+									}
+							}
+						});
+						
+			       }
+			    });
+		    },
+		    cache:false
+	});
+}
+
+//编辑用户时删除已分配给用户的角色
+function delRoleFromUserOnEdit(){
+	if($("#editUserRoleGrid input:checked").length < 1){
+		$.dialog.notice({content:'请选择要删除的角色',icon:'warning',time:3});
+		return false;
+	}
+	$.dialog({
+		title:'警告',
+		content:'确定删除选中角色？',
+		cancelVal:'取消',
+		cancel:true,
+		icon:'warning',
+		okVal:'确定',
+		ok:function(){
+			var selectedRoleId = '';
+			var checkboxlength = $('#editUserRoleGrid input:checked').length;
+			if(checkboxlength<=0){
+				return;
+			}
+			$("#editUserRoleGrid input:checked").each(
+					function(i) {
+						selectedRoleId += $('#editUserRoleGrid input:checked:eq(' + i+ ')').val()+ ',';
+					}
+			);
+			selectedRoleId=selectedRoleId.substring(0,selectedRoleId.length-1);
+			$.ajax({
+				url:$.appClient.generateUrl({ESRole: 'deleteUserRole'}, 'x'),
+				type:'post',
+				data:{roleIds:selectedRoleId,userId:$('#editUserid').val()},
+				success:function(msg){
+				if(msg == "success"){
+					var selectedIdArray  = selectedIds.split(",");
+					var selectedRoleIdArray = selectedRoleId.split(",");
+					var wb= '';
+					for(var i = 0;i<selectedIdArray.length;i++){
+						if(panduan(selectedIdArray[i],selectedRoleIdArray)){
+						}else{
+							wb+=selectedIdArray[i]+",";
+						}
+					}
+					wb=wb.substring(0,wb.length-1);
+					selectedIds = wb;
+					$("#editUserRoleGrid").flexOptions({url:$.appClient.generateUrl({ESRole: 'findUserRole',selectedRoleId:wb}, 'x')}).flexReload();
+					$.dialog.notice({content:'删除角色成功！',icon:'warning',time:3});
+					}else{
+					$.dialog.notice({content:msg,icon:'warning',time:3});
+					}
+				}
+			});
+		}
+	});
+}
+function panduan(id,ids){
+	 for(var i = 0;i<ids.length;i++){
+		 if(id==ids[i]){
+			 return true;
+		 }
+	 }
+	return false;
+}
+function getEditUserRoleQuery(){
+	var keyword=$.trim($('input[name="editUserRoleKeyWord"]').val());
+	if(keyword=='' || keyword=='请输入关键字') {
+		keyword = '';
+	}
+	$("#editUserRoleGrid").flexOptions({url:$.appClient.generateUrl({ESRole: 'findUserRole',selectedRoleId:selectedIds,keyWord:encodeURI(keyword)}, 'x')}).flexReload();
+}
+</script>

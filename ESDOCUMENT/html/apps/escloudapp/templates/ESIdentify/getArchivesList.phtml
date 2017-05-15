@@ -1,0 +1,71 @@
+<table id=getArchivesList></table> 
+<script type="text/javascript">
+	$("#getArchivesList").flexigrid({
+		url: $.appClient.generateUrl({ESIdentify:'set_json',path:parentPath,radio:'true'}),
+		dataType: 'json',
+		colModel : [
+			{display: '序号', name : 'num', width : 20, align: 'center'}, 
+			{display: '<input type="radio" name="path" >', name : 'ids', width : 20, align: 'center'},
+			{display: '操作', name : 'operate', width : 60, align: 'center'},
+			{display: '关系', name : 'relation', width : 60, align: 'center',metadata:'relation',hide:true},
+			<?php echo $fields;?>
+			],
+		buttons :[{name: '筛选', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:filterArchives},
+				{name: '还原', bclass: 'refresh',tooltip:'把数据还原到筛选前的状态',onpress:resetArchives}],
+	   		usepager: true,
+			useRp: true,
+			query:'',
+			width: 800,
+			onDoubleClick:modify,
+			height:260,
+			dblClickResize:true
+			//onSuccess: autoResize
+		
+	});
+		//筛选后重置
+	function resetArchives()
+	{
+		$("#getArchivesList").flexOptions({query:''}).flexReload();
+	}
+
+	//单选
+	$("#getArchivesList tbody tr").die().live('click',function(){
+		var selectTr = $(this);
+		$('input[type="radio"]', $(this).closest("tr")).attr('checked',true);
+	});
+	
+	//筛选案卷数据
+	function filterArchives(){
+	var sid=parentPath.substr(parseInt(parentPath.lastIndexOf("@")+1),parentPath.length);//截取path上结构ID
+	$.ajax({
+	    url:$.appClient.generateUrl({ESIdentify:'filter',status:status,strucid:sid},'x'),
+	    success:function(data){
+	    	$.dialog({
+		    	title:'筛选数据',
+	    		width: '50%',
+	    	    height: '40%',
+	    	   	fixed:true,
+	    	    resize: false,
+		    	content:data,
+		    	okVal:'确定',
+			    ok:function(){
+			    	var form=$('#esfilter');
+					var thisDialog=this;
+					var flag=form.validate();
+					if(flag){
+						var condition=filterValue('flag');
+						condition.type='filter';
+						thisDialog.close();
+						$("#getArchivesList").flexOptions({newp:1,query:condition}).flexReload();
+					}
+			    	return false;
+			    },
+			    cancelVal: '关闭',
+			    cancel: true 
+		    });
+		    },
+		    
+		    cache:false
+	});
+	}
+</script>

@@ -1,0 +1,46 @@
+<style>
+
+.ztree li a span{
+	color:#444;
+}
+
+</style>
+<div id='addrolefree'>
+	<h2 class='h2'>筛选条件设置</h2>
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span>
+		<span class='w90 w14090 hei30'>比较符</span>
+		<span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span>
+	</p>
+	<div id='contents'>
+		<!-- 1 -->
+		<p class='contbox creatediv'>
+			<select class='w140 w14090 hei20 filedname'>
+				<option value='CLASSCODE' selected="selected">分类号</option>
+				<option value='STORAGE_TERM'>保管期限</option>
+				<option value='ARCHIVE_TYPE'>档案类型</option>
+				<option value='DESCRIPTION'>备注</option>
+			</select>
+			<select class='w90 w14090 hei20 comparison'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like">包含</option>
+				<option value="notLike">不包含</option>
+			</select>
+			<input type='text' class='w140 w14090 hei20 filedvalue' />
+			<select id='' class='w14090 w90 hei20 relationship'>
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select>
+			<a class='newfilter'>添加行</a> 
+			<a class='delfilter'>删除行</a>
+		</p>
+
+
+	</div>
+</div>

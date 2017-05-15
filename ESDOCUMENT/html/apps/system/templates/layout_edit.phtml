@@ -1,0 +1,22 @@
+
+<div class="content">
+  <?php if(!isset($config['console']) || !$config['console']):?>
+  <div class="left">
+    <ul style="background:none;">
+    <li><a href="<?php echo url($baseUrl);?>"><img src="<?php echo $tplPath?>/images/arrow_little_down.gif" width="7" height="10" alt=" " style="*_margin-top:10px;"/> 返回<?php echo $appInfo['name'];?></a></li>
+    <?php foreach($urlList as $k=>$v):?>
+    <?php if ($k == $url): ?>
+    <li class="leftOn bold"><span style="margin-left:15px;"><?php echo $v?></span></li>
+    <?php else: ?>
+    <li><a href="<?php echo url($baseUrl.'/'.$k.'/edit');?>"><span style="margin-left:15px;"><?php echo $v?></span></a></li>
+    <?php endif ?>
+    <?php endforeach;?>
+
+    </ul>
+
+  </div>
+  <?php endif;?>
+  <div style="width:800px; padding:0px;  float:left;">
+    <?php echo $layoutHtml;?>
+  </div>
+</div>

@@ -1,0 +1,176 @@
+@CHARSET "UTF-8";
+
+html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
+	pre, a, address, big, cite, code, del, em, font, img, ins, small,
+	strong, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form,
+	label, legend {
+	margin: 0;
+	padding: 0;
+}
+.estransfer{width:560px;height:auto!important;overflow:hidden;margin-bottom:20px;}
+.estransfer ul{width: 550px; height:auto; overflow:hidden; text-align:center;}
+.estransfer ul li{width:250px;height:40;margin-left:20px;float:left;margin-top:10px;_display:inline}
+.estransfer span{width:80px;height:40px;line-height:30px;text-align:left;float:left;}
+.estransfer ul li input, .estransfer ul li select{float:left;line-height:20px;width:160px;}
+.estransfer ul li .select-acc-range{ width:168px; padding:0;}
+.estransfer ul li select{width:162px;height:26px;float:left;}
+.estransfer ul li textarea{width:430px;height:40px;line-height:18px;font-size:13px;float:left}
+textarea {
+	resize: none;
+}
+
+input, textarea {
+	outline: 0;
+}
+
+select {
+	_font-size: 12px;
+}
+
+html, body {
+	overflow: hidden;
+}
+
+a {
+	text-decoration: none;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+.esmain {
+	width: 96%;
+	margin-left: 2%;
+}
+
+.esmain .eshead {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #ccc;
+}
+
+.esmain .esleft {
+	background: #fff;
+	width: 220px;
+	float: left;
+	overflow: auto;
+	/* border-left: 1px solid #ccc; */
+	background-color: #133959;
+	margin-right: 10px;
+	border-radius: 5px;
+	padding-top: 12px;
+}
+
+.contbox {
+	width: 610px;
+	height: 30px;
+	float: left;
+	margin-left: 5px;
+	_display: inline;
+}
+
+.contbox input {
+	height: 20px;
+	padding: 0;
+	border: 1px solid #ccc;
+}
+
+.contbox input:hover {
+	border: 1px solid #5599ff;
+}
+
+.w14090 {
+	font-size: 13px;
+	color: #555;
+	float: left;
+	margin-right: 10px;
+	display: block;
+}
+
+.hei30 {
+	line-height: 30px;
+}
+
+.w140 {
+	width: 130px;
+	padding-left: 2px;
+}
+
+.w90 {
+	width: 70px;
+}
+
+.hei20 {
+	height: 20px;
+	line-height: 20px;
+	margin-top: 4px;
+	border: 1px solid #aaa;
+}
+
+.newfilter, .delfilter {
+	margin-left: 17px;
+	margin-right: 20px;
+	width: 22px;
+	height: 22px;
+	line-height: 22px;
+	text-indent: 22px;
+	color: #555;
+	float: left;
+	margin-top: 3px;
+	cursor: pointer;
+}
+
+.newfilter {
+	background: url(../../public/img/add.png) no-repeat 4px 4px;
+}
+
+.delfilter {
+	background: url(../../public/img/del.gif) no-repeat 4px 4px;
+}
+
+.newfilter:hover, .delfilter:hover {
+	width: 22px;
+	line-height: 22px;
+	text-indent: 22px;
+}
+
+.esmain .eshead {
+	width: 100%;
+	text-align: center;
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #ccc;
+	overflow: hidden;
+}
+
+.esmain .eshead input {
+	width: 50px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	border-radius: 3px;
+}
+
+.inputtext {
+	height: 20px;
+}
+
+.inputtextnoedit {
+	height: 20px;
+	border: 1px solid #ccc;
+}
+/**
+20141030 xuekun 添加可编辑下拉框
+*/
+.selectInput {
+	height: 20px;
+	border: 1px solid #ccc;
+	background-image: url('../../public/img/drop_down_tab.gif');
+	background-repeat: no-repeat;
+	background-position: 99% 50%;
+	background-size: 20px20px;
+}
+.warning{
+	border:2px #DD0000 solid;
+}

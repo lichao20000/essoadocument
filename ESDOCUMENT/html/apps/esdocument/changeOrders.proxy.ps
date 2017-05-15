@@ -1,0 +1,109 @@
+<?php
+/**
+ * 设计变更单模块
+ * @author gengqianfeng
+ *
+ */
+class ProxyEsdocumentChangeOrders extends AgentProxyAbstract {
+	const SERVICE_NAME = "changeOrders";
+	
+	/**
+	 * 获取变更单列表总条数
+	 * 
+	 * @param unknown $where        	
+	 */
+	public function getCount($user, $admin,$pId, $where) {
+		$urlParam = array (
+				'count',
+				$user,
+				$admin,
+				$pId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取变更单列表
+	 * 
+	 * @param unknown $page
+	 *        	第几页
+	 * @param unknown $pre
+	 *        	每页显示多少条
+	 * @param unknown $where
+	 *        	筛选条件
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findChangeOrdersList($page, $pre, $user, $admin,$pId, $where) {
+		$urlParam = array (
+				'list',
+				$page,
+				$pre,
+				$user,
+				$admin,
+				$pId
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 通过id获取单条变更单记录
+	 * 
+	 * @param unknown $id
+	 *        	变更单id
+	 */
+	public function findChangeOrdersById($id) {
+		$urlParam = array (
+				'findChangeOrdersById',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 编辑变更单
+	 * 
+	 * @param unknown $order
+	 *        	变更单实体集
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function editOrders($order) {
+		$urlParam = array (
+				'update' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $order ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除设计变更单
+	 * 
+	 * @param unknown $ids        	
+	 */
+	public function delOrder($ids) {
+		$userId = $this->getUserId ();
+		$ip = $_SERVER ['REMOTE_ADDR'];
+		$urlParam = array (
+				'delOrder',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $ids ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除接收文件中的签字单 修改接收状态
+	 * 
+	 * @param unknown $param        	
+	 */
+	public function deleteFile($param) {
+		$urlParam = array (
+				'deleteFile' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+}

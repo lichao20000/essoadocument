@@ -1,0 +1,30 @@
+﻿appid = np033
+apptoken = wwwwww
+name = 部门天地
+description = 部门天地
+version = BETA
+
+
+icon = department.gif
+
+is_single = 1
+is_child = 0
+is_singleton = 0
+
+children[] = weather
+children[] = stock
+children[] = quicklinks
+children[] = vote
+children[] = fileshare
+children[] = sns
+
+; 紫光信息发布
+children[] = unisxinxifabu
+; 紫光外出留言
+children[] = unisappwaichuliuyan
+; 紫光通讯录
+children[] = unisapptongxunlu
+; 紫光部门日程
+children[] = unisapprichengguanli
+
+display=hidden

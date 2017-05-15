@@ -1,0 +1,28 @@
+@charset "utf-8";
+/* CSS Document */
+a{text-decoration:none;}
+a img {border: 0 none;cursor:pointer;}
+.clear{clear:both;}
+.main{width:96%;margin-left:2%;background-color:#fff;margin-top: 10px;}
+.main .mycontent{position:relative;float:left;width:100%;overflow-y: auto;}
+.ldmtop{border-bottom:1px solid #999999;}
+.main .submit{text-align:left;padding-bottom:10px;padding-top:10px;float:left;margin-left: 10px;}
+.main .path{float:left;margin-top:15px;margin-left:20px;font-size:15px;color:#fff;}
+.main .submit input{
+	width:86px;
+	height:30px;
+	background-color:#6f6e81;
+	border:0 none;
+	cursor:pointer;
+	color:#fff;
+		}
+.main .submit input:hover{
+	background-color:#133959;
+
+		}
+.mycontent .list{float:left;margin-top:10px;margin-left:36px;_margin-left:30px;width:96px;overflow:hidden;height:190px;}
+.mycontent .list .photo{width:80px;height:80px;padding:5px;position:relative;overflow:hidden;}
+.mycontent .list span{font-size:14px;}
+.selected{background:#ccc;color:#fff;}
+.mycontent .list .re_title{ font-size: 14px; overflow: hidden; height: 20px; line-height: 18px; display: block;}
+.editbtn {display:inline-block; width:16px; height:16px; background:url(../../public/img/edit.jpg) no-repeat no-repeat; cursor:pointer;}

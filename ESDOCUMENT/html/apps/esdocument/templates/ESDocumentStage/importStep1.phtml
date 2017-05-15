@@ -1,0 +1,37 @@
+<div id="importStep1Div">
+	<form id="importStep1" action="" enctype="multipart/form-data" method="post">
+    	<div style="border:solid 1px #AAAAAA;padding:0 0 20px 20px;margin:20px 20px 60px 20px;width:700px;">
+			<span style="position: relative;left:10px; top:-10px;background-color:#FFF;font-weight:bold;color:#909090;">文件类型</span><br/>
+			<div style="margin:5px 0 20px 0;"><input type="radio" name="type" value="excel" id="importForExcelId" checked="true" /> <label for="importForExcelId" style="padding:0px;display:inline;">Excel(*.xls/*.xlsx)</label> </div>
+			<div><input type="radio" id="importForDBFId" name="type" value="dbf" /> <label for="importForDBFId" style="padding:0px;display:inline;">DBF(*.dbf)</label></div>
+		</div>
+		<div style="border:solid 1px #AAAAAA;padding:7px 0 10px 20px;margin:20px;width:700px;height:160px;">
+			<span style="position: relative;left:10px; top:-17px;background-color:#FFF;font-weight:bold;color:#909090;">选择文件</span>
+<?php
+	
+		if(strlen($data['title'])>7){
+			echo 	'<div style="margin-bottom:12px;padding-bottom: 15px;"><div style="width:180px;height:20px;line-height:16px;float:left;">'.$data['title'].'级目录数据：</div><input type="file" style="width:360px;height:19px;" name="'.$data['path'].'" /></div>';
+			//echo 	'<div style="margin-bottom:12px;padding-bottom: 15px;"><div style="width:180px;height:20px;line-height:16px;float:left;">电子文件级数据：</div><input type="file" style="width:360px;height:19px;" name="'.$data['path'].'_document" /></div>';
+		}else{
+			echo 	'<div style="margin-bottom:12px;padding-bottom: 15px;"><div style="width:180px;height:20px;line-height:20px;float:left;">'.$data['title'].'级目录数据：</div><input type="file" style="width:360px;height:19px;" name="'.$data['path'].'" /></div>';
+			//echo 	'<div style="margin-bottom:12px;padding-bottom: 15px;"><div style="width:180px;height:20px;line-height:16px;float:left;">电子文件级数据：</div><input type="file" style="width:360px;height:19px;" name="'.$data['path'].'_document" /></div>';
+		}
+?>
+		</div>
+		<input type="hidden" name="userId" value="<?php echo $userId;?>">
+	</form>
+</div>
+
+<script type="text/javascript">
+/** wanghongchen 20141020 dbf导入时隐藏电子文件 **/
+var importTypeCheck = $("input[name$='_document']");
+$("#importForDBFId").click(function(){
+	importTypeCheck.attr('disabled',true);
+	importTypeCheck.closest("div").css("display","none");
+});
+$("#importForExcelId").click(function(){
+	importTypeCheck.attr('disabled',false);
+	importTypeCheck.closest("div").css("display","none");
+});
+
+</script>

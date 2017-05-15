@@ -1,0 +1,6 @@
+@CHARSET "UTF-8";
+body,html{ margin:0; overflow:hidden;}
+
+/** wanghongchen 20141013 去掉宽度样式**/
+.init-style{ float:left;max-height:400px;height:auto!important;overflow:auto;}
+.reply{height:400;}

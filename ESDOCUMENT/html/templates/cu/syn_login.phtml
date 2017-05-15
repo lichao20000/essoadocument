@@ -1,0 +1,49 @@
+<?php
+if(!isLogin()) {
+  gotoUrl('');
+}
+global $user;
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>联通云门户-同步登录中....</title>
+</head>
+<body>
+<div style="margin:0 auto; width:204px; height:24px; margin-top:200px;">
+  <p id="msg" style="height:10px">登录中......</p>
+  <div style="height:10px;overflow:hidden;width:200px;margin:2px;border:1px solid #ccc;font-size:0">
+    <div id="divpb" style="height:10px;background:#c91617;font-size:0;width:0"></div>
+  </div>
+</div>
+<script>
+var t = <?php echo count($login_list)?>;
+var m = 100 / t, c = 0, p = 0, elPb = document.getElementById('divpb');
+function update(type){
+  c++;
+  p = p + m;
+  elPb.style.width = p + '%';
+  if (c >= t) {
+    elPb.style.width = '100%';
+    window.location.href = '<?php echo $jumpto ?>';
+  }
+}
+
+var wt = 0, el = document.getElementById('msg');
+setInterval(function() {
+  wt++;
+  if (wt == 1 || wt == 2) {
+    el.innerHTML = '网速慢，请稍候...';
+  } else if (wt == 3) {
+    el.innerHTML = '网速慢，请稍候.....';
+  } else {
+    window.location.href = '<?php echo url('') ?>';
+  }
+}, 2000);
+</script>
+<?php foreach($login_list as $url): ?>
+<script type="text/javascript" src="<?php echo $url . '?aopsid=' . $user->sid . '&rt=' . REQUEST_TIME ?>"></script>
+<?php endforeach;?>
+</body>
+</html>

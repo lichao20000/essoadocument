@@ -1,0 +1,22 @@
+<div style="width:600px;height:500px;">
+  <div style="width:600px;height:40px;margin-top:-10px;"><p><img src="" />基本信息</p></div>
+  <div style="width:600px;height:40px;margin-top:10px;">
+    <span>角色名称:</span><input type="text" value="" name="" style="width:100px;height:16px;margin-left:16px;" />
+    <span>角色描述:</span><input type="text" value="" name="" style="width:300px;height:16px;margin-left:16px;" />
+  </div>
+  <div>
+    <table id="unauthorized"></table>
+  </div>
+  <script type="text/javascript">
+    var uri="<?php echo url($this->getUrl($esaction->generateUrl(Array('ESFormPermission'=>'unauthorized_json'))));?>";
+   </script>
+  <div>
+    <table id="authorization"></table>
+  </div>
+</div>
+
+<script type="text/javascript">
+   var uri="<?php echo url($this->getUrl($esaction->generateUrl(Array('ESFormPermission'=>'authorization_json'))));?>";
+</script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormPermission/js/template.js"></script>
+ 

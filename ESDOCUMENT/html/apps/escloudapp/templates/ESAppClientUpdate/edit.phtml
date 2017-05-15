@@ -1,0 +1,107 @@
+<!-- yanghuiqiang 20140522 升级编辑窗口-->
+
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<style type="text/css">
+.mydiv p {
+	margin: 0px;
+	padding: 0px;
+}
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="uploadForm" method="post" enctype="multipart/form-data">
+			<table id="table_detail" style="height: 200px;">
+				<tr>
+					<td><input type="hidden" name="id" id="id"
+						value="<?php echo $update->id;?>"
+						style="width: 380px; height: 0px;" /></td>
+				</tr>
+				<tr>
+					<td>APP名称：</td>
+					<td><input type="text" name="appName" id="appName" readOnly=true
+						value="<?php echo $update->appName;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>APP描述：</td>
+					<td><input type="text" name="appDescription" id="appDescription" readOnly=true
+						value="<?php echo $update->appDescription;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>APP包名：</td>
+					<td><input type="text" name="packageName" id="packageName" readOnly=true
+						value="<?php echo $update->packageName;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>内部版本号：</td>
+					<td><input type="text" name="versionCode" id="versionCode" readOnly=true
+						value="<?php echo $update->versionCode;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>版本名称：</td>
+					<td><input type="text" name="versionName" id="versionName"
+						value="<?php echo $update->versionName;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>是否强制更新：</td>
+					
+					<td><select style="width: 385px; height: 25px;">  
+  						<option value ="0" <?php echo $update->forceUpdate == 1 ? "":"selected=selected";?>>否</option>  
+ 						<option value ="1" <?php echo $update->forceUpdate == 1 ? "selected=selected":"";?>>是</option>   
+					</select></td>
+				</tr>
+
+				<tr>
+					<td>是否自动更新：</td>
+					<td><select style="width: 385px; height: 25px;">  
+  						<option value ="0" <?php echo $update->autoUpdate == 1 ? "":"selected=selected";?>>否</option>  
+ 						<option value ="1" <?php echo $update->autoUpdate == 1 ? "selected=selected":"";?>>是</option>   
+					</select></td>
+				</tr>
+
+				<tr>
+					<td>APK文件地址：</td>
+					<td><input type="text" name="apkUrl" id="apkUrl" readOnly=true
+						value="<?php echo $update->apkUrl;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+
+				<tr>
+					<td>更新提示信息：</td>
+					<td><div class="mydiv" id="msgDiv"
+							style="border-left-style: inset; border-top-style: inset; border: 1; width: 380px; height: 100px; cursor: text" contentEditable="true">
+							<?php echo $update->updateDefaultTip;?>
+						</div></td>
+				</tr>
+
+				<tr>
+					<td>更新时间：</td>
+					<td><input type="text" name="updateTime" id="updateTime" readOnly=true
+						value="<?php echo gmdate("Y-m-d H:i:s", ($update->updateTime / 1000) + 8*3600);?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+
+});
+</script>
+

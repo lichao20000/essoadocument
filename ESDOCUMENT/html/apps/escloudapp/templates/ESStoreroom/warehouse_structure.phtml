@@ -1,0 +1,485 @@
+<style type="text/css">
+.show{padding: 0px;float: left;width: 100%;border: 1px solid #ccc;}
+.show span{font-size:15px;float: left;margin: 0px;}
+#opstu label{font-size:15px;}
+#opstu div{margin-top:10px;}
+#opstu input{height:20px;width:125px;}
+
+#ops label{font-size:15px;float:left;margin-right:10px;}
+#ops div{margin-top:10px;width: 170px;height: 30px;}
+#ops input{height:20px;width:125px;float:left;}
+
+
+.buttoncss {
+	padding-left: 5px;
+}
+
+.buttoncss div {
+	float: left;
+	margin-top: 5px;
+	margin-right: 5px;
+	border: 1px solid transparent;
+}
+
+.buttoncss span {
+	margin-right: 5px;
+}
+
+.buttoncss span.title {
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 5px 0px 20px;
+	margin-left: 5px;
+	border-right: 1px solid #ccc;
+}
+
+.buttoncss span.button {
+	float: left;
+	height: 28px;
+	color: #fff;
+	line-height: 28px;
+	padding: 0 5px 0px 5px;
+	padding-left: 28px;
+	_border-top-color: tomato;
+	_border-left-color: tomato;
+	_filter: chroma(color =       tomato);
+	background-position-x: 5px;
+	_border-top-color: tomato;
+	cursor: pointer;
+}
+
+
+.button {
+	background-color: #4a8bc2;
+}
+
+.buttoncss {
+	width: 100%;
+	height: 40px;
+	float: left;
+	padding: 0px;
+	border-left: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+#addbutton{
+	background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/add.png) no-repeat
+		5px;
+	background-color: #6f6e81;
+}
+#batchAddButton{
+	background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/Grid_Data_Batch_Edit.gif) no-repeat
+		5px;
+	background-color: #6f6e81;
+}
+#treeedit{
+background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/all.png) no-repeat
+		5px;
+	background-color: #6f6e81;
+}
+#deletetreenode{
+background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/close.png) no-repeat
+		5px;
+	background-color: #6f6e81;
+}
+.buttoncss span#addbutton:HOVER {
+	background-color: #133959;
+}
+.buttoncss span#batchAddButton:HOVER {
+	background-color: #133959;
+}
+.buttoncss span#treeedit:HOVER {
+	background-color: #133959;
+}
+.buttoncss span#deletetreenode:HOVER {
+	background-color: #133959;
+}
+
+.ztree li a span{
+	color:#444;
+}
+</style>
+<div id="structuremain" style="float: left;margin: 0px;width: 390px;padding: 5px;">
+<input type="hidden" name="framenum" value="<?php echo $framenumber;?>"/><!-- 记录该排架的排架数量 -->
+	<div id='' class='buttoncss' style="padding-left: 20px;width: 370px;">
+		<!--  暂时注释掉批量添加按钮<div><span id='addbutton' class='button' >添加</span></div>   -->
+		<div><span id='batchAddButton' class='button' title="添加排架数量">批量添加</span></div>
+		<div><span class='button' id="treeedit">编辑</span></div>
+		<div><span class='button' id="deletetreenode">删除</span></div>
+	</div>
+	<div class="show" style="overflow: auto;">
+		<ul id="mystructure" class="ztree" ></ul>
+	</div>
+</div>
+<script type="text/javascript">
+if(state==1){
+		$('#structuremain .buttoncss').show();
+	 }else{
+		$('#structuremain .buttoncss').hide();
+ }
+$(function(){
+
+	var setting = {
+			view: {
+				dblClickExpand: false,
+				showLine: false,
+				selectedMulti: false
+			},
+			edit:{
+				enable:true
+			},
+			async:{
+				enable:true,
+				url:$.appClient.generateUrl({ESStoreroom:'getnode',houid:selectid},'x'),
+				autoParam:["id"]
+			},
+			callback: {
+				beforeRename:beforeRename,
+				onClick: clickNode
+			}
+		};
+	function beforeRename(treeId,treeNode,newName){
+		 if (newName.length == 0) {
+			 $.dialog.notice({title:'操作提示',content:'节点名称不能为空.',icon:'error',time:3});
+			 var zTree = $.fn.zTree.getZTreeObj("mystructure");
+			 setTimeout(function(){zTree.editName(treeNode)}, 10);
+			 return false;
+			 }
+			 return true; 
+	}
+	function clickNode(event, treeId, treeNode){
+		var zTree = $.fn.zTree.getZTreeObj("mystructure");
+		zTree.expandNode(treeNode);
+	}
+	$(document).ready(function() {
+		$.getJSON($.appClient.generateUrl({ESStoreroom : "tree",houid:selectid}, 'x'), function(zNodes) {
+			$.fn.zTree.init($("#mystructure"), setting, zNodes);
+			$("#mystructure_1_span").click();
+		
+		});
+	});
+	
+	//var nodes = "";
+// 	var exg = /^[^\s][\u4e00-\u9fa5]*\d*[a-zA-Z]*@*$/;
+	// longjunhao 20140820 修复bug 549 库房管理-库房结构编号提示允许输入的内容与实际允许输入的内容不符
+	var exg = /^[^\s][\u4e00-\u9fa5\da-zA-Z@]*$/;
+	//添加操作
+	$('#addbutton').click(function(){
+		var html = '<form id="opstu">';
+			html+= '<div><label>名称</label>';
+			html+= '<input type="text" name="name"/></div>';
+			html+= '<div><label>编号</label>';
+			html+= '<input type="text" name="code"/></div></form>';
+		$.dialog({
+			title:'添加库房结构',
+			fixed:true,
+		    resize: false,
+		    ok:true,
+		    cancelVal: '取消',
+		    cancel: true,
+	    	content:html,
+	    	ok:function(){
+				var s = $("#opstu input[name='name']").val();
+				var t = $("#opstu input[name='code']").val();
+				if(exg.test(t)==false){
+					$.dialog.notice({icon:'warning',content:'库房结构编码只能为汉字数字及字母或者@',time:3});
+					return;
+				}
+				if(s==""){
+					$.dialog.notice({icon:'warning',content:'库房结构名字不能为空',time:3});
+					return;
+				}
+				var zTree = $.fn.zTree.getZTreeObj("mystructure");
+				nodes = zTree.getSelectedNodes();
+	    		treeNode = nodes[0];
+	    		//alert(treeNode);return;
+	    		if(treeNode==undefined){
+	    			$.dialog.notice({icon:'warning',content:'请先选择节点再进行添加操作',time:3});
+					return;
+		    	}
+	    		//var pid =treeNode.id;
+	    		var form=$('#opstu');
+				var data=form.serialize();
+				var st = s + t;
+				//alert(st);return;
+				var istrue = 1;
+				$.post($.appClient.generateUrl({ESStoreroom:'getnode',houid:selectid},'x'),{id:treeNode.id},function(result){
+					var res = eval("("+result+")");
+					for(var i = 0;i<res.length;i++){
+						if(res[i].name==st){
+							istrue = 0;
+						}
+					}
+					if(istrue==0){
+						$.dialog.notice({icon:'warning',content:'添加的节点不能与同一级节点有重复',time:3});
+						return;
+					}else{
+						donext(treeNode,data,zTree);
+					}
+				});
+	        }
+			
+		});
+	});
+	function donext(treeNode,data,zTree){
+		$.post($.appClient.generateUrl({ESStoreroom:'addstructureval'},'x'),{pid:treeNode.id,param:data,houid:selectid},function(datas){
+			if(datas){
+				if(treeNode.isParent==true){
+					zTree.reAsyncChildNodes(treeNode,"refresh");
+				}else{
+					zTree.reAsyncChildNodes(treeNode.getParentNode(),"refresh");
+					//zTree.selectNode(treeNode);
+				}
+				$.dialog.notice({icon:'succeed',content:'操作成功',time:2});
+				
+			}else{
+				$.dialog.notice({icon:'error',content:'操作失败',time:2});
+			}
+		});
+	}
+	//批量添加
+	$("#batchAddButton").click(function(){
+		var zTree = $.fn.zTree.getZTreeObj("mystructure");
+		nodes = zTree.getSelectedNodes();
+		treeNode = nodes[0];
+		if(treeNode.getParentNode()!=null){
+			$.dialog.notice({icon:'warning',content:'请选择根节点进行批量添加！',time:3});
+			return false;
+		}
+		var framenum = $('#structuremain [name="framenum"]').val();
+		var htmlContent = '<form id="ops"><input type="hidden" name="gridwidth" value="<?php echo $gridwidth?>"/>';
+			htmlContent+= '<div><label>架</label>';
+			htmlContent+= '<input type="text" name="jia"/></div>';
+			htmlContent+= '<div><label>列</label>';
+			htmlContent+= '<input type="text" name="lie" value="<?php echo $col?>" readonly=true/></div>';
+			htmlContent+= '<div><label>层</label>';
+			htmlContent+= '<input type="text" name="ceng" value="<?php echo $layer?>" readonly=true/></div></form>';
+			$.dialog({
+				title:'批量添加库房结构',
+				width: '270px',
+	    	   	height: '150px',
+	    	   	padding: '0px',
+				fixed:true,
+			    resize: false,
+			    cancelVal: '取消',
+			    cancel: true,
+		    	content:htmlContent,
+		    	ok:function(){
+					var zTree = $.fn.zTree.getZTreeObj("mystructure");
+					nodes = zTree.getSelectedNodes();
+		    		treeNode = nodes[0];
+		    		if(treeNode==undefined){
+		    			$.dialog.notice({icon:'warning',content:'请先选择节点再进行添加操作',time:3});
+						return;
+			    	}
+
+		    		// longjunhao 20140915 add 判断排架数量最大值为100
+		    		var frameNum = $('[name="framenum"]').val();
+		    		var addFrameNum = $("#ops input[name='jia']").val();
+		    		if (frameNum*1+addFrameNum*1 > 100) {
+		    			$.dialog.notice({icon:'warning',content:'添加排架失败，排架数量的最大值为100，您还能再添加'+(100-frameNum*1)+'个排架',time:3});
+						return false;
+		    		}
+			    	
+		    		var batchForm=$('#ops');
+					var data=batchForm.serialize();
+					var reg=/^[1-9]\d*$/;
+						if(!reg.test($("#ops input[name='jia']").val()) || ($("#ops input[name='jia']").val()>100)){
+							$.dialog.notice({icon:'warning',content:'架只能为不大于100的正整数且不能为空！',time:3});
+							return false;
+						}else if((!reg.test($("#ops input[name='lie']").val())) || ($("#ops input[name='lie']").val()>100)){
+							$.dialog.notice({icon:'warning',content:'列只能为不大于100的正整数且不能为空！',time:3});
+							return false;
+						}else if((!reg.test($("#ops input[name='ceng']").val())) || ($("#ops input[name='ceng']").val()>10)){
+							$.dialog.notice({icon:'warning',content:'层只能为不大于10的正整数且不能为空！',time:3});
+							return false;
+						}else{
+							$.post($.appClient.generateUrl({ESStoreroom:'saveRepositoryStructureBatch'},'x'),{parentid:treeNode.id,param:data,repositoryid:selectid},function(datas){
+				    			if(datas){
+				    				if(treeNode.isParent==true){
+				    					zTree.reAsyncChildNodes(treeNode,"refresh");
+				    				}else{
+				    					zTree.reAsyncChildNodes(treeNode.getParentNode(),"refresh");
+				    				}
+				    				$("#flexme1").flexReload();
+				    				$.dialog.notice({icon:'succeed',content:'操作成功',time:2});
+				    			}else{
+				    				$.dialog.notice({icon:'error',content:'操作失败',time:2});
+				    			}
+				    		});
+						}
+			    },
+			    cache:false
+			});
+	});
+	//编辑
+	$("#treeedit").click(function(){
+		var zTree = $.fn.zTree.getZTreeObj("mystructure");
+		nodes = zTree.getSelectedNodes();
+		treeNode = nodes[0];
+		if (nodes.length == 0) {
+			$.dialog.notice({icon:'warning',content:'请先选择节点再进行操作',time:2});
+			return;
+		}
+		var pid=treeNode.pId;
+		if(pid==0){
+			$.dialog.notice({icon:'warning',content:'根节点不允许编辑',time:2});
+			return;
+		}
+		  $.ajax({
+			    url:$.appClient.generateUrl({ESStoreroom:'showeditstructure',id:treeNode.id},'x'),
+			    success:function(data){
+			    	$.dialog({
+				    	title:'编辑库房结构',
+			    	   	fixed:true,
+			    	    resize: false,
+				    	content:data,
+				    	ok:true,
+						cancelVal: '取消',
+						cancel: true,
+				    	ok:function(){
+				    		var form=$('#editstu');
+				    		if (!form.validate()) {return false;}
+				    		var data=form.serialize();
+				    		var s = $("#editstu input[name='name']").val();
+				    		var t = $("#editstu input[name='code']").val();
+				    		var st = s + t;
+				    		//alert(st);return;
+				    		if(exg.test(t)==false){
+				    			$.dialog.notice({icon:'warning',content:'库房结构编码只能为汉字数字及字母或者@',time:3});
+				    			return false;
+				    		}
+				    		if(s==""){
+				    			$.dialog.notice({icon:'warning',content:'库房结构名字不能为空',time:2});
+				    			return false;
+				    		}
+
+				    		var fnodes = zTree.getNodesByParam("pId",pid,treeNode.getParentNode());
+				    		
+				    		//alert(fnodes[0].name);return;
+				    		var istrue = 1;
+				    		//alert(fnodes[1].name);return;
+				    		for(var i=0;i<fnodes.length;i++){
+				    			if(fnodes[i].name==st&&st!=treeNode.name){
+									istrue = 0;
+								}
+					    	}
+					    	if(istrue==0){
+					    		$.dialog.notice({icon:'warning',content:'编辑的节点不能与同一级节点有重复',time:2});
+								return;
+						    }
+				    		var url = $.appClient.generateUrl({ESStoreroom:'editstructure'},'x');
+				    		$.post(url,{id:treeNode.id,param:data},function(datas){
+				    			if(datas){
+					    			if(pid=="0"){
+					    				treeNode.name = s;
+					    				zTree.updateNode(treeNode);
+						    		}else{
+						    			zTree.reAsyncChildNodes(treeNode.getParentNode(),"refresh");
+							    	}
+				    				$.dialog.notice({icon:'succeed',content:'操作成功',time:1});
+				    				
+				    			}else{
+				    				$.dialog.notice({icon:'error',content:'操作失败',time:1});
+				    			}
+				    		});
+					    },
+					    init: function(){
+						 	$('#editstu').autovalidate();   
+					    }
+				    });
+				    },
+				    cache:false
+			});
+	
+
+		
+		
+	});
+	//删除
+	$("#deletetreenode").click(function(){
+		var zTree = $.fn.zTree.getZTreeObj("mystructure");
+		nodes = zTree.getSelectedNodes();
+		treeNode = nodes[0];
+		if (nodes.length == 0) {
+		$.dialog.notice({icon:'warning',content:'请先选择一个节点',time:2});
+		return;
+		}
+		if(treeNode.pId==0){
+			$.dialog.notice({icon:'warning',content:'根节点不能删除',time:2});
+			return;
+		}
+		// longjunhao 20140826 修复bug530，不能删除层和列
+		// 判断当前选中节点的层级，level >= 2的为层级和列级，不能删除
+		if (treeNode.level >= 2) {
+			$.dialog.notice({icon:'warning',content:'不能删除层和列!',time:2});
+			return;
+		} else {
+			del(treeNode.id,treeNode,zTree);
+		}
+		
+// 		$.post($.appClient.generateUrl({ESStoreroom:'getnode',houid:selectid},'x'),{id:treeNode.id},function(result){
+// 			if(result!="[]"){
+// 				$.dialog.notice({icon:'warning',content:'请先其删除子节点',time:2});
+// 				return;
+// 			}else{
+// 				del(treeNode.id,treeNode,zTree);
+// 			}
+// 		});
+
+	});
+	function del(treeid,treeNode,zTree){
+		$.dialog({
+			content : '确定要删除吗？删除后不能恢复！',
+			okVal : '确定',
+			ok : true,
+			cancelVal : '关闭',
+			cancel : true,
+			ok : function() {
+				$.post($.appClient.generateUrl({ESStoreroom:'delstructure'},'x'),{id:treeid,repositoryid:selectid},function(datas){
+					if(datas){
+						$('[name="framenum"]').val($('[name="framenum"]').val()*1-1);
+						zTree.reAsyncChildNodes(treeNode.getParentNode(),"refresh");
+						$.dialog.notice({icon:'succeed',content:'删除成功',time:2});
+						// longjunhao 20140929 刷新库房列表
+						$("#flexme1").flexReload();			
+					}else{
+						$.dialog.notice({icon:'warning',content:'此排下已有档案存在，不允许删除!',time:3});
+					}
+				});
+			}
+		});
+	}
+	
+	
+	//add调整高度@author ldm
+	function wSize() // 函数：获取尺寸
+	{
+		var width;
+		var height;
+		// 获取窗口高度
+		if (window.innerHeight) {
+			height = window.innerHeight;
+		} else if ((document.body) && (document.body.clientHeight)) {
+			height = document.body.clientHeight;
+		}
+		//获取窗口宽度
+		if (window.innerWidth) {
+			width = window.innerWidth;
+		} else if ((document.body) && (document.body.clientWidth)) {
+			height = document.body.clientWidth;
+		}
+		// 通过深入 Document 内部对 body 进行检测，获取窗口大小
+		if (document.documentElement && document.documentElement.clientHeight&&document.documentElement.clientWidth) {
+			height = document.documentElement.clientHeight;
+			width =  document.documentElement.clientWidth;
+		}
+		document.getElementById('structuremain').style.height = 490 + 'px';
+		document.getElementById('mystructure').style.height = 430 + 'px';
+	}
+	wSize();
+	window.onresize = wSize;
+		
+});
+</script>

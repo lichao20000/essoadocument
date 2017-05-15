@@ -1,0 +1,152 @@
+<div id="batchmodifystyle">
+<form id="batchModify">
+<span class="tabs" style="font-weight: bold;">修改规则编辑</span>
+<hr width="100%" style="margin:5px 0px;">
+<span class="tabs">
+<input type="radio" name="RadioGroup" id="RadioGroupthID" value="0" checked="checked"><label for="RadioGroupthID" style="padding:0px;display:inherit;">替换</label>&nbsp;&nbsp;&nbsp;
+<input type="radio" name="RadioGroup" id="RadioGroupJQZID" value="1"><label for="RadioGroupJQZID" style="padding:0px;display:inherit;">加前缀</label>&nbsp;&nbsp;&nbsp;
+<input type="radio" name="RadioGroup" id="RadioGroupJHZID" value="2"><label for="RadioGroupJHZID" style="padding:0px;display:inherit;">加后缀</label>&nbsp;&nbsp;&nbsp;
+<input type="radio" name="RadioGroup" id="RadioGroupZDBHID" value="3"><label for="RadioGroupZDBHID" style="padding:0px;display:inherit;">自动编号</label></span>
+<div id="itab00">
+<span class="tabs">待修改字段<em style="color: red;">*</em>&nbsp;&nbsp;
+<select id="batchFieldName" name="fieldName" verify="text/50/1/0">
+<option value="">--请选择--</option>
+<?php 
+		foreach($searchFieldForUpdate as $key=>$val){
+				echo "<option value=C".$val->ID." fieldType='".$val->ESTYPE."' info='".$val->ESTYPE."/".$val->ESLENGTH."/".$val->ESISNULL."/".$val->ESDOTLENGTH."'>".$val->TAGESIDENTIFIER."</option>";
+}?>
+</select></span>
+</div>
+</form>
+<?php if($flag===true){?>
+<span class="tabs" style="font-weight: bold;">修改数据筛选</span>
+<hr width="100%" style="margin:5px 0px;">
+<?php include (dirname(__FILE__)."/filter.phtml")?><?php } ?>
+</div>
+
+<div id="itab0" style="display:none"><span class="tabs">被替换值&nbsp;&nbsp;<input type="text" name="oldValue" value="">&nbsp;&nbsp;&nbsp;替换值&nbsp;&nbsp;<input type="text" name="newValue" value=""></span></div>
+<div id="itab1" style="display:none"><span class="tabs">前缀字符串&nbsp;&nbsp;<input type="text" name="newValue" value=""></span></div>
+<div id="itab2" style="display:none"><span class="tabs">后缀字符串&nbsp;&nbsp;<input type="text" name="newValue" value=""></span></div>
+<div id="itab3" style="display:none"><span class="tabs">起始编号值&nbsp;&nbsp;<input type="text" name="oldValue" value="" verify="number/3/0/0">&nbsp;&nbsp;&nbsp;编号位数&nbsp;&nbsp;<input type="text" name="newValue" id="autoNumLen" onblur="getColumnLen()" value="" verify="number/20/0/0">&nbsp;&nbsp;<input type="checkbox" name="isZero" id="isZeroId" value="1">&nbsp;&nbsp;<label for="isZeroId" style="padding:0px;display:inherit;">自动补零</label></span></div>
+<script type="text/javascript">
+$(function(){
+	var len=$(":radio").length;
+	$(":radio").each(function(i){
+		$(this).change(len,function(){
+// 			$("#itab0").css("display","none");
+			for(var j=0;j<len;j++){
+				if(j==i)
+				{	
+// 					var arr = [ 1, 2, 3];
+					var arr = [ 1, 2];
+					if($.inArray(i, arr)!=-1){
+						$("#batchFieldName").get(0).options.length =1;  //默认选择第一行
+						<?php 
+						    $filter=array('NUMBER','DATE','FLOAT','TIME','BOOL');//批量修改过滤掉  数字型字段、日期型字段、时间型字段、浮点型字段、布尔型字段
+						    foreach($searchFieldForUpdate as $key=>$val){
+						  	$estype=$val->ESTYPE;
+						  	if (!in_array($estype, $filter)){
+						  ?>
+						  $("#batchFieldName").append("<option value=<?php echo "C".$val->ID?> fieldType='<?php echo $val->ESTYPE?>' info='<?php echo $val->ESTYPE."/".$val->ESLENGTH."/".$val->ESISNULL."/".$val->ESDOTLENGTH ?>'><?php echo $val->TAGESIDENTIFIER;?></option>"); 
+						  <?php
+						  	}
+						  }
+				        ?>
+					}else if(i == 3){//guolanrui 20140820 自动编号时，允许修改数值类型字段
+						$("#batchFieldName").get(0).options.length =1;  //默认选择第一行
+						<?php 
+						    $filter=array('DATE','FLOAT','TIME','BOOL');//批量修改过滤掉  日期型字段、时间型字段、浮点型字段、布尔型字段
+						    foreach($searchFieldForUpdate as $key=>$val){
+						  	$estype=$val->ESTYPE;
+						  	if (!in_array($estype, $filter)){
+						  ?>
+						  $("#batchFieldName").append("<option value=<?php echo "C".$val->ID?> fieldType='<?php echo $val->ESTYPE?>' info='<?php echo $val->ESTYPE."/".$val->ESLENGTH."/".$val->ESISNULL."/".$val->ESDOTLENGTH ?>'><?php echo $val->TAGESIDENTIFIER;?></option>"); 
+						  <?php
+						  	}
+						  }
+				        ?>   
+					}else{
+						$("#batchFieldName").get(0).options.length =1;  // longjunhao 20140805 解决点击“替换”，字段下拉框重复问题
+						<?php 
+						   foreach($searchFieldForUpdate as $key=>$val){
+						?>
+						   $("#batchFieldName").append("<option value=<?php echo "C".$val->ID?> fieldType='<?php echo $val->ESTYPE?>' info='<?php echo $val->ESTYPE."/".$val->ESLENGTH."/".$val->ESISNULL."/".$val->ESDOTLENGTH ?>'><?php echo $val->TAGESIDENTIFIER;?></option>"); 
+						<?php
+							}
+					    ?>
+
+					}
+					$('#itab'+i).clone().appendTo('#batchModify').show();
+				}else{
+					$('#itab'+j,$('#batchModify')).remove();
+				}
+				var f=$('#batchModify');
+    				if(f.length > 0){
+						f.autovalidate();
+					}
+			}
+		});
+	});	
+
+	// longjunhao 20140805 校验填写是否合法
+	$('#batchFieldName').change(function(){
+		var verifyStr = $('#batchFieldName option:selected').attr('info');
+		var fieldType = $('#batchFieldName option:selected').attr('fieldType');
+		var checkedModiStyle = $("input[name='RadioGroup']:checked").val();
+
+		verifyStr = verifyStr.toLowerCase();
+		$('[name="oldValue"],[name="newValue"]').attr("verify",verifyStr);
+		$('[name="oldValue"],[name="newValue"]').val("");
+		//guolanrui 20140820 增加自动编号时，对数值类型数据被选择时，将补零和为数置为只读BUG：630
+		if(checkedModiStyle=='3' && fieldType=='NUMBER'){
+			$('[name="newValue"]')[0].disabled=true;
+			$('[name="isZero"]')[0].disabled=true;
+		}else{
+			$('[name="newValue"]')[0].disabled=false;
+			$('[name="isZero"]')[0].disabled=false;
+		}	
+
+		// longjunhao 20140912 修复bug202 处理选择“替换”是的布尔类型
+		if ($('#RadioGroupthID').is(':checked')) {
+			if('BOOL' == fieldType) {
+				var op = 
+					'<span class="tabs">被替换值&nbsp;&nbsp;<select id="oldValue" name="oldValue" style="width:138px;" verify="text/5/0/0"><option value=""></option><option value="是">是</option><option value="否">否</option></select>&nbsp;&nbsp;&nbsp;' +
+					'替换值&nbsp;&nbsp;<select id="newValue" name="newValue" style="width:138px;" verify="text/5/1/0"><option value="">--请选择--</option><option value="是">是</option><option value="否">否</option></select></span>';
+				$('#itab0').html(op);
+			} else {
+				$('#itab0').html('<span class="tabs">被替换值&nbsp;&nbsp;<input type="text" name="oldValue" value="">&nbsp;&nbsp;&nbsp;替换值&nbsp;&nbsp;<input type="text" name="newValue" value=""></span>');
+				$('[name="oldValue"],[name="newValue"]').attr("verify",verifyStr);
+			}
+			$('#batchModify').autovalidate();
+		}
+	});
+
+	$('#itab0').clone().appendTo('#batchModify').show();
+});
+//wanghongchen 20140314 自动编号，编号位数验证
+function getColumnLen(){
+	url = "<?php echo $esaction->generateUrl(Array('ESIdentify'=>'getColumnLen'),'x');?>";
+	var $e = $("#autoNumLen");
+	var col = $("#batchFieldName").val();
+	var flag = true;
+	$.ajax({
+		url:url,
+		type:'get',
+		async:false,
+		data:{col:col},
+		success:function(data){
+			if(parseInt($e.val()) > parseInt(data)){
+				$e.css('border','2px #DD0000 solid');
+				$e.attr('title','编号位数不得大于'+data+'位！');
+				flag = false;
+			}else{
+				$e.removeClass("2px #DD0000 solid"); 
+				//$e.css('border','1px invert');
+				$e.attr('title','');
+			}
+		}
+	});
+	return flag;
+}
+</script>
+

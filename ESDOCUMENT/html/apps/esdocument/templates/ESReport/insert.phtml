@@ -1,0 +1,142 @@
+<style type="text/css">
+#addReport table tr {
+	height: 50px;
+}
+
+span.addReportType input {
+	float: left;
+	margin-left: 25px;
+}
+
+span.addReportType label {
+	float: left;
+	margin-right: 45px;
+}
+</style>
+<div style="height: 300px;">
+	<div style="padding-top: 10px;">
+		<form id="addReport" method="post" enctype="multipart/form-data">
+			<table style="height: 100px;">
+				<tr>
+					<td>报表标题:</td>
+					<td><input type="text" name="title" verify="unspecial/100/1/0"
+						id="title" value="" style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>报表类型:</td>
+					<td><select name="mytype" style="width: 380px; height: 20px;">
+							<option value="collection">文件收集</option>
+							<option value="using">文件借阅</option>
+							<option value="workflow">工作流</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td>输出格式:</td>
+					<td><span class="addReportType"><input id="s1" type="radio"
+							class="radio" checked="checked" name="resourceleve" value="pdf"><label
+							for="s1">PDF格式</label></span> <span class="addReportType"><input
+							id="s2" type="radio" class="radio" name="resourceleve"
+							value="rtf"><label for="s2">WORD格式</label></span> <span
+						class="addReportType"><input id="s3" type="radio" class="radio"
+							name="resourceleve" value="xls"><label for="s3">EXCEL格式</label></span>
+					</td>
+				</tr>
+				<tr id="myproces">
+					<td>模版文件:</td>
+					<td><input id="btnAdd" type="button" value=" 添加文件 " /> <input
+						id="btnCancel" style="display: none;" type="button" value=" 取消" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><div style="height: 25px; width: 30px;" id="fsUploadProgress"></div></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	// 上传电子文件
+		var upload = new SWFUpload({
+			//提交路径
+			upload_url: "<?php echo $ip;?>/addReport",
+			//向后台传递额外的参数
+			//上传文件的名称
+			file_post_name: "file",
+			
+			file_size_limit : "102400",	// 100MB
+			file_types : "*.jrxml",
+			file_types_description : "jrxml文件",
+			file_upload_limit : "1",
+			file_queue_limit : "0",
+
+			// 事件处理
+			swfupload_loaded_handler : swfuploadLoaded,
+			file_dialog_start_handler : fileDialogStart,
+			file_queued_handler : fileQueued,
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_start_handler : uploadStart,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+
+			// 按钮的处理
+			button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+			button_placeholder_id : "btnAdd",
+			button_width: 72,
+			button_height: 28,			
+			// Flash文件地址设置
+			flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",			
+			custom_settings : {
+				progressTarget : "fsUploadProgress",
+				cancelButtonId : "btnCancel",
+				startButtonId : "btnStart"
+				// 上传成功的回调函数
+				//uploadSuccess : function(file, data){$("#report").flexOptions().flexReload();}
+			},			
+			// Debug 设置
+			debug: false
+		});
+		$("#btnCancel").click(function(){cancelQueue(upload);});
+		$("#btnStart").click(function(){
+			var form=$('#addReport');
+    		if (!form.validate()) {
+    			return false;
+    		}
+			var title = $("#addReport input[name='title']").val();
+			var resourceleve = $("#addReport .radio:checked").val();
+			var mytype = $("#addReport select option:selected").val();
+			var rtitle = $.trim(title);
+			$.ajax({
+				type: "POST",
+    	    	url:$.appClient.generateUrl({ESReport:'checkTitleUnique'},'x'),
+    	    	data:{title:rtitle},
+    	    	success:function(data){
+        	    	if(data == 'true'){
+        				upload.addPostParam("reportname",rtitle);
+        				upload.addPostParam("reportType",mytype);
+        				upload.addPostParam("reportstyle",resourceleve);
+        				upload.addPostParam("uploader","<?php echo $userid;?>");
+        				upload.addPostParam("userIp","<?php echo $userIp;?>");
+        				startQueue(upload);
+        	    	}else{
+        	    		$.dialog.notice({icon:'warning', content:"标题为【"+rtitle+"】的报表已经存在，请重新填写报表标题!", time:3});
+        				return;
+                	}	
+    	    	},
+    		    cache:false
+    		});			
+		});
+});
+
+//上传成功的回调函数
+function uploadSuccess(file,data){
+	if(!this.getStats().upload_errors) {
+		this.destroy();//当不需要再使用SWFUpload了的时候,可以使用该方法来销毁它的实例和dom元素
+		dia1.close();//关闭添加窗口
+		$("#report").flexOptions().flexReload();
+	}
+}
+</script>

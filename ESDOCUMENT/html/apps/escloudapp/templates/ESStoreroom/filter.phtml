@@ -1,0 +1,112 @@
+<style type="text/css">
+<!--
+/* 筛选功能通用样式 */
+
+#addrolefree{ width:655px; height:auto; overflow:hidden; float:left;}
+#contents{ width:650px; height:150px; overflow:auto; marign-left:5px; _dispaly:inline;}
+#addrolefree .h2{ width:100%;  line-height:25px; text-indent:25px; color:#555; border-bottom:1px solid #f3f3f3; float:left; margin:5px 0; background:#f9f9f9 url(<?php echo $tplPath;?>/ESStoreroom/img/info.gif) no-repeat 5px 5px;}
+.contbox{ width:645px; height:30px; float:left; margin-left:5px; _display:inline;}
+.w14090{ font-size:13px; color:#555; float:left; margin-right:10px; display:block;}
+.hei30{ line-height:30px;}
+.w140{ width:130px; padding-left:2px;}
+.w90{ width:80px;}
+.hei20{ height:20px; line-height:20px; margin-top:4px; border:1px solid #aaa;}
+/* 添加行删除行按钮样式 */
+.newfilter,.delfilter{ width:70px; line-height:24px; text-indent:24px; color:#555; float:left; margin-top:3px;cursor:pointer;}
+.newfilter{ margin-right:10px; background:url(<?php echo $tplPath;?>/public/img/add.png) no-repeat 4px 4px;}
+.delfilter{ background:url(<?php echo $tplPath;?>/public/img/del.gif) no-repeat 4px 4px;}
+.newfilter:hover,.delfilter:hover{ width:68px; line-height:22px; text-indent:23px; border:1px solid #e3e3e3;}
+.newfilter:hover{ background:#f3f3f3 url(<?php echo $tplPath;?>/public/img/add.png) no-repeat 3px 3px;}
+.delfilter:hover{ background:#f3f3f3 url(<?php echo $tplPath;?>/public/img/del.gif) no-repeat 3px 3px;}
+-->
+</style>
+<style>
+
+.ztree li a span{
+	color:#444;
+}
+
+</style>
+<div id='addrolefree'>
+	<h2 class='h2'>筛选条件设置</h2>
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span>
+		<span class='w90 w14090 hei30'>比较符</span>
+		<span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span>
+	</p>
+	<div id='contents'>
+		<!-- 4 longjunhao 20140809 edit 默认显示4行-->
+		<?php for($i=0;$i<4;$i++){?>
+		<p class='contbox creatediv'>
+			<select class='w140 w14090 hei20 filedname'>
+				<option value='DATE' selected="selected">记录日期</option>
+				<option value='TIME'>时间</option>
+				<option value='TEMPERATURE'>温度</option>
+				<option value='HUMIDITY'>湿度</option>
+			</select>
+			<select class='w90 w14090 hei20 comparison'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like">包含</option>
+				<option value="notLike">不包含</option>
+			</select>
+			<input type='text' class='w140 w14090 hei20 filedvalue' />
+			<select id='' class='w14090 w90 hei20 relationship'>
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select>
+			<a class='newfilter'>添加行</a> 
+			<a class='delfilter'>删除行</a>
+		</p>
+		<?php }?>
+	</div>
+</div>
+<script type="text/javascript">
+//longjunhao 20140915 修复bug1135
+$('.newfilter').die().live('click',function (){
+	var p = $(this).parent().clone().insertAfter($(this).parent());
+	var tds=p.children();
+	tds.each(function(i){
+		if(i==0){
+			$(this).val('DATE');
+		}
+		if(i==1){
+			$(this).val('equal');
+		}
+		if(i==2){
+			$(this).val('');
+		}
+		if(i==3){
+			$(this).val('AND');
+		}
+	});
+});
+//longjunhao 20140915 修复bug1135
+$('.delfilter').die().live('click',function (){
+	if($('#contents p').length > 4){
+		$(this).parent().remove();
+	} else {
+		var tds=$(this).parent().children();
+		tds.each(function(i){
+			if(i==0){
+				$(this).val('DATE');
+			}
+			if(i==1){
+				$(this).val('equal');
+			}
+			if(i==2){
+				$(this).val('');
+			}
+			if(i==3){
+				$(this).val('AND');
+			}
+		});
+	}
+});
+
+</script>

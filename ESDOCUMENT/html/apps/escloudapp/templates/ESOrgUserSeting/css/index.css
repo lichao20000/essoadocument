@@ -1,0 +1,113 @@
+@CHARSET "UTF-8";
+/**
+ * 机构人员设置首页样式和弹出窗口样式
+ * @author caojian
+ * @DATE 20140324
+ */
+body,html{ overflow:hidden;}
+.leftfree, .rightfree{ float:left;}
+.leftfree{ overflow:auto;}
+.cursor { cursor:pointer;}
+
+
+/*init*/
+input { margin:0; padding:0;}
+ul{ margin:0; padding:0; list-style-type:none;}
+p{ margin:0; padding:0;}
+
+/*用户详细信息按钮*/
+.edit{ width:16px; height:16px; background:url(../../public/img/user.png) no-repeat; border:none; cursor:pointer;}
+
+
+/*
+ *以下是弹出窗口样式
+ *其中部扩展样式在extjumwin.css文件中
+ *最外层框
+ */
+#jumwin{ width:466px; height:auto; overflow:hidden; float:left;}
+
+/*
+ * 字段div已经做到自适应高度
+ * 只需要添加p标签(包含里面的span和input)
+ */
+#userMes{ width:466px; height:auto; overflow:hidden; float:left; margin-bottom:10px;}
+#userMes p{ width:475px; height:30px; float:left;}
+.fieldname{ width:70px; font:normal normal normal 13px/30px arial; color:#555; float:left;}
+.shortinput{ width:152px; height:20px; font:normal normal normal 13px/20px 微软雅黑; padding:0 0 0 3px; float:left; margin:3px 8px 0 0; border:1px solid #ccc; _display:inline;}
+
+
+
+/*系统角色列表UL,导出导入按钮DIV,已选角色列表UL*/
+#userRole,.referValues{ width:466px; height:auto; overflow:hidden; float:left;}
+.referValues{ clear:left; display:none; margin-top:20px; border-radius:5px;}
+
+.ruleTitle{ width:100%; height:25px; float:left; margin-bottom:5px;}
+.ruleTitle span{ line-height:25px; float:left; padding:0 10px; background:#eee; border-radius:5px;}
+
+.useLis,.selBut{ height:auto; overflow:hidden; float:left;}
+.useLis{ width:193px;}
+.selBut{ width:80px; padding-top:105px; position:relative;}
+.selBut span{width:20px; height:20px; float:right; margin:0 30px 10px; cursor:pointer; background:url(../img/button.bg.gif) no-repeat;}
+.selBut .endspan{ margin-bottom:0;}
+.selBut .estop{ background-position:0px 0px;}
+.selBut .esup{ background-position:0px -20px;}
+.selBut .esleft{ background-position:0px -40px;}
+.selBut .esright{ background-position:0px -60px;}
+.selBut .esdown{ background-position:0px -80px;}
+.selBut .endspan{ background-position:0px -100px;}
+/*gengqianfeng 20140910 修改排序样式图标*/
+.selBut .A-Z{ background-position:0px -140px;}
+.selBut .Z-A{ background-position:0px -120px;}
+
+.zerorule{ width:80px; height:22px; position:absolute; top:0; left:0; z-index:200}
+.selBut .zerorule .spa{ width:35px; line-height:22px; text-align:center; float:left; font-size:12px;}
+.selBut .zerorule .inpu{ width:40px; height:20px; line-height:20px; float:left; border:1px solid #eee;}
+
+/*搜索文本框和搜索按钮*/
+.searchRole{ width:187px; height:20px; float:left; padding-left:2px; border:1px solid #ccc;}
+.searchusername{ width:165px; height:20px; float:left; border:0; font-size:13px; color:#555;}
+.searchuserbutton{ width:20px; height:20px; float:right; border:none; background:url(../img/search.bg.gif) no-repeat 2px 2px;}
+
+/*两个列表*/
+.userList{ width:190px; height:170px; float:left; margin-top:5px; border:1px solid #ccc; overflow-y:scroll;}
+.userList li{ width:170px; height:22px; line-height:22px; color:#555; text-indent:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer;}
+
+/*roletitle*/
+.roletitle{ width:80px; line-height:20px; text-align:center; color:#fff; float:left; margin-bottom:10px; background:#aaa;}
+
+.esselected{background:#eee;color:#fff;}
+
+/* 弹出窗口新样式 */
+.public-set-auth{ width:510px; height:auto; overflow:hidden; float:left;}
+.user-information{ width:510px; height:auto; overflow:hidden; float:left;}
+.user-information p{ width:10px; height:30px; float:left; padding:0; margin:0;}
+.user-information div{ width:250px; height:30px; float:left;}
+.user-information div span{ width:70px; height:22px; font:normal normal normal 13px/24px 微软雅黑,黑体,宋体,arial; color:#000; float:left;}
+.user-information div input{ width:172px; height:20px; float:right; padding:0 3px; outline:0; margin:0; border:1px solid #3C7FB1;}
+.user-role{ width:510px; height:auto; overflow:hidden; float:left;}
+.roles-list{ width:230px; height:280px; float:left; border:1px solid #3C7FB1; overflow-y:scroll;}
+.roles-list li{ width:207px; height:22px; text-decoration:none; font:normal normal normal 13px/22px 微软雅黑,黑体,宋体,arial; color:#000; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; float:left; padding-left:3px;}
+.temp-title{ width:auto; height:24px; line-height:24px; padding:0 5px; border:1px solid #333; background:#CCC; color:#333; position:absolute; z-index:19999;}
+.roles-list .hover{ background:#aaf; color:#fff;}
+.roles-list .focus{ background:#66f; color:#fff;}
+
+.operation-button{ width:46px; height:280px; float:left;}
+.extends-spacing{ width:46px; height:108px; float:left;}
+.operation-button a{ width:20px; height:20px; float:left; margin:5px 12px; border:1px solid #fff; background-image:url(../img/button.bg.gif); _display:inline;}
+.operation-button a:hover{border:1px solid #666;}
+
+.title-search{ width:510px; height:50px; float:left;}
+.title-search .search-role{ width:232px; height:46px; float:left;}
+.title-search .search-role h2{font:normal normal bold 14px/24px 微软雅黑,黑体,宋体,arial; color:#000; float:left; padding:0; margin:0;}
+.title-search .search-role input{width:207px; height:20px; color:#000; float:left; border:1px solid #3c7fb1; padding:0 20px 0 3px; margin:0; outline:0; background:url(../img/search.bg.gif) no-repeat right center;}
+.title-search p{ width:46px; height:30px; float:left;}
+
+.alltoleft{ background-position:0 -179px;}
+.alltoright{ background-position:0 -159px;}
+.toleft{ background-position:0 -41px;}
+.toright{ background-position:0 -59px;}
+
+/**/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+input,textarea{ margin-left:0px !important;}
+}

@@ -1,0 +1,66 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<style type="text/css">
+#classficationNa{width:152px;height:22px;line-height:22px;}
+#limTime{width:152px;_width:152px;height:22px;_height:22px;line-height:22px;}
+#yearMonth{width:150px;height:20px;line-height:20px;}
+#accountingPeriod{width:152px;height:120px;background:#fff;border:1px solid #aaa;display:none;z-index:888;position:absolute;overflow:auto;}
+</style>
+<form id="verificationRule">
+<table style="width:260px;height:120px;border-collapse:collapse;margin-left:25px;padding-bottom:5px;">
+  <tr>
+     <td>年度<font color="red" size="3">*</font></td>
+     <td><input type="text" name="yearMonthVal" value="<?php echo $forceDate;?>" id='yearMonth' class="Wdate" readonly="readonly" onFocus="WdatePicker({dateFmt:'yyyy',oncleared:clearAfter,ychanging:cYearFunc});"/></td>
+  </tr>
+  <tr>
+     <td>会计期间<font color="red" size="3">*</font></td>
+     <!-- <td><input type="text" name="accountingPeriodVal" readonly="readonly" value="" verify="text/100/1/0" id='limTime'/></td> -->
+  	 <td>
+  	 	<select name="accountingPeriodVal" verify="text/100/1/0" id="limTime">
+			<option value = " ">-请先选择年度-</option>
+			<?php if(count($periodDate)>0){
+				foreach($periodDate as $val){
+					echo '<option value = '.$val.'>'.$val.'</option>';
+				}
+			}
+			?>
+		</select>
+     </td>
+  </tr>
+  <tr>
+     <td>凭证类型</td>
+     <td><select name="classificationNameVal" verify="text/100/0/0" id="classficationNa">
+     		<option value = "" selected></option>
+			<option value = "应付发票凭证">应付发票凭证</option>
+			<option value = "应付付款凭证">应付付款凭证</option>
+			<option value = "应收发票凭证">应收发票凭证</option>
+			<option value = "应收收款凭证">应收收款凭证</option>
+			<option value = "记账凭证（总账）">记账凭证（总账）</option>
+			<!-- <option value = "会计账簿">会计账簿</option>
+			<option value = "会计报告">会计报告</option> -->
+		</select>
+	</td>
+  </tr>
+</table>
+</form>
+<script type="text/javascript">
+	function clearAfter(){
+		$('option:gt(0)',$('#limTime')).remove();
+		$('#limTime').val("");
+	}
+	function cYearFunc(){
+		var p,c = $dp.cal;
+		p='y';
+		var yearMonthVal=c.newdate[p];
+		var url=$.appClient.generateUrl({ESIdentify:'getAccountingPeriodVal'},'x');
+		$.post(url,{yearMonthVal:yearMonthVal},function(result){
+			$('#limTime option:gt(0)').remove();
+			if(result.length >0){
+				var resultList=[];
+				for(var i=0;i<result.length;i++){
+					resultList.push('<option value ='+result[i]+' >'+result[i]+'</option>');
+				}
+				$('#limTime').append(resultList.join(""));
+			}
+		},'json');
+	}
+</script>

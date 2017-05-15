@@ -1,0 +1,110 @@
+<div id="reportstyle">
+<form name="esreport" method="post" action=''>
+<span class="tabs">报表实例选择</span>
+<hr width="100%">
+
+<span class="tabs"><input type="radio" name="report_style" value="文书档案案卷目录（A4，2行）">文书档案案卷目录（A4，2行）</span>
+<span class="tabs"><input type="radio" name="report_style" value="文书档案案卷目录（A4，3行）">文书档案案卷目录（A4，3行）</span>
+
+<span class="tabs">报表格式选择</span>
+<hr width="100%">
+<span class="tabs"><input type="radio" name="print_style" value="PDF">PDF</span>
+<span class="tabs"><input type="radio" name="print_style" value="excel">Excle</span>
+<span class="tabs"><input type="radio" name="print_style" value="word">Word</span>
+<?php if($flag===true){?>
+<span class="tabs">打印数据筛选</span>
+<hr width="100%">
+<table width="600" id="sift">
+	<tr>
+		<td>字段名</td>
+		<td>比较符</td>
+		<td>字段值</td>
+		<td>关系符</td>
+		<td>增加行</td>
+		<td>删除行</td>
+	</tr>
+	<tr>
+		<td> <select name="esfields">
+				<option value="题目">题目</option>
+				<option value="文号">文号</option>
+				<option value="分类号">分类号</option>
+				<option value="日期">日期</option>
+				<option value="责任人">责任人</option>
+				<option value="主题词">主题词</option>
+			</select></td>
+		<td> <select name="comparison">
+				<option value="等于">等于</option>
+				<option value="大于">大于</option>
+				<option value="小于">小于</option>
+				<option value="不等于">不等于</option>
+				<option value="大于等于">大于等于</option>
+				<option value="小于等于">小于等于</option>
+				<option value="包含">包含</option>
+				<option value="不包含">不包含</option>
+			</select></td>
+		<td><input type="text" value="" name="esfieldvalue"></td>
+		<td><select name="">
+				<option value="">并且</option>
+				<option value="">或者</option>
+				</select></td>
+		<td><a href="javascript:void()" class ="esadd"><div class="es_add"></div></a></td>
+		<td><a href="javascript:void()" class ="esreduce"><div class="es_del"></div></a></td>
+	</tr>
+		<tr>
+		<td> <select name="">
+				<option value="">题目</option>
+				<option value="">文号</option>
+				<option value="">分类号</option>
+				<option value="">日期</option>
+				<option value="">责任人</option>
+				<option value="">主题词</option>
+			</select></td>
+		<td> <select name="">
+				<option value="">等于</option>
+				<option value="">大于</option>
+				<option value="">小于</option>
+				<option value="">不等于</option>
+				<option value="">大于等于</option>
+				<option value="">小于等于</option>
+				<option value="">包含</option>
+				<option value="">不包含</option>
+			</select></td>
+		<td><input type="text" value="" name=""></td>
+		<td><select name="relational">
+				<option value="并且">并且</option>
+				<option value="或者">或者</option>
+				</select></td>
+		<td><a href="javascript:void()" class ="esadd"><div class="es_add"></div></a></td>
+		<td><a href="javascript:void()" class ="esreduce"><div class="es_del"></div></a></td>
+	</tr>
+		<tr>
+		<td> <select name="">
+				<option value="">题目</option>
+				<option value="">文号</option>
+				<option value="">分类号</option>
+				<option value="">日期</option>
+				<option value="">责任人</option>
+				<option value="">主题词</option>
+			</select></td>
+		<td> <select name="">
+				<option value="">等于</option>
+				<option value="">大于</option>
+				<option value="">小于</option>
+				<option value="">不等于</option>
+				<option value="">大于等于</option>
+				<option value="">小于等于</option>
+				<option value="">包含</option>
+				<option value="">不包含</option>
+			</select></td>
+		<td><input type="text" value="" name=""></td>
+		<td><select name="">
+				<option value="">并且</option>
+				<option value="">或者</option>
+				</select></td>
+		<td><a href="javascript:void()" class ="esadd"><div class="es_add"></div></a></td>
+		<td><a href="javascript:void()" class ="esreduce"><div class="es_del"></div></a></td>
+	</tr>
+</table>
+<?php } ?>
+</form>
+</div>

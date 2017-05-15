@@ -1,0 +1,317 @@
+@CHARSET "UTF-8";
+/*wangbo 20140325*/
+body,html{margin:0px;overflow:hidden;}
+input { margin:0; padding:0;}
+ol,ul{ margin:0; padding:0; list-style-type:none;}
+h2,p,form,table{ margin:0; padding:0; font-weight:normal;}
+#paper{ margin:0 auto;}
+
+#fileEquipGrid img{cursor:pointer;}
+a{
+	text-decoration : none ;
+}
+
+.estransfer{width:360px;overflow-y:auto;overflow-x:hidden}
+.estransfer ul{width: 360px;text-align:center;}
+.estransfer .funLi{width:300px;margin-left:20px;float:left;margin-top:10px;}
+.estransfer .funLi .funSpan{width:100px;height:30px;line-height:30px;text-align:left;float:left;}
+.estransfer .funLi input{height:20px;float:left;line-height:20px;width:190px;}
+
+.wf_manager_main {width: 96%;margin-left:2%;}
+.wf_manager_main .workflow_model_tree {background-color:#133959;border-radius:5px;width:220px;height:100%;float:left;overflow: auto;margin-right:10px;}
+
+.deleteAll{background:url(../img/deleteAll.png) no-repeat 2px center;}
+.warnning{border:2px #DD0000 solid;}
+
+.esModelType{width:310px;overflow-y:hidden;overflow-x:hidden}
+.esModelType ul{width: 300px;text-align:center;}
+.esModelType ul li{width:270px;margin-left:20px;float:left;margin-top:10px;}
+.esModelType span{width:80px;height:20px;line-height:20px;text-align:left;float:left;}
+.esModelType ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.esModelType ul li select{width:165px;height:25px;float:left;line-height:25px;}
+.esModelType .esbottom{width:100%;float:left;margin-top:20px;}
+.esModelType button{width:60px;height:30px;cursor:pointer}
+
+#wfModel_graph {background:url('../img/grid.gif');}
+.createWorkflowArea{width:900px;overflow-y:hidden;overflow-x:hidden}
+
+.wf_add {
+	background: url("../img/chart_organisation_add.png") no-repeat center left;
+}
+.wf_delete {
+	background: url("../img/chart_organisation_delete.png") no-repeat center left;
+}
+.wf_public {
+	background: url("../img/chart_organisation.png") no-repeat center left;
+}
+.wf_copy {
+	background: url( ../img/copy.png ) no-repeat center left;
+}
+.wf_stat {
+	background: url(../img/formbuilderStat.gif) no-repeat center left;
+}
+.wf_test {
+	background: url(../img/detectionWf.png) no-repeat center left;
+}
+.wf_import {
+	background: url("../img/Grid_Data_Import.gif") no-repeat center left;
+}
+.wf_exort {
+	background: url("../img/Grid_Data_Export.gif") no-repeat center left;
+}
+.wf_functionSet {
+	background: url("../img/functionSet.png") no-repeat center left;
+}
+
+/**longjunhao 20140704*/
+.esselected{background:#CCC;color:#fff;}
+#userRole,.referValues{ width:710px; height:auto; overflow:hidden; float:left;}
+.referValues{ clear:left; display:none; margin-top:20px; border-radius:5px;}
+
+.ruleTitle{ width:100%; height:25px; float:left; margin-bottom:10px;}
+.ruleTitle span{ line-height:25px; float:left; padding:0 10px; background:#eee; border-radius:5px;}
+
+.useLis,.selBut{ height:auto; overflow:hidden; float:left;}
+.useLis{ width:250px;}
+.selBut{ width:80px; padding-top:35px; position:relative;}
+.selBut span{width:20px; height:20px; float:right; margin:0 30px 10px; cursor:pointer; background:url(../img/button.bg.gif) no-repeat;}
+.selBut .endspan{ margin-bottom:0;}
+.selBut .estop{ background-position:0px 0px;}
+.selBut .esup{ background-position:0px -20px;}
+.selBut .esleft{ background-position:0px -40px;}
+.selBut .esright{ background-position:0px -60px;}
+.selBut .esdown{ background-position:0px -80px;}
+.selBut .endspan{ background-position:0px -100px;}
+/*gengqianfeng 20140910 修改排序样式图标*/
+.selBut .A-Z{ background-position:0px -140px;}
+.selBut .Z-A{ background-position:0px -120px;}
+
+.zerorule{ width:80px; height:22px; position:absolute; top:0; left:0; z-index:200}
+.selBut .zerorule .spa{ width:35px; line-height:22px; text-align:center; float:left; font-size:12px;}
+.selBut .zerorule .inpu{ width:40px; height:20px; line-height:20px; float:left; border:1px solid #eee;}
+
+/*搜索文本框和搜索按钮*/
+.searchRole{ width:230px; height:20px; float:left; padding-left:2px; border:1px solid #ccc;}
+.searchusername{ width:210px; height:20px; float:left; border:0; font-size:13px; color:#555;}
+.searchuserbutton{ width:20px; height:20px; float:right; border:none;}
+
+/*两个列表*/
+.userList{ width:230px; height:170px; float:left; margin-top:10px; border:1px solid #ccc; overflow-y:scroll;}
+.userList li{ width:170px; height:22px;line-height:22px;color:#555; text-indent:4px; cursor:pointer;}
+/*规则设置样式 <----end--->*/
+
+.selBut,.selectedFields,.allFieldsForSelected{
+	float:left;
+}
+.s-fieldset {
+	border:1px solid #B5B8C8;
+	padding: 10px;
+	margin-bottom: 10px;
+	display: block;
+	float: left;
+	width:750px;
+}
+
+.s-fieldset legend {
+	font: bold 12px tahoma, arial, helvetica, sans-serif;
+	color: #15428b;
+	margin: 15px 0px 10px 0px !important;
+}
+
+.s-fieldset-bwrap {
+	overflow: hidden;
+	zoom: 1;
+}
+
+.s-estransfer{width:800px;overflow-y:auto;overflow-x:hidden;height:500px;margin-right:-5px;}
+
+form label{
+	float: left;
+	margin-right: 30px;
+}
+
+form .s-left{
+	border-top:1px solid #B5B8C8;
+	border-right:1px solid #B5B8C8;
+	border-bottom:1px solid #B5B8C8;
+	width:528px;
+	height:430px;
+	float:left;
+}
+form .s-left-top{
+	border-bottom:1px solid #B5B8C8;
+	border-left:1px solid #B5B8C8;
+	width:529px;
+	height:196px;
+	float:left;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+form .s-left-buttom{
+	width:529px;
+	height:233px;
+	float:left;
+	overflow-y:hidden;
+	overflow-x:hidden;
+}
+form .s-right{
+	border:1px solid #B5B8C8;
+	border-left:0px;
+	width: 210px;
+	height:430px;
+	float:left;
+}
+
+#delSelect {
+	margin-left: 15px;
+	padding: 6px 8px;
+	cursor: pointer;
+	display: inline-block;
+	text-align: center;
+	line-height: 1;
+	letter-spacing: 2px;
+	font-family: Tahoma, Arial/ 9 !important;
+	width: auto;
+	overflow: visible;
+	color: #FFF;
+	border: 0px;
+	background: #4A8BC2;
+}
+
+
+.a-estransfer{width:800px;overflow-y:auto;overflow-x:hidden;height:500px;}
+
+/** tab标签展现重要css **/
+.modelActionPage .tabpanel{ width:100%; height:35px; float:left; overflow:hidden; margin-bottom: 10px;}
+.modelActionPage .tabpanel .subnav{width:100%; height:30px; float:left; padding-left:10px; border-bottom: 5px solid #133959;}
+.modelActionPage .tabpanel .subnav li{ line-height:30px; color:#fff; float:left; padding:0 10px; margin-right:5px; background: #6f6e81; cursor:pointer; border-radius:5px 5px 0 0;}
+.modelActionPage .tabpanel .subnav .defalutTagOpen{ background: #133959;}
+.modelActionPage .tabpanel .subnav .not-allowed{color:#ffffff; cursor:not-allowed;}
+.modelActionPage .Tags{ float:left; height:auto; overflow:hidden;}
+
+.modelActionPage .formBuilderDiv {
+	width: 100%;
+	display: block;/** 默认显示 **/
+}
+
+.modelActionPage .formBuilderDiv .formBuilderPanelDiv {
+	width: 744px;
+	MARGIN-RIGHT: auto;
+	MARGIN-LEFT: auto; 
+}
+
+.a-label {
+	width:140px;height:20px;line-height:20px;float:left;
+}
+
+.a-fieldset {
+	border:1px solid #B5B8C8;
+	padding: 10px;
+	margin-bottom: 10px;
+	display: block;
+	float: left;
+	width:730px;
+}
+
+.a-fieldset legend {
+	font: bold 12px tahoma, arial, helvetica, sans-serif;
+	color: #15428b;
+	margin: 5px 0px 0px 0px !important;
+}
+
+.a-fieldset .chkbox {
+	width:60px;
+	margin-left: -20px;
+	margin-top: 5px;
+}
+
+.a-fieldset .a-child {
+	border:1px solid #B5B8C8;
+	padding: 10px;
+	margin-bottom: 10px;
+	display: block;
+	float: left;
+	width:260px;
+	height: 180px;
+}
+
+form .a-left{
+	width:530px;
+	height:432px;
+	float:left;
+}
+form .a-left-top{
+	border:1px solid #B5B8C8;
+	width:528px;
+	height:195px;
+	float:left;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+form .a-left-buttom{
+	border:1px solid #B5B8C8;
+	width:528px;
+	height:235px;
+	float:left;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+form .a-right{
+	border:1px solid #B5B8C8;
+	width: 210px;
+	height:430px;
+	float:left;
+}
+
+/** 条件选择 */
+.c-estransfer{width:770px;height:270px;overflow-y:auto;overflow-x:hidden;}
+
+.modelConditionPage .tabpanel{ width:100%; height:35px; float:left; padding-top:10px; overflow:hidden; margin-bottom: 10px;}
+.modelConditionPage .tabpanel .subnav{width:100%; height:30px; float:left; padding-left:10px; border-bottom:5px solid #133959;}
+.modelConditionPage .tabpanel .subnav li{ line-height:30px; color:#fff; float:left; padding:0 10px; margin-right:5px; background:#6f6e81; cursor:pointer; border-radius:5px 5px 0 0;}
+.modelConditionPage .tabpanel .subnav .defalutTagOpen{ background: #133959;}
+.modelConditionPage .tabpanel .subnav .not-allowed{color:#ffffff; cursor:not-allowed;}
+.modelConditionPage .Tags{ float:left; height:auto; overflow:hidden;}
+
+.modelConditionPage .formBuilderDiv {
+	width: 100%;
+	display: block;/** 默认显示 **/
+}
+
+.modelConditionPage .formBuilderDiv .formBuilderPanelDiv {
+	width: 770px;
+	MARGIN-RIGHT: auto;
+	MARGIN-LEFT: auto; 
+}
+
+
+.i-estransfer{width:400px;height:300px;overflow-y:auto;overflow-x:hidden;margin-right:-5px;}
+
+.i-fieldset {
+	border:1px solid #B5B8C8;
+	padding: 10px;
+	margin-bottom: 10px;
+	display: block;
+	float: left;
+	width:370px;
+}
+
+.i-fieldset legend {
+	font: bold 12px tahoma, arial, helvetica, sans-serif;
+	color: #15428b;
+	margin: 15px 0px 0px 0px !important;
+}
+
+.i-fieldset .chkbox {
+	width:60px;
+	margin-left: -20px;
+	margin-top: 5px;
+}
+
+.labelDiv {
+	 margin-bottom:12px;margin-left: 50px;
+}
+
+.toLeft {background:url(../img/toLeft.png) no-repeat 2px center;}
+.btnToRight {background:url(../img/toRight.png) no-repeat 2px center;}
+

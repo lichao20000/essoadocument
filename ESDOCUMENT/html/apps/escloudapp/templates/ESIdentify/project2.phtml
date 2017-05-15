@@ -1,0 +1,230 @@
+<table id="flexme"></table> 
+<script type="text/javascript">
+function remove(arr,objPropery,objValue) 
+{ 
+	return $.grep(arr, function(cur,i){ 
+	   return cur[objPropery]!=objValue; 
+	}); 
+} 
+if(status==7){
+	var moreButton=[
+	                {name:'分组设置',bclass:"group",tooltip:'设置分组',onpress:set_group},
+	                {name:'排序设置',bclass:"sort",tooltip:'设置排序',onpress:set_sort},
+	                {name:'批量修改',bclass:"batchmodify",tooltip:'批量修改',onpress:batchModify},
+	                {name:'数据导出',bclass:"batchexport",tooltip:'数据导出',onpress:batchExport},
+	              //shiyangtao 添加组合字段按钮
+	                {name:'组合字段',bclass:"batchmodify",tooltip:'组合字段',onpress:checkcombinationFiled}
+					];
+	if('<?php echo $isgroupNode;?>'=='1'){
+		moreButton=remove(moreButton,'name','分组设置');
+	}	
+	 var button=[
+ 		 {name: '查看日志', bclass: 'note',tooltip:'查看勾选数据的操作日志',onpress:showLog},
+		{name: '目录报表', bclass: 'report',tooltip:'根据选择的数据或者输入的条件打印目录报表',onpress:printReport},
+		{name: '筛选', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:commomFilter},
+		{name: '取消筛选', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:flexmeReset},
+		{name: '上传原文', bclass: 'tranlist',tooltip:'上传电子文件',onpress:uploadFileByMenu},
+		//guolanrui 20140819 修改更多操作按钮的tooltip跟其中的按钮不一致的BUG：617
+		//gengqianfeng 20140910  补充更多操作提示字段
+ 		{name: '更多操作&nbsp;&nbsp;&nbsp;&nbsp;', bclass: 'more',tooltip:'包含分组设置、排序设置、批量修改、数据导出、组合字段',id:'do_more',more:moreButton}
+ 		];
+		
+}
+if(status==6){
+	var moreButtons=[
+	                 {name: '查看日志', bclass: 'note',tooltip:'查看勾选数据的操作日志',onpress:showLog},
+					{name: '目录报表', bclass: 'report',tooltip:'根据选择的数据或者输入的条件打印目录报表',onpress:printReport},
+					{name: '筛选&nbsp;&nbsp;&nbsp;&nbsp;', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:commomFilter},
+					{name: '取消筛选', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:flexmeReset},
+	                  {name:'分组设置',bclass:"group",tooltip:'设置分组',onpress:set_group},
+	                  {name:'排序设置',bclass:"sort",tooltip:'设置排序',onpress:set_sort},
+	                 // {name:'数据导入',bclass:"batchimport",tooltip:'数据导入',onpress:batchImport},//根据测试要求 目前在案卷整理模块的文件级中有数据导入功能，但是没有添加、删除功能，造成如果用户将数据导入错误了，无法删除 将数据导入功能去掉
+	                  {name:'数据导出',bclass:"batchexport",tooltip:'数据导出',onpress:batchExport},
+	                //shiyangtao 添加组合字段按钮
+	                  {name:'组合字段',bclass:"batchmodify",tooltip:'组合字段',onpress:checkcombinationFiled},
+	                  {name:'批量修改',bclass:"batchmodify",tooltip:'批量修改',onpress:batchModify},
+	                  {name:'批量挂接',bclass:"batchhanging",tooltip:'批量挂接',onpress:batchHanging}
+	 				];
+	if('<?php echo $isgroupNode;?>'=='1'){
+		moreButtons=remove(moreButtons,'name','分组设置');
+	}	
+	var button= [
+	 	   		{name: '组卷', bclass: 'paper',tooltip:'将选择的文件组成案卷',onpress:generatePaper},
+	 	   		{name: '自动组卷', bclass: 'paper',tooltip:'将选择的文件自动组成案卷',onpress:generatePaperQuick},
+		   		{name: '插件', bclass: 'insertArchive',tooltip:'将为组卷的文件插入已存在的案卷内',onpress:insertFile},
+		   		{name: '退回', bclass: 'back',tooltip:'将选择的数据退回上一个业务',onpress:sendInnerFileBack},
+		   		{name: '上传原文', bclass: 'tranlist',tooltip:'上传电子文件',onpress:uploadFileByMenu},
+		   		//guolanrui 20140819 修改更多操作按钮的tooltip跟其中的按钮不一致的BUG：617
+		   		//gengqianfeng 20140910 补充更多操作提示字段BUG：617
+		   		{name: '更多操作&nbsp;&nbsp;&nbsp;&nbsp;', bclass: 'more',tooltip:'包含查看日志、目录报表、筛选、取消筛选、分组设置、排序设置、数据导入、数据导出、组合字段、批量修改、批量挂接',id:'do_more',more:moreButtons}
+		   		];
+}
+if(status==3){
+		var button=[
+				{name: '查看日志', bclass: 'note',tooltip:'查看勾选数据的操作日志',onpress:showLog},
+				{name: '目录报表', bclass: 'report',onpress:printReport}
+				];
+}
+if(status==100){
+	var button=[{name: '数据恢复', bclass: 'add',onpress:revertData},
+				{name: '删除', bclass: 'delete',onpress:perDelData},
+				{name: '清空', bclass: 'grid_data_batch_delete',onpress:perEmptyData},
+				{name: '筛选', bclass: 'filter',onpress:commomFilter},
+				{name: '取消筛选', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:flexmeReset},//wanghongchen 20140716 增加还原功能
+				{name: '查看日志', bclass: 'note',onpress:showLog}];
+}
+if(status==4){
+var moreButtons=[
+	                 {name: '查看日志', bclass: 'note',tooltip:'查看勾选数据的操作日志',onpress:showLog},
+	 				 {name: '目录报表', bclass: 'report',tooltip:'根据选择的数据或者输入的条件打印目录报表',onpress:printReport},
+	 				 {name: '筛选&nbsp;&nbsp;&nbsp;&nbsp;', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:commomFilter},
+	 				{name: '取消筛选', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:flexmeReset},
+	                  {name:'分组设置',bclass:"group",tooltip:'设置分组',onpress:set_group},
+	                  {name:'排序设置',bclass:"sort",tooltip:'设置排序',onpress:set_sort},
+	                  {name:'批量删除',bclass:"batchdelete",tooltip:'批量删除',onpress:batchDelete},
+	                  {name:'批量修改',bclass:"batchmodify",tooltip:'批量修改',onpress:batchModify},
+	                  {name:'批量挂接',bclass:"batchhanging",tooltip:'批量挂接',onpress:batchHanging},
+	                  {name: 'zip导入', bclass: 'zipimport',tooltip:'导入zip包中的文件',onpress:zipImport},
+	                //shiyangtao 添加组合字段按钮
+	                  {name:'组合字段',bclass:"batchmodify",tooltip:'组合字段',onpress:checkcombinationFiled},
+	                  {name: '手动鉴定', bclass: 'handIdentify',tooltip:'手动鉴定',onpress:handIdentify},
+	                  {name: '自动鉴定', bclass: 'autoIdentify',tooltip:'自动鉴定',onpress:autoIdentify}
+	 				];
+if('<?php echo $isgroupNode;?>'=='1'){
+	moreButtons=remove(moreButtons,'name','分组设置');
+}	
+			var button=[{name: '添加', bclass: 'add',tooltip:'添加新的档案',onpress: addData},
+				{name: '删除', bclass: 'delete',tooltip:'删除所勾选的数据',onpress:delItems},
+				{name: '导入', bclass: 'import',tooltip:'导入数据',onpress:batchImport},
+				{name: '导出', bclass: 'export',tooltip:'导出数据',onpress:batchExport},
+				{name: '组卷', bclass: 'paper',tooltip:'将选择的文件组成案卷',onpress:generatePaper},
+		   		{name: '插件', bclass: 'insertArchive',tooltip:'将为组卷的文件插入已存在的案卷内',onpress:insertFile},
+		   		{name: '上传原文', bclass: 'tranlist',tooltip:'上传电子文件',onpress:uploadFileByMenu},
+		   		//guolanrui 20140819 修改更多操作按钮的tooltip跟其中的按钮不一致的BUG：617
+		   		//gengqianfeng 20140910 补充更多操作提示字段BUG：617
+				{name: '更多操作&nbsp;&nbsp;&nbsp;&nbsp;', bclass: 'more',tooltip:'包含查看日志、目录报表、筛选、取消筛选、分组设置、排序设置、批量删除、批量修改、批量挂接、zip导入、组合字段、手动鉴定、自动鉴定',id:'do_more',more:moreButtons}];
+
+
+}
+var colModelPro2;
+if(status==100){
+	colModelPro2=[
+	  			{display: '序号', name : 'num', width : 20, align: 'center'}, 
+				{display: '<input type="checkbox" name="path" onclick=selectAll(checked,name,"#flexme")>', name : 'ids', width : 20, align: 'center'},
+				/** xiaoxiong 20140809 添加relation列，为了标示是否已经组卷，已经组卷的数据不能再进行组卷与插卷 **/
+				{display: 'relation', name : 'relation', width : 60, align: 'left',metadata:'relation',hide:true},
+				{display: '源系统', name : 'bussystemid', width : 60, align: 'center',metadata:'bussystemid',hide:true},
+				<?php echo $fields;?>
+				]
+}else{
+	colModelPro2=[
+		  			{display: '序号', name : 'num', width : 20, align: 'center'}, 
+					{display: '<input type="checkbox" name="path" onclick=selectAll(checked,name,"#flexme")>', name : 'ids', width : 20, align: 'center'},
+					/** xiaoxiong 20140809 添加relation列，为了标示是否已经组卷，已经组卷的数据不能再进行组卷与插卷 **/
+					{display: 'relation', name : 'relation', width : 60, align: 'left',metadata:'relation',hide:true},
+					{display: '操作', name : 'operate', width : 60, align: 'left'},
+					{display: '源系统', name : 'bussystemid', width : 60, align: 'center',metadata:'bussystemid',hide:true},
+					<?php echo $fields;?>
+					]
+}
+	$("#flexme").flexigrid({
+		url: $.appClient.generateUrl({ESIdentify:'set_json',path:'<?php echo $type["path"];?>'}),
+		dataType: 'json',
+		colModel : colModelPro2,
+		buttons :button,
+		
+	   		usepager: true,
+			title: title,
+			useRp: true,
+			query:gc,
+			width: width,
+			onDoubleClick:modify,
+			height:height,
+			dblClickResize:true
+			//onSuccess: autoResize
+		
+	});
+	/** xiaoxiong 20140807 添加模糊检索框 **/
+	$('div[class="tDiv2"]').append('<div class="find-dialog"><input id="queryKeyword" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="queryKeyword" value="请输入关键字" /><span onclick="fuzzyQuery(\'flexme\', \'queryKeyword\')"></span></div>');
+	//查看盒内的档案
+	function showBoxInnerFile(packetNum,pId){
+		packetNo=packetNum;
+		packetId=pId;
+		$.ajax({
+		    url:$.appClient.generateUrl({ESIdentify:'project'},'x'),
+		    type:'POST',
+		    data:"file=boxinnerfile&path="+'<?php echo $type["path"];?>',
+		    success:function(content){
+		    	$.dialog({
+		    		id:'artBoxInnerFilePanel',
+			    	title:'盒内档案',
+		    		width: '500px',
+		    	    padding:'0px',
+		    	   	fixed:true,
+		    	    resize: false,
+			    	content:content,
+				    cancelVal: '关闭',
+				    cancel: true 
+			    });
+			    },
+			    
+			    cache:false
+		});
+		
+	}
+
+	/** xiaoxiong 20140903 添加按钮权限与
+	 *获取权限说明：1、null 			代表拥有全部权限
+	 * 			 2、false 			代表没有任何权限
+	 * 			 3、(C26 = '短期')	代表部分有权限
+	 2
+	 **/
+	(function(){
+		if("<?php echo $itemEditRight;?>" == "false"){
+			$(".add").addClass("not-allowed");
+			$(".add").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".back").addClass("not-allowed");
+			$(".back").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".tranlist").addClass("not-allowed");
+			$(".tranlist").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".batchmodify").addClass("not-allowed");
+			$(".batchmodify").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".batchimport").addClass("not-allowed");
+			$(".batchimport").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".batchhanging").addClass("not-allowed");
+			$(".batchhanging").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+// 			$(".transfer").addClass("not-allowed");
+// 			$(".transfer").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+// 			$(".cancel").addClass("not-allowed");
+// 			$(".cancel").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+// 			$(".store").addClass("not-allowed");
+// 			$(".store").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+// 			$(".delcode").addClass("not-allowed");
+// 			$(".delcode").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+// 			$(".code").addClass("not-allowed");
+// 			$(".code").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+// 			$(".confirm").addClass("not-allowed");
+// 			$(".confirm").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".handIdentify").addClass("not-allowed");
+			$(".handIdentify").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".autoIdentify").addClass("not-allowed");
+			$(".autoIdentify").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".import").addClass("not-allowed");
+			$(".import").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".zipimport").addClass("not-allowed");
+			$(".zipimport").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".paper").addClass("not-allowed");
+			$(".paper").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+			$(".insertArchive").addClass("not-allowed");
+			$(".insertArchive").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		}	
+		if("<?php echo $itemDeleteRight;?>" == "false"){
+			$(".delete").addClass("not-allowed");
+			$(".delete").attr("title", "您没有当前节点下的数据删除权限，删除功能不可用！") ;
+			$(".batchdelete").addClass("not-allowed");
+			$(".batchdelete").attr("title", "您没有当前节点下的数据删除权限，批量删除功能不可用！") ;
+		}
+		$('#escontent').attr("itemEditRight", "<?php echo $itemEditRight;?>");
+		$('#escontent').attr("itemDeleteRight", "<?php echo $itemDeleteRight;?>");
+	})();
+	</script>

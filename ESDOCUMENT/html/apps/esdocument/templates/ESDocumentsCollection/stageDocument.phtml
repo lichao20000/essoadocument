@@ -1,0 +1,160 @@
+<style>
+<!--
+.button {
+	cursor: pointer;
+	padding: 5px;
+	background-color: #6F6E81;
+	color: #FFF;
+	border: 0px none;
+	outline: 0px none;
+}
+-->
+</style>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDocumentsCollection/js/addOrUpdate.js"></script>
+<div class="documentStyle">
+	<form id="addDataForm" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="stageId" id="stageId" value="<?php echo $stageId; ?>" />
+		<input type="hidden" name="deviceCode" id="devicecode" value="<?php echo $deviceCode; ?>">
+		<input type="hidden" name="deviceName" id="devicename" value="<?php echo $deviceName; ?>">
+		<input type="hidden" name="fileList" id="fileList" value="" /> 
+		<input type="hidden" name="collectionType" id="collectionType" value="1" /> 
+		<input type="hidden" name="model" value="ESCatalogCheck" />
+		<div class="estransfer">
+		  <ul>
+			 <?php  
+			 	$arr = array();//数组存储数据
+			 	$index = 0; //下标
+			 	foreach ( $formData as $value ) {
+				 	if ($value['name']=='stageName' || $value['name']=='deviceName' ||
+				 	$value['name']=='participatoryName' || $value['name']=='documentTypeName' ||
+				 	$value['name']=='engineeringName' || $value['name']=='stageId'){
+				 		continue;
+				 	}
+				 	$defaultValue='';
+					if ($value['defaultValue']!=null){
+						$defaultValue=$value['defaultValue'];
+					}
+					if ($value['name']=='stageCode'){
+						echo '<li><span> 选择文件 <font color="red" size="3"> * </font> </span><input type="text" id="stageName" name="stageName" class="selectInput" readonly="readonly" verify="text/200/1/0" value="'.$stageName.'"  /><input type="hidden" name="stageCode" id="stageCode" value="'.$stageCode.'" /></li>';
+					}else if($value['name']=='deviceCode'){
+						if($deviceCode == "0"){
+							echo '<li><span> 装置名称 <font color="red" size="3"> * </font></span><input type="text" id="deviceName" class="selectInput" readonly="readonly" name="deviceName" verify="text/50/1/0" value=""  /> <input type="hidden" name="deviceCode" id="deviceCode" value="'.$defaultValue.'" /></li>';
+						}else{
+							continue;
+						}
+					}else if($value['name']=='participatoryCode'){
+						echo '<li><span> 拟定部门 <font color="red" size="3"> * </font> </span><input type="text" id="participatoryName" name="participatoryName" verify="text/50/1/0" value="" class="selectInput" readonly="readonly"  /><input type="hidden" name="participatoryCode" id="participatoryCode" value="'.$defaultValue.'" /></li>';
+					}else if($value['name']=='documentCode'){
+						echo '<li><span> 文件类型代码 <font color="red" size="3"> * </font></span><input type="text" name="documentTypeName" id="documentName" verify="text/50/1/0" value="" class="selectInput" /><img id="documentBtn" class="clickImg"/><input type="hidden" name="documentCode" id="documentCode" value="'.$defaultValue.'" /></li>';
+					}else if($value['name']=='engineeringCode'){
+						echo '<li><span> 文件专业代码 <font color="red" size="3"> * </font> </span><input type="text" name="engineeringName" id="engineeringName" verify="text/50/1/0" value="" class="selectInput" /><img id="engineeringBtn" class="clickImg"/><input type="hidden" name="engineeringCode" id="engineeringCode" value="'.$defaultValue.'" /></li>';
+					}else{//过滤出项目代码，调整按部门添加页面字段的顺序
+						if($deviceCode == "0" && $value['name']=='projectCode'){
+							echo '<li style="width:260px" ><span>' . $value ['lable'] .'<font color="red" size="3">*</font></span><input type="text" name="' . $value ['name'] . '" id="' . $value ['name'] . '" value="'.$defaultValue.'" verify="' . $value ['verify'] . '"  isedit="' . $value ['isSystem'] . '" class="notselectInput" /></li>';
+						}else{
+							$arr[$index] = $value;
+							$index++;
+						}
+					}
+				 }
+				 foreach ($arr as $value){//遍历
+				 	$isNull = '';
+				 	$edittage = '';
+				 	$liwidth = '260px';
+					if ($value ['isNull'] == 1) {
+						$isNull = '<font color="red" size="3">*</font>';
+					}
+					$defaultValue='';
+					if ($value['defaultValue']!=null){
+						$defaultValue=$value['defaultValue'];
+					}
+				 	if ($value ['type'] == 'BOOL') {
+				 		$edittage = '<select name="' . $value ['name'] . '" id="' . $value ['name'] . '"  verify="' . $value ['verify'] . '"  isedit="' . $value ['isSystem'] . '" class="notselectInput"><option value="是">是</option><option value="否" selected="'.$defaultValue.'">否</option></select>';
+				 	} else {
+				 		if ($value ['length'] >= 200) {
+				 			$liwidth = '550px';
+				 			$edittage = '<textarea  name="' . $value ['name'] . '" id="' . $value ['name'] . '"  verify="' . $value ['verify'] . '" style="width:440px;margin-bottom:10px;"  isedit="' . $value ['isSystem'] . '" class="notselectInput">'.$defaultValue.'</textarea>';
+				 		} else {
+				 			$readOnly='';
+				 			if($value['name']=='docNo'){
+				 				$readOnly='readonly';
+				 			}else if($value['name']=='person'){
+				 				$readOnly='readonly';
+				 				$defaultValue=$person_;
+				 			}
+				 			$edittage = '<input type="text" name="' . $value ['name'] . '" id="' . $value ['name'] . '" value="'.$defaultValue.'" verify="' . $value ['verify'] . '"  isedit="' . $value ['isSystem'] . '"  '.$readOnly.' class="notselectInput"/>';
+				 		}
+				 	}
+				 	echo '<li style="width:' . $liwidth . '" ><span>' . $value ['lable'] . $isNull . '</span>' . $edittage . '</li>';
+				 }
+				?>
+			</ul>
+		</div>
+	</form>
+	<div class="esbottom">
+		<table id="efiletable" style="width: auto;">
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	if($('#stageId').val()!=''){
+		$.ajax({
+		    type: "GET",
+		    url: $.appClient.generateUrl({
+		        ESDocumentsCollection: 'judegeIsExitesDocnoRule'
+		    },
+		    'x'),
+		    data: {
+		        stageId: $('#stageId').val()
+		    },
+		    success: function(data) {
+		        if (data != 'false') {
+		        	var url=$.appClient.generateUrl({ESDocumentsCollection: 'getFileCode'},'x');
+		        	$.post(url,{stageId:$('#stageId').val(),tagIds:data},function(res){
+		        		var jsondata = eval('(' + res + ')');
+		        		$("#docNo").val("");
+		        		ruleDocNo = [];
+		        		releation = [];
+		        		for(var i = 0;i<jsondata.nums;i++){
+		        			if(jsondata["flag"+i] == true || jsondata["flag"+i] == 'true'){
+			        			if(jsondata[i] == 'deviceCode' && $("#devicecode").val()!= '0'){
+			        				$("#docNo").val($("#docNo").val()+$('#devicecode').val());
+				        		}else{
+		        					$("#docNo").val($("#docNo").val()+$('#'+jsondata[i]).val());
+				        		}
+		        			}else{
+		        				$("#docNo").val($("#docNo").val()+jsondata[i]);
+		        			}
+		        			ruleDocNo.push(jsondata[i]);
+		        			releation.push(jsondata["flag"+i]);
+		        		}
+		        		$.ajax({
+		    	            type: "POST",
+		    	            url: $.appClient.generateUrl({ESDocumentsCollection: 'judegIsRepeatBydocNoRule'},'x'),
+		    	            data: {docNoRule: $("#docNo").val(),stageId:$("#stageId").val()},
+		    	            success: function(data) {
+		    	            	if(data != 'false'){
+		    	            		$("#docNo").val($("#docNo").val()+data);
+		    	            	}else{
+		    	            		$("#docNo").val($("#docNo").val()+'0001');
+		    	            	}
+		    	            }
+		    			});	
+		            });
+		        } else {
+		            $.dialog.notice({
+		                content: '请在文件元数据模块中为该节点设置文件编码规则!',
+		                time: 3,
+		                icon: 'warning'
+		            });
+		            $("#docNo").val("");
+		            ruleDocNo = [];
+	        		releation = [];
+		            return false;
+		        }
+		    }
+		});
+	}
+});
+</script>

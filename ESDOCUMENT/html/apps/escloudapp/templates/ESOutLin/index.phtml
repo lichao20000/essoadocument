@@ -1,0 +1,39 @@
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESLog/css/index.css" />
+<link rel='stylesheet' type='text/css' href='<?php echo $tplPath;?>/ESLog/css/filter.css' />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'导出结构到离线库'));?>
+<script type="text/javascript">	
+	$(function() {
+		var setting = {
+			// zaizheli
+			view : {
+				dblClickExpand : true,
+				showLine : false
+			},
+			data : {
+				simpleData : {
+					enable : true
+				}
+			},
+			callback : {
+				//onClick:editStructure
+			},
+			check: {
+				enable: true,
+				chkStyle: "checkbox",
+				chkboxType: { "Y": "p", "N": "s" }
+			}
+		};
+		$.getJSON($.appClient.generateUrl({ESTemplate:'GetOwnBusinessTree'},'x'),function(data) {
+			$.fn.zTree.init($("#ztree"), setting, data.zNodes);
+		});
+	})
+</script>
+
+<div id="ztree" class="ztree">
+</div>

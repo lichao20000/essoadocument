@@ -1,0 +1,180 @@
+<style type="text/css">
+</style>
+<div >
+  <table id="code1">
+  </table>
+  <script type="text/javascript">
+  $(function(){
+  var uri1=$.appClient.generateUrl({ESTemplate:'codes_json',stid:structureID});
+	$("#code1").flexigrid({
+	url: uri1,
+	dataType: 'json',
+	colModel : [
+		{display: '序号', name : 'id1', width : 40, align: 'center'},
+		{display: '名称', name : 'c3',  width: 150, sortable : true, align: 'center'},
+		{display: '元数据', name : 'c6', width : 150, sortable : true, align: 'center'},
+		{display: '长度', name : 'c4', width : 100, sortable : true, align: 'center'},
+		{display: '描述', name : 'c5', width : 200, sortable : true, align: 'center'}
+		],
+	sortname: "ID",
+	sortorder: "asc",
+	usepager: true,
+	title: '著录项',
+	useRp: true,
+	rp: 20,
+	minColToggle:0,
+	resizable:false,
+	nomsg:"没有数据",
+	procmsg:"加载中，请稍候……",
+	showTableToggleBtn: false,
+	pagetext: '第',
+	outof: '页 /共',
+	width: 800,
+	height: 100,
+	pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});	
+	
+	//下表
+	var uri2=$.appClient.generateUrl({ESTemplate:'code_json'});
+	$("#code2").flexigrid({
+	url: uri2,
+	editable: true,
+	dataType: 'json',
+	colModel : [
+		{display: '<input type="checkbox" name="ids" />', name : 'id2', width : 40, align: 'center'},
+		{display: '属性值', name : 'c3',  width: 100, sortable : true, align: 'center', editable: true},
+		//{display: '代码值', name : 'c4', width : 200, sortable : true, align: 'center', editable: true},
+		{display: '描述', name : 'c5', width : 380, sortable : true, align: 'center', editable: true}
+		],
+	buttons : [
+		{name: '添加', bclass: 'add',onpress:add},
+		{name: '删除', bclass: 'delete',onpress:delcode},
+		{name : '保存', bclass : 'save',onpress:save}
+		],
+	
+	sortname: "id",
+	sortorder: "asc",
+	usepager: true,
+	title: '数据字典',
+	procmsg:"加载中，请稍候……",
+	useRp: true,
+	resizable:false,
+	rp: 10,
+	minColToggle:0,
+	nomsg:"没有数据",
+	showTableToggleBtn: false,
+	pagetext: '第',
+	outof: '页 /共',
+	width: 800,
+	height: 100,
+	pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+
+	var id="";
+	$("#code1").find("tr").live("click",function(){
+		id=this.id.replace("row","");
+		//$(".other .flexigrid .tDiv span").css({cursor: "pointer",color:"#000000"});
+		var url = $.appClient.generateUrl({ESTemplate:'code_json',id:id,stid:structureID,moid:molid});
+		$("#code2").flexOptions({newp:1,url:url}).flexReload();
+	});
+	
+	function add()
+	{
+		if(id==""){
+			return;
+		}
+		$("#code2").flexExtendData([{"id":'',"cell":{"id2":'<input type="checkbox" name="id2" value="" />',"c3":"属性值","c4":"代码值","c5":"描述信息","editable":true}}]);
+	}
+	//全选
+	$("input[name='ids']").die().live('click',function(){
+			$("input[name='id2']").attr('checked',$(this).is(':checked'));
+			});
+	//删除
+	function delcode(){
+		var data = new Array();
+		var codeid='';
+		var checkboxObj=$("input[name='id2']:checked");
+		if(checkboxObj.length =='0' || checkboxObj.length==='undefined')
+		{
+			$.dialog.notice({icon:'warning',content:'请选择要删除的数据',time:3});
+			return false;
+		}else{
+			//遍历选中的数据
+			checkboxObj.each(function(i){
+				codeid+=$(this).val()+',';
+				var s2 = $(this).parent().parent().parent().find("td").eq(1).find("div").html();
+				var s3 = $(this).parent().parent().parent().find("td").eq(2).find("div").html();
+				var s4 = $(this).parent().parent().parent().find("td").eq(3).find("div").html();
+				data[i]={"tagId":id,"idStructure":structureID,"idBusiModel":molid,"tagPropvalue":s2,"tagCodevalue":s3,"tagDescription":s4};
+				});
+			}
+		if(codeid=='' || codeid==='undefined' || codeid==0)
+		{
+			return false;
+		}	
+		$.dialog({
+				content:'确定要删除吗?',
+				ok:true,
+				okVal:'确定',
+				cancel:true,
+				cancelVal:'取消',
+				ok:function(){
+					var url=$.appClient.generateUrl({ESTemplate:'codedel'},'x');
+					$.post(url,{param:data},function(result){
+						if(result){
+							$("input[name='ids']").attr("checked",false);
+							$.dialog.notice({icon:'succeed',content:'数据删除成功',time:3});
+							$('#code2').flexOptions({newp: 1}).flexReload();
+							$('#edit_rule_tbl').flexReload();
+						}
+						
+						});
+					
+				}
+			});
+		
+	}
+	//保存
+	function save()
+	{
+		if(id==""){
+			return;
+		}
+		var data = new Array();
+		$("#code2").find("tr").each(function(i){
+			//var s1 = $(this).find("td").eq(0).find("input").val();
+			var s2 = $(this).find("td").eq(1).find("div").html();
+//			var s3 = $(this).find("td").eq(2).find("div").html();
+			var s3 = s2;
+			var s4 = $(this).find("td").eq(2).find("div").html();
+			data[i]={"tagId":id,"idStructure":structureID,"idBusiModel":molid,"tagPropvalue":s2,"tagCodevalue":s3,"tagDescription":s4};
+
+		});
+		if(data==""){return;}
+		var url=$.appClient.generateUrl({ESTemplate:'codevaluesave'},'x');
+		$.post(url,{param:data},function(result){
+			//alert(result);
+			if(result=="1"){
+				$.dialog.notice({icon:'succeed',content:'保存成功',time:3});
+				$('#code2').flexOptions({newp: 1}).flexReload();
+				$('#edit_rule_tbl').flexReload();
+				return;
+			}else{
+				$.dialog.notice({icon:'error',content:'保存失败',time:3});
+				$('#code2').flexOptions({newp: 1}).flexReload();
+				return;
+			}
+		});
+	}
+  });
+    </script>
+
+</div>
+
+<div class="other">
+  <table id="code2">
+  </table>
+
+
+
+</div>

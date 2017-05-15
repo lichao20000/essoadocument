@@ -1,0 +1,24 @@
+<div style="width:500px; height:100px;">
+	<div style="padding-top: 50px; text-align: center;">
+		装置：<input type="text" name="device"  id="device" readonly="readonly" value="" code="" style="width:250px; height:20px;"/>
+	</div>
+</div>
+<div id="menuContent" class="menuContent" style="display: none;position: fixed;">
+	<ul id="treeDemo" class="ztree selectztree"></ul>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#device").selectInput({
+        url: $.appClient.generateUrl({ESDevice: "getTree",maxLevel:5 },'x'),
+        chkStyle: "radio",
+        onCheck:function(treeNode,obj){
+        	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+    		nodes = zTree.getCheckedNodes(true);
+    		if(nodes.length==1){
+    			$("#device").attr("value", nodes[0].name);
+    			$("#device").attr("code", nodes[0].code);
+	    	}
+		}
+ 	});
+});
+</script>

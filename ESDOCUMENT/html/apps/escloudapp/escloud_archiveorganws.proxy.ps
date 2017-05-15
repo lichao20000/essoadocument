@@ -1,0 +1,89 @@
+<?php
+/**
+ * 归档机构设置代理服务
+ * @author ldm
+ *
+ */
+class ProxyEscloudappEscloud_archiveorganws extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_archiveorganws";
+  /**
+   * 树的获取
+   * @author ldm
+   */
+  public function gettree($id)
+  {
+    $urlParam = array('getSubCompanyListByParentid',$id);
+    $url = implode('/', $urlParam);
+    return $this->get(self::SERVICE_NAME, $url);
+    
+  }
+  
+  /**
+   * 根据树节点查询右表信息
+   * @author ldm
+   */
+  public function getinfo($id,$page,$rp)
+  {
+  	$urlParam = array('getArchiveorganList',$id,$page,$rp);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  
+  }
+  
+  /**
+   * 表格数据总数
+   * @author ldm
+   */
+  public function countall($id){
+  	$urlParam = array('countAll',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 添加记录
+   * @author ldm
+   */
+  public function addval($param){
+  	$urlParam = array('saveArchiveorgan');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 删除记录
+   * @author ldm
+   */
+  public function delval($param){
+  	$urlParam = array('deleteBatchArchiveorgan');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 修改记录
+   * @author ldm
+   */
+  public function saveval($param){
+  	$urlParam = array('updateBatchArchiveorgan');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 筛选
+   * @author ldm
+   */
+  public function filte($param,$start,$end){
+  	$urlParam = array('getArchiveorganListByCondition',$start,$end);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 筛选总数
+   * @author ldm
+   */
+  public function filtercount($param){
+  	$urlParam = array('countAllByCondition');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+  }
+  
+}

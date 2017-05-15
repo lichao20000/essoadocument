@@ -1,0 +1,98 @@
+<style>
+<!--
+.button {cursor: pointer;padding: 5px;background-color: #6F6E81;color: #FFF;border: 0px none;outline: 0px none;}
+-->
+</style>
+<div style="padding-top: 30px;">
+		<form id="editDataForm" method="post">
+			<input type="hidden" name="id" id="id" value='<?php echo $id;?>' />
+		    <input type="hidden" name="stageId" id="stageId" value="<?php echo $stageId;?>"/>
+			<input type="hidden" name="isSystem" id="isSystem" value="<?php echo $isSystem;?>"/>
+			<input type="hidden" name="isEdit" id="isEdit" value="<?php echo $isEdit;?>"/>
+			<div class="estransfer">
+			<ul>
+				<li>
+					<span>字段名称<font color="red" size="3">*</font></span>
+					<input type="text" name="name" id="name" verify="unspecial/20/1/0" value="<?php echo $name;?>"  />
+				</li>
+				<li>
+					<span>字段代码<font color="red" size="3">*</font></span>
+					<input type="text" name="code" id="code" verify="china-english/20/1/0" value="<?php echo $code;?>"  />
+				</li>
+				<li>
+					<span>档案元数据</span>
+					<input type="text" id="esidentifier" name="esidentifier" class="selectInput"
+						readonly="readonly"  value="<?php echo $esidentifier;?>" title ="点击选择" />
+					<input type="hidden" name="metaDataId" id="metaDataId" value="<?php echo $metaDataId;?>"  />
+				</li>
+				<li>
+					<span>字段类型<font color="red" size="3">*</font></span>
+ 					<select name="typeShow" id="typeShow" disabled="disabled" title="不可编辑" class="inputselect" > 
+						<option value="TEXT" <?php echo $type=='TEXT'?'selected':'';?>>文本</option>
+						<option value="NUMBER" <?php echo $type=='NUMBER'?'selected':''; ?> >数值</option>
+ 						<option value="DATE" <?php echo $type=='DATE'?'selected':''; ?> >日期</option>
+						<option value="FLOAT" <?php echo $type=='FLOAT'?'selected':'';?> >浮点</option>
+						<option value="TIME"  <?php echo $type=='TIME'?'selected':'';?> >时间</option>
+ 						<option value="BOOL"  <?php echo $type=='BOOL'?'selected':'';?> >布尔</option>
+					</select>
+					<input type="hidden" name="type" id="type"  value="<?php echo $type;?>"  />
+				</li>
+				<li>
+					<span>字段长度<font color="red" size="3">*</font></span>
+					<input type="text" name="toLength" id="toLength" verify="number/11/1/0" value="<?php echo $length;?>"  />
+					<input type="hidden" id="startLength"  value="<?php echo $length;?>"  />
+				</li>
+				<li>
+					<span>小数点长度</span>
+					<input type="text"  name="dotLength" id="dotLength" verify="number/11/0/0" value="<?php echo $dotLength;?>"  />
+					<input type="hidden"  id="startDotLength" value="<?php echo $dotLength;?>"  />
+				</li>
+				<li>
+					<span>是否为空<font color="red" size="3">*</font></span>
+					<span><input type="radio" name="isNull" id="is" style="width: 13px" id="is" value="0"  <?php echo $isNull=='0'?'checked':'';?> /><label style="display: inline;" for="is">是</label></span>
+					<span><input type="radio" name="isNull" id="no" style="width: 13px" id="is" value="1" <?php echo $isNull=='1'?'checked':'';?> /><label style="display: inline;" for="no">否</label></span>
+				</li>
+				<li>
+					<span>默认值</span>
+					<input type="text" name="defaultValue" id="defaultValue" verify="unspecial/200/0/0" value="<?php echo $defaultValue;?>" />
+				</li>
+			</ul>
+			</div>
+		</form>
+	</div>
+<script type="text/javascript">
+//编辑的时候初始化默认值的校验规则
+$(document).ready(function(){
+	var type= $("#type").val();
+	var toLength = $("#toLength").val();
+	var dotLength = $("#dotLength").val();
+	var reg = "";
+	if(type=="TEXT"){
+		reg = "unspecial";
+	}else if(type=="NUMBER"){
+		reg = "number";
+	}else if(type=="DATE"){
+		reg = "date";
+	}else if(type=="FLOAT"){
+		reg = "float";
+	}else if(type=="TIME"){
+		reg = "Time";
+	}else if(type=="BOOL"){
+		reg = "boolean";
+	}
+	if(reg!="" && toLength!="" && dotLength!=""){
+		var verfiy= reg+"/"+toLength+"/0/"+dotLength;
+		$("#defaultValue").attr("verify",verfiy);
+	}
+
+	var isEdit = $("#isEdit").val();
+	if(isEdit == '1'){
+		$("#name").attr("readonly",true);
+		$("#code").attr("readonly",true);
+		$("#toLength").attr("readonly",true);
+		$("#dotLength").attr("readonly",true);
+		$("#editDataForm").find("input[type='radio']").attr("disabled",true);
+	}
+});
+
+</script>

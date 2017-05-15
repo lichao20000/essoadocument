@@ -1,0 +1,26 @@
+<?php
+/**
+ * 
+ * @author wangtao
+ * 档案年检
+ *
+ */
+class ProxyEscloudappEscloud_yearlyInspectionws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_yearlyInspectionws";
+	/**
+	 * @author wagntao
+	 * 根据机构ID获取档案归档情况
+	 * @param string $orgID 机构号
+	 * @param string $archiveType 档案类型、
+	 * @param string $year 年度 
+	 * @return mixed
+	 */
+	public function getOrgArchive($orgID,$archiveType,$year)
+	{
+		$urlParam=array('execute',$orgID,$archiveType,$year);
+		$url=implode('/',$urlParam);
+// 		return $url;
+		return $this->post(self::SERVICE_NAME,$url);
+	}
+}

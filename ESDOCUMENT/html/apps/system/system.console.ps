@@ -1,0 +1,25 @@
+<?php
+class AppConsoleSystem extends AppConsoleAbstract
+{
+  public function urls(){
+    return array(
+      'default' => 'homelayout',
+      'homelayout' => 'homelayout',
+    );
+  }
+
+  public function menus(){
+    return array(
+      'homelayout' => '首页布局',
+    );
+  }
+
+  public function url_homelayout(){
+    AopCore::loadLibrary('app');
+    $systemInfo = AopApp::getInfo('system');
+    $systemInstance = AopApp::getInstance($systemInfo);
+    $url = $this->getUrl('homelayout');
+    return $systemInstance->layout('edit', array('layoutUrl' => $url,'console' => 1, 'layoutKey'=>'eip_home_page'));
+  }
+
+}

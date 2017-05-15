@@ -1,0 +1,70 @@
+<div class='publicpaper'>
+	<h2 class='title'>
+		<span>您的位置：</span>
+		<a href='javascript:void(0)' title='回系统首页' class='gohome' id='goHome'>首页</a>
+		<b></b>
+		<a href='javascript:void(0)' title='回<?php echo $info['boardCn'];?>列表页面' class='mores more' boardid='<?php echo $info['boardId'];?>'><?php echo $info['boardCn'];?></a>
+		<b></b>
+		<a href='javascript:void(0)' class='details detail' info='<?php echo $info['boardId'].'&'.$info['topicId'];?>'><?php echo $data->title;?></a>
+	
+	</h2>
+	<div class='conts'>
+		<h3><?php echo $data->title;?></h3>
+		<h4>发布人：<?php echo $data->authorName;?>&nbsp;&nbsp;&nbsp;&nbsp;发布时间：<?php echo $data->createTime;?>&nbsp;&nbsp;&nbsp;&nbsp;浏览次数：<?php echo $data->browseTimes;?>次</h4>
+		<div class='summary'>
+			<span>摘要：</span>
+			<p><?php echo $data->itemsText[0]->summary; ?></p>
+		</div>
+		<div class='main'><?php echo $data->itemsText[0]->text;?></div>
+		
+		<div class='files'>
+		
+		<?php
+			if($data->boardType == 21){ // 档案规范
+					$fav = $info['boardId'].'&'.$info['topicId'];
+					
+					foreach($data->itemsFile as $file){
+						
+						$mark = explode('.', $file->addressMark);
+						
+						if($mark[1] == 'doc' || $mark[1] == 'docx'){
+						
+							$icon = 'doc.gif';
+							
+						}else if($mark[1] == 'xls' || $mark[1] == 'xlsx'){
+							
+							$icon = 'xls.gif';
+							
+						}else if($mark[1] == 'ppt' || $mark[1] == 'pptx'){
+							$icon = 'ppt.gif';
+						}else if($mark[1] == 'pdf'){
+						
+							$icon = 'pdf.gif';
+						}else if($mark[1] == 'txt'){
+						
+							$icon = 'txt.gif';
+						}else if($mark[1] == 'zip' || $mark[1] == 'rar'){
+							$icon = 'zip.gif';
+						}else{
+							$icon = 'default.gif';
+						}
+						
+						$dl = $file->id.'&'.$file->addressMark.'&'.$data->provice; // fileId&mark&mainSite
+						
+						echo "<div class='file'>";
+							echo '<p><img width="24" src="'. $tplPath.'/ESDefault/img/'.$icon .'"  title="'. $file->fileName .'" alt="'. $file->fileName .'" /></p>';
+							echo '<h2>'. $file->fileName .'</h2>';
+							echo '<span>附件大小：'. $file->fileSize .'</span>';
+							echo '<span>下载次数：'. $file->downloadTimes .'</span>';
+							echo "<a href='javascript:void(0)' class='downloads' info='". $dl ."'>下载</a>";
+							echo "<a href='javascript:void(0)' class='favorates' info='". $fav ."'>收藏</a>";
+						echo "</div>";
+						
+					}
+					
+				}
+		?>
+		</div>
+		
+	</div>
+</div>

@@ -1,0 +1,245 @@
+<style>
+<!--
+.button {cursor: pointer; padding: 5px;background-color: #6F6E81;color: #FFF;border: 0px none;outline: 0px none;}
+-->
+</style>
+<div class="sendPage">
+	<form id="sendPage">
+		<table id="table_detail" style="height: 100px; width:100%; padding: 10px 0px 10px 0px; margin-left: 60px;" sendId="<?php echo isset($send->id)?$send->id:''; ?>" >
+			<tr valign="middle">				
+				<td style="width: 90px;">收发流程名称<font size="3px" color="red">*</font></td>
+				<td style="width: 360px;">					
+					<input type="hidden" name="matrix" id="matrix" value='<?php echo isset($send->matrix)?$send->matrix:''; ?>' />
+					<input type="hidden" name="fileflow_id" id="fileflow_id" value="<?php echo isset($send->fileflow_id)?$send->fileflow_id:''; ?>" />
+					<input type="hidden" name="typeNo" id="typeNo" value='' stageId="" />
+					<select name="flowId" id="flowId" style="width: 250px; height: 20px;" flowname="<?php echo isset($send->fileflow_name)?$send->fileflow_name:''; ?>" >
+						<option value="">请选择</option>
+						<?php foreach ($flowList as $flow){?>
+						<option value="<?php echo $flow->id; ?>" matrix='<?php echo $flow->flow_matrix; ?>' typeNo='<?php echo $flow->typeNo; ?>' ><?php echo $flow->name; ?></option>
+						<?php }?>
+					</select><span>&nbsp;&nbsp;<a id="scanMatrix" href="javascript:;">查看流程</a></span>
+				</td>
+				<td style="width: 40px;">编号<font size="3px" color="red">*</font></td>
+				<td><input type="text" name="no" id="no" verify="text/30/1/0" value="<?php echo isset($send->no)?$send->no:''; ?>"
+					style="width: 150px; height: 20px;" readonly="readonly" /></td>
+			</tr>
+			<tr valign="top">
+				<td colspan="1">&nbsp;</td>
+				<td><a id="changesend" href="javascript:;">自定义分发</a><span>&nbsp;&nbsp;</span>每种文件需分发&nbsp;<font color="red">0</font>&nbsp;份</td>
+			</tr>
+		</table>
+		<input type="hidden" name="file_id" id="file_id" value="<?php echo isset($send->file_id)?$send->file_id:''; ?>" />
+		<div style="float:left; width:100%; border-top: 1px solid #ccc;">
+			<div style="float:left;width:100%;height: 40px;line-height: 40px; padding-left:10px;">
+				<span>关联文件&nbsp;|&nbsp;</span>
+				<span class="button linkFile" style="padding-right:10px;padding-left:22px; background:#6F6E81 url(<?php echo $tplPath?>/public/flexigrid/css/images/add.png) no-repeat left;">选择文件</span>&nbsp;&nbsp;
+				<span class="button delLinkFile" style="padding-right:10px;padding-left:22px; background:#6F6E81 url(<?php echo $tplPath?>/public/flexigrid/css/images/close.png) no-repeat left;">删除</span>
+			</div>
+			<div id="div_linkFileList" style="float: left; width:100%;height: 272px;">
+				<table id="linkFileList"></table>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	//下拉框添加事件
+	$("select[name='flowId']").live('focus',function(){
+		if($("#flowId option:selected").val() == ""){
+			$(this).addClass('invalid-text').attr('title','此项不能为空');
+		}
+	});
+	$("select[name='flowId']").live('change',function(){
+		if($("#flowId option:selected").val() == ""){
+			$(this).addClass('invalid-text').attr('title','此项不能为空');
+		}else{
+			$(this).removeClass('invalid-text').attr('title','');
+		}
+	});
+	var fileid=$("#fileflow_id").val();
+	if(fileid!="" && fileid!=null){
+		$("#flowId").val(fileid);
+		 $.post($.appClient.generateUrl({ESDocumentSend:'getSendReceiveFlowById'},'x'),{flowId:fileid},function(data){
+				if(data.id !=null && data.id!="undefined"){
+					$("#typeNo").val(data.typeNo);
+					updateFlowNameBySendid(data.name);
+					$("#flowId").attr("flowname",data.name);
+				}else{
+					$("#flowId").html('<option value="'+fileid+'">'+$("#flowId").attr("flowname")+'<font color="red">(已删除)</font></option>');
+					$("#flowId").val(fileid);
+				}
+		 },"json");
+	}
+
+	function updateFlowNameBySendid(flowName){
+		var sendId=$("#table_detail").attr("sendId");
+		if($("#flowId").attr("flowname")!=flowName && sendId!=""){			
+			$.post($.appClient.generateUrl({ESDocumentSend:'updateFlowNameBySendid'},'x'),{sendId:sendId,flowName:flowName},function(data){
+				if(data=="true"){
+					$("#esDataList").flexReload();
+					return true;
+				}
+			});
+		}
+	}
+	
+	setCopies($("#flowId"));
+
+	var sendId=$("#table_detail").attr("sendId");
+	if(sendId=="" || sendId==null){
+		$("#flowId").die().live("change",function(){
+			//改变流程 自定义发送变为初始化
+			var flowId = $("#flowId").find("option[value='"+$("#flowId").val()+"']").val();
+			var value = $("#flowId").find("option[value='"+$("#flowId").val()+"']").attr("matrix");
+			var typeNo = $("#flowId").find("option[value='"+$("#flowId").val()+"']").attr("typeNo");
+			$("#matrix").val(value);
+			$("#typeNo").val(typeNo);
+			$("#fileflow_id").val(flowId);		
+			setCopies($(this));	
+		});
+		$.post($.appClient.generateUrl({ESDocumentSend:'getSendNo',pId:$("#selTreeId").val()},'x'),function(data){
+			$("#no").val(data);
+		});
+	}else{
+		$("#flowId").attr("disabled","disabled");		
+	}
+	
+	function setCopies(vl){
+		var matrix=$('#matrix').val();
+		var copies = 0;
+		if($("#fileflow_id").val() != ""){
+			
+			if(matrix==""){
+				vl.find("option").each(function(){
+					if($(this).attr("matrix")){
+						var o_matrix=jQuery.parseJSON($(this).attr("matrix"));
+						if(o_matrix==null) return;
+						for(var i=0;i<o_matrix.length;i++){
+							copies=copies+o_matrix[i].copies*1;
+						}
+					}
+				});
+			}else{
+				var matrix=jQuery.parseJSON(matrix);
+				for(var i=0;i<matrix.length;i++){
+					copies=copies+matrix[i].copies*1;
+				}
+			}			
+			vl.closest("tr").next().find("font").html(copies);
+		}else{
+			if(matrix!=""){
+				var matrix=jQuery.parseJSON(matrix);
+				for(var i=0;i<matrix.length;i++){
+					copies=copies+matrix[i].copies*1;
+				}
+			}
+			vl.closest("tr").next().find("font").html(copies);
+		}
+	}
+	$("#changesend").die().live("click",function(){
+		flowChart();
+	});
+
+	function flowChart(){
+			var id = $("#flowId").val();
+			if(id=='(自定义流程)') id='';
+			$.ajax({
+			    url:$.appClient.generateUrl({ESSendReceiveFlow:'flowChart',id:id},'x'),
+			    success:function(data){
+			    	dia2 = $.dialog({
+				    	title:'自定义接收对象',
+			    		width: '750px',
+			    	   	fixed:true,
+			    	    resize: false,
+			    	    padding:0,
+				    	content:data,
+					    cancel: true,
+					    cancelVal: '关闭',
+					    ok:true,
+					    okVal:'确定',
+					    ok:function(){
+					    	var matrix=getMatrixParam();
+					    	if(matrix==null){
+					    		$.dialog.notice({icon:"warning",content:"请添加接收文件的单位部门或用户",time:3});
+								return false;
+					    	}else{
+					    		addMatrix(id,matrix);
+					    		//自定义完成后将选择的的流程都初始化
+					    		$("#flowId").append('<option value="(自定义流程)" selected>(自定义流程)</option>');
+					    		$("#flowId").attr("disabled",true);
+								$("#typeNo").val("");
+								$("#fileflow_id").val("");
+					    	}
+					    },
+					    button:[{
+							name:'取消自定义流程',
+							callback:function(){
+								$("#flowId option[value='(自定义流程)']").remove();
+					    		$("#flowId").attr("disabled",false);
+							}
+						}],
+					    cancel:function(){
+					    	//关闭定制流程窗口
+					    }
+				    });
+			    },
+			    cache:false
+			});
+	}
+
+	//添加流程矩阵
+	function addMatrix(id,matrix){
+		$('#matrix').val(matrix);
+		setCopies($("#flowId"));
+	}
+	
+	//获取收发矩阵
+	function getMatrixParam(){
+		var matrix="[";
+    	$("#flowChart .confirmPart").each(function(){
+    		var code=$(this).attr("code");
+    		var copies=$(this).attr("copies");
+    		var type=$(this).attr("receiveType");
+    		if(code!="" && copies!=""){
+    			matrix += '{"code":"'+code+'","copies":"'+copies+'","type":"'+type+'"},';
+    		}
+    	});
+    	return (matrix=="[")?null:(matrix.substring(0, matrix.length-1)+"]");
+	}
+
+	$("#scanMatrix").die().live('click',function(){
+		scanMatrix();
+	});
+	
+	//查看流程
+	function scanMatrix(){
+		var id = $("#flowId").val();
+		var typeNo=$("#typeNo").val();
+		if(id!="" && id!=null && typeNo!=null && typeNo!=""){
+			$.ajax({
+			    url:$.appClient.generateUrl({ESDocumentSend:'flowChart1',id:id},'x'),
+			    success:function(data){
+			    	dia2 = $.dialog({
+				    	title:'查看流程',
+			    		width: '750px',
+			    	   	fixed:true,
+			    	    resize: false,
+			    	    padding:0,
+				    	content:data,
+					    cancel: true,
+					    cancelVal: '关闭',
+					    ok:false,
+					    cancel:function(){
+					    	//关闭定制流程窗口
+					    }
+				    });
+			    },
+			    cache:false
+			});
+		}else{
+			$.dialog.notice({icon:"warning",content:"请先选择一个流程",time:3});
+		}
+	}
+});
+
+</script>

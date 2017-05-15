@@ -1,0 +1,15 @@
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESAccountingArchive/css/index.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESArchiveLending/css/index.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESCollaborative/css/index.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css"/>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<div id="ESSystemIndex" >
+	<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+	<table id="flexme1"></table>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/validate.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type='text/javascript' src='<?php echo $tplPath?>/ESAccountingArchive/js/index.js'></script>

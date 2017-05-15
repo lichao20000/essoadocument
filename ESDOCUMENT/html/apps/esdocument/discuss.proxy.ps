@@ -1,0 +1,61 @@
+<?php
+/**
+ * 交流园地
+ * @author rongying
+ * 2014-04-13
+ */
+class ProxyEsdocumentDiscuss extends AgentProxyAbstract
+{
+	const SERVICE_NAME='discuss';
+	/**
+	 * 
+	 * 发布信息
+	 * @param mixed $param
+	 * @return mixed
+	 */
+	public function saveTopic($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'saveTopicItem',$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 
+	 * 获取信息列表
+	 * @param int $start
+	 * @param int $limit
+	 * @param mixed $condition
+	 * @return mixed
+	 */
+	public function getTopicList($start,$limit,$condition)
+	{
+		$url=array('getTopicList',$start,$limit);
+		$url=implode('/', $url);
+		return  $this->post(self::SERVICE_NAME, $url,$condition,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 
+	 * 保存回复的数据
+	 * @param unknown_type $param
+	 */
+	public function addReplyItem($itemId,$param)
+	{
+		$url=array('addReplyItem',$itemId);
+		$url=implode('/', $url);
+		return $this->post(self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 删除内容
+	 */
+	public function delTopicItem($params)
+	{
+		return $this->post(self::SERVICE_NAME, 'delTopicItem',$params,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 删除回复
+	 * Enter description here ...
+	 * @param unknown_type $id
+	 */
+	public function delReply($params)
+	{
+		return $this->post(self::SERVICE_NAME, 'delReplyById',$params,'application/json;charset=UTF-8');
+	}
+}

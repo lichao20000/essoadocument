@@ -1,0 +1,78 @@
+<link rel="stylesheet"href="<?php echo $tplPath;?>/public/css/appmenu.css" type="text/css"/>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/css/appmenuRight.css" type="text/css"/>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css"	type="text/css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script	type="text/javascript" src="<?php echo url('js/jquery.json-2.3.min.js');?>"></script>
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.core.min.js"></script>
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+
+<div class="sidebar-scroll" tabindex="5000" id="sidebarContainer"
+	style="overflow: hidden; outline: none;">
+	<div id="sidebar" class="nav-collapse collapse"
+		style="z-index: -100; position: absolute;">
+		<ul id="menu">
+		    <li><a class="subFuncs" controller="ESOrder" action="index" href="javascript:;"><i class='icon-group icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>服务订购</a></li>
+			
+		</ul>
+	</div>
+</div>
+
+<div class="sidebar-scroll-right" tabindex="5000"
+	id="sidebarContainerRight" style="overflow: hidden; outline: none;">
+	<div id="sidebarRight" class="nav-collapse collapse"
+		style="z-index: -100; position: absolute;">
+		<ul id="menuRight">
+		    <li><a class="subFuncs" controller="ESOrder" action="index" href="javascript:;"><i class='icon-group icon-large' style='margin-right:10px;height: 50px; width: 50px'></i>服务订购</a></li>
+		</ul>
+	</div>
+</div>
+
+<script>
+	var isAdmin  = "<?php global $user; echo $user->id;?>";
+	$(".subFuncs").click(function() {
+		var url = {};
+		var controller = $(this).attr("controller");
+		var action = $(this).attr("action");
+		if(typeof controller === "string" && controller.length > 0){
+			url[$(this).attr("controller")] = $(this).attr("action");
+			window.open($.appClient.generateUrl(url), "_self");
+		}
+	});
+	(function(){
+		
+		$('#sidebar,#sidebarContainer').css({
+			'margin-left' : '-240px'		
+		});
+		$('#sidebar > ul').hide();
+		$("#container").addClass("sidebar-closed");
+		
+		$("#sidebarContainer").hover(function(){
+			$('#sidebar > ul').show(500);
+			$('#sidebar').css({
+				'margin-left' : '0'
+			});
+			$(this).stop(true,false);
+			$(this).animate({marginLeft:0},300);
+		},function(){
+			$('#sidebar').css({
+				'margin-left' : '-240px'
+			});
+			$('#sidebar > ul').hide();
+			$("#container").addClass("sidebar-closed");
+			$(this).animate({marginLeft:-240},300);
+		});
+		
+	})();
+	
+	$("#sidebarContainerRight").hover(function(){
+		
+		$(this).stop(true,false);
+		$(this).animate({right:0},300);
+	},function(){
+		
+		$(this).animate({right:-240},300);
+	});
+</script>

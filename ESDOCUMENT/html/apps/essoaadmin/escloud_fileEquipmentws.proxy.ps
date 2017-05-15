@@ -1,0 +1,99 @@
+<?php
+/*
+ *文件存储设备服务
+* @author wangbo 20140318
+*/
+class ProxyEssoaadminEscloud_fileEquipmentws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "mainFileServer";
+	 /**
+	 * 获取总记录数
+	 * 
+	 */
+	public function getCountAll($wb)
+	{
+		$url = "getStorageCount";
+		return $this->post(self::SERVICE_NAME,$url,$wb,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	* 获取所有文件存储设备信息
+	*/
+	public function getAllFileEquip($canshu)
+	{
+		$url = "getStorageList";
+		return $this->post(self::SERVICE_NAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	/**
+	* 添加文件存储设备
+	*/
+	public function addFileEquipment($data){
+	     $url = "saveStorage";
+	     return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	/**
+	* 删除文件存储设备
+	*/
+	public function deleteFileEquipment($id,$priority){
+		 $urlParam = array('dropStorage',$id,$priority);
+		 $url = implode('/', $urlParam);
+	     return $this->post(self::SERVICE_NAME, $url);
+	}
+ 
+	/**
+	*启用或者禁用某个文件存储设备
+	*/
+	public function startOrStopFileEquipment($id,$mark){
+	      $urlParam = array('setStorageEnable',$id,$mark);
+		  $url = implode('/', $urlParam);
+		  return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	*将某个文件存储设备设为最优
+	*/
+	public function setFirstFileEquipment($id,$priority){
+	      $urlParam = array('setFirstFileStorage',$id,$priority);
+		  $url = implode('/', $urlParam);
+		  return $this->post(self::SERVICE_NAME, $url);
+	}
+	
+	
+	/**
+	 * 获取数据集
+	 */
+	public function getDataList($postData){
+		$urlParam = array('getDataList');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 添加
+	 */
+	public function add($postData){
+		$urlParam = array('add');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 编辑
+	 */
+	public function edit($postData){
+		$urlParam = array('edit');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	public function deleteByIds($postData){
+		$urlParam = array('delete');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	public function getDataById($postData){
+		$urlParam = array('getDataById');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+}

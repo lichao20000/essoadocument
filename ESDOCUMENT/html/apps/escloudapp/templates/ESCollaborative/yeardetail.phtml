@@ -1,0 +1,273 @@
+<style type="text/css">
+.checkTime{float:right;margin-right:20px;}
+</style>
+<div class='borrowing_message'>
+	<div class='positionbtn'>
+		<div id="jieyue" class='buttons'>
+			<?php 
+				if($list->yearnewspaper_approval->activity == 'departmentApproval'){
+					echo '<input type="button" value="同意" class="basebtn basebtn_border btn agree" />';
+					echo '<input type="button" value="退回" class="basebtn basebtn_border btn back" />';
+					echo '<input type="button" value="转审批" class="basebtn basebtn_border btn approval" />';
+				} else {
+					echo '<input type="button" value="发布" class="basebtn basebtn_border btn agree" />';
+				}
+			?>
+			<input type="button" value="流程图" class="basebtn basebtn_border image process" />
+		</div>
+	</div>
+	<div class='message_list'>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>填报单位：</span>
+				<input type='text' value="<?php echo $list->yearnewspaper_approval->fillunit;?>" readonly='readonly' />
+			</p>
+			<p class='like_input'>
+				<span>制表人：</span>
+				<input type='text' value="<?php echo $list->yearnewspaper_approval->display_name;?>" readonly='readonly' />
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>年报类型：</span>
+				<input type='text' name="datacs" id="datacs" value="<?php echo $list->yearnewspaper_approval->yearnewspaper_type;?>" readonly='readonly' />
+			</p>
+			<p class='like_input'>
+				<span>年度：</span>
+				<input type='text' name="fillyear" id="fillyear" value="<?php echo $list->yearnewspaper_approval->fillyear;?>" readonly='readonly' />
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>浏览附件：</span>
+				<span><a id="detailse" href="javascript:void(0);">查看</a></span>
+			</p>
+		</div>
+		<div class='like_textarea'>
+			<h2>描述：</h2>
+			<textarea readonly='readonly' class='extextarea'><?php echo $list->yearnewspaper_approval->yearnewspaper_desc;?></textarea>
+		</div>
+		<?php 
+			foreach($list->yearnewspaper_opinion as $key=>$val){
+				echo '<div class="like_textarea">';
+				echo '<h2>'.$val->opinion_user_name.'审批意见：'.'<span class="checkTime">'.$val->opinion_time.'</span>'.'</h2>';
+				echo '<textarea readonly="readonly" class="extextarea">'.$val->opinion_approval.'</textarea>';
+				echo '</div>';
+			}
+			if($list->yearnewspaper_approval->activity == 'departmentApproval'){
+				echo '<div class="like_textarea">';
+				echo '<h2>请输入您的意见：</h2>';
+				echo '<textarea name="leaderidea"  class="extextarea"></textarea>';
+				echo '</div>';
+			}
+		?>
+		
+	</div>
+	<input type="hidden" name="workid" value="<?php echo $list->yearnewspaper_approval->workflowid;?>" />
+	<input type="hidden" name="taskid" value="<?php echo $list->yearnewspaper_approval->task_id;?>" />
+	<input type="hidden" name="yearnewspaper_id" value="<?php echo $list->yearnewspaper_approval->yearnewspaper_id;?>" />
+	<!-- <input type="hidden" name="datacs" value="<?php echo $list->yearnewspaper_approval->typeid;?>" /> 
+	//<span class="checkTime"><?php echo $val->opinion_time;?></span>-->
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var workid = $("input[name='workid']").val();
+	var taskId = $("input[name='taskid']").val();
+	var departmentApprovalResult = "Reject";
+	var localvar = "";
+	var operation = "";
+	var opinion_approval = "";
+	var operate = "";
+	var yearnewspaper_id = $("input[name='yearnewspaper_id']").val();
+	$("#jieyue :button").die().live('click',function(){
+		operate = $(this).val();
+		opinion_approval = $("textarea[name='leaderidea']").val();
+		if(operate == "同意"){
+			departmentApprovalResult = "agree";
+		}
+		if(operate == "同意" || operate == "退回" || operate == "发布"){
+			operation = "complete";
+			localvar = "false";
+		}else{
+			operation = "delegate";
+			localvar = "true";
+		}
+		switch(operate){
+			case '同意': accede(taskId,operation,localvar,workid,opinion_approval,yearnewspaper_id,departmentApprovalResult);break;
+			case '退回': untread();break;
+			case '转审批': change();break;
+			case '流程图': flowmap();break;
+			case '发布': issue();break;
+		}
+	});
+	$("#detailse").die().live('click',function(){
+		var yearId = $("input[name='yearnewspaper_id']").val();
+		var datacs = $("input[name='datacs']").val();
+		if(yearId){
+			$.ajax({
+			    url:$.appClient.generateUrl({ESYearlyReport:'datacs', yearId:yearId},'x'),
+			    type:'post',
+			    data:'datacs=' + datacs,
+			    success:function(data){
+			    	$.dialog({
+			    		id:"yearDialog",
+				    	title:'查看年报',
+				    	width:750,
+				    	height:500,
+				    	padding:'0px',
+				    	content:data
+				    });
+				},
+				cache:false
+			});
+		}
+	});
+	function accede(taskId,operation,localvar,workid,opinion_approval,yearnewspaper_id,departmentApprovalResult){
+		if(opinion_approval == ""){ opinion_approval = "同意"; }
+		var url = $.appClient.generateUrl({ESCollaborative:'accedeaction'},'x');
+		$.ajax({
+			url:url,
+			type:"POST",
+			data:'taskId=' + taskId + '&operation=' + operation + '&localvar=' + localvar + '&opinion_workflowid=' + workid + '&opinion_approval=' + opinion_approval + '&yearnewspaper_id=' + yearnewspaper_id + '&departmentApprovalResult=' + departmentApprovalResult,
+			success:function(data){
+				if(data){
+					yeardia.close();
+					$("#mylist").flexOptions({newp:1}).flexReload();
+					$.dialog.notice({icon:"succeed",content:"操作成功",time:3});
+				}
+			}
+		});
+	}
+	function untread(){
+		if(opinion_approval == ""){ opinion_approval = "退回"; }
+		var url = $.appClient.generateUrl({ESCollaborative:'untreadaction'},'x');
+		$.ajax({
+			url:url,
+			type:"POST",
+			data:'taskId=' + taskId + '&operation=' + operation + '&localvar=' + localvar + '&opinion_workflowid=' + workid + '&opinion_approval=' + opinion_approval + '&yearnewspaper_id=' + yearnewspaper_id + '&departmentApprovalResult=' + departmentApprovalResult,
+			success:function(data){
+				if(data){
+					yeardia.close();
+					$("#mylist").flexOptions({newp:1}).flexReload();
+					$.dialog.notice({icon:"succeed",content:"操作成功",time:3});
+				}
+			}
+		});
+	}
+	function change(){
+		if(opinion_approval == ""){ opinion_approval = "转审批"; }
+		var url = $.appClient.generateUrl({ESArchiveLending:'approveToUser'},'x');
+		$.ajax({
+			url:url,
+			type:"POST",
+			data:{workid:workid},
+			success:function(data){
+				$.dialog({
+			    	title:'下一级用户列表',
+			    	padding:0,
+		    	   	fixed:true,
+		    	    resize: false,
+			    	content:data,
+			    	okVal:'提交',
+			    	cancelVal:'取消',
+			    	ok:true,
+				    cancel: true,
+				    ok:function(){
+				    	
+				    	var perObj=$("#perList").find("input:checked");
+		  				if(perObj.length==0){
+			  				$.dialog.notice({content:'请选择审批人！',icon:'warning',time:3});
+						    return false;
+		  				}
+		  				var perId = $("#perList").find("input:checked").attr('id');
+						var listId=perId.split('|');
+						var opinionId=listId[0];
+						
+				    	//var username=$("#getuser input[name='id2']:checked").val();
+					     var url = $.appClient.generateUrl({ESCollaborative:'changeaction'},'x');
+						$.ajax({
+							url:url,
+							type:"POST",
+							data:'taskId=' + taskId + '&operation=' + operation + '&localvar=' + localvar + '&opinion_workflowid=' + workid + '&opinion_approval=' + opinion_approval + '&yearnewspaper_id=' + yearnewspaper_id + '&departmentApprovalResult=' + departmentApprovalResult + '&login_userid=' + opinionId,
+							success:function(data){
+								if(data){
+									yeardia.close();
+									$("#mylist").flexOptions({newp:1}).flexReload();
+									$.dialog.notice({icon:"succeed",content:"操作成功",time:3});
+								}
+							}
+						});
+					}
+			    });
+			},
+			cache:false
+		});
+		
+		
+		/*var url = $.appClient.generateUrl({ESCollaborative:'changeuser'},'x');
+		$.ajax({
+			url:url,
+			type:"POST",
+			data:{workid:workid},
+			success:function(data){
+				$.dialog({
+			    	title:'下一级用户列表',
+			    	padding:0,
+		    	   	fixed:true,
+		    	    resize: false,
+			    	content:data,
+			    	okVal:'提交',
+			    	cancelVal:'取消',
+			    	ok:true,
+				    cancel: true,
+				    ok:function(){
+				    	var username = $("#getuser input[name='id2']:checked").val();
+					    var url = $.appClient.generateUrl({ESCollaborative:'changeaction'},'x');
+						$.ajax({
+							url:url,
+							type:"POST",
+							data:'taskId=' + taskId + '&operation=' + operation + '&localvar=' + localvar + '&opinion_workflowid=' + workid + '&opinion_approval=' + opinion_approval + '&yearnewspaper_id=' + yearnewspaper_id + '&departmentApprovalResult=' + departmentApprovalResult + '&login_userid=' + username,
+							success:function(data){
+								if(data){
+									yeardia.close();
+									$("#mylist").flexOptions({newp:1}).flexReload();
+									$.dialog.notice({icon:"succeed",content:"操作成功",time:3});
+								}
+							}
+						});
+					}
+			    });
+			}
+		});*/
+	}
+	function flowmap(){
+		var url = $.appClient.generateUrl({ESCollaborative:'imgview', workid:workid},'x');
+		var html = '<img src = "'+url+'" />';
+		$.dialog({
+		    	title:'详细信息',
+		    	padding:0,
+	    	   	fixed:true,
+	    	   	width:580,
+	    	   	height:390,
+	    	    resize: false,
+		    	content:html
+		    });
+	}
+	function issue(){
+		if(opinion_approval == ""){ opinion_approval = "发布"; }
+		var url = $.appClient.generateUrl({ESCollaborative:'issueaction'},'x');
+		$.ajax({
+			url:url,
+			type:"POST",
+			data:'taskId=' + taskId + '&operation=' + operation + '&localvar=' + localvar + '&opinion_workflowid=' + workid + '&opinion_approval=' + opinion_approval + '&yearnewspaper_id=' + yearnewspaper_id ,
+			success:function(data){
+				if(data){
+					yeardia.close();
+					$("#mylist").flexOptions({newp:1}).flexReload();
+					$.dialog.notice({icon:"succeed",content:"操作成功",time:3});
+				}
+			}
+		});
+	}
+});
+</script>

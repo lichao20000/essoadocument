@@ -1,0 +1,184 @@
+<?php
+/**
+ * 
+ * @author wangtao
+ *馆藏统计服务
+ */
+class ProxyEscloudappescloud_collectionws extends AgentProxyAbstract
+{
+	const SERVICE_NAME='escloud_collectionws';
+	/**
+	 * @author wangtao
+	 * 获取馆藏统计方案
+	 * @param $start 
+	 * @param $limit
+	 * @param $userId
+	 * @return mixed
+	 */
+	public function getDataList($start,$limit,$userId)
+	{
+		$urlParam = array('getColls',$start,$limit,$userId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * @author wangtao
+	 * 保存统计方案名称(统计方案第一步)
+	 * @param string $title 方案名称
+	 * @param $userId
+	 * @return string
+	 */
+	public function saveTitle($id,$title,$userId)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveCollTitle',$id,$title,$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * @author wangtao
+	 * 保存树节点(统计方案第二步)
+	 * @param int $id 方案ID
+	 * @param mixed $treeNodes 树节点
+	 */
+	public function saveTreeNodes($userId,$id,$treeNodes)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveCollPaths',$id,$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$treeNodes,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 获取方案数据(统计方案第三步)
+	 * @param int $id 方案的ID
+	 * @return mixed
+	 */
+	public function getCollItems($id)
+	{
+		$urlParam = array('getCollItemsForShow',$id);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * @author wangtao
+	 * 保存统计规则
+	 * 
+	 */
+	public function saveCollItem($jsonList)
+	{
+		$urlParam = array('saveCollItem');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$jsonList,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 保存统计项设置
+	 */
+	public function saveOptions($userId,$collId,$classNode,$dataNode,$isSummary,$isLayout,$pic,$dataOptions)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveOptions',$collId,$classNode,$dataNode,$isSummary,$isLayout,$userId,$ip,$pic);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$dataOptions,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 删除统计方案
+	 * @param int $id
+	 */
+	public function removeColl($userId,$id)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('removeColl',$id,$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * @author wangtao
+	 * 生成excel文件
+	 * @param int $id 统计方案ID
+	 * @param version excel版本
+	 */
+	public function executeColl($id,$version,$userId,$ip)
+	{
+		$urlParam = array('executeColl',$id,$version,$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * @author wangtao
+	 * 修改当前步骤
+	 * @param int $collId 方案ID
+	 * @param int $currStep 当前步骤
+	 * @return bool
+	 */
+	public function changeCollCurrStep($collId,$currStep)
+	{
+		$urlParam = array('changeCollCurrStep',$collId,$currStep);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * @author wangtao
+	 * 设置统计方案的列数，已及列的标题，列标题为一个字符串，中间以;分割 如 列1;列2;列3
+	 * @param int $collId 方案ID
+	 * @param int $colCount 列数
+	 * @param string $title 列名称
+	 * @return bool
+	 */
+	public function saveCollTitleAndColCount($userId,$collId,$colCount,$title)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveCollTitleAndColCount',$collId,$colCount,$title,$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * @author wangtao
+	 * 移除一列
+	 * @param int $collId 方案ID
+	 * @param int $colNo 列ID
+	 */
+	public function removeCollItemsByColNo($collId,$colNo)
+	{
+		$urlParam = array('removeCollItemsByColNo',$collId,$colNo);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 根据ID获取统计方案信息
+	 * 
+	 */
+	public function getCollById($id)
+	{
+		$urlParam = array('getCollById',$id);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 批量删除
+	 * wanghongchen 20140820
+	 */
+	public function batchDelete($param)
+	{
+		return $this->post(self::SERVICE_NAME, "batchDelete",$param,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 根据collId和path获取统计项
+	 */
+	public function getCollItemById($param)
+	{
+		return $this->post(self::SERVICE_NAME, "getCollItemById",$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 更新分类节点、数据节点、缩进
+	 * wanghongchen 20140822
+	 */
+	public function updateOption($param)
+	{
+		return $this->post(self::SERVICE_NAME, "updateOption",$param,'application/json;charset=UTF-8');
+	}
+}

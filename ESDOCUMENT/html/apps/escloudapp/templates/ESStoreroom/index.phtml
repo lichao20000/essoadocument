@@ -1,0 +1,168 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link href="<?php echo $tplPath?>/ESStoreroom/css/essstyle.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESStoreroom/js/ESStoreroom.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESStoreroom/js/buttons.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/highcharts.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/modules/exporting.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/validate.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.excheck.min.js"></script>
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"库房管理", content:"#esstdright"});
+});
+</script>
+
+<div class='essmain'>
+  <div id="esstdright" class="essright">
+
+    <table id="flexme1"></table>  
+	<script type="text/javascript">
+		/**
+		 * 下拉框生成
+		 *  @author ldm
+		 */
+			var createSelect = '<div id="Seledopreate" class="Seledopreate">';
+			//liqiubo 20140603  由于标准版产品不依据机构ID分库房，故屏蔽掉此下来框
+			/**createSelect += '<select id="select" onchange="changemolid()" class="selectype">';
+			createSelect +='<?php foreach ($list as $k=>$val){
+// 				if($val->orgid==$userinfo->shengid){
+// 					echo '<option selected="selected" value="'.$val->orgid.'|'.$val->mainSite.'">'.$val->orgName.'</option>';
+// 				}else{
+// 					echo '<option value="'.$val->orgid.'|'.$val->mainSite.'">'.$val->orgName.'</option>';
+// 				}
+				}?>';
+			createSelect +='</select></div>';*/
+			createSelect +='</div>';
+		
+			//下拉框值的改变
+			var state=1;
+			function changemolid(){
+				var obs = document.getElementById("select");
+				var vals=obs.options[obs.selectedIndex].value;
+				vals=vals.split("|");
+			    state = 1;
+				$('.tDiv .tDiv2 .add').show();
+				$('.tDiv .tDiv2 .delete').show();
+				var url=$.appClient.generateUrl({ESStoreroom:'set_json',ogid:oganid},'x');
+				$("#flexme1").flexOptions({newp:1,url:url}).flexReload();
+			}
+		  /**
+		   * 库房结构
+		   * @author ldm
+		   */
+		  	function structure(){
+		  		var checkboxObj=$("input[name='storeroomid']:checked");
+				if(checkboxObj.length =='0' || checkboxObj.length!='1')
+				{
+					selectid="";
+					$.dialog.notice({icon:'warning',content:'请先选择库房并且库房只能选取一个',time:3});
+					return false;
+				}else{
+					selectid = checkboxObj.val();
+				}
+		  		// $('#structure').load($.appClient.generateUrl({ESStoreroom :'warehouse_structure'}, 'x'));
+		  		// $("#estabs").esTabs("open", {title:"库房结构", content:"#structure", canClose:true, activated:true});
+		  		// longjunhao 20140825 获取当前选择的库房层数、列数和格子宽度  20140915 add 排架数量framenumber
+		  		var trObj = checkboxObj.closest('tr');
+		  		var columns = ['framenumber','col',"layer","gridwidth","hasStructure"];
+				var colValues = $("#flexme1").flexGetColumnValue(trObj,columns);
+				var colValuesArray = colValues.split("|");
+				var framenumber = colValuesArray[0];
+				var col = colValuesArray[1];
+				var layer = colValuesArray[2];
+				var gridwidth = colValuesArray[3];
+				var hasStructure = colValuesArray[4];
+
+				if (hasStructure=='0') {
+					$.dialog.notice({content:'库房机构正在努力创建中，请稍候再试...',icon:'warning', time:'3'});
+					return false;
+				}
+				
+				  $.ajax({
+					  type:'post',
+					  url:$.appClient.generateUrl({ESStoreroom :'warehouse_structure'}, 'x'),
+					  data : {framenumber:framenumber,col:col,layer:layer,gridwidth:gridwidth},
+					  success:function(html){
+						  $.dialog({
+						    	title:'库房结构',
+						    	width: '400px',
+						    	height:'500px',
+						    	padding:'0px',
+					    	   	fixed:  true,
+					    	    resize: false,
+						    	content:html
+							 });
+					  },
+					  cache:false
+				  });
+		  		 
+		  	}
+		
+			/*
+			 @author ldm
+			  库房监控
+			*/
+			function monitoring()
+			{
+				var checkboxObj=$("input[name='storeroomid']:checked");
+				if(checkboxObj.length =='0' || checkboxObj.length!='1')
+				{
+					selectid="";
+					$.dialog.notice({icon:'warning',content:'请先选择要监控的库房并且库房只能选取一个',time:3});
+					return false;
+				}else{
+					//遍历选中的数据
+						selectid=checkboxObj.val();
+						// longjunhao 20140815 获取库房编号
+						var trObj = $(checkboxObj).closest('tr');
+						var _code=$("#flexme1").flexGetColumnValue(trObj,['code']);
+					}
+				//  selectid = selectid.substring(selectid.length-2,selectid.length-1);
+			      $('#monitoring').load('<?php echo $esaction->generateUrl(Array('ESStoreroom'=>'warehouse_monitoring'),'x');?>?code='+_code);
+				  $("#estabs").esTabs("open", {title:"库房监控", content:"#monitoring", canClose:true, activated:true});
+			}
+
+			/**
+			 * 改变浏览器尺寸
+			 */ 
+			function sizeChanged(main,table){
+				if($.browser.msie && $.browser.version==='6.0'){
+					$("html").css({overflow:"hidden"});
+				}
+				var h = $(window).height() - main.position().top;
+				var flex = table.closest("div.flexigrid");
+				var bDiv = flex.find('.bDiv');
+			    var contentHeight = bDiv.height();
+			    var headflootHeight = flex.height() - contentHeight; 
+			    
+			    bDiv.height(h - headflootHeight);
+				flex.height(h);
+
+				// 修改IE表格宽度兼容
+				if($.browser.msie && $.browser.version==='6.0'){
+					flex.css({width:"-=3px"});
+				}
+			};
+		
+		
+			
+	</script>
+    
+	</div>
+	<!-- <div id="structure"></div> -->
+	<div id="report"></div>
+	<div id="monitoring"></div>
+</div>
+
+
+

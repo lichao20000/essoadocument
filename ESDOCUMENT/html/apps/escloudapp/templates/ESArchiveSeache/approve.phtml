@@ -1,0 +1,106 @@
+<div class="main">
+<div class="content2">
+<form action="">
+<div class="submit">
+<input type="button" value="提交审批" />
+<input type="button" value="查看流程图" />
+<input type="button" value="返回" />
+</div>
+<div class="basic">
+<table>
+<tbody>
+<tr><td><label class="number">借阅单编号</label></td><td><input type="text" name="number" value="" /></td></tr>
+<tr><td><label class="applicant">借阅人</label></td><td><input type="text" name="applicant" value="" /></td><td><label class="unit">单位</label></td><td><input type="text" name="unit" value="" /></td></tr>
+<tr>
+<td><label class="phone">电话</label></td><td><input type="text" name="phone" value="" /></td>
+<td><label class="email">邮箱</label></td><td><input type="text" name="email" value="" /></td>
+</tr>
+<tr>
+<td><label class="purpose">利用目的</label></td><td><select style="width: 100%;height:100%;"><option>编史修志</option><option>工作考察</option><option>学术研究</option><option>经济建设</option><option>宣传教育</option><option>其他</option></select></td>
+<td><label class="email">催还提前天数</label></td><td><input type="text" name="email" value="" /></td><td>天</td>
+</tr>
+</tbody>
+</table>
+</div>
+</form>
+<div class="detail"> 
+<div><label>借阅明细：</label><img src="<?php echo $tplPath?>/ESArchiveSeache/img/line.gif" /></div>
+<table id="flexme1"></table> 
+ <script type="text/javascript">
+$(function(){
+	var uri="<?php echo url($this->getUrl($esaction->generateUrl(Array('ESArchiveSeache'=>'set_json'),'x')));?>";
+	$("#flexme1").flexigrid({
+	url: uri,
+	dataType: 'json',
+	colModel : [
+		{display: '<input type="checkbox" name="ids">', name : 'id', width : 40, align: 'center'},
+		{display: '档号', name : 'num', width : 40, align: 'center'},
+		{display: '题名', name : 'c3', width : 420, sortable : true, align: 'center'},
+		{display: '借阅类型', name : 'c4', width : 80, sortable : true, align: 'center'},
+		{display: '备注', name : 'c5', width : 80, sortable : true, align: 'center'}
+		],
+	buttons : [
+		{name: '添加', bclass: 'add',onpress: add},
+		{name: '删除', bclass: 'delete'}
+		],
+	searchitems : [
+       	{display: 'c3', name : 'c3'},
+       	{display: 'c4', name : 'c4', isdefault: true}
+       	],
+	sortname: "c3",
+	sortorder: "asc",
+	usepager: true,
+	title: '借阅明细',
+	useRp: true,
+	rp: 20,
+	nomsg:"没有数据",
+	showTableToggleBtn: true,
+	pagetext: '第',
+	outof: '页 /共',
+	width: 980,
+	height: 500,
+	pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+});
+
+	//新建按钮
+	function add(){
+		$(".esmain").load("createnew");
+	}
+	
+
+
+	$(".submit :button").eq(1).click(function(){
+    	$.dialog({
+	    	title:'流程图',
+    		width: '400px',
+    	    height: '300px',
+    	   	fixed:true,
+    	    resize: false,
+	    	content:'<img src="<?php echo $tplPath?>/ESArchiveSeache/img/show.gif" />',
+	    	okVal:'确定',
+		    ok:true,
+		    cancelVal: '关闭',
+		    cancel: true 
+	    });
+	});
+
+});
+//全选功能
+$(function(){
+	$("input[name='ids']").toggle(
+		function(){
+		$(":checkbox").attr('checked',true);
+		},function(){
+			$(":checkbox").attr('checked',false);
+
+			}
+
+		)
+
+	});
+</script>
+
+
+</div>
+</div>
+</div>

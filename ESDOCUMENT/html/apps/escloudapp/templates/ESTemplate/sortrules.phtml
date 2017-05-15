@@ -1,0 +1,422 @@
+<style>
+<!--
+.selBut .esasc{background:url(<?php echo $tplPath;?>/ESTemplate/img/asc.gif);}
+.selBut .esdesc{background:url(<?php echo $tplPath;?>/ESTemplate/img/desc.gif);}
+.notshow{display:none;}
+.mychange{width:170px;height:20px;}
+#extracustomRole .userList{ width:380px; height:190px; float:left; margin-top:10px; border:1px solid #ccc; overflow-y:scroll;}
+-->
+</style>
+<div id='userRole'>
+  <div id='' class='useLis'>
+    <div class='searchRole'>
+      <input type='text' id='one' class='searchusername' value='' onKeyUp="show(this.value,'left');"/>
+	  <input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+	</div>
+    <ul id="sortRole" class='userList'>
+   	    <?php foreach ($left as $k=>$val){ ?>
+    	<li id="<?php echo $val->tagId;?>" cname="<?php echo $val->name;?>" ><?php echo $val->display;?></li>
+    	<?php }?>
+	</ul>
+  </div>
+	<div id='esbutton' class='selBut'>
+		<span id="sorttop" class="estop" title='置顶'></span> 
+		<span id="sortup" class="esup" title='上移'></span>
+		<span id="sortleft" class="esleft" title='左移'></span>
+		<span id="sortasc" class="A-Z" title='升序'></span>
+		<span id="sortdesc" class="Z-A" title='降序'></span>
+		<span id="sortdown" class="esdown" title='下移'></span>
+		<span id="sortbottom" class="esbottom endspan" title='置底'></span>
+	</div>
+	
+	<div id='' class='useLis'>
+		<div class='searchRole'>
+			<input type='text' id='two' class='searchusername'  value='' onKeyUp="show(this.value,'right');"/>
+			<input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+		</div>
+		<ul id='sortsaveRole' class='userList'>
+			<?php
+		    foreach ($right as $k=>$val){ ?>
+    		<li id="<?php echo $val->tagid;?>" cname="<?php echo $val->name;?>"><?php echo $val->display.'|'.$val->AscOrDesc;?></li>
+  		    <?php }
+  		    ?>
+		</ul>
+	</div>
+</div>
+<div class="clear"></div>
+<div id='extracustomRole' style="display:none;">
+	<div id="customrule" class="extrarule" ><span style="display:block;float:left;height:20px;line-height:20px;width: 80px;">自定义输入</span><input  type="text" name="customlen" class="inpu" style="height:20px;width:340px;border:1px solid #CCCCCC;" /><button id="custom" style="width:40px;">=></button></div>
+  	<div class="clear"></div>
+  	
+	<div id='custombutton' class='selBut'>
+	
+		<span id="customtop" class="estop" title="置顶"></span>
+		<span id="customup" class="esup" title="上移"></span>
+		<span id="customdown" class="esdown" title="下移" ></span>
+		<span id="custombottom" class="esbottom endspan" title="置底"></span>
+	</div>
+	<div id='' class='useLis' style="width:380px;">
+		<ul id='customsaveRole' class='userList'>
+		
+		
+		</ul>
+	</div>
+</div>
+<?php echo '<script type="text/javascript">var data='.$merge.'</script>';?>
+<script type="text/javascript">
+custom = new Array();//存储用户自定义数据
+$('#userRole li').die().live('click',function(){
+	$('#userRole li').removeClass('esselected');
+	$(this).addClass('esselected');
+});
+$('#extracustomRole li').die().live('click',function(){
+	$('#extracustomRole li').removeClass('esselected');
+	$(this).addClass('esselected');
+});
+
+var str = /(\|ASC|\|DESC)+/;
+//左移
+$("#sortleft").die().live('click',function(){
+	var html = $("#sortsaveRole .esselected").html();
+	var newhtml = html.replace(str,"");
+	$('#sortsaveRole .esselected').html(newhtml);
+	$('#sortsaveRole .esselected').appendTo('#sortRole');
+});
+//升序
+$("#sortasc").die().live('click',function(){
+	var asc = $('#sortRole .esselected').html();
+	asc+='|ASC';
+	$('#sortRole .esselected').html(asc);
+	$('#sortRole .esselected').appendTo('#sortsaveRole');
+
+	$("#customRole").html("");
+	$("#customsaveRole").html("");
+	
+	var targid = $('#userRole .esselected').attr("id");
+	var cname = $('#userRole .esselected').attr("cname");
+	var right = custom[cname].right;
+	var rword = right.split(',');
+	for(var i=0;i<rword.length;i++){
+		if(rword[i]!=""){
+			$("#customsaveRole").append('<li>'+rword[i]+'</li>');
+		}
+	}
+	
+});
+//降序
+$("#sortdesc").die().live('click',function(){
+	var desc = $('#sortRole .esselected').html();
+	desc+='|DESC';
+	$('#sortRole .esselected').html(desc);
+	$('#sortRole .esselected').appendTo('#sortsaveRole');
+
+	$("#customRole").html("");
+	$("#customsaveRole").html("");
+	var targid = $('#userRole .esselected').attr("id");
+	var cname = $('#userRole .esselected').attr("cname");
+	var right = custom[cname].right;
+	var rword = right.split(',');
+	for(var i=0;i<rword.length;i++){
+		if(rword[i]!=""){
+			$("#customsaveRole").append('<li>'+rword[i]+'</li>');
+		}
+	}
+});
+//置顶
+$("#sorttop").die().live('click',function(){
+	if($("#sortsaveRole .esselected").html()==$('#sortsaveRole li:eq(0)').html()){
+		return;
+	}
+	$('#sortsaveRole li:eq(0)').before($("#sortsaveRole .esselected"));
+});
+$("#customtop").die().live('click',function(){
+	if($('#customsaveRole .esselected').html()==null)return;
+	if($("#customsaveRole .esselected").html()==$('#customsaveRole li:eq(0)').html()){
+		return;
+	}
+	$('#customsaveRole li:eq(0)').before($("#customsaveRole .esselected"));
+	var data = "";
+	$("#customsaveRole li").each(function(){
+		data += $(this).text()+',';
+	});
+	if(data=="")return;
+	var ext = /,$/;
+	var newdata = data.replace(ext,"");
+	var cname = $("#sortsaveRole .esselected").attr("cname");
+	custom[cname].right = newdata;
+});
+//置底
+$("#sortbottom").die().live('click',function(){
+	if($("#sortsaveRole .esselected").html()==$('#sortsaveRole li:last').html()){
+		return;
+	}
+	$('#sortsaveRole li:last').after($("#sortsaveRole .esselected"));
+});
+$("#custombottom").die().live('click',function(){
+	if($('#customsaveRole .esselected').html()==null)return;
+	if($("#customsaveRole .esselected").html()==$('#customsaveRole li:last').html()){
+		return;
+	}
+	$('#customsaveRole li:last').after($("#customsaveRole .esselected"));
+	var data = "";
+	$("#customsaveRole li").each(function(){
+		data += $(this).text()+',';
+	});
+	if(data=="")return;
+	var ext = /,$/;
+	var newdata = data.replace(ext,"");
+	var cname = $("#sortsaveRole .esselected").attr("cname");
+	custom[cname].right = newdata;
+});
+//上移
+$("#sortup").die().live('click',function(){
+	var index=$('#sortsaveRole .esselected').index()-1;
+	//guolanrui 20141014 添加index的判断，避免在IE8下选择最上的字段上移时字段消失BUG：1352
+	if(index>-1){
+		$('#sortsaveRole li:eq('+index+')').before($("#sortsaveRole .esselected"));
+	}	
+});
+$("#customup").die().live('click',function(){
+	if($('#customsaveRole .esselected').html()==null)return;
+	var index=$('#customsaveRole .esselected').index()-1;
+	//guolanrui 20141014 添加index的判断，避免在IE8下选择最上的字段上移时字段消失BUG：1352
+	if(index>-1){
+		$('#customsaveRole li:eq('+index+')').before($("#customsaveRole .esselected"));
+		var data = "";
+		$("#customsaveRole li").each(function(){
+			data += $(this).text()+',';
+		});
+		if(data=="")return;
+		var ext = /,$/;
+		var newdata = data.replace(ext,"");
+		var cname = $("#sortsaveRole .esselected").attr("cname");
+		custom[cname].right = newdata;
+	}	
+	
+});
+//下移
+$("#sortdown").die().live('click',function(){
+	var index=$('#sortsaveRole .esselected').index()+1;
+	$('#sortsaveRole li:eq('+index+')').after($("#sortsaveRole .esselected"));
+});
+$("#customdown").die().live('click',function(){
+	if($('#customsaveRole .esselected').html()==null)return;
+	var index=$('#customsaveRole .esselected').index()+1;
+	$('#customsaveRole li:eq('+index+')').after($("#customsaveRole .esselected"));
+	var data = "";
+	$("#customsaveRole li").each(function(){
+		data += $(this).text()+',';
+	});
+	if(data=="")return;
+	var ext = /,$/;
+	var newdata = data.replace(ext,"");
+	var cname = $("#sortsaveRole .esselected").attr("cname");
+	custom[cname].right = newdata;
+});
+//左双击
+$('#sortRole li').die().live('dblclick',function (){
+	var ext = $(this).html();
+	ext+='|ASC';
+	$(this).html(ext);
+	$('#sortsaveRole').append($(this));
+});
+/*右双击
+$('#sortsaveRole li').die().live('click dblclick',function (event){
+	if(event.type=="dblclick"){
+		var html = $(this).html();
+		var newhtml = html.replace(str,"");
+		$(this).html(newhtml);
+		$('#sortRole').append($(this));
+		$("#extracustomRole").css("display","none");
+	}else{
+		$("#extracustomRole").css("display","block");
+		$("#customRole").html("");
+		$("#customsaveRole").html("");
+		
+		var targid = $(this).attr("id");
+		var cname = $(this).attr("cname");
+		var right = custom[cname].right;
+		var rword = right.split(',');
+		for(var i=0;i<rword.length;i++){
+			if(rword[i]!=""){
+				$("#customsaveRole").append('<li>'+rword[i]+'</li>');
+			}
+		}
+		
+	}
+	
+});*/
+
+//右双击,倪阳修改，修复模板定义->排序规则左侧双击无效问题
+//修复同时绑定单击和双击事件时，触发双击事件也会触发单击事件
+var TimeFn = null;
+$('#sortsaveRole li').die().live('click',function(){
+	clearTimeout(TimeFn);
+	var jQueryObj = $(this);
+	TimeFn = setTimeout(function(){
+		$("#extracustomRole").css("display","block");
+		$("#customRole").html("");
+		$("#customsaveRole").html("");		
+		var targid = jQueryObj.attr("id");
+		var cname = jQueryObj.attr("cname");
+		var right = custom[cname].right;
+		var rword = right.split(',');
+		for(var i=0;i<rword.length;i++){
+			if(rword[i]!=""){
+				$("#customsaveRole").append('<li>'+rword[i]+'</li>');
+			}
+		}		
+	},250);
+});
+$('#sortsaveRole li').live('dblclick',function(){
+	clearTimeout(TimeFn);
+	var html = $(this).html();
+	var newhtml = html.replace(str,"");
+	$(this).html(newhtml);
+	$('#sortRole').append($(this));
+	console.log($('#sortRole'));
+	$("#extracustomRole").css("display","none");
+});
+//下表双击单击事件
+$('#customsaveRole li').die().live('click dblclick',function (event){
+	if(event.type=="dblclick"){
+		$.dialog({
+			content : '确定要删除么！',
+			okVal : '确定',
+			ok : true,
+			cancelVal : '关闭',
+			cancel : true,
+			ok : function() {
+				var cname = $("#sortsaveRole .esselected").attr("cname");
+				var val = $("#extracustomRole .esselected").text();
+				var ext1 = '/'+val+'/';
+				var ext2 = '/'+val+',/';
+				var exts1 = eval("("+ext1+")");
+				var exts2 = eval("("+ext2+")");
+				if(exts2.test(custom[cname].right)==true){
+					custom[cname].right = custom[cname].right.replace(exts2,"");
+				}else{
+					custom[cname].right = custom[cname].right.replace(exts1,"");
+				}
+				$("#extracustomRole .esselected").remove();
+			}
+		});
+	}else{
+		var tag = $("#customsaveRole .esselected").children().prop("tagName");
+		  if (typeof(tag) != "undefined" && tag.toLowerCase() == "input")
+		    {
+		    	return;
+		    }
+		var oldvalue = $("#customsaveRole .esselected").text();
+		var cname = $("#sortsaveRole .esselected").attr("cname");
+		var exg = '/'+oldvalue+'/';
+		var exgs = eval("("+exg+")");
+		var txt = '<input class="mychange" type="text" value="'+oldvalue+'" />';
+		$("#customsaveRole .esselected").html(txt);
+		$(".mychange").focus();
+		$(".mychange").blur(function(){
+			var newvalue = $(this).val();
+			$("#customsaveRole .esselected").html(newvalue);
+			custom[cname].right = custom[cname].right.replace(exgs,newvalue);
+		});
+		
+	}
+
+});
+$("#custom").click(function(){
+	var cname = $("#sortsaveRole .esselected").attr("cname");
+	if(cname==undefined){
+		$.dialog.notice({icon:'warning',content:'请先选择要操作的数据',time:3});
+		return;
+	}
+	var val = $("input[name='customlen']").val();
+	if(trim(val)==""){
+		$.dialog.notice({icon:'warning',content:'不能为空，请重新输入自定义字段',time:3});
+		return;
+	}
+	var ext=/^[^\'\"\=\{\}\[\]\\\/\<\>\n\r\*\?\|!,.。：]*$/;
+	if(ext.test(val)==false){
+		$.dialog.notice({icon:"warning",content:"不能包含特殊符号",time:3});
+    	return;
+    }
+	var flag = true;
+	$("#customsaveRole li").each(function(i){
+		if(trim(val)==$(this).text()){
+			flag=false;
+		}
+	});
+	if(flag==false){
+		$.dialog.notice({icon:'warning',content:'您输入的已存在，请重新输入',time:3});
+		return;
+	}
+	var temp = '<li>'+trim(val)+'</li>';
+	$("#customsaveRole").append(temp);
+	var val = trim(val);
+	var ext = '/'+val+'/';
+	var exts = eval("("+ext+")");
+	if(custom[cname].right==""){
+		custom[cname].right += val;
+	}else{
+		custom[cname].right += ','+val;
+	}
+	
+});
+/**
+ * 去左空格; 
+ * @author ldm
+ */
+function ltrim(s){
+	return s.replace( /^\s*/, ""); 
+} 
+/**
+ * 去右空格; 
+ * @author ldm
+ */
+function rtrim(s){
+	return s.replace( /\s*$/, ""); 
+} 
+/**
+ * 去左右空格; 
+ * @author ldm
+ */
+function trim(s){
+	return rtrim(ltrim(s)); 
+}
+//筛选
+ function show(value,position)
+ {
+ 	
+ 	if($.trim(value)==''){
+ 		$('#sortRole li').show();
+ 		$('#sortsaveRole li').show();
+ 		return;
+ 	}else{
+ 		if(position=='left' && $.trim(value)!='')
+ 		{
+ 			
+ 			$('#sortRole li').hide();
+ 			var liObj=$('#sortRole li:contains('+value+')').show();
+ 			$('#sortRole').append(liObj);
+ 		}else if(position=='right' && $.trim(value)!='')
+ 		{
+ 			$('#sortsaveRole li').hide();
+ 			var liObj=$('#sortsaveRole li:contains('+value+')').show();
+ 			$('#sortsaveRole').append(liObj);
+ 		}else{
+ 			return;
+ 		}
+ 	}
+
+ }
+
+$(function(){
+	var length = data.length;
+	for(var i=0;i<length;i++){
+		if(data[i].tagvalue==undefined){
+			custom[data[i].name] = {'right':""};
+		}else{
+			custom[data[i].name] = {'right':data[i].tagvalue};
+		}
+	}
+});
+</script>

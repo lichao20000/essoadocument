@@ -1,0 +1,41 @@
+<?php
+class ProxyEssoaadminEscloud_userInstanceAuthws extends AgentProxyAbstract {
+	const SERVICE_NAME = "escloud_userInstanceAuthws";
+	
+	/**
+	 * 添加组织机构
+	 */
+	public function saveUsers($params) {
+		return $this->post ( self::SERVICE_NAME, "saveUsers", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 获取注册机构列表
+	 */
+	public function getUsers($params) {
+		return $this->post ( self::SERVICE_NAME, "getUsers", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 获取还未分配的用户列表
+	 */
+	public function getNoAuthUsers($params) {
+		return $this->post ( self::SERVICE_NAME, "getNoAuthUsers", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 根据id获取一个注册机构
+	 */
+	public function getById($id){
+		$urlParam=array('getById',$id);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/** 取消用户 **/
+	public function deleteUsers($params) {
+		return $this->post ( self::SERVICE_NAME, "deleteUsers", $params, "application/json;charset=UTF-8" );
+	}
+	
+	/** 同步用户 **/
+	public function syncUsers($params) {
+		return $this->post ( self::SERVICE_NAME, "syncUsers", $params, "application/json;charset=UTF-8" );
+	}
+}

@@ -1,0 +1,75 @@
+@CHARSET "UTF-8";
+/*wangbo 20140325*/
+body,html{margin:0px;overflow:hidden;}
+input { margin:0; padding:0;}
+ol,ul{ margin:0; padding:0; list-style-type:none;}
+h2,p,form,table{ margin:0; padding:0; font-weight:normal;}
+#paper{ margin:0 auto;}
+
+#fileEquipGrid img{cursor:pointer;}
+a{
+	text-decoration : none ;
+}
+.estransfer{width:560px;overflow-y:auto;overflow-x:hidden}
+.estransfer ul{width: 560px;text-align:center;}
+.estransfer ul li{width:250px;margin-left:20px;float:left;margin-top:10px;}
+.estransfer span{width:80px;height:30px;line-height:30px;text-align:left;float:left;}
+.estransfer ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.estransfer ul li select{width:165px;height:25px;float:left;line-height:25px;}
+.estransfer .esbottom{width:100%;float:left;margin-top:20px;}
+.estransfer button{width:60px;height:30px;cursor:pointer}
+
+.estransferorg{width:310px;overflow-y:auto;overflow-x:hidden}
+.estransferorg ul{width: 300px;text-align:center;}
+.estransferorg ul li{width:270px;margin-left:20px;float:left;margin-top:10px;}
+.estransferorg span{width:100px;height:30px;line-height:30px;text-align:left;float:left;}
+.estransferorg ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.estransferorg ul li select{width:165px;height:25px;float:left;line-height:25px;}
+.estransferorg .esbottom{width:100%;float:left;margin-top:20px;}
+.estransferorg button{width:60px;height:30px;cursor:pointer}
+
+
+.esmain {width: 100%;}
+.esmain .eshead {width: 100%;height: 50px;line-height: 50px;border-bottom: 1px solid #ccc;}
+.esmain .esleft {background: #fff;width:160px;float:left;overflow: auto;}
+.esmain .escenter {background: #fff;width:220px;float:left;overflow: auto;}
+.esmain .esright {background: #fff;}
+
+
+ .addOrg{background:url(../img/add.png) no-repeat 2px center;}
+ .deleteOrg{background:url(../img/close.png) no-repeat 2px center;}
+.editOrg{background:url(../img/Grid_Data_Batch_Edit.gif) no-repeat 2px center;}
+ .addUser{background:url(../img/add.png) no-repeat 2px center;}
+ .deleteUser{background:url(../img/close.png) no-repeat 2px center;}
+.warnning{border:solid 2px #f00;}
+
+.find-dialog{ width:203px; height:20px; border:1px solid #aaa; background:#fff; float: left; margin-top: 2px; line-height: 20px;position: absolute;right: 2px;}
+.find-dialog input{ width:180px; height:20px; line-height:20px; float:left; border:0; _line-height:23px; color: gray;}
+.find-dialog span{ width:20px; height:20px; float:left;  background:url(../img/search.gif) no-repeat center center; cursor:pointer;}
+
+.roleSearch{width:203px; height:20px; border:1px solid #aaa; background:#fff; float: right; margin-top: 2px;margin-bottom: 8px; line-height: 20px; }
+.roleSearch input{ width:180px; height:20px; line-height:20px; float:left; border:0; _line-height:23px; color: gray;}
+.roleSearch span{ width:20px; height:20px; float:left;  background:url(../img/search.gif) no-repeat center center; cursor:pointer;}
+
+div#rMenu {
+	    background-color:#555555;
+	    text-align: left;
+	    padding:2px;
+	    width:100px;
+	    position:absolute;
+        display:none;
+}
+div#rMenu ul {
+	    margin:1px 0;
+	    padding:0 5px;
+	    cursor: pointer;
+	    list-style: none outside none;
+	    background-color:#DFDFDF;
+	    display:none;
+}
+div#rMenu ul li {
+	    margin:0;
+	    padding:2px 0;
+}
+.flexigrid div.tDiv0 /*toolbar*/{background:#ffffff url(images/bg.gif) repeat-x top;position:relative;padding-top:5px;border-bottom:0;overflow:hidden}
+.flexigrid div.tDiv1{float:left;clear:both;padding:1px}

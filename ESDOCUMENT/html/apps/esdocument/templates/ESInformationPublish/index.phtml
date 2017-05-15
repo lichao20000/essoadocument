@@ -1,0 +1,420 @@
+<link href="<?php echo $tplPath?>/ESInformationPublish/css/index.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'信息发布管理'));?>
+<div id="ESSystemIndex" >
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+	<div id='leftfree' class='leftfree'>
+		<div id='navlist' class='ztree' style = "margin-top:10px;"></div>
+	</div>
+	<div id='rightfree' class='rightfree'>
+		<!-- 共用表格 -->
+		<div id='ArchiveTbl' class='archivetbl'><table id='ArchiveList' class='archivelist'></table></div>
+		<!-- 发表文章 -->
+		<div id='editor' class='editor'>
+			<div class='public_buttons' id='public_buttons'>
+				<input type='button' id='saveButton' class='buttons submit' name='default' value='保存' />
+				<input type='button' id='saveAndStatus' class='buttons submit' name='default' value='保存且发布' />
+				<input type='button' id='returnButton' class='buttons' name='default' value='返回' />
+				<div class="process_now" id='process_now'></div>
+			</div>
+			<form id="form1">
+			<div class='auto_scroll' id='auto_scroll1'>
+				<div class='shortinput'>
+					<h2 class='h2'>标题：</h2>
+					<input type='text' id='editortitle' class='input TEXT_INPUT FOCUS_EVENT' verify="unspecial/100/1/0" value='请输入标题' />
+				</div>
+			<!-- 
+				<div class='shortinput extendshortinput'>
+					<h2 class='fileannextitle'>标题摘要：</h2>
+					<textarea id='title_summary' class='textareainput TEXTAREA_INPUT FOCUS_EVENT'>请输入标题摘要</textarea>
+				</div>
+				<div>
+					<div id='common_btns' class='common_btns'><span id='UploadCoverImageFile' class='addannex'>封面图片</span></div><div id='InsertCoverImagePosition' style='width:700px' class='insert_position'></div>
+				</div>
+				 -->	
+				<div class='shortinput extendshortinput' >
+					<h2 class='fileannextitle'>内容摘要：</h2>
+					<textarea id='summary'  class='textareainput TEXTAREA_INPUT FOCUS_EVENT'  verify="unspecial/500/1/0">请输入内容摘要</textarea>
+				</div>
+				
+				<div class='editorcontent' id="eseditor">
+					<textarea name='contentarea' id='editorcontent' ></textarea>
+				</div>
+				
+				<div class="insert_position" style="width:700px" id="InsertPosition">
+					
+				</div>
+				
+				<div class='power_status'  class='display-none'>
+					<div id='isPublishBtn' class='display-none'>
+						<input type='checkbox' id='isPublish' />
+						<label for='isPublish'>发布</label>
+					</div>
+					<div class='display-none'>
+						<input type="checkbox" id="isPublic"  />
+						<label for="isPublic">公开(勾选此项其他省份可见)</label>
+					</div>
+					<div id='isCommentBtn' class='display-none'>
+						<input type='checkbox' id='isComment' />
+						<label for='isComment'>评论</label>
+					</div>
+				</div>
+			</div>
+			</form>
+		</div>
+		<div class='editPic' id='editPic'>
+			<div class='public_buttons' id='public_buttons'>
+				<input type='button' id='saveButton1' class='buttons submit' name='default' value='保存' />
+				<input type='button' id='saveAndStatus1' class='buttons submit' name='default' value='保存且发布' />
+				<div class="process_now" id='process_now'></div>
+			</div>
+			<div class='auto_scroll' id='auto_scroll'>
+				<div class='shortinput' id='shortinput'>
+					<h2 class='h2'>标题：</h2>
+					<input type='text' id='editortitle1' class='input TEXT_INPUT FOCUS_EVENT' value='请输入标题' style="width:60%;"/>
+				</div>
+				<div class="insert_position" style="width:700px" id="InsertPosition">
+					
+				</div>
+					
+				<div class='power_status' class='display-none'>
+					<div id='isPublishBtn' class='display-none'>
+						<input type='checkbox' id='isPublish' />
+						<label for='isPublish'>发布</label>
+					</div>
+					<div  class='display-none' >
+						<input type="checkbox" id="isPublic"/>
+						<label for="isPublic">公开(勾选此项其他省份可见)</label>
+					</div>
+					<div id='isCommentBtn' class='display-none'>
+						<input type='checkbox' id='isComment' />
+						<label for='isComment'>评论</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESInformationPublish/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.exedit.min.js"></script>
+<script type="text/javascript">
+$('#form1').autovalidate();
+var _global = {
+		localPath: false,
+		boardTree: undefined, // 栏目树节点对象
+		boardNode: undefined, // 栏目当前被单击节点对象
+		content: undefined, // ckeditor
+		workId: undefined, // 待办
+		taskId: undefined, // 待办
+		topicId: undefined, // 信息
+		leader: undefined, // 待办提交给领导审批暂存
+		taskFlag: false, // = false|publish|destroy.indentify
+		taskEvent: false, // = back|null
+		taskSize: 0, // publish = 4
+		countTextAer:0
+};
+_global.localPath = "<?php echo $tplPath;?>/ESDefault/img/";
+var _serverUrl = _url = null;
+$.get(
+	$.appClient.generateUrl({ESInformationPublish:'GetServiceIP'},'x'),
+	function (addr){
+		_serverUrl = addr;
+	}
+); 
+
+$(document).on('click',"#UploadFile",function(){
+	$.dialog({
+		title:'上传文件(最多同时上传10个附件)',
+	    fixed:true,
+	    resize: false,
+	    padding:'0px 0px',
+		content:"<div class='fieldset flash' id='fsUploadProgress'></div>",
+		cancelVal: '关闭',
+		cancel: function (){
+			//$('#UploadAnnexBox').hide();
+		},
+		button: [
+    		{id:'btnAdd', name: '添加文件'},
+            {id:'btnCancel', name: '删除所有', disabled: true},
+            {id:'btnStart', name: '开始上传', disabled: true, callback: function(){return false;}}
+		],
+		init:createSWFUpload
+	});	    	
+});
+
+function createSWFUpload(){
+
+	var addhtml = '';
+	var fileLimit='';
+	var fileType="*.doc;*.docx;*.ppt;*.xlsx;*.xls;*.pdf;*.rar;*.zip;*.txt";
+	if(_global.boardNode.type == 22){
+		fileType="*.jpg;*.jpeg;*.png;*.gif";
+	    fileLimit="1024";
+	}
+	
+	var upload = new SWFUpload({
+		//提交路径
+		upload_url: "",
+		//向后台传递额外的参数
+		//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+		//上传文件的名称
+		file_post_name: "file.txt",
+		file_size_limit : fileLimit,	// 100MB
+		file_types : fileType,
+		file_types_description : "文件类型",
+		file_upload_limit : "10",
+		file_queue_limit : "0",
+
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnAdd",
+		button_width: 72,
+		button_height: 28,
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel",
+			startButtonId : "btnStart",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data){
+				var data = $.parseJSON(data);
+				if(data.success == 'false'){ return false;}
+				
+				if(_global.boardNode.type == 21){
+					var filename = file.name;	// 显示名字
+					var mb = 1024*1024;
+					var fs = file.size;	// 文件大小
+					
+					if(fs < 1024){
+						fsize = '1KB';
+					}else if(fs > 1024 && fs < mb){
+						fsize = (fs/1024).toFixed(2)+'KB';
+					}else{
+						fsize = (fs/mb).toFixed(2)+'MB';
+					}
+					
+					var ext = filename.split('.');
+					if(ext[1] == 'doc' || ext[1] == 'docx'){
+						
+						icon = 'doc.gif';
+						
+					}else if(ext[1] == 'xls' || ext[1] == 'xlsx'){
+						
+						icon = 'xls.gif';
+						
+					}else if(ext[1] == 'ppt' || ext[1] == 'pptx'){
+						icon = 'ppt.gif';
+					}else if(ext[1] == 'pdf'){
+					
+						icon = 'pdf.gif';
+					}else if(ext[1] == 'txt'){
+					
+						icon = 'txt.gif';
+					}else if(ext[1] == 'zip' || ext[1] == 'rar'){
+						icon = 'zip.gif';
+					}else{
+						icon = 'default.gif';
+					}
+					addhtml = '<div class="files_div" style="width:'+_size.editorwidth+'px;" >';
+					addhtml += '<span class="file_icon"><img width=26  alt="'+ filename +'" title="'+ filename +'" src="'+ _global.localPath+ icon  +'" /></span>';
+					addhtml += '<p class="file_name">附件名：'+ filename +'</p>';
+					addhtml += '<a href="javascript:void(0)" class="rm_file" id="" mark="'+ data.fileId+'.'+data.type +'">删除附件</a>';
+
+					addhtml += '<p class="file_size">附件大小：'+ fsize +'</p>';
+					addhtml += "<input type='hidden' class='fileInfo' id='null' mark='" + data.fileId+'.'+data.type + "' name='"+filename+"' fsize='"+fsize+"' />";
+
+					addhtml += '</div>';
+					
+					$('#InsertPosition').append(addhtml);
+				}else if(_global.boardNode.type ==22){
+					addhtml = "<div class='pic_beds'><div class='pic_bed'><div class='pic_bed_in'>";
+					addhtml += '<img width="100" src="'+ data.dst_image +'" alt="'+ data.fileName +'" title="'+ data.fileName +'" />';
+					addhtml += "</div></div>";
+					addhtml +=	"<div class='editorcontent1' > <textarea  id='editorcontentnew"+_global.countTextAer+"' style='width:650px;'></textarea></div>";
+					addhtml += "<span class='close_pic' title='删除图片'></span>";
+					addhtml += '<input type="hidden" new= "true" class="imgPath" path="' + data.dst_image + '" iname="'+ data.fileName +'" text ="editorcontentnew'+_global.countTextAer+'" realHeight="'+data.realHeight+'" realWidth="'+data.realWidth+'"/>';
+					addhtml += "</div>";
+					
+					$('#InsertPosition').append(addhtml);
+					if(!CKEDITOR.instances['editorcontentnew'+_global.countTextAer]){
+						CKEDITOR.replace(
+								'editorcontentnew'+_global.countTextAer,
+								{
+								toolbarStartupExpanded:false,
+						        toolbar :'Basic',
+								enterMode:CKEDITOR.ENTER_BR,
+								height: '45',
+								resize_enabled: false,
+								width: '700'	
+							});
+						CKEDITOR.instances['editorcontentnew'+_global.countTextAer].on("instanceReady", function () {  
+					        this.on("blur", function(){
+					        	if(this.getData().replace(/[^\x00-\xff]/g,'xx').length>1000){
+					        		$('.'+$(this).attr('id')).css('border','1px solid red');
+					        		$.dialog.notice({content:'图片内容描述不能超过500汉字', time:2, icon:'error', lock:false});	
+									return false;
+					        	}else{
+					        		$('.'+$(this).attr('id')).css('border','0px');
+					        	}
+					        });  
+					    }); 
+												
+						_global.countTextAer++;
+						
+					}
+					}
+				
+			}
+		}
+	});
+	$("#btnCancel").click(function(){cancelQueue(upload);});
+	$("#btnStart").click(function(){
+		if(_global.boardNode.type == 21){
+			$.post($.appClient.generateUrl({ESIdentify:'getUploadURL'},'x'),  function(data){
+				upload.setUploadURL(data);
+				startQueue(upload);
+			});
+		}else{
+			upload.setUploadURL($.appClient.generateUrl({ESInformationPublish:'uploadImages'},'x'));
+			startQueue(upload);
+		}	
+		});
+
+};
+function cccc(){
+
+
+	var addhtml = '';
+	var fileType="*.png;*.jpg;*.jpeg;";
+	var upload = new SWFUpload({
+		//提交路径
+		upload_url: "",
+		//向后台传递额外的参数
+		//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+		//上传文件的名称
+		file_post_name: "file.txt",
+		file_size_limit : 1024000,	// 100MB
+		file_types : fileType,
+		file_types_description : "文件类型",
+		file_upload_limit : "1",
+		file_queue_limit : "0",
+		file_size_limit : "102400",	// 100MB
+
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnAdd",
+		button_width: 72,
+		button_height: 28,
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel",
+			startButtonId : "btnStart",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data){
+				var data = $.parseJSON(data);
+				// yanghuiqiang 20140925 APP客户端封面图片修改为上传到PHP端，并压缩为300长或宽的缩略图
+				//if(data.success == 'false'){ return false;}
+				//$.ajax({
+				//	url: $.appClient.generateUrl({ESInformationPublish:'downFile'},'x'),
+				//	data: { mark:  data.fileId+'.'+data.type , index:'true'},
+				//	type: 'POST',
+				//	async: false, 
+				//	success: function(url1){
+				//		var filename = file.name;
+				//		addhtml = "<div class='pic_beds'><div class='pic_bed'><div class='pic_bed_in'>";
+				//		addhtml += '<img style="width:100px;height:100px;" src="'+ url1 +'" alt="'+filename +'" title="'+ filename +'" />';
+				//		addhtml += "</div></div>";
+				//		addhtml += "<span class='close_pic' title='删除图片'></span>";
+				//		addhtml += '<input type="hidden" new="false" class="imgPath" fileId="' + data.fileId + '" iname="'+ filename +'" />';
+				//		addhtml += "</div>";
+				//		$('#InsertCoverImagePosition').append(addhtml);
+				//	}
+				//});
+
+	
+				addhtml = "<div class='pic_beds'><div class='pic_bed'><div class='pic_bed_in'>";
+				addhtml += '<img style="width:100px;height:100px;" src="'+ data.dst_image +'" alt="'+data.fileName +'" title="'+ data.fileName +'" />';
+				addhtml += "</div></div>";
+				addhtml += "<span class='close_pic' title='删除图片'></span>";
+				addhtml += '<input type="hidden" new="false" class="imgPath" fileId="' + data.dst_image + '" iname="'+ data.fileName +'" />';
+				addhtml += "</div>";
+				$('#InsertCoverImagePosition').append(addhtml);
+
+			}
+		}
+	});
+	$("#btnCancel").click(function(){cancelQueue(upload);});
+	$("#btnStart").click(function(){
+		//$.post($.appClient.generateUrl({ESIdentify:'getUploadURL'},'x'),  function(data){
+		//	upload.setUploadURL(data);
+		//	startQueue(upload);
+		//});
+
+		upload.setUploadURL($.appClient.generateUrl({ESInformationPublish:'uploadImages'},'x'));
+		startQueue(upload);
+	});
+
+
+}
+$('"#updateSumPic"').live('click',function(){
+$.dialog({
+	title:'上传文件(最多同时上传1个附件)',
+    fixed:true,
+    resize: false,
+    padding:'0px 0px',
+	content:"<div class='fieldset_new flash' id='fsUploadProgress'></div>",
+	cancelVal: '关闭',
+	cancel: function (){
+		//$('#UploadAnnexBox').hide();
+	},
+	button: [
+		{id:'btnAdd', name: '添加文件'},
+        {id:'btnCancel', name: '删除所有', disabled: true},
+        {id:'btnStart', name: '开始上传', disabled: true, callback: function(){return false;}}
+	],
+	init:cccc
+	});	    
+});	
+
+
+</script>

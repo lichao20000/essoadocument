@@ -1,0 +1,17 @@
+<div class="estransfer">
+<form id="triggerServiceForm" action="" method="post">
+	<input type="hidden" name='id' value="<?php echo $data[0]?>">
+	<ul>
+		<li>
+			<span>服务名称：</span><input type="text" verify="text/250/1/0" name="restname" title="例如:批量转换缩略图" value="<?php echo $data[1]?>"><font color="red">*</font></li>
+		<li>
+			<span>服务类名：</span><input type="text" verify="text/250/1/0" title="此处填写全类名，如:cn.flying.rest.admin.restInterface.TriggerWS"
+			name="classname" value="<?php echo $data[2]?>"><font color="red">*</font></li>
+		<li>
+			<span>执行方法：</span><input type="text" verify="text/250/1/0" title="此处填写执行类中的方法，如:excuteBatchTransforThumbs,全部为GET方式请求忙不携带任何参数"
+			name="excutemethodname" value="<?php echo $data[3]?>"><font color="red">*</font></li>
+		<li style="width: 600px">
+			<span>服务描述：</span><textarea name="description" verify="text/250/0/0" style="width: 445px; height: 50px; float: left"><?php echo $data[4]?></textarea></li>
+	</ul>
+</form>
+</div>

@@ -1,0 +1,65 @@
+<html>
+ <head>
+  <meta http-equiv="expires" content="never"/>
+  <meta http-equiv="content-language" content="fr"/>
+  <meta lang="fr" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  
+  <link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ext/resources/css/ext-all.css" />
+  <link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESFormBuilder/js/main.css" />
+		
+  <script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/adapter/ext/ext-base.js"></script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/ext-all.js"></script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/source/locale/ext-lang-zh_CN.js"></script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/Utils.js"></script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/source/widgets/grid/GridEditor.js"></script>
+	
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESFormBuilder/js/Ext.drasill2.js"></script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESFormBuilder/js/cfg.js"></script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESFormBuilder/js/main.js"></script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESFormBuilder/js/components.js"></script>
+  <script type="text/javascript">
+  	function showMsg(msg, type){
+		if(type == '1'){
+			$.dialog.notice({icon : 'succeed',content : msg,title : '3秒后自动关闭',time : 3});
+		} else {
+			$.dialog.notice({icon : 'error',content : msg,title : '3秒后自动关闭',time : 3});
+		}
+	}
+	
+  	function getFormJs(m){
+  		$.post( $.appClient.generateUrl({ESFormBuilder : 'getFormJs'}, 'x')
+    			,{formId : m.id}, function(res){
+    				var json = eval('(' + res + ')');
+    				var config= Ext.decode(json.formJs);
+    				m.setConfig({items:[config]});
+		});
+	}
+  </script>
+ </head>
+<body>
+<style>
+	.notice {
+		color: #559;
+		font-style: italic;
+	}
+	.x-form-multicheckbox {
+		background:#FFFFFF;
+		border:1px solid #B5B8C8;
+		padding:3px;
+	}
+</style>
+<div id="OS_Form_Builder_Div"/>
+<script type="text/javascript">
+	try{
+		var savedCleanConfig = '' ;
+		var hasData = '<?php echo $data[2];?>';//hasData
+		var main = new FormBuilderMain('<?php echo $data[0];?>','<?php echo $data[1];?>');//formId formTypeID
+		if("-1" != '<?php echo $data[0];?>'){
+			getFormJs(main);
+		}
+		Ext.onReady(main.init, main);
+	}catch(e){}
+</script>
+</body>
+</html>

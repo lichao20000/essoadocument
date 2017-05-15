@@ -1,0 +1,76 @@
+<div>
+	<div id="noOrgUserGrid"></div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#noOrgUserGrid").flexigrid({
+		url : $.appClient.generateUrl({	ESOrgAndUser : 'findNoOrgUserList'}, 'x'),
+		dataType : 'json',
+		width: 620,
+		height: 300,
+		border:false,
+		colModel : [{
+			display : '',
+			name : 'startNum',
+			width : 30,
+			align : 'center'
+		}, {
+			display : '<input type="checkbox" id="noOrgUserId">',
+			name : 'ids',
+			width : 30,
+			align : 'center'
+		}, {
+			display : 'ID',
+			name : 'id',
+			metadata : 'id',
+			hide : true,
+			align : 'center'
+		}, {
+			display : '用户名',
+			name : 'userid',
+			metadata : 'userid',
+			width : 100,
+			align : 'left'
+		}, {
+			display : '姓名',
+			name : 'Name',
+			metadata : 'Name',
+			width : 100,
+			sortable : true,
+			align : 'left',
+		}, {
+			display : '状态',
+			name : 'userStatus',
+			metadata : 'userStatus',
+			width : 30,
+			sortable : true,
+			align : 'left'
+		}, {
+			display : '手机',
+			name : 'mobTel',
+			metadata : 'mobTel',
+			width : 100,
+			sortable : true,
+			align : 'left'
+		}, {
+			display : '邮件',
+			name : 'emailAddress',
+			metadata : 'emailAddress',
+			width : 150,
+			sortable : true,
+			align : 'left'
+		} ],
+		usepager : true,
+		useRp : true,
+		rp : 20,
+		nomsg : "没有数据",
+		pagetext : '第',
+		outof : '页 /共',
+		pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	// 全选
+	$("#noOrgUserId").die().live('click', function() {
+		$("input[name='userId']").attr('checked', $(this).is(':checked'));
+	});
+});
+</script>

@@ -1,0 +1,116 @@
+<style>
+/* tooltip */
+#tooltip{
+	position:absolute;
+	border:1px solid #ccc;
+	background:#333;
+	padding:2px;
+	display:none;
+	color:#fff;
+}
+#lightPoint{
+	position:absolute;
+	display:none;
+}
+#content{
+position:relative;
+}
+</style>
+<div style="margin-left:200px">
+<form id="form">
+<table>
+<tr >
+<td><span style="color:red">双击确定坐标：</span><input type="text" id="xyLocation" name="xyLocation" value="" readonly="readonly"/></td>
+</tr>
+</table>
+</form>
+</div>
+<div id="content">
+<img id="img" src="<?php echo $tplPath;?>/ESOrgAndUser/img/map1.jpg" style="width:650px;height: 400px" />
+<div id="lightPoint"><img src="<?php echo $tplPath;?>/ESOrgAndUser/img/position.jpg"  style="width:15px;height: 15px"/></div>
+<div id="tooltip"></div>
+</div>
+<script type="text/javascript">
+var JPos = {};
+(function($){
+$.$getAbsPos = function(p)
+ {
+  var _x = 0;
+  var _y = 0;
+  while(p.offsetParent){
+    _x += p.offsetLeft;
+    _y += p.offsetTop;
+    p = p.offsetParent;
+  }
+   
+  _x += p.offsetLeft;
+  _y += p.offsetTop;
+   
+  return {x:_x,y:_y};
+ };
+  
+ $.$getMousePos = function(evt){
+  var _x,_y;
+  evt = evt || window.event;
+  if (evt.pageX || evt.pageY)
+  {
+   _x = evt.pageX;
+   _y = evt.pageY;
+  }
+  else if (evt.clientX || evt.clientY)
+  {
+   _x = evt.clientX + document.body.scrollLeft - document.body.clientLeft;
+   _y = evt.clientY + document.body.scrollTop - document.body.clientTop;
+  }
+  else
+  {
+    return $.$getAbsPos(evt.target); 
+  }
+  return {x:_x,y:_y};
+ }
+})(JPos);
+ 
+ 
+function haha(pChoice)
+{
+ switch(pChoice){
+  case "GETMOUSEPOSINPIC":
+   var mPos = JPos.$getMousePos();
+   var iPos = JPos.$getAbsPos(arguments[1]);      
+  alert((mPos.x - iPos.x) + " " + (mPos.y - iPos.y));
+    
+   break;
+ }
+}
+
+$(function(){
+	
+	$("#img").live("dblclick",function(){
+		 var mPos = JPos.$getMousePos();
+		 var iPos = JPos.$getAbsPos(this);  
+		 var x=mPos.x-iPos.x;
+		 var y=mPos.y-iPos.y;
+		 xx= Math.round(x*1.55+15);//缩放比例增加坐标值 图片宽(很接近没做到精确)
+		 yy= Math.round(y*1.6);//缩放比例增加坐标值 图片高
+		 $("#form").find('input[name="xyLocation"]').val(xx + "," + yy);
+		 $("#lightPoint").css({
+				top :  y-6+ "px",
+				left : x-6+ "px"
+			}).show();
+		});
+	$('#img').mouseout(function(){
+	$("#tooltip").hide();
+	}).mousemove(function(e){
+			var mPos = JPos.$getMousePos();
+			var iPos = JPos.$getAbsPos(this);
+			var x=mPos.x-iPos.x;
+			var y=mPos.y-iPos.y;
+			
+			$("#tooltip").css({
+				top :  y+5+ "px",
+				left : x+20+ "px"
+			}).html( Math.round(x*1.55+15)+","+ Math.round(y*1.6)).show();
+		});
+})
+
+</script>

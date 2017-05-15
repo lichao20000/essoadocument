@@ -1,0 +1,118 @@
+<div id="reportstyle">
+	<form name="esreport" method="post" action='' id="esreport" style="width: 600px">
+		<span class="tabs">导出文件格式选择</span>
+		<hr width="100%">
+		<span class='tabs'>
+			<input type='radio' class="cbx" name='export_formats' value="formats_Excel" checked='checked' id='formats_Excel'>
+			<label for="formats_Excel" style="padding: 0px; display: inline;">Excel</label>
+			<input type='radio' class="cbx" name='export_formats' value="formats_xml" id='formats_xml'>
+			<label for="formats_xml" style="padding: 0px; display: inline;">Xml</label> 
+			<input type='radio' class="cbx" name='export_formats' id='formats_dbf' value='formats_dbf'>
+			<label for="formats_dbf" style="padding: 0px; display: inline;">Dbf</label>
+			<!-- wanghongchen 20140808 添加下载原文选项 -->
+			<span id="resourceSpan">
+				<input type="checkbox" name="resource" id="resource" style="margin-left: 370px;">
+				<label for="resource" style="padding: 0px; display: inline;">下载原文</label>
+			</span>
+		</span>
+	</form>
+	<br>
+	<?php if($display){?>
+	<span class="tabs">导出数据筛选</span>
+	<hr width="100%">
+	<!--<?php include (dirname(__FILE__)."/filter1.phtml")?>-->
+	<div id='filterContents' style='padding:20px;'>
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span>
+		<span class='w90 w14090 hei30'>比较符</span>
+		<span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">添加行</span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">删除行</span>
+	</p>
+	<div id='contents'>
+		<?php for($fly=1;$fly<6;$fly++){ ?>
+		<p class='contbox creatediv'  style="overflow:hidden;">
+			<select name="esfields" class='w140 w14090 hei20 filedname' id='esfields_<?php echo $fly ?>' onchange="filterControl(<?php echo $fly ?>)">
+				<option value=''>请选择</option>
+				<?php 
+				foreach($searchField as $value){
+					echo '<option value='.$value->code.' type='.$value->type.'>'.$value->name.'</option>';
+				}
+				?>
+			</select>
+			<select name="comparison" class='w90 w14090 hei20 comparison' id='comparison_<?php echo $fly ?>'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select>
+			<input type='text' class='w140 w14090 hei20 filedvalue'  name="esfieldvalue" id='esfieldvalue_<?php echo $fly ?>' />
+			<select id='' class='w14090 w90 hei20 relationship' name="relation">
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select>
+			<a class='newfilter'></a><a class='delfilter'></a>
+		</p>
+		<?php }?>
+		</div>
+	</div>
+	<?php } ?>
+</div>
+<!-- DBF导出不支持导出原文 -->
+<script type="text/javascript">
+	$(".cbx").click(function(){
+		if($(this).val() == 'formats_dbf'){
+			$("#resourceSpan").css("display","none");
+		}else{
+			$("#resource").attr("checked",false);
+			$("#resourceSpan").css("display","");
+		}
+	});
+function filterControl(i){
+		
+		var selectValue = $("#esfields_"+i).val();
+		var selectType = $("#esfields_"+i+" option:selected").attr('type');
+		if("DATE" == selectType || "TIME" == selectType){
+			
+			/** 清空比较符，只添加大于、小于、等于三种比较符 **/
+			$("#comparison_"+i + " option").remove();  
+			var comparison = $("#comparison_"+i) ;
+			comparison.append("<option value='equal' selected>等于</option>"); 
+			comparison.append("<option value='greaterThan'>大于</option>"); 
+			comparison.append("<option value='lessThan'>小于</option>"); 
+
+			/** 添加日期插件 **/
+			var esfieldvalueObj = $("#esfieldvalue_"+i) ;
+			esfieldvalueObj.val('');
+			esfieldvalueObj.addClass("Wdate");
+			esfieldvalueObj.bind("click",WdatePicker);
+			
+		}else{
+
+			/** 还原设置 **/
+			$("#comparison_"+i + " option").remove();  
+			var comparison = $("#comparison_"+i) ;
+			comparison.append("<option value='equal'>等于</option>"); 
+			comparison.append("<option value='greaterThan'>大于</option>"); 
+			comparison.append("<option value='lessThan'>小于</option>"); 
+			comparison.append("<option value='notEqual'>不等于</option>"); 
+			comparison.append("<option value='greaterEqual'>大于等于</option>"); 
+			comparison.append("<option value='lessEqual'>小于等于</option>"); 
+			comparison.append("<option value='like' selected>包含</option>"); 
+			comparison.append("<option value='notLike'>不包含</option>"); 
+
+			/** 添加日期插件 **/
+			var esfieldvalueObj = $("#esfieldvalue_"+i) ;
+			esfieldvalueObj.removeClass("Wdate");
+			esfieldvalueObj.unbind("click");
+			esfieldvalueObj.attr('readonly',false);
+			esfieldvalueObj.removeAttr('disabled');
+			esfieldvalueObj.val('');
+		}
+	}
+</script>

@@ -1,0 +1,71 @@
+<div class="flexigrid ie" style="width: 800px; overflow: auto;">
+	<div class="mDiv">
+		<div class="ftitle">布局浏览</div>
+		<input type="hidden" id="groupShow_statisticsId"
+			value="<?php echo isset($id)?$id:''; ?>" />
+	</div>
+	<div class="hDiv">
+		<div class="hDivBox">
+			<table cellSpacing="0" cellPadding="0" id="showGroupsHead">
+			</table>
+		</div>
+	</div>
+	<div class="bDiv" style="height: 300px;">
+		<table id="showGroupsGrid" cellSpacing="0" cellPadding="0"></table>
+	</div>
+</div>
+<script type="text/javascript">
+(function($){
+
+	clickGroupShow();
+	
+	function clickGroupShow() {
+		var url = $.appClient.generateUrl({
+			ESStatistics : 'clickGroupShow',
+			statistic_id : $("#groupShow_statisticsId").val()
+		}, 'x');
+		$
+				.post(
+						url,
+						function(data) {
+							var json = eval('(' + data + ')');							
+							var groups = [];
+							var dataList = [];
+							if (!jQuery.isEmptyObject(json)) {
+								groups = json.groups;
+								dataList = json.dataList;
+								var t0 = '<th axis="col0" align="center"><div style="width: 800px; text-align: center;">'+ json.statisticName+'('+json.stageName +')</div></th>';					
+								var r0="";
+								var r1="";
+								var r2="";
+								var row = 1;
+								for (var i = 0; i < groups.length; i++) {
+									r0 += '<th axis="col'
+											+ (i + row)
+											+ '" align="center"><div style="width: 120px; text-align: center;">列'
+											+ (i + row) + '(分组)</div></th>';
+									r1 += '<td><div style="width: 120px; text-align: left;">'
+											+ groups[i].name + '</div></td>';
+									r2 += '<td><div style="width: 120px; text-align: left;">'
+											+ groups[i].name + '</div></td>';
+								}
+								row = groups.length + 1;
+								for (var i = 0; i < dataList.length; i++) {
+									r0 += '<th axis="col'
+											+ (i + row)
+											+ '" align="center"><div style="width: 120px; text-align: center;">列'
+											+ (i + row) + '(统计)</div></th>';
+									r1 += '<td><div style="width: 120px; text-align: left;">'
+											+ dataList[i].title + '</div></td>';
+									r2 += '<td><div style="width: 120px; text-align: left;">'
+											+ dataList[i].collIdentifier
+											+ '</div></td>';
+								}
+								$("#showGroupsHead").append(t0);
+								$("#showGroupsGrid").append("<tr>" + r0 + "</tr><tr>" + r1 + "</tr><tr>" + r2
+												+ "</tr>");
+							}
+						});
+	}
+})(jQuery);
+</script>

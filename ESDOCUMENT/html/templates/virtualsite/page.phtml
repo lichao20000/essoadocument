@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>联通云门户</title>
+<link href="<?php echo $tplPath ?>/css/app_global.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath ?>/css/virtual.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath ?>/css/global.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath ?>/css/jquery.ui.core.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath ?>/css/jquery.ui.theme.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath . '/js/jquery.js' ?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath . '/js/jquery.block-ui.js'?>"></script>
+<script type="text/javascript">
+var App = {};
+var ChinaUnicom = {};
+</script>
+</head>
+<body>
+<?php echo $content ?>
+</body>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/jquery-ui.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/jquery.form.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/easySlider1.7.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/webtoolkit.base64.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath ?>/js/cu.page.js"></script>
+<script type="text/javascript">
+var requestTime = <?php echo REQUEST_TIME * 1000 ?>;
+var tplPath = '<?php echo $tplPath ?>';
+var baseUrl = '<?php echo url('',true); ?>';
+var searchBaseUrl = '<?php echo url('search') ?>';
+</script>
+</html>

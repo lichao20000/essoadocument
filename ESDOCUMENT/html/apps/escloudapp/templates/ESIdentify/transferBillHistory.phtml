@@ -1,0 +1,48 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#historyBill").flexigrid({
+			url: $.appClient.generateUrl({ESIdentify:'getHistoryTransfercationList',nodePath:'<?php echo $nodePath?>'},'x'),
+			dataType: 'json',
+		  	colModel : [
+				{display: '<input type="checkbox" id="sinput" />', name : 'cb', width : 24, align: 'center'},
+				{display: '编号', name : 'code', width : 140, align: 'left'},
+				{display: '标题', name : 'title', width : 120, align: 'left'},
+				{display: '发起人', name : 'proposer', width : 100, align: 'center'},
+				{display: '发起时间', name : 'starttime', width : 140, align: 'center'},
+				{display: '移交时间', name : 'endtime', width : 140, align: 'center'},
+				{display: '移交人', name : 'transferperson', width : 100, align: 'center'},
+				{display: '移交数量', name : 'transfernum', width : 60, align: 'center'},
+				{hide:true, name : 'userid'},
+				{hide:true, name : 'wfid'},
+				{hide:true, name : 'formid'},
+				{hide:true, name : 'structureid'},
+				{hide:true, name : 'oswfformid'}
+			],
+			usepager: true,
+			useRp: true,
+			rp: 20,
+			nomsg:"没有数据",
+			pagetext: '第',
+			outof: '页 /共',
+			width: 660,
+			height:280,
+			pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+		});
+		//实现单选
+		$('#historyBill tr').live('click',function (){
+			var cbObj = $(this);
+			$('#historyBill tr').each(function(){
+				if($(this).find('input[name="inputs"]').val() == cbObj.find('input[name="inputs"]').val()){
+					$(this).find('input[name="inputs"]').attr('checked',true);
+					$(this).addClass('trSelected');
+				}else{
+					$(this).find('input[name="inputs"]').attr('checked',false);
+					$(this).closest('tr').removeClass('trSelected');
+				}
+			});
+		});
+	});
+</script>
+<div style="height: 345px;">
+	<div id="historyBill"></div>
+</div>

@@ -1,0 +1,56 @@
+ .moudle{
+ 	float :left;
+ 	margin-left:20px;
+ 	margin-top:30px;
+ 	width:100px;
+ 	height:60px;
+ 	cursor:pointer;
+ }
+
+ .storeCode{
+ 	margin-top:5px;
+ 	text-align:center;
+ 	margin-left:-40px;
+ }
+ 
+ .nav,.connector{
+ 	float:left;
+ }
+ .nav{
+ 	cursor:pointer;
+ 	color:#4a8bc2;
+ }
+ .shelf{
+ 	float:right;
+ 	position:absolute;
+ 	right:20px;
+ 	color:#4a8bc2;
+ 	cursor:pointer;
+ }	
+ .activeSelected {
+   border:1px solid red;
+}
+.storeContainer{
+	height:410px;
+	overflow-y:scroll;
+	overflow-x:hidden;
+}
+
+ .storelogo,.collogo,.layerlogo,.shelflogo{
+    width:50px;
+ 	height:50px;
+ 	cursor:pointer;
+ 	
+ }
+.storelogo{
+ 	background:url(../images/store.png) no-repeat no-repeat;
+ }
+.shelflogo{
+	background:url(../images/shelf.png) no-repeat no-repeat;
+}
+.collogo{
+	background:url(../images/col.png) no-repeat no-repeat;
+}
+.layerlogo{
+	background:url(../images/layer.png) no-repeat no-repeat;
+}

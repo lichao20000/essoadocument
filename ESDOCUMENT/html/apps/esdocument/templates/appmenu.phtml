@@ -1,0 +1,104 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/css/appmenu.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/autovalidate/style.css" />
+<script type="text/javascript" src="<?php echo url('js/jquery.json-2.3.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.excheck.min.js"></script>
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/autovalidate/validate.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.messageFun.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESRole/js/dccAuths.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/collaborativeIntervalEmail.js"></script>	
+<iframe id="wfdownloadiframe" style="display: none"></iframe>
+<script>
+	/**  新版appmenu加载区域  start **/
+	$.getJSON($.appClient.generateUrl({ESDefault:"getArchiveAuthMenu"},'x'),function(zNodes){
+		var menuMain = $("#menu");
+		var menuAppendings = "";
+		var arrayObj_fatherMenu = new Array();
+		var subULClass = ["subulPersonManage","subulArcCollecte","subulArcManage","subulArcUse","subulArcCount","subulTasks","subulSystemManage","subulAPPManage"];
+		// 存在菜单权限才显示菜单
+		if(zNodes.length > 0 ) {
+			var parentCounter = 1;
+			for(var i = 0 ; i <zNodes.length ;i ++){
+				/** 首先取出第一层的功能 **/
+				if(zNodes[i].pId == 0){
+					arrayObj_fatherMenu[zNodes[i].id] = "<li><a href='#' class='"+subULClass[zNodes[i].id-1]+"'>"
+						+zNodes[i].name+"</a>" + "<ul class = 'subContainer'>";
+					parentCounter++;
+				}else{
+					arrayObj_fatherMenu[zNodes[i].pId] += "<li><a class='" + zNodes[i].controller + "_"+zNodes[i].action+"_small' controller='" + zNodes[i].controller + "' action='"+zNodes[i].action+"' href='javascript:;'>"+zNodes[i].name+"</a></li>"; 
+				}
+			}
+			for(var i = 0 ; i <= arrayObj_fatherMenu.length ; i++){
+				if(arrayObj_fatherMenu[i] != null && arrayObj_fatherMenu[i] != "undefined"){
+					arrayObj_fatherMenu[i] += "</ul></li>";
+					menuAppendings += arrayObj_fatherMenu[i];
+				}
+			}
+			menuMain.html(menuAppendings);
+			
+			$(".subContainer li a").click(function() {
+				var url = {};
+				var controller = $(this).attr("controller");
+				var action = $(this).attr("action");
+				if(typeof controller === "string" && controller.length > 0){
+					// longjunhao 20140829 add 访问日志，为了避免添加日志失败，导致不能进入功能，改为同步请求
+					//在java端后台的请求总是返回ture，除非请求过程中报错。
+					var modelName = $(this).html().replace(/[ ]/g,"");
+					$.ajax({
+						type:'POST',
+				        url : $.appClient.generateUrl({ESLog : 'saveAccessModel'},'x'),
+				        data: {model:modelName},
+						async:false, // 同步
+					    success:function(data){
+					    },
+					    cache:false
+					});
+					url[$(this).attr("controller")] = $(this).attr("action");
+					window.open($.appClient.generateUrl(url), "_self");
+				}
+			});
+		}
+		$('#menu li').die().hover(function(){
+			var ulMarginTop = $(this).position().top;
+			var marginTop = 0;
+			if($(this).find('li').length>3 ){
+				if(ulMarginTop>400){
+					marginTop = -180;
+				}else{
+					if(ulMarginTop>150){
+						marginTop = -150;
+					}else{
+						marginTop = - ulMarginTop;
+					}
+				}
+				
+	/**
+				var halfLiHeight  = $(this).find('li').length*60/2;
+					if( halfLiHeight < ulMarginTop){
+						marginTop = -(halfLiHeight );
+					}else{
+						if(ulMarginTop>290){
+							marginTop = -150;
+						}else{
+							marginTop = -(ulMarginTop );
+						}
+					} 
+					**/
+				$(this).find('.subContainer').css("height",290).css("top",marginTop).css("width",238).css("left",220).css("overflow-y","auto").css("overflow-x","hidden");
+			}
+			$(this).find('ul:eq(0)').slideDown();
+		}, function(){
+			$(this).find('ul').hide();
+			$(this).find('ul').hide();
+		});
+		    
+	});
+
+	
+</script>

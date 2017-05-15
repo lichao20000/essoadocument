@@ -1,0 +1,29 @@
+<div id="reportstyle">
+<form name="esreport" method="post" action='' id="esreport">
+<span class="tabs">报表实例选择</span>
+<hr width="100%">
+<?php $i=0; foreach ($data as $k=>$value){
+	//guolanrui 20140909 将报表的输出格式显示方式修改 
+	$reportStyleForOut = '';
+	if (($value->reportstyle) == 'pdf') {
+		$reportStyleForOut = 'PDF';
+	}elseif (($value->reportstyle) == 'xls'){
+		$reportStyleForOut = 'EXCEL';
+	}elseif (($value->reportstyle) == 'rtf'){
+		$reportStyleForOut = 'WORD';
+	}
+	$i++;
+	if (strpos($value->title, $boxthick)){
+		echo "<span class='tabs'><input type='radio' name='report_style' checked='checked' id='diretoryReportId".$i."' value=".$value->reportid.'-'.$value->reportstyle." ><label for='diretoryReportId".$i."' style='display:inline;'>".$value->title ."（". $reportStyleForOut ."）</label></span>";
+	}else {
+		echo "<span class='tabs'><input type='radio' id='diretoryReportId".$i."' name='report_style' value=".$value->reportid.'-'.$value->reportstyle." ><label for='diretoryReportId".$i."' style='display:inline;'>".$value->title ."（". $reportStyleForOut ."）</label></span>";
+	}
+ }?>
+
+</form>
+</div>
+<?php if($flag===true){?>
+<span class="tabs">打印数据筛选</span>
+<hr width="100%">
+<?php include (dirname(__FILE__).($reportType==1?'/filterBox.phtml':'/filter.phtml'))?>
+<?php } ?>

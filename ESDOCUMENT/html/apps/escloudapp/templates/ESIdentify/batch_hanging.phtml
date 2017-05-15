@@ -1,0 +1,362 @@
+<?php
+// $userinfo = $esaction->exec("getProxy", "user")->getUserInfo($esaction->getUser()->getId());
+// $companyCode = $userinfo->shengid;
+// $appinfo = $app->getAppInfo();
+// $uploadUrl = $esaction->exec("getProxy", "filestoreservice")->findbestfileuploadurl($companyCode)->fileStoreServiceAddr."storenewfile/".$appinfo["appid"]."/".$appinfo["apptoken"]."/".$companyCode."/true";
+// $uploadUrl = "http://127.0.0.1:8080";
+?>
+<style type="text/css">
+.clear{clear:both;}
+#contentL{padding-left:66px;margin-top:15px;margin-bottom:15px;}
+#defaultList,#controlBtn,#selectList{height:auto; overflow:hidden;float:left;}
+#defaultList,#selectList{width:193px;}
+.queryList{ width:187px; height:20px; float:left; padding-left:2px; border:1px solid #ccc;}
+.queryDefaultList{ width:165px; height:20px;line-height:20px; float:left; border:0; font-size:13px; color:#555;}
+.queryButton{ width:20px; height:20px; float:right; border:none;cursor:pointer;}
+.List{width:190px; height:190px; float:left; margin-top:10px; border:1px solid #ccc; overflow-y:scroll;}
+.List li{width:170px; height:22px;line-height:22px;color:#555; text-indent:4px; cursor:pointer;}
+#controlBtn span{width:20px; height:20px; float:right; margin:0 30px 10px; cursor:pointer; background:url(<?php echo $tplPath;?>/ESTemplate/img/button.bg.gif) no-repeat;}
+#controlBtn{width:80px; padding-top:53px; position:relative;}
+#controlBtn .endspan{ margin-bottom:0;}
+#controlBtn .estop{ background-position:0px 0px;}
+#controlBtn .esup{ background-position:0px -20px;}
+#controlBtn .esleft{ background-position:0px -40px;}
+#controlBtn .esright{ background-position:0px -60px;}
+#controlBtn .esdown{ background-position:0px -80px;}
+#controlBtn .endspan{ background-position:0px -100px;}
+#controlBtn #extrarule{width:90px; height:22px; position:absolute; top:0; left:0; z-index:200;}
+#controlBtn #extrarule .spa{  width:40px;line-height:22px; text-align:center; float:left;font-size:9px;}
+#controlBtn #extrarule .inpu{ width:15px; height:20px; line-height:20px; float:left; border:1px solid #ccc;}
+#massHanging .selectBit,.exeButton{float:left;}
+#massHanging .exeButton{float:right;margin-right:275px;margin-top:-40px;}
+#massHanging #upButton{height:30px;}
+#massHanging #upfileButton{height:30px;}
+.chanClass{float: left;height:18px; background: #6f6e81;color: #fff; font: 12px;padding: 3px 1px 1px 1px;}
+.chanClass:HOVER {
+	background-color: #133959;
+}
+</style>
+<?php if($flagQuery===true){?>
+<?php include (dirname(__FILE__)."/filter.phtml")?>
+<?php }?>
+<div id="massHanging">
+	<span class="tabs nameRule">批量挂接规则定义:</span>
+	<hr width="100%">
+	<div class="contentL" id="contentL">
+		
+		<div id="defaultList" class="defaultList">
+			<div id="queryList" class="queryList">
+				<input type='text' id='one' class='queryDefaultList' value='' onKeyUp="showList(this.value,'left');"/>
+				<img id="queryButton" class="queryButton" src="<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif"/>
+			</div>
+			<ul id="leftList" class="List">
+				<?php if($left==null){
+					}else{foreach ($left as $val){?>
+						<li id="<?php echo $val->tagId;?>"><?php echo $val->display;?></li>
+				<?php 
+						} 
+					}?>
+			</ul>
+		</div>
+		
+		<div id="controlBtn" class="controlBtn">
+			<div id="extrarule" class="extrarule">
+				<div class="spa">连接符</div>
+				<input  type="text" name="comlen" class="inpu"/>
+				<p id="chan" style="width:18px;" class='chanClass'><img src='<?php echo $tplPath;?>/public/flexigrid/css/images/Grid_Data_Export.gif'></p>
+			</div>
+			<span id="extratop" class="estop" title="置顶"></span>
+			<span id="extraup" class="esup" title="上移"></span>
+			<span id="extraleft" class="esleft" title="左移"></span>
+			<span id="extraright" class="esright" title="右移"></span>
+			<span id="extradown" class="esdown" title="下移" ></span>
+			<span id="extrabottom" class="esbottom endspan" title="置底"></span>
+		</div>
+		
+		<div id="selectList" class="selectList">
+			<div id="queryList" class="queryList">
+				<input type='text' id='two' class='queryDefaultList' value='' onKeyUp="showList(this.value,'right');"/>
+				<img id="queryButton" class="queryButton" src="<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif"/>
+			</div>
+			<ul id="rightList" class="List">
+				<?php if($right==null){
+					}else{foreach ($right as $val){?>
+						<li id="<?php echo $val->tagId;?>"><?php echo $val->display;?></li>
+				<?php 
+						}
+					}?>
+			</ul>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<hr width="100%">
+	<ul class="selectBit" style="margin-left:60px;">
+		<li class="Bit"><input type="radio" name="matching" checked="checked" id="matchingRule" value=""/>&nbsp;&nbsp;&nbsp;<label for="matchingRule" style="display: inline;">依据扫描规则挂接</label></li>
+		<li class="Bit"><input type="radio" name="matching" id="involveSubFile" value=""/>&nbsp;&nbsp;&nbsp;<label for="involveSubFile" style="display: inline;">上传电子文件挂接</label></li>
+		<li class="Bit"></li>
+	</ul>
+	<div style="margin-left: 390px;margin-top: 20px;">
+		<ul>
+			<li><input type="radio" name="AllORPart" checked="checked" id="allMatching" value="1"/>&nbsp;&nbsp;&nbsp;<label for="allMatching" style="display: inline;">完全匹配挂接</label></li>
+			<li style="padding-top: 10px;"><input type="radio" name="AllORPart" id="partMatching" value="0"/>&nbsp;&nbsp;&nbsp;<label for="partMatching" style="display: inline;">部分匹配挂接</label></li>
+		</ul>
+	</div>
+	<div class="exeButton">
+		<input type="button" name="upButton" id="upButton" value="上传文件"/>
+	</div>
+	
+</div>
+<script type="text/javascript">
+var rightStr="<?php echo $str;?>";
+var scanPath="<?php echo $scanPath;?>";
+var batchModifyStruId="<?php echo $batchModifyStruId;?>";//liqiubo 20141010 这存的是真正的结构ID，如果当前是从案卷级挂接的，则此为卷内级结构，修复bug 1304，主要在存规则的位置使用了
+var isupload=0;
+var tt=$("#matchingRule").is(':checked');
+if(tt){
+	$(".exeButton").hide();
+}
+$("#matchingRule").die().live('click',function(){
+	isupload=0;
+	$(".exeButton").hide();
+});
+$("#involveSubFile").die().live('click',function(){
+	isupload=1;
+	$(".exeButton").show();
+});
+var trimext = /\|\w+/;
+$('#contentL li').die().live('click',function(){
+	$('#contentL li').removeClass('esselected');
+	$(this).addClass('esselected');
+});
+//左移
+$("#extraleft").die().live('click',function(){
+	var st = $('#rightList .esselected').text().match(trimext).toString().substr(1);
+	if(st=="FIELD"){
+		var temp = $('#rightList .esselected').text().replace(trimext,"");
+		var html = $('#rightList .esselected').html(temp);
+		$('#leftList').append(html);
+	}else{
+		$('#rightList .esselected').remove();
+	}
+});
+//右移
+$("#extraright").die().live('click',function(){
+	var html = $('#leftList .esselected').html();
+	html+='|FIELD';
+	$('#leftList .esselected').html(html);
+	$('#leftList .esselected').appendTo('#rightList');
+});
+$("#chan").die().live('click',function(){
+	var length = $("input[name='comlen']").val();
+	if(length==""){
+		$.dialog.notice({icon:'error',content:'请先填写连接符',time:3,title:'3秒后自动关闭'});
+		return;
+	}
+	length+='|CONNECTOR';
+	var html='<li id="">'+length+'</li>';
+	$('#rightList').append(html);
+});
+//置顶
+$("#extratop").die().live('click',function(){
+	if($("#rightList .esselected").html()==$('#rightList li:eq(0)').html()){
+		return;
+	}
+	$('#rightList li:eq(0)').before($("#rightList .esselected"));
+});
+//置底
+$("#extrabottom").die().live('click',function(){
+	if($("#rightList .esselected").html()==$('#rightList li:last').html()){
+		return;
+	}
+	$('#rightList li:last').after($("#rightList .esselected"));
+});
+//上移
+$("#extraup").die().live('click',function(){
+	var index=$('#rightList .esselected').index()-1;
+	//guolanrui 20141014 添加index的判断，避免在IE8下选择最上的字段上移时字段消失BUG：1352
+	if(index>-1){
+		$('#rightList li:eq('+index+')').before($("#rightList .esselected"));
+	}
+});
+//下移
+$("#extradown").die().live('click',function(){
+	var index=$('#rightList .esselected').index()+1;
+	$('#rightList li:eq('+index+')').after($("#rightList .esselected"));
+});
+//左双击
+$('#leftList li').die().live('dblclick',function (){
+	var ext = $(this).html();
+	ext+='|FIELD';
+	$(this).html(ext);
+	$('#rightList').append($(this));
+});
+//右双击
+$("#rightList li").die().live('dblclick',function(){
+	var st = $(this).text().match(trimext).toString().substr(1);
+	//alert(st);return;
+	if(st=="FIELD"){
+		var temp = $(this).text().replace(trimext,"");
+		$(this).html(temp);
+		$('#leftList').append($(this));
+	}else{
+		$(this).remove();
+	}
+});
+//筛选
+function showList(value,position)
+{
+	if($.trim(value)==''){
+		$('#leftList li').show();
+		$('#rightList li').show();
+		return;
+	}
+	if(position=='left' && $.trim(value)!='')
+	{
+		$('#leftList li').hide();
+		var liObj=$('#leftList li:contains('+value+')').show();
+		$('#leftList').append(liObj);
+	}else if(position=='right' && $.trim(value)!='')
+	{
+		$('#rightList li').hide();
+		var liObj=$('#rightList li:contains('+value+')').show();
+		$('#rightList').append(liObj);
+	}else{
+		return;
+	}
+}
+function makeNewSWFUpload(){
+	var files = [];
+	var upload = new SWFUpload({
+		//提交路径
+		upload_url: "",
+		file_post_name: "file.txt",		
+		file_size_limit : "1048576",	// 100MB  longjunhao 20140905 修改为1024MB=1GB
+		file_types : "*.*",
+		file_types_description : "所有文件",
+		file_upload_limit : "0",
+		file_queue_limit : "0",
+
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnUpload",
+		button_width: 72,
+		button_height: 28,
+		
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel",
+			startButtonId : "btnStart",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data, remainder){
+				//alert(file+'-----'+remainder);return;//[object Object]-----0
+				var f = $.parseJSON(data);
+				var extName = file.name.substr(file.name.lastIndexOf(".")+1);
+				extendFile(f.fileId, f.contentMD5, f.fileSize, f.createTime, file.name, extName, remainder);
+			}
+		},
+		
+		// Debug 设置
+		debug: false
+	});
+	$("#btnCancel").click(function(){cancelQueue(upload);});
+	$("#btnStart").click(function(){
+		$.dialog({
+			content:'确定要上传吗?确定后操作不可恢复，请谨慎操作！',
+			icon:'warning',
+			ok:true,
+			okVal:'确定',
+			cancel:true,
+			cancelVal:'取消',
+			ok:function(){
+				$.post($.appClient.generateUrl({ESIdentify:'getUploadURL'},'x'),  function(data){
+					upload.setUploadURL(data);
+					startQueue(upload);
+				});
+			},
+			cache:false
+		});
+	});
+	// 挂接文件
+	function extendFile(fileid, md5, filesize, createtime, filename, extName, remainder){
+		files.push({ORIGINAL_ID:fileid, ESMD5:md5, ESTITLE:filename, ESTYPE:extName, ESSIZE:filesize, EsCreateTime:createtime});
+		if(remainder ===0){
+			var datas = "";
+			var isScan="";
+			var temp="";
+			$('#rightList li').each(function(i){
+	    		temp += $(this).text()+';';
+	    		var tmp = $(this).text().match(trimext).toString().substr(1);
+	    		if(tmp=="FIELD"){
+	    			var id = $(this).attr("id");
+	    			datas+=id+'-';
+	    		}
+			});
+			if(temp==rightStr){
+				isScan='true';
+			}else{
+				isScan='false';
+			}
+			datas=datas.substr(0,datas.length-1);
+			var treeNodeId = $('#treeDemo').attr('treenodeid');
+			var tempMassHangingFiles = document.getElementsByName("AllORPart");  
+			var allOrPartFiles = '';
+			for(var i=0;i<tempMassHangingFiles.length;i++)  {     
+				if(tempMassHangingFiles[i].checked)           
+				 allOrPartFiles = tempMassHangingFiles[i].value;  
+			}
+			
+
+			var id='';
+			var checkboxObj=$("input[name='path']:checked",$('#flexme'));
+			if(checkboxObj.length > 0)
+			{
+				//遍历选中的数据
+				checkboxObj.each(function(i){
+					id+=$(this).val()+',';
+					})
+			}
+			var condition='';
+			if(!id){
+				condition=filterValue();
+				var form=$('#esfilter');
+					var flag=form.validate();
+					if(!flag){
+						return false;
+					}
+			}
+			$.post($.appClient.generateUrl({ESIdentify:'massHangingFiles'},'x'),{struId:strucid,busiModelId:status,matchFile:datas,files:files,isScan:isScan,treeNodeId:treeNodeId,allOrPart:allOrPartFiles,pkgPath:id,condition:condition},function(data){
+				if(data=='true'){
+					files=[];
+					$.dialog.list['hangingDialog'].close();
+					$.dialog.list['massHangingDialog'].close();
+					$.dialog.notice({width: 150,content: '成功挂接数据',icon: 'succeed',time: 3});
+					$("#flexme,#innerfile").flexReload();
+				}else if(data=='notMatchData'){
+					$.dialog.notice({title:'操作提示',icon:'warning',content:'没有匹配的数据！',time:3});
+					$.dialog.list['hangingDialog'].close();
+					$.dialog.list['massHangingDialog'].close();
+					return false;
+				}else if(data=='false'){
+					$.dialog.notice({width: 150,content: '挂接数据失败',icon: 'error',time: 3});
+					return false;
+				}
+			});
+		}
+	};
+};
+</script>

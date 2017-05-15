@@ -1,0 +1,51 @@
+	<?php $counter = 1 ?>
+	<?php 
+	//guolanrui 20141013 此页面暂时没用，别改，为了修改admin用户saas不走权限预留的页面
+	
+	if($isadmin){
+		foreach ($appList as $key => $app) {
+			$flag=(!isset($app['display']) || $app['display']!='hidden')&&($app['is_public']||$isadmin);
+			$appname=$app['name'];
+			foreach ($grantApps as $grantApp){
+				$grant=(array)$grantApp;
+				if ($app['appid']==$grant['appname']){
+					$flag=true;
+					if ($grant['saasid']!=-1){
+						$appname=$app['name'];
+						$appname=$appname.'[ '.$grant['bigorgname'].' ]';
+		?>
+				<li><a href="<?php echo url($app['id'])?>" appid="<?php echo $app['id']?>" class = "btn-<?php echo $counter?>"> <?php echo $appname;?></a></li>
+		<?php  
+					}
+				}
+			}
+			if($flag){
+				?>
+					<li><a href="<?php echo url($app['id'])?>" appid="<?php echo $app['id']?>" class = "btn-<?php echo $counter?>"> <?php echo $appname;?></a></li>
+					<?php  }
+			$counter++;
+		}
+
+	}else{
+	?>
+	<?php foreach ($appList as $key => $app) { 
+		$flag=(!isset($app['display']) || $app['display']!='hidden')&&($app['is_public']||$isadmin);
+		$appname=$app['name'];
+		foreach ($grantApps as $grantApp){
+			$grant=(array)$grantApp;
+			if ($app['appid']==$grant['appname']){
+				$flag=true;
+				if ($grant['saasid']!=-1){
+					$appname=$appname.'[ '.$grant['bigorgname'].' ]';
+				}
+				break;
+			}
+		}	
+		if($flag){				
+		?>
+		<li><a href="<?php echo url($app['id'])?>" appid="<?php echo $app['id']?>" class = "btn-<?php echo $counter?>"> <?php echo $appname;?></a></li>
+		<?php  }
+		   $counter++;
+		}
+		}
+		?>

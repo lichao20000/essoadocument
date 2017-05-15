@@ -1,0 +1,40 @@
+.rule-public{ width:760px; height:auto; float:left; overflow:hidden;}
+.rule-public .condition-free{ width:740px; height:214px; float:left; padding-left:20px}
+.rule-public .condition{ width:740px; height:180px; float:left; overflow-y:auto;}
+ 
+.rule-public .condition-free ul{ width:720px; float:left; margin-top:10px;}
+.rule-public .condition-free ul li{ height:24px; line-height:24px; float:left; margin-right:10px; overflow:hidden;}
+.rule-public .condition-free ul li.long{ width:160px;}
+.rule-public .condition-free ul li.long select{ width:160px; height:20px;}
+.rule-public .condition-free ul li.long select, .rule-public .condition ul li.long input, .rule-public .condition ul li.short select, .rule-public .condition ul li.maxshort select{ float:left; margin-top:2px; border:1px solid #ccc; font-size:13px; font-family:arial;}
+.rule-public .condition-free ul li.long input{ width:158px; height:18px; overflow:hidden;}
+.rule-public .condition-free ul li.short{ width:80px;}
+.rule-public .condition-free ul li.short select{ width:80px; height:20px;}
+.rule-public .condition-free ul li.maxshort{ width:120px;}
+.rule-public .condition-free ul li.maxshort select{ width:120px; height:20px;}
+.rule-public .condition-free ul li.clear{ margin:0;}
+
+.rule-public .condition ul li a{ width:20px; height:20px; float:left; margin-top:2px;}
+.rule-public .condition ul li a.add{ background:url(../../public/img/add.png) no-repeat center center;}
+.rule-public .condition ul li a.del{ background:url(../../public/img/del.gif) no-repeat center center;}
+.rule-public .condition ul li a.add:hover{ background:#ccc url(../../public/img/add.png) no-repeat center center;}
+.rule-public .condition ul li a.del:hover{ background:#ccc url(../../public/img/del.gif) no-repeat center center;}
+
+.user, .org{ width:16px; height:16px; position:absolute; top:4px; right:4px; background:url(../../public/img/edit.jpg) no-repeat center center; cursor:pointer;}
+
+.public_filter{ width:500px; height:214px; float:left;}
+.public_filter .condition{ width:460px; height:auto; overflow:hidden; float:left; margin:15px 20px; _display:inline;}
+
+.public_filter .condition li{ width:460px; height:30px; float:left;}
+.public_filter .condition li p{ width:100px; line-height:30px; float:left; margin-right:10px;}
+.public_filter .condition li div{ height:30px; float:left;}
+.public_filter .condition li div input{ width:190px; height:20px; font:normal normal normal 12px/20px 微软雅黑,黑体,宋体,airal; padding:0; padding:0 5px; border:1px solid #ccc;}
+.public_filter .condition li div select{ width:202px; height:22px; padding:0; border:1px solid #ccc;}
+.public_filter .condition li label{ float:left; margin:5px;}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+input,textarea{ margin-left:0 !important;}
+}
+
+.escatagory{height:220px;width:230px;background:#fff;border:1px solid #aaa;display:none;z-index:888;position:absolute;overflow:auto;}
+.escatagoryRole{height:250px;width:480px;background:#fff;border:1px solid #aaa;display:none;z-index:888;position:absolute;overflow:auto;}

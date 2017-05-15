@@ -1,0 +1,121 @@
+@CHARSET "UTF-8";
+  
+html,body,div,span,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,address,big,cite,code,del,em,font,img,ins,small,strong,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend
+	{
+	margin: 0;
+	padding: 0;
+}
+
+textarea{ resize:none;}
+input,textarea{ outline:0;}
+
+
+a{
+	text-decoration : none ;
+}
+ol,ul {
+	list-style: none;
+}
+
+.esmain {
+	width: 100%;
+	
+	
+}
+.esmain .esleft {
+	background: #fff;
+	width:240px;
+	float:left;
+	overflow: auto;
+	border-left: 1px solid #ccc;
+	border: 1px solid #ccc;
+}
+
+.esmain .esright {
+	background: #fff;
+	}
+.espakcet{width:480px;overflow:auto;height:250px;}
+.espakcet ul{width: 460px;text-align:center;}
+.espakcet ul li{width:200px;height:30px;margin-left:20px;float:left;margin-top:10px;_display:inline}
+.espakcet span{width:60px;height:30px;line-height:30px;text-align:left;float:left;}
+.espakcet ul li input{height:20px;float:left;width:133px;}
+.espakcet ul li select{height:22px;float:left;width:135px;}
+.esselected{background:#eee;color:#fff;}
+.esright ul li{width:220px;height:30px;margin-left:20px;float:left;margin-top:10px;_display:inline}
+.esright span{width:60px;height:30px;line-height:30px;text-align:left;float:left;}
+.esright ul li input{height:20px;float:left;width:135px;}
+.esright ul li select{height:22px;float:left;width:137px;}
+.esright button{width:80px;height:30px;cursor:pointer;padding:0px;line-height:30px;}
+
+.buttoncss {
+	padding-left: 5px;
+}
+
+
+.buttoncss div {
+	float: left;
+	margin-top: 5px;
+	margin-right: 5px;
+	border: 1px solid transparent;
+}
+
+.buttoncss span.buttonForAnn {
+	margin-right: 10px;
+	width:55px;
+}
+
+.buttoncss span.title {
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 5px 0px 20px;
+	margin-left: 5px;
+	border-right: 1px solid #ccc;
+}
+
+ .buttoncss span.buttonForAnn {
+	float: left;
+	height: 28px;
+	color: #fff;
+	line-height: 28px;
+	padding: 0 5px 0px 5px;
+	padding-left: 28px;
+	_border-top-color: tomato;
+	_border-left-color: tomato;
+	_filter: chroma(color =       tomato);
+	background-position-x: 5px;
+	_border-top-color: tomato;
+	cursor: pointer;
+}
+
+ .buttoncss span.buttonForAnn:HOVER {
+	background-color: #41b3e5;
+	margin-right: 10px;
+	border: 0px;
+}
+
+#look {
+	background: url(../../public/flexigrid/css/images/zoom_in.png) no-repeat
+		5px;
+	background-color: #4a8bc2;
+	width:30px;
+}
+#send {
+	background: url(../../public/flexigrid/css/images/formbuilderStat.gif) no-repeat
+		5px;
+	background-color: #4a8bc2;
+}
+
+.buttoncss {
+	height: 40px;
+	float: left;
+	padding: 0px;
+	border-bottom: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+.esright{
+	float: left;
+	padding: 0px;
+	border-bottom: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}

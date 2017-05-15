@@ -1,0 +1,11 @@
+
+Label.slideshowControl{
+	color: #FFFFFF;
+	fontFamily: "Helvetica Neue";
+}
+.@font-face{
+	fontFamily: "Helvetica Neue";
+	src: local("Helvetica Neue");
+	fontWeight: normal;
+	fontStyle: normal;
+}

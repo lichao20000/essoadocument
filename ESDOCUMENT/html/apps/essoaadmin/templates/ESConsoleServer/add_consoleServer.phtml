@@ -1,0 +1,172 @@
+<!-- wangbo 20140325-->
+<form id="addConsoleServer" action=""	method="post">
+<div class="estransfer">
+<ul>
+<li><span>ID<font color="red" size="3">*</font></span><input  type="text" name="serviceId"       value=""><input type="hidden" name="id"    value="-1"  ><input type="hidden" name="appId"    value= "<?php echo $appId;?>"></li>
+<li><span>服务名称<font color="red" size="3">*</font></span><input type="text" name="serviceName"     value=""></li>
+<li><span>接口全类名<font color="red" size="3">*</font></span><input type="text" name="interfaceName"    value=""></li>
+<li><span>访问路径<font color="red" size="3">*</font></span><input type="text" name="url"   title="例如:http://www.flyingsoft.cn"    value=""></li>
+<!-- <li><span>所属应用<font color="red" size="3">*</font></span><select id="attachApp" name="attachApp" onchange="evaluateToken()"><option value=''>--请选择--</option></select></li>
+<li><span>口令<font color="red" size="3">*</font></span><input type="text" name="token"  readonly="readonly"   value=""></li> -->
+<li><span>是否启用<font color="red" size="3">*</font></span><select name="enableState" ><option value=''>--请选择--</option><option value='1'>是</option><option value='0'>否</option></select></li>
+<li style="width: 525px;">
+	<div id="reasonDiv">
+	<span>禁用原因</span>
+	<textarea name="reason" rows="4" cols="60"></textarea>
+	</div>
+</li>
+</ul>
+</div>
+</form>
+<script type="text/javascript">
+
+ var simpleZZ  =  new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+ var interfaceZZ  =  new RegExp("[`~!@#$^&*()=|{}':;',\\[\\]<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+// var tokenZZ = /^\w{2}|\w{15}$/;
+ var urlZZ = /^http:\/\/.*$/;
+ //在页面初始化完毕时，获取所有应用信息
+ //var mark = 0;
+// function getApp(){
+//	 if(mark==0){
+//		$.ajax({
+//				url:$.appClient.generateUrl({ESConsoleServer:'getAppName'},'x'),
+//				success:function(data){
+//					var datas = eval(data);
+//					mark = 1;
+//					$.each(datas,function(index,myData){
+//					    $("#addConsoleServer select[name='attachApp']").append("<option myValue='"+myData.appToken+"' value='"+myData.id+"'>"+myData.appNameCn+"</option>"); 
+//					});
+//				}
+//		});	
+//	  }
+// }
+ //当选择所属应用下拉列表后，为口令文本框赋值
+// function evaluateToken(){
+//	$("#addConsoleServer input[name='token']").val($("#attachApp  option:selected").attr("myValue"));
+// }
+ //验证serviceid
+ $("#addConsoleServer input[name='serviceId']").bind('blur',function(){
+		var serviceId = $(this).val();
+		serviceId=serviceId.replace(/[ ]/g,"");
+		if(serviceId==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(simpleZZ.test(serviceId)==true){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+	//验证servicename
+ $("#addConsoleServer input[name='serviceName']").bind('blur',function(){
+		var serviceName = $(this).val();
+		serviceName=serviceName.replace(/[ ]/g,"");
+		if(serviceName==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(simpleZZ.test(serviceName)==true){
+			$(this).addClass("warnning");
+			return false;
+		}
+		var url = $.appClient.generateUrl({ESConsoleServer : 'ValidateServiceName'}, 'x');
+		$.post(url, {data : serviceName}, function(res) {
+    		if(res=='true'){//说明serviceName不存在
+        		 
+    		}else{//说明serviceName已存在
+        		 $("#addConsoleServer input[name='serviceName']").addClass("warnning");
+    			return false;
+    		}
+    	});
+		$(this).removeClass("warnning");
+	});
+	//验证接口
+ $("#addConsoleServer input[name='interfaceName']").bind('blur',function(){
+		var interfaceName = $(this).val();
+		interfaceName=interfaceName.replace(/[ ]/g,"");
+		if(interfaceName==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(interfaceZZ.test(interfaceName)==true){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+	//验证url
+ $("#addConsoleServer input[name='url']").bind('blur',function(){
+		var url = $(this).val();
+		url=url.replace(/[ ]/g,"");
+		if(url==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(urlZZ.test(url)==false){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+	//验证口令
+// $("#addConsoleServer input[name='token']").bind('blur',function(){
+//		var token = $(this).val();
+//		token=token.replace(/[ ]/g,"");
+//		if(token==''){
+//			$(this).addClass("warnning");
+//			return false;
+//		}
+//		if(tokenZZ.test(token)==false){
+//			$(this).addClass("warnning");
+//			return false;
+//		}
+//		$(this).removeClass("warnning");
+//	});
+	//验证启用状态
+ $("#addConsoleServer select[name='enableState']").bind('blur',function(){
+		var enableState = $(this).val();
+		enableState=enableState.replace(/[ ]/g,"");
+		if(enableState==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+//验证是否选择所属应用
+// $("#addConsoleServer select[name='attachApp']").bind('blur',function(){
+//		var attachApp = $(this).val();
+//		attachApp=attachApp.replace(/[ ]/g,"");
+//		if(attachApp==''){
+//			$(this).addClass("warnning");
+//			return false;
+//		}
+//		$(this).removeClass("warnning");
+///	});
+// $(document).ready(function(){
+//		getApp();
+//	});
+
+$(function(){
+
+	$('#addConsoleServer [name="enableState"]').bind('change',function(){
+		checkStatus();
+	});
+	
+	// 根据状态,判断是否显示禁用原因textarea
+	function checkStatus() {
+		var status = $('#addConsoleServer [name="enableState"]').val();
+		if (status == '0') {
+			// 显示禁用原因
+			$('#reasonDiv').show();
+		} else {
+			$('#addConsoleServer [name="reason"]').val("");
+			// 隐藏禁用原因
+			$('#reasonDiv').hide();
+		}
+	}	
+	checkStatus();
+	
+});
+</script>
+ 

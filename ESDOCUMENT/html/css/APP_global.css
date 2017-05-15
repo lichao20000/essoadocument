@@ -1,0 +1,576 @@
+@charset "utf-8";
+/*=======================================页面属性样式=======================================*/
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, table, tr, th, td, embed, object, em, hr, span {
+	margin:0px;
+	padding:0px;
+	font-size:12px;
+	list-style:none;
+}
+body {
+	font-family: Arial, Helvetica, sans-serif, 宋体;
+	color:#777;
+	min-width:960px;
+}
+img {
+	border-width:0px;
+}
+.floatLeft {
+	float:left !important;
+}
+.floatRight {
+	float:right !important;
+}
+a, a:hover {
+	border:0px;
+}
+input, button, select, textarea {
+	outline:none
+}
+.margin0 {
+	margin:0px !important;
+}
+.margin20 {
+	margin-top:20px;
+}
+.margin10 {
+	margin-top:10px;
+}
+.textAlignLeft {
+	text-align:left !important;
+}
+.textAlignCenter {
+	text-align:center !important;
+}
+.noBorder {
+	border:none !important;
+}
+/*=======================================中间（左边）样式=======================================*/
+.content {
+	float:left;
+	width:100%;
+	min-width:960px;
+}
+.left {
+	float:left;
+	width:220px;
+	clear:right;
+}
+.left ul {
+	clear:both;
+	overflow:hidden;
+	padding:5px 0;
+	width:220px;
+	border-bottom:1px solid #fff;
+	background: url(../../images/line2.gif) no-repeat bottom;
+	float:left;
+}
+.left li, .left dd {
+	float:left;
+	height:30px;
+	width:175px;
+	color:#222;
+	cursor:pointer;
+	position:relative;
+	left:0px;
+	padding-left:20px;
+	line-height:30px;
+}
+.left li a, .left dl a {
+	color:#222;
+	text-decoration:none;
+	line-height:30px;
+	height:30px;
+	display:block;
+	padding-left:10px;
+}
+.left li a:hover, .left dl a:hover {
+	background:#eee !important;
+	padding-left:10px;
+}
+.left li span {
+	margin-left:5px;
+}
+.colorBox {
+	width:11px;
+	height:11px;
+	position:absolute;
+	left: 180px;
+	top: 7px;
+}
+.left p {
+	padding:0 30px;
+	line-height:24px;
+	padding-top:5px;
+}
+.left p b {
+	float:left;
+	height:11px;
+	width:11px;
+	margin:6px 0 0 30px;
+	display:inline
+}
+.left p span {
+	margin-right:5px;
+}
+.left dl {
+	background:none;
+	float:left;
+	clear:both;
+	overflow:hidden;
+	width:220px;
+}
+.left dt {
+	background:url(../../images/leftList.gif) no-repeat;
+	position:relative;
+	line-height:30px;
+	height:30px;
+	padding-left:40px;
+	color:#222;
+}
+.left dd {
+	padding-left:37px;
+	width:158px;
+}
+.leftOn {
+	background:url(../images/line.gif) no-repeat;
+	color:#e74b39 !important;
+	padding-left:30px !important;
+	font-weight:bold;
+}
+.leftOn1 {
+	background:url(../images/line.gif) no-repeat;
+	color:#e74b39 !important;
+	padding-left:47px !important;
+	font-weight:bold;
+}
+/*=======================================中间（中间）样式=======================================*/
+.center {
+	float:left;
+	width:800px;
+	min-width:500px !important;
+}/*写好百分百JS后请把width:800px;去掉*/
+.listBox {
+	float:left;
+	height:86px;
+	border-bottom:1px solid #e5e5e5;
+	padding:8px 50px 14px 10px;
+	width:740px;
+	cursor:pointer;
+	overflow:hidden;
+}/*写好百分百JS后请把width:740px;去掉*/
+.topNavMenuFirst {
+	text-align:center !important;
+	width:100px;
+}
+.topNavMenuFirst a {
+	margin-top:2px;
+	display:block
+}
+.listBox input {
+	float:left;
+	margin-top:2px;
+*_margin-top:-2px;
+*+margin-top:-2px;
+*+margin-left:-4px;
+}
+.listStar {
+	width:16px;
+	height:16px !important;
+	margin:0 10px;
+*+margin:0 10px 0 7px;
+	float:left;
+	line-height:16px !important;
+}
+.noStar {
+	background: url(../images/app_item_element/star_no.gif);
+}
+.noStarHover {
+	background:url(../images/app_item_element/star_no_hover.gif);
+}
+.star {
+	background:url(../images/app_item_element/star_yes.gif);
+}
+.starHover {
+	background:url(../images/app_item_element/star_yes_hover.gif);
+}
+.listNum {
+	width:24px;
+	height:22px;
+	background:url(../images/app_item_element/numBg.gif);
+	text-align:center;
+	color:#fff;
+	float:left;
+	font-family:Arial, Helvetica, sans-serif;
+	line-height:18px;
+	margin-right:17px;
+}
+.listOff {
+	background:url(../images/app_item_element/numBgOff.gif);
+}
+.listImg {
+	width:80px;
+	height:80px;
+	overflow:hidden;
+	border:1px solid #ccc;
+	padding:2px;
+	float:left;
+	background:#fff;
+	margin-right:15px;
+}
+.listText {
+	float:left;
+	width:540px;
+}/*写好百分百JS后请把width:540px;去掉*/
+.listText h1 {
+	color:#369;
+	font-size:14px;
+	font-weight:bold;
+	width:100%;
+	display:block;
+	float:left;
+}
+.listText h1 a {
+	color:#369;
+	text-decoration:none;
+	display:block;
+	float:left;
+	margin-right:5px;
+	line-height:24px;
+}
+.listText h1 span {
+	padding:0 5px;
+	line-height:20px;
+	font-size:12px !important;
+	font-weight:100 !important;
+	color:#fff;
+	display:block;
+	float:left;
+}
+.listText h2 {
+	font-weight:100;
+	width:100%;
+	margin:5px 0;
+	display:block;
+	float:left;
+}
+.listText p {
+	line-height:15px;
+}
+.listOn {
+	background:#ffffb4;
+	border-left:2px solid #4d90f0;
+}
+.listText1 {
+	float:left;
+}
+.listText1 a {
+	text-decoration:none;
+	color:#777;
+}
+.listBox1 {
+	height:25px;
+	line-height:20px;
+	border-bottom:1px solid #e5e5e5;
+	padding:8px 10px 0px 10px;
+}
+.listBox1 input {
+	margin-top:2px;
+*+margin-top:-2px;
+	float:left;
+*+margin-left:-4px;
+}
+.listName {
+	float:left;
+	width:100px;
+	margin-right:10px;
+	color:#000;
+}
+.listLink {
+	float:right;
+	width:16px;
+	margin-left:15px;
+	display:inline;
+}
+.listTime {
+	float:right !important;
+	text-align:right;
+	width:70px;
+}
+/*=======================================中间（博客）样式=======================================*/
+.blog {
+	margin-top:10px;
+}
+.blog ul {
+	clear:both;
+	position:relative;
+}
+.blog li {
+	float:left;
+	line-height:30px;
+}
+.blog li input {
+	height:22px;
+	line-height:22px;
+	border:1px solid #c0c0c0;
+	padding:0 5px;
+}
+.inputOn {
+	border:1px solid #a9d6f5 !important;
+}
+.inputWrong {
+	border:1px solid #f31b01 !important;
+}
+.blogTitle {
+	border-bottom:1px solid #d8d8d8;
+	padding:0 20px 15px 20px;
+	margin-bottom:20px;
+	float:left;
+}
+.blogTitleFont {
+	color:#222 !important;
+	line-height:20px !important;
+}
+.blogText {
+	padding:0 20px 15px 20px;
+	margin-bottom:20px;
+	color:#222 !important;
+	font-size:14px;
+	line-height:22px;
+	float:left;
+}
+.inputBox a {
+	margin:0 5px;
+}
+.inputBox {
+	height:22px !important;
+	line-height:22px !important;
+	border:1px solid #c0c0c0;
+	padding:0 5px;
+	position:relative !important;
+*_height:17px;
+*_line-height:17px;
+*_padding:2px 5px 3px 5px;
+	left:0px;
+}
+.inputBox span {
+	margin-right:12px;
+	line-height:22px;
+	cursor:pointer;
+}
+.inputBox span span {
+	margin:0px;
+}
+.inputOpen {
+	position:absolute;
+	top:22px;
+	border:1px solid #ccc;
+	left:400px;
+	width:320px;
+}
+.inputOpen a {
+	display:block;
+	line-height:24px;
+	padding:0 10px;
+	width:300px;
+	text-decoration:none;
+	color:#222;
+	margin:0px;
+}
+.inputOpen a:hover {
+	background:#eee;
+	padding:0 10px;
+}
+.inputTip {
+	height:32px;
+	top:29px;
+	text-align:center;
+	position: absolute;
+	background: url(../../images/inputBg2.gif) right;
+}
+.inputTip span {
+	line-height:32px;
+	margin:0px !important;
+	padding:0px !important;
+}
+/*=======================================中间（右边）样式=======================================*/
+.right {
+	float:right;
+	width:200px;
+	padding:10px 20px 15px 20px;
+}
+.right h1 {
+	color:#369;
+	margin-bottom:10px;
+	width:200px;
+}
+.rightPicList {
+	width:54px;
+	margin-right:18px;
+	float:left;
+	text-align:center;
+	margin-bottom:10px !important;
+}
+.rightPicList a {
+	text-decoration: underline;
+	color:#369;
+}
+.rightPic {
+	width:48px;
+	height:48px;
+	overflow:hidden;
+	padding:1px;
+	border:1px solid #ccc;
+	margin-bottom:6px;
+}
+.rightReview {
+	border-bottom:1px dotted #e5e5e5;
+	width:200px;
+	line-height:20px;
+	padding-bottom:5px;
+	margin-bottom:5px;
+}
+/*=======================================日历样式=======================================*/
+.calendarBox {
+	width:1147px;
+	float:left;
+}
+.calendar {
+	width:927px;
+	float:left;
+	margin-top:16px;
+}
+.calendar ul {
+	width:132px;
+	height:520px;
+	float:left;
+	border-top:1px solid #ddd;
+}
+.calendar li {
+	cursor:pointer;
+	color:#222;
+	width:128px;
+	height:72px;
+	border:1px solid #ddd;
+	float:left;
+	padding:1px;
+	border-right:1px solid #fff;
+	border-top:1px solid #fff;
+	line-height:18px;
+	overflow:hidden;
+}
+.calendar li span {
+	margin-left:6px;
+	line-height:18px;
+}
+.calendar li p, .calendar1 p {
+	border:1px solid #979797;
+	background:#c2c2c2;
+	float:left;
+	width:110px;
+	padding:0 6px;
+	line-height:18px;
+	margin-top:1px;
+	color:#222;
+}
+.calendar li p input, .calendar1 input {
+	margin-top:2px;
+*_margin-top:0px;
+*+margin-top:-1px;
+	margin-top:2px\0;
+	margin-left:0px !important;
+}
+.week {
+	float:left;
+	width:927px;
+}
+.week p {
+	height:25px;
+	line-height:25px;
+	text-align:center;
+	float:left;
+	width:131px;
+	color:#222
+}
+.calendarOn {
+	width:124px !important;
+	height:72px !important;
+	border:1px solid #666 !important;
+	background:#eaeaea;
+}
+.calendar1 {
+	border:1px solid #ddd;
+	height:445px;
+	border-top:none;
+	border-right:none;
+	margin-bottom:63px;
+	width:129px !important;
+	padding:1px;
+}
+.calendar1 p {
+	width:114px;
+}
+/*=======================================按扭样式=======================================*/
+.but1 {
+	border:1px solid #bbb;
+	line-height:27px;
+	height:27px;
+	text-align:center;
+	cursor:pointer;
+	background:#e2e2e2;
+	color:#222;
+	float:left;
+	padding:0 5px;
+	margin-right:15px;
+}
+.but1_hover {
+	filter: alpha(opacity=73);
+	opacity:0.57;
+	-webkit-opacity:0.73;
+}
+.but2 {
+	border: 1px solid #bbb;
+	line-height:27px;
+	height:27px;
+	text-align:center;
+	background:#e2e2e2;
+	color:#222;
+	filter: alpha(opacity=33);
+	opacity:0.33;
+	-webkit-opacity:0.33;
+	float:left;
+	padding:0 5px;
+	margin-right:15px;
+}
+.but2_hover {
+	filter: alpha(opacity=73);
+	opacity:0.57;
+	-webkit-opacity:0.73;
+}
+.but2_icon {
+	position:absolute;
+	left:55px;
+	top:11px;
+}
+.but3Box {
+	position:relative !important;
+	float:left;
+	padding:0 5px;
+	margin-right:15px;
+}
+.but3 {
+	cursor:pointer;
+	background:#fff;
+}
+.but3_icon {
+	position:absolute !important;
+	top: 23px;
+	left:28px;
+}
+.butNoBg {
+	background:#fff;
+	border:0px;
+}
+.but1 a, .but2 a, .but3 a {
+	text-decoration:none;
+	color:#222;
+}

@@ -1,0 +1,61 @@
+<style>
+.look_model_content{width:800px;height:630px; margin:0;border:0; padding:0; list-style-type:none;}
+.model_content .subnav{width:800px;  height:30px; float:left; padding-left:0px; border-bottom:5px solid #41b3e5;}
+.model_content .subnav li{ line-height:30px; color:#fff; float:left; padding:0 10px; margin-right:5px; background:rgb(74, 139, 194); cursor:pointer; border-radius:5px 5px 0 0;}
+.model_content .subnav .defalutTagOpen{ background: #41b3e5;}
+.model_content .subnav .ceng{background:url(../img/ceng.png) no-repeat 2px center;padding-left:25px;}
+.look_model_tag{ width:800px; height:auto; overflow:hidden; float:left;}
+.model_content .subnav .not-allowed{;color:#41b3e5; cursor:not-allowed;}
+.model_content .not-allowed{color:#41b3e5; cursor:not-allowed;}
+</style>
+<div id="lookModelContent" class="look_model_content">
+	<div id="modelContent" class="model_content">
+		<ul id="subnav" class="subnav">
+		<?php if($type == 'project'){?>
+			<li id='EDIT_NODE' ><span class='ceng' id="project"> 项目级</span></li>
+		<?php }?>
+		<?php if($type == 'file' || $type== 'project'){?>
+			<li id='EDIT_NODE' '><span class='ceng' id="file"> 案卷级</span></li>
+		<?php }?>
+			<li id='EDIT_STRU' ><span class='ceng' id="innerFile">卷内级</span></li>
+			<li id='EDIT_RULE' ><span class='ceng' id="ducoment">电子文件级</span></li>
+		</ul>
+	</div>
+	<div id="lookModelTag" class="look_model_tag"></div>
+</div>
+<script type="text/javascript">
+var sId = <?php echo $sId?>;
+$('#lookModelTag').html('<table id="model_tag_tbl"></table>');
+
+$("#model_tag_tbl").flexigrid({
+	url : $.appClient.generateUrl({ESTemplate : 'structure_json', id:sId}, 'x'),
+	dataType : 'json',
+	editable:true,
+	colModel : [
+		{display : '<input type="checkbox" id="sinputB">', name:'cbox', width:40, align:'center'},
+		{display : '字段名',	name : 'ESIDENTIFIER',	width : 100,align : 'center'},
+		{display : '元数据',	name : 'METADATA',width : 200,align : 'center'},
+		{display : '类型',name : 'ESTYPE',width : 60,align : 'center' },
+		{display : '是否为必填项',name : 'ESISNULL', width : 50, align : 'center'},
+		{display : '字段长度', name : 'ESLENGTH', width:80,align :'center'},
+		{display : '小数点位数', name : 'ESDOTLENGTH',  width : 80, align :'center'},
+		{display : '是否为系统字段',name:'ESISSYSTEM', width:80,align:'center'},
+		{display : '描述', name : 'ESDESCRIPTION',  width : 150, align : 'center'}
+	],
+	usepager : true,
+	useRp : true,
+	width : _size.tbl.width,
+	height : _size.tbl.height,
+	rp : 20,
+	nomsg : "没有数据",
+	pagetext : '第',
+	outof : '页 /共',
+	procmsg : '刷新中，请稍等...',
+	pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条',
+	onSuccess : function(){
+		$(".flexigrid").css('width','800px');
+		}	
+});
+
+
+</script>

@@ -1,0 +1,139 @@
+<div id='userRole'>
+  <div id='' class='useLis'>
+    <div class='searchRole'>
+      <input type='text' id='one' class='searchusername' value='' onKeyUp="show(this.value,'left');"/>
+	  <input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+	</div>
+    <ul id='zeroRole' class='userList'>
+    <?php $left = $list->left;
+	foreach ($left as $k=>$val){
+    ?>
+    <li id="<?php echo $val->tagId;?>" eslength="<?php echo $val->eslength;?>" ><?php echo $val->display;?></li>
+    <?php }?>
+	</ul>
+  </div>
+
+	<div id='esbutton' class='selBut'>
+		<div id="zerorule"  class='zerorule'><p class='spa'>长度:</p><input type="text" name="zerolen" class='inpu' /></div>
+		<span id="zerotop" class="estop" title='置顶'></span>
+		<span id="zeroup" class="esup" title='上移'></span>
+		<span id="zeroleft" class="esleft" title='左移'></span>
+		<span id="zeroright" class="esright" title='右移'></span>
+		<span id="zerodown" class="esdown" title='下移'></span>
+		<span id="zerobottom" class="esbottom endspan" title='置底'></span>
+	</div>
+	<div id='' class='useLis'>
+		<div class='searchRole'>
+			<input type='text' id='two' class='searchusername'  value='' onKeyUp="show(this.value,'right');"/>
+			<input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+		</div>
+		<form id ="haha"></form>
+		<ul id='zerosaveRole' class='userList'>
+		    <?php $right = $list->right;
+				foreach ($right as $k=>$val){
+			    ?>
+			    <li id="<?php echo $val->tagId;?>" eslength="<?php echo $val->eslength;?>" ><?php echo $val->display.'|'.$val->length;?></li>
+			    <?php }?>
+		
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+$('#userRole li').die().live('click',function(){
+	$('#userRole li').removeClass('esselected');
+	$(this).addClass('esselected');
+});
+
+//左移
+var ex = /\|\d+/;
+var num = /^[1-9]$/;
+$("#zeroleft").die().live('click',function(){
+	var length = $("input[name='zerolen']").val();
+	var html = $("#zerosaveRole .esselected").html();
+	if(html==null){
+		return;
+	}
+	var newhtml = html.replace(ex,"");
+	$('#zerosaveRole .esselected').html(newhtml);
+	$('#zerosaveRole .esselected').appendTo('#zeroRole');
+	
+});
+//右移
+$("#zeroright").die().live('click',function(){
+	var length = $("input[name='zerolen']").val();
+	
+	var s = num.test(length);
+	if(s==false){
+		$.dialog.notice({icon:'error',content:'请输入长度为1-9之间的数字',time:3});
+		return;
+	}
+	var eslength=$('#zeroRole .esselected').attr("eslength");
+	if(length*1>eslength*1){
+		$.dialog.notice({icon:'error',content:'字段补零长度应小于等于字段的长度'+eslength,time:3});
+		return;
+		}
+	
+	var html = $('#zeroRole .esselected').html();
+	html+='|'+length;
+	$('#zeroRole .esselected').html(html);
+	$('#zeroRole .esselected').appendTo(' #zerosaveRole');
+});
+//置顶
+$("#zerotop").die().live('click',function(){
+	if($("#zerosaveRole .esselected").html()==$('#zerosaveRole li:eq(0)').html()){
+		return;
+	}
+	$('#zerosaveRole li:eq(0)').before($("#zerosaveRole .esselected"));
+});
+//置底
+$("#zerobottom").die().live('click',function(){
+	if($("#zerosaveRole .esselected").html()==$('#zerosaveRole li:last').html()){
+		return;
+	}
+	$('#zerosaveRole li:last').after($("#zerosaveRole .esselected"));
+});
+//上移
+$("#zeroup").die().live('click',function(){
+	var index=$('#zerosaveRole .esselected').index()-1;
+	//guolanrui 20141014 添加index的判断，避免在IE8下选择最上的字段上移时字段消失BUG：1352
+	if(index>-1){
+		$('#zerosaveRole li:eq('+index+')').before($("#zerosaveRole .esselected"));
+	}	
+});
+//下移
+$("#zerodown").die().live('click',function(){
+	var index=$('#zerosaveRole .esselected').index()+1;
+	$('#zerosaveRole li:eq('+index+')').after($("#zerosaveRole .esselected"));
+});
+
+
+$('#zerosaveRole li').die().live('dblclick',function (){
+	var html = $(this).html();
+	var newhtml = html.replace(ex,"");
+	$(this).html(newhtml);
+	$('#zeroRole').append($(this));
+});
+//筛选
+function show(value,position)
+{
+	if($.trim(value)==''){
+		$('#zeroRole li').show();
+		$('#zerosaveRole li').show();
+		return;
+	}
+	if(position=='left' && $.trim(value)!='')
+	{
+		
+		$('#zeroRole li').hide();
+		var liObj=$('#zeroRole li:contains('+value+')').show();
+		$('#zeroRole').append(liObj);
+	}else if(position=='right' && $.trim(value)!='')
+	{
+		$('#zerosaveRole li').hide();
+		var liObj=$('#zerosaveRole li:contains('+value+')').show();
+		$('#zerosaveRole').append(liObj);
+	}else{
+		return;
+	}
+}
+</script>

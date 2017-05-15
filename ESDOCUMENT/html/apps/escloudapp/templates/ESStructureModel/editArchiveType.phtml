@@ -1,0 +1,19 @@
+<form id="addArchiveType" action=""	method="post">
+	<div class="estransfer">
+		<ul>
+			<li>
+				<span>唯一标识<font color="red" size="3">*</font></span>
+				<input  type="text" name="SKUNumber" readonly value="<?php echo $data[1];?>" title = "唯一标识只能以字母、数字和下划线组成。">
+				<input type="hidden" name="id" value="<?php echo $data[0];?>"  > 
+			</li>
+			<li>
+				<span>类型名称<font color="red" size="3">*</font></span>
+				<input type="text" name="className" verify="unspecial/100/1/0" value="<?php echo $data[2];?>">
+			</li>
+			<li >
+				<span>备注</span>
+				<textarea name="description" verify="text/250/0/0" style="width:158px;height:50px;float:left"><?php echo $data[3];?></textarea>
+			</li>
+		</ul>
+	</div>
+</form> 

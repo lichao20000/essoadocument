@@ -1,0 +1,1697 @@
+<script type="text/javascript" >
+$(document).ready(function(){
+	// 填充条件
+    var conditions = <?php echo json_encode($conditions);?>;
+    $.each(conditions, function(k, v){
+        var $field = $("#field_"+v.field);
+        //$field.val(v.pkgpath);
+        $field.val(function(){
+			return this.value + v.pkgpath + '  ';
+        });
+        $field.attr("sId", v.structureid);
+        $field.attr("conditions", v.conditions == null?"":v.conditions);
+    });
+    // 标签页处理
+    var $div_li =$("div.tab_menu ul li");
+    $div_li.click(function(){
+		$(this).addClass("selected")            
+			   .siblings().removeClass("selected"); 
+	    var index =  $div_li.index(this); 
+		$("div.tab_box > div")   	
+				.eq(index).show()  
+				.siblings().hide();
+	}).hover(function(){
+		$(this).addClass("hover");
+	},function(){
+		$(this).removeClass("hover");
+	});
+	// 生成树目录
+	var curSelectNode;
+	var treesetting = {
+		view: {dblClickExpand: false,showLine: false},
+		data: {simpleData: {enable: true}},
+		async:{autoParam:['id'],enable:true,url:$.appClient.generateUrl({ESIdentify : "getTree", status:4}, 'x')},
+		callback: {onClick: treeClick}
+	};
+	function treeClick(e, treeId, treeNode){
+		var treeObj = $.fn.zTree.getZTreeObj("archivetree");
+		treeObj.expandNode(treeNode);
+		curSelectNode = treeNode;
+	}
+	$.getJSON($.appClient.generateUrl({
+		ESIdentify : "getTree",status:4
+	}, 'x'), function(zNodes) {
+		$.fn.zTree.init($("#archivetree"), treesetting, zNodes);
+
+	});
+	// 输入框事件处理
+	var curInput;
+	$("#tab_box").find("input[type='text']").each(function(i, input){
+		$(input).focus(function(){
+			if(curInput) $(curInput).css("background-color", "#F7F7F7");
+			curInput = this;
+			$(this).css("background-color", "#0FFFFF");
+		});
+	});
+	// 设置对应按钮事件
+	$("#setRelationBtn").click(function(){
+		if(curInput){
+			if(curSelectNode && curSelectNode.sId*1 > 0){
+				var yearId = $("#year_id").val()*1;
+				var field = $(curInput).attr("id").substring(6);
+				var condition = {field:field, pkgpath:curSelectNode.path, structureid:curSelectNode.sId};
+				$.post($.appClient.generateUrl({ESYearlyReport:"setRelationCondition", yearId:yearId}, "x"), {condition:condition}, function(data){
+					if(data){
+						$(curInput).attr("sId",curSelectNode.sId);
+						$(curInput).attr("conditions","");
+						$(curInput).val(data);
+						$.dialog.notice({content:"设置对应操作成功",icon:"success", time:2});
+					} else {
+						$.dialog.notice({content:"设置条件操作失败",icon:"error", ok:true, time:2});
+					}
+				}, "json");
+			} else {
+				$.dialog.notice({content:"请选择要设置对应的档案库结构节点",icon:"warning", time:2});
+			}
+		} else {
+			$.dialog.notice({content:"请选择要设置对应的统计项",icon:"warning", time:2});
+		}
+	});
+	// 取消对应按钮事件
+	$("#cancelRelationBtn").click(function(){
+		if(curInput){
+			var yearId = $("#year_id").val()*1;
+			var field = $(curInput).attr("id").substring(6);
+			$.post($.appClient.generateUrl({ESYearlyReport:"cancelRelation"}, "x"), {yearId:yearId, field:field}, function(data){
+				if(data){
+					$(curInput).val("");
+					$(curInput).attr("sId","");
+					$.dialog.notice({content:"取消对应设置操作成功",icon:"success", time:2});
+				} else {
+					$.dialog.notice({content:"取消对应设置操作失败",icon:"error", ok:true, time:2});
+				}
+			}, "json");
+		} else {
+			$.dialog.notice({content:"请选择要设置对应的统计项",icon:"warning", time:2});
+		}
+	});
+	// 设置统计条件
+	$("#statConditionBtn").click(function(){
+		if(curInput){
+			if(curSelectNode && curSelectNode.sId*1 > 0){
+				var yearId = $("#year_id").val()*1;
+				var field = $(curInput).attr("id").substring(6);
+				var condition = {field:field, pkgpath:curSelectNode.path, structureid:curSelectNode.sId};
+				$.post($.appClient.generateUrl({ESYearlyReport:"setRelationCondition", yearId:yearId}, "x"), {condition:condition}, function(data){
+					if($(curInput).val()==data){
+						var yearId = $("#year_id").val()*1;
+						var pkgpath = $(curInput).val();
+						var field = $(curInput).attr("id").substring(6);
+						var conditions = $(curInput).attr("conditions");
+						if(pkgpath.length > 0) {
+							var url = $.appClient.generateUrl({ESYearlyReport:'statistic'},'x');
+							$.ajax({
+								url:url,
+								type:'post',
+								data:"yearid=" + yearId + "&field=" + field,
+								success:function(data){
+									var conditionDialog = $.dialog({
+										title:'设置统计条件',
+						    			width:"600px",
+						    			height:"300px",
+						    			padding:"0px",
+						    	   		fixed:true,
+						    	    	resize: true,
+						    	    	okVal:'保存',
+									    cancelVal: '关闭',
+									    //button: [{id:'delCondition', name: '删除', callback: function(){delCondition(structureid);return false;}}],
+									    cancel: true,
+							    		content:data,
+							    		ok:function(){
+							    			var checkboxObj = $(":checkbox",$('#statistic'));
+							    			var newConditions = [];
+							    			checkboxObj.each(function(i){
+									    		var trObj=$(this).closest('tr');
+										    	var tval = $("input[type='text']",trObj).val();
+										    	var tvid = $("input[type='checkbox']",trObj).val();
+										    	if(tval){
+										    		newConditions.push( tvid + '|' + tval );
+											    }
+										    });
+							    			$.post($.appClient.generateUrl({ESYearlyReport:"savecondition"}, "x"), {condition:newConditions}, function(result){
+												if(result){
+													//$(curInput).attr("conditions", newConditions);
+													$.dialog.notice({content:"设置对应统计条件操作成功",icon:"success", time:2});
+													conditionDialog.close();
+												} else {
+													$.dialog.notice({content:"设置对应统计条件操作失败",icon:"error", ok:true, time:2});
+												}
+											}, "json");
+											return false;
+								    	}
+									});
+								}
+							});
+						}
+					} else {
+						$.dialog.notice({content:"请先设置对应",icon:"warning", ok:true, time:2});
+					}
+				}, "json");
+			} else {
+				$.dialog.notice({content:"请选择要设置对应的档案库结构节点",icon:"warning", time:2});
+			}
+		}else {
+			$.dialog.notice({content:"请选择统计项",icon:"warning", time:2});
+		}
+	});
+	// 关闭按钮事件
+	$("#yearCloseBtn").click(function(){
+		$.dialog.list["yearConditionDialog"].close();
+	});
+});
+</script>
+<div class="treebox"><ul id="archivetree" class="ztree"></ul></div>
+<div class="tab" style="width: 700px; float: right;">
+	<div class="tab_menu" style="width: 700px;">
+		<ul>
+			<li class="selected">档基 2 表</li>
+			<li>档 基 2 表附表</li>
+		</ul>
+	</div>
+ 	<div class="tab_btn" style="width: 700px;">
+ 		<div class="fbutton"><div><span id="setRelationBtn" class="relation">设置对应</span></div></div>
+ 		<div class="fbutton"><div><span id="cancelRelationBtn" class="cancel">取消对应</span></div></div>
+ 		<div class="fbutton"><div><span id="statConditionBtn" class="condition">统计条件</span></div></div>
+ 		<div class="fbutton"><div><span id="yearCloseBtn" class="close">关闭</span></div></div>
+ 	</div>
+	<div id="tab_box" class="tab_box" style="width: 700px;"> 
+		<input type="hidden" id="year_id" datatype="number" readonly="true" value="<?php echo $yearId?>">
+		<!-- 档基2表 -->
+		<div>
+		  <table width="97%" border="0" cellpadding="0" cellspacing="0" class="topdis">
+            <tr>
+              <td style="border:0px; height:50px; line-height:50px; font-size:20px; font-weight:bold; text-align:center;">档案馆基本情况年报单</td>
+            </tr>
+            <tr>
+              <td width="700"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td width="250" valign="bottom"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="100" height="25" valign="baseline" style="padding-left: 10px; line-height: 25px;">单位类别代码：</td>
+                      <td><!-- <input id="field_unittype" type="text" datatype="text" style="background-color:#F7F7F7;border:1px solid silver;width:140px;"> --></td>
+                    </tr>
+                    <tr>
+                      <td style="padding-left: 10px; line-height: 25px;">编制单位：</td>
+                      <td height="25"><!-- <input id="field_fillunit" type="text" datatype="text" style="background-color:#F7F7F7;border:1px solid silver;width:140px; "> --></td>
+                    </tr>
+                  </table></td>
+                  <td width="200" align="center" valign="bottom" style="padding-bottom:4px;"><input type="text" id="field_fillyear" datatype="text" style="width:30px; background-color:#F7F7F7;border:1px solid silver; text-align:center;" readonly="readonly">年度</td>
+                  <td width="250" align="right"><table width="180" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="60" height="20" align="left">表号：</td>
+                      <td align="left">档基2表</td>
+                    </tr>
+                    <tr>
+                      <td height="20" align="left">制定机关：</td>
+                      <td align="left">国家档案局</td>
+                    </tr>
+                    <tr>
+                      <td height="20" align="left">批准单位：</td>
+                      <td align="left">国家统计局</td>
+                    </tr>
+                    <tr>
+                      <td height="20" align="left">批准文号：</td>
+                      <td align="left">国统制[2012]59号</td>
+                    </tr>
+                    <tr>
+                      <td height="20" align="left">有效期至：</td>
+                      <td align="left">2014年8月</td>
+                    </tr>
+                  </table></td>
+                </tr>
+              </table></td>
+            </tr>
+            <tr>
+              <td width="700" style="text-align: center;"><table width="98%" border="0" cellspacing="0" cellpadding="0" class="topdisborder">
+                <tr>
+                  <td colspan="4" style="text-align: center; font-size: 12px; font-weight: bold;">指标名称</td>
+                  <td style="text-align: center; font-size: 12px; font-weight: bold; width:100px;">代码</td>
+                  <td style="text-align: center; font-size: 12px; font-weight: bold; width:100px;">计量</td>
+                  <td style="text-align: center; font-size: 12px; font-weight: bold; width:140px;">数量</td>
+                </tr>
+                <tr>
+                  <td colspan="4">一、定编</td>
+                  <td style="text-align:center;">1</td>
+                  <td style="text-align:center;">人</td>
+                  <td><input id="field_YC1" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="4">二、现有全部专职人员</td>
+                  <td style="text-align:center;">2</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td style="width:50px;"></td>
+                  <td colspan="3">其中：女性</td>
+                  <td style="text-align:center;">3</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="4">三、现有全部专职人员情况</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>              
+                <tr>
+                  <td rowspan="29">&nbsp;</td>
+                  <td colspan="3">年龄</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>              
+                <tr>
+                  <td rowspan="3" style="width:50px;">&nbsp;</td>
+                  <td colspan="2">50岁及以上</td>
+                  <td style="text-align:center;">4</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">35-49岁</td>
+                  <td style="text-align:center;">5</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">34岁及以下</td>
+                  <td style="text-align:center;">6</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="3">文化程度</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="9">&nbsp;</td>
+                  <td colspan="2">博士研究生</td>
+                  <td style="text-align:center;">7</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">硕士研究生</td>
+                  <td style="text-align:center;">8</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">研究生班研究生</td>
+                  <td style="text-align:center;">9</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">双学士</td>
+                  <td style="text-align:center;">10</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">大学本科</td>
+                  <td style="text-align:center;">11</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">大专</td>
+                  <td style="text-align:center;">12</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">中专</td>
+                  <td style="text-align:center;">13</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">高中</td>
+                  <td style="text-align:center;">14</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">初中及以下</td>
+                  <td style="text-align:center;">15</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="3">档案专业程度</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="7">&nbsp;</td>
+                  <td colspan="2">博士研究生</td>
+                  <td style="text-align:center;">16</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">硕士研究生</td>
+                  <td style="text-align:center;">17</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">研究生班研究生</td>
+                  <td style="text-align:center;">18</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">大学本科</td>
+                  <td style="text-align:center;">19</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">大专</td>
+                  <td style="text-align:center;">20</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">中专</td>
+                  <td style="text-align:center;">21</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">职业高中</td>
+                  <td style="text-align:center;">22</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="3">档案干部专业技术职务</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="5">&nbsp;</td>
+                  <td colspan="2">研究馆员</td>
+                  <td style="text-align:center;">23</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">副研究馆员</td>
+                  <td style="text-align:center;">24</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">馆员</td>
+                  <td style="text-align:center;">25</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">助理馆员</td>
+                  <td style="text-align:center;">26</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">管理员</td>
+                  <td style="text-align:center;">27</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="3">接受在职培训教</td>
+                  <td style="text-align:center;">28</td>
+                  <td style="text-align:center;">人</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="4">四、事业费</td>
+                  <td style="text-align:center;">29</td>
+                  <td style="text-align:center;">万元</td>
+                  <td><input id="field_YC29" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="4">五、馆藏档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="14">&nbsp;</td>
+                  <td colspan="3">全宗</td>
+                  <td style="text-align:center;">30</td>
+                  <td style="text-align:center;">个</td>
+                  <td><input id="field_YC30" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">案卷</td>
+                  <td style="text-align:center;">31</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC31" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="3">案卷排架长度</td>
+                  <td style="text-align:center;">32</td>
+                  <td style="text-align:center;">米</td>
+                  <td><input id="field_YC32" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">以件为保管单位档案</td>
+                  <td style="text-align:center;">33</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC33" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="3">以件为保管单位档案排架长度</td>
+                  <td style="text-align:center;">34</td>
+                  <td style="text-align:center;">米</td>
+                  <td><input id="field_YC34" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">未整理零散文件排架长度</td>
+                  <td style="text-align:center;">35</td>
+                  <td style="text-align:center;">米</td>
+                  <td><input id="field_YC35" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="3">录音磁带、录像磁带、影片档案</td>
+                  <td style="text-align:center;">36</td>
+                  <td style="text-align:center;">盘</td>
+                  <td><input id="field_YC36" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">照片档案</td>
+                  <td style="text-align:center;">37</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC37" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="3">底图</td>
+                  <td style="text-align:center;">38</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC38" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">微缩胶片</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="3">&nbsp;</td>
+                  <td colspan="2">平片</td>
+                  <td style="text-align:center;">39</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC39" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="2">开窗卡</td>
+                  <td style="text-align:center;">40</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC40" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="2">卷片</td>
+                  <td style="text-align:center;">41</td>
+                  <td style="text-align:center;">万幅</td>
+                  <td><input id="field_YC41" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="3">实物档案</td>
+                  <td style="text-align:center;">42</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC42" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="4">六、馆藏资料</td>
+                  <td style="text-align:center;">43</td>
+                  <td style="text-align:center;">册</td>
+                  <td><input id="field_YC43" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="4">七、本年进馆档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="12">&nbsp;</td>
+                  <td colspan="3">接收档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="5">&nbsp;</td>
+                  <td colspan="2">案卷</td>
+                  <td style="text-align:center;">44</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC44" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="2">以件为保管单位档案</td>
+                  <td style="text-align:center;">45</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC45" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="2">录音磁带、录像磁带、影片档案</td>
+                  <td style="text-align:center;">46</td>
+                  <td style="text-align:center;">盘</td>
+                  <td><input id="field_YC46" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="2">照片档案</td>
+                  <td style="text-align:center;">47</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC47" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="2">底图</td>
+                  <td style="text-align:center;">48</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC48" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="3">征集档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="5">&nbsp;</td>
+                  <td colspan="2">案卷</td>
+                  <td style="text-align:center;">49</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC49" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="2">以件为保管单位档案</td>
+                  <td style="text-align:center;">50</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC50" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="2">录音磁带、录像磁带、影片档案</td>
+                  <td style="text-align:center;">51</td>
+                  <td style="text-align:center;">盘</td>
+                  <td><input id="field_YC51" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="2">照片档案</td>
+                  <td style="text-align:center;">52</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC52" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="2">底图</td>
+                  <td style="text-align:center;">53</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC53" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="4" rowspan="2">八、接受寄存档案</td>
+                  <td style="text-align:center;">54</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC54" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">55</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC55" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="4">九、本年销毁档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="5">&nbsp;</td>
+                  <td colspan="3">案卷</td>
+                  <td style="text-align:center;">56</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC56" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="3">以件为保管单位档案</td>
+                  <td style="text-align:center;">57</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC57" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">录音磁带、录像磁带、影片档案</td>
+                  <td style="text-align:center;">58</td>
+                  <td style="text-align:center;">盘</td>
+                  <td><input id="field_YC58" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="3">照片档案</td>
+                  <td style="text-align:center;">59</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC59" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="3">底图</td>
+                  <td style="text-align:center;">60</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC60" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td colspan="4">十、馆藏档案的历史分期</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="11">&nbsp;</td>
+                  <td colspan="3" rowspan="2">建国前档案</td>
+                  <td style="text-align:center;">61</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC61" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">62</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC62" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td rowspan="7">&nbsp;</td>
+                  <td colspan="2">明清以前档案</td>
+                  <td style="text-align:center;">63</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC63" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">明清档案</td>
+                  <td style="text-align:center;">64</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC64" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">65</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC65" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">民国档案</td>
+                  <td style="text-align:center;">66</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC66" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td style="text-align:center;">67</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC67" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">革命历史档案</td>
+                  <td style="text-align:center;">68</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC68" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">69</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC69" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3" rowspan="2">建国后档案</td>
+                  <td style="text-align:center;">70</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC70" datatype="number" type="text" ></td>
+                </tr>               
+                <tr>
+                  <td style="text-align:center;">71</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC71" datatype="number" type="text" ></td>
+                </tr>
+                <tr>
+                  <td colspan="4">十一、档案编目情况</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="13">&nbsp;</td>
+                  <td colspan="3">手工目录</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="9" style="width:50px;">&nbsp;</td>
+                  <td colspan="2">案卷目录</td>
+                  <td style="text-align:center;">72</td>
+                  <td style="text-align:center;">本</td>
+                  <td><input id="field_YC72" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="2">全引目录</td>
+                  <td style="text-align:center;">73</td>
+                  <td style="text-align:center;">本</td>
+                  <td><input id="field_YC73" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2">归档文件目录</td>
+                  <td style="text-align:center;">74</td>
+                  <td style="text-align:center;">本</td>
+                  <td><input id="field_YC74" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2">专题目录</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="2">&nbsp;</td>
+                  <td>薄式</td>
+                  <td style="text-align:center;">75</td>
+                  <td style="text-align:center;">本</td>
+                  <td><input id="field_YC75" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td>卡片式</td>
+                  <td style="text-align:center;">76</td>
+                  <td style="text-align:center;">本</td>
+                  <td><input id="field_YC76" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2">重要文件目录</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="2">&nbsp;</td>
+                  <td>薄式</td>
+                  <td style="text-align:center;">77</td>
+                  <td style="text-align:center;">本</td>
+                  <td><input id="field_YC77" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td>卡片式</td>
+                  <td style="text-align:center;">78</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YC78" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">机读目录</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="2">&nbsp;</td>
+                  <td colspan="2">案卷级</td>
+                  <td style="text-align:center;">79</td>
+                  <td style="text-align:center;">万条</td>
+                  <td><input id="field_YC79" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2">文件级</td>
+                  <td style="text-align:center;">80</td>
+                  <td style="text-align:center;">万条</td>
+                  <td><input id="field_YC80" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">十二、开放档案情况</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td rowspan="11">&nbsp;</td>
+                  <td colspan="3">建国前档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="3">&nbsp;</td>
+                  <td colspan="2">全宗</td>
+                  <td style="text-align:center;">81</td>
+                  <td style="text-align:center;">个</td>
+                  <td><input id="field_YC81" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="2">案卷</td>
+                  <td style="text-align:center;">82</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC82" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2">以件为保管单位档案</td>
+                  <td style="text-align:center;">83</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC83" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">建国后档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="3">&nbsp;</td>
+                  <td colspan="2">全宗</td>
+                  <td style="text-align:center;">84</td>
+                  <td style="text-align:center;">个</td>
+                  <td><input id="field_YC84" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="2">案卷</td>
+                  <td style="text-align:center;">85</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC85" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2">以件为保管单位档案</td>
+                  <td style="text-align:center;">86</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC86" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">开放档案目录</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="2">&nbsp;</td>
+                  <td colspan="2">案卷级</td>
+                  <td style="text-align:center;">87</td>
+                  <td style="text-align:center;">万条</td>
+                  <td><input id="field_YC87" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="2">文件级</td>
+                  <td style="text-align:center;">88</td>
+                  <td style="text-align:center;">万条</td>
+                  <td><input id="field_YC88" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">十三、本年利用档案人次</td>
+                  <td style="text-align:center;">89</td>
+                  <td style="text-align:center;">人次</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td rowspan="2">&nbsp;</td>
+                  <td rowspan="2">&nbsp;</td>
+                  <td colspan="2">其中：台港澳同胞</td>
+                  <td style="text-align:center;">90</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YC90" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2">外国人</td>
+                  <td style="text-align:center;">91</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YC91" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="4" rowspan="2">十四、本年利用档案</td>
+                  <td style="text-align:center;">92</td>
+                  <td style="text-align:center;">卷次</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">93</td>
+                  <td style="text-align:center;">件次</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td rowspan="10">&nbsp;</td>
+                  <td colspan="3">所属时期</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="4">&nbsp;</td>
+                  <td colspan="2" rowspan="2">建国前档案</td>
+                  <td style="text-align:center;">94</td>
+                  <td style="text-align:center;">卷次</td>
+                  <td><input id="field_YC94" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td style="text-align:center;">95</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YC95" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">建国后档案</td>
+                  <td style="text-align:center;">96</td>
+                  <td style="text-align:center;">卷次</td>
+                  <td><input id="field_YC96" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td style="text-align:center;">97</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YC97" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3">利用者类别</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td rowspan="4">&nbsp;</td>
+                  <td colspan="2" rowspan="2">单位</td>
+                  <td style="text-align:center;">98</td>
+                  <td style="text-align:center;">卷次</td>
+                  <td><input id="field_YC98" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">99</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YC99" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="2" rowspan="2">个人</td>
+                  <td style="text-align:center;">100</td>
+                  <td style="text-align:center;">卷次</td>
+                  <td><input id="field_YC100" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">101</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YC101" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="4">十五、政府信息公开查阅场所</td>
+                  <td style="text-align:center;">102</td>
+                  <td style="text-align:center;">个</td>
+                  <td><input id="field_YC102" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4" rowspan="2">十六、本年利用现行文件</td>
+                  <td style="text-align:center;">103</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YC103" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td style="text-align:center;">104</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YC104" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4" rowspan="2">十七、本年利用资料</td>
+                  <td style="text-align:center;">105</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YC105" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td style="text-align:center;">106</td>
+                  <td style="text-align:center;">册次</td>
+                  <td><input id="field_YC106" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">十八、爱国主义教育基地</td>
+                  <td style="text-align:center;">107</td>
+                  <td style="text-align:center;">个</td>
+                  <td><input id="field_YC107" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="4">十九、本年举办档案展览</td>
+                  <td style="text-align:center;">108</td>
+                  <td style="text-align:center;">个</td>
+                  <td><input id="field_YC108" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>基本陈列</td>
+                  <td colspan="2">&nbsp;</td>
+                  <td style="text-align:center;">109</td>
+                  <td style="text-align:center;">个</td>
+                  <td><input id="field_YC109" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="4">二十、本年参观档案展览人次</td>
+                  <td style="text-align:center;">110</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YC110" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">二十一、本年编研档案资料</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td rowspan="4">&nbsp;</td>
+                  <td colspan="3" rowspan="2">公开出版</td>
+                  <td style="text-align:center;">111</td>
+                  <td style="text-align:center;">种</td>
+                  <td><input id="field_YC111" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">112</td>
+                  <td style="text-align:center;">万字</td>
+                  <td><input id="field_YC112" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="3" rowspan="2">内部参考</td>
+                  <td style="text-align:center;">113</td>
+                  <td style="text-align:center;">种</td>
+                  <td><input id="field_YC113" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">114</td>
+                  <td style="text-align:center;">万字</td>
+                  <td><input id="field_YC114" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="4">二十二、国家重点档案抢救情况</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="6">&nbsp;</td>
+                  <td colspan="3" rowspan="2">应抢救档案总数</td>
+                  <td style="text-align:center;">115</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC115" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td style="text-align:center;">116</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC116" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3" rowspan="2">已抢救档案数量</td>
+                  <td style="text-align:center;">117</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC117" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">118</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC118" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td rowspan="2">&nbsp;</td>
+                  <td colspan="2" rowspan="2">其中：本年度抢救档案数量</td>
+                  <td style="text-align:center;">119</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YC119" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">120</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YC120" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">二十三、档案馆总建筑面积</td>
+                  <td style="text-align:center;">121</td>
+                  <td style="text-align:center;">平方米</td>
+                  <td><input id="field_YC121" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td rowspan="4">&nbsp;</td>
+                  <td colspan="3">档案库房建筑面积</td>
+                  <td style="text-align:center;">122</td>
+                  <td style="text-align:center;">平方米</td>
+                  <td><input id="field_YC122" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3">后库面积</td>
+                  <td style="text-align:center;">123</td>
+                  <td style="text-align:center;">平方米</td>
+                  <td><input id="field_YC123" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3">档案技术用房建筑面积</td>
+                  <td style="text-align:center;">124</td>
+                  <td style="text-align:center;">平方米</td>
+                  <td><input id="field_YC124" datatype="number" type="text"></td>
+                </tr>               
+                <tr>
+                  <td colspan="3">对外服务用房建筑面积</td>
+                  <td style="text-align:center;">125</td>
+                  <td style="text-align:center;">平方米</td>
+                  <td><input id="field_YC125" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">二十四、馆内设备</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="15">&nbsp;</td>
+                  <td colspan="3">微缩设备</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td rowspan="5">&nbsp;</td>
+                  <td colspan="2">缩微摄影机</td>
+                  <td style="text-align:center;">126</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">冲 洗 机</td>
+                  <td style="text-align:center;">127</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">拷 贝 机</td>
+                  <td style="text-align:center;">128</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">阅 读 器</td>
+                  <td style="text-align:center;">129</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="2">阅读复印机</td>
+                  <td style="text-align:center;">130</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="3">电子计算机</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="2">&nbsp;</td>
+                  <td colspan="2">服 务 器</td>
+                  <td style="text-align:center;">131</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="2">微    机</td>
+                  <td style="text-align:center;">132</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="3">复印机</td>
+                  <td style="text-align:center;">133</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="3">空调机</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td>&nbsp;</td>
+                  <td colspan="2">集中式</td>
+                  <td style="text-align:center;">134</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td colspan="2">分散式</td>
+                  <td style="text-align:center;">135</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="3">去湿机</td>
+                  <td style="text-align:center;">136</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>               
+                <tr>
+                  <td colspan="3">消毒设备</td>
+                  <td style="text-align:center;">137</td>
+                  <td style="text-align:center;">台</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td colspan="4" style="border: 0px;">单位负责人：<input id="field_leader" type="text" datatype="text"></td>
+                  <td style="text-align:center;border: 0px;"></td>
+                  <td colspan="2" align="right" style="text-align:right;border: 0px;">填报日期：<input id="field_dateactualquote" type="text" datatype="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4" style="border: 0px;">填表人：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="field_lister" type="text" datatype="text"></td>
+                  <td style="text-align:center;border: 0px;"></td>
+                  <td colspan="2" style="text-align:right;border: 0px;">联系电话：<input id="field_tel" type="text" datatype="text"></td>
+                </tr>               
+              </table></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+            </tr>
+          </table>
+		</div>
+		<!-- /档基2表 -->
+		<!-- 档基2表附表 -->
+		<div class="hide">
+		<table width="97%" border="0" cellpadding="0" cellspacing="0" class="topdis">
+            <tr>
+              <td colspan="6" style="border:0px; height:50px; line-height:50px; font-size:20px; font-weight:bold; text-align:center;">档案馆数字档案基本情况年报</td>
+            </tr>
+            <tr>
+              <td width="700" colspan="6"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td width="250" valign="bottom"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <!-- <td width="100" height="25" valign="baseline" style="padding-left: 10px; line-height: 25px;">单位类别代码：</td> -->
+                      <!-- <td><input id="field_S_unittype" type="text" datatype="text" style="background-color:#F7F7F7;border:1px solid silver;width:140px;" readonly="readonly"></td> -->
+                    </tr>
+                    <tr>
+                      <!--<td style="padding-left: 10px; line-height: 25px;">编制单位：</td> -->
+                      <!--<td height="25"><input id="field_S_fillunit" type="text" datatype="text" style="background-color:#F7F7F7;border:1px solid silver;width:140px; " readonly="readonly"></td> -->
+                    </tr>
+                  </table></td>
+                  <!--  <td width="200" align="center" valign="bottom" style="padding-bottom:4px;"><input type="text" id="field_S_fillyear" datatype="text" style="width:30px; background-color:#F7F7F7;border:1px solid silver; text-align:center;" readonly="readonly" >年度</td> -->
+                  <td width="250" align="right"><table width="180" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="60" height="20" align="left">表号：</td>
+                      <td align="left">档基2表附表</td>
+                    </tr>
+                    <tr>
+                      <td height="20" align="left">制定机关：</td>
+                      <td align="left">国家案局</td>
+                    </tr>
+                    <tr>
+                      <td height="20" align="left">批准单位：</td>
+                      <td align="left">国家统计局</td>
+                    </tr>
+                    <tr>
+                      <td height="20" align="left">批准文号：</td>
+                      <td align="left">国统制[2012]59号</td>
+                    </tr>
+                    <tr>
+                      <td height="20" align="left">有效期至：</td>
+                      <td align="left">2014年8月</td>
+                    </tr>
+                  </table></td>
+                </tr>
+              </table></td>
+            </tr>
+            <tr>
+              <td width="700" colspan="6" style="text-align: center;"><table width="98%" border="0" cellspacing="0" cellpadding="0" class="topdisborder">
+                <tr>
+                  <td colspan="4" style="text-align: center; font-size: 12px; font-weight: bold;">指标名称</td>
+                  <td style="text-align: center; font-size: 12px; font-weight: bold; width:100px;">代码</td>
+                  <td style="text-align: center; font-size: 12px; font-weight: bold; width:100px;">计量</td>
+                  <td style="text-align: center; font-size: 12px; font-weight: bold; width:140px;">数量</td>
+                </tr>
+                <tr>
+                  <td colspan="4">一、数字档案馆</td>
+                  <td style="text-align:center;">1</td>
+                  <td style="text-align:center;">个</td>
+                  <td><input id="field_YS1" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">二、馆藏数字档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="21" style="width:50px;">&nbsp;</td>
+                  <td colspan="3">归档电子文件</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="6" style="width:50px;">&nbsp;</td>
+                  <td colspan="2" rowspan="2">电子文件</td>
+                  <td style="text-align:center;">2</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YS2" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">3</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS3" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">数码照片</td>
+                  <td style="text-align:center;">4</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YS4" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">5</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS5" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">数字录音、数字录像</td>
+                  <td style="text-align:center;">6</td>
+                  <td style="text-align:center;">小时</td>
+                  <td><input id="field_YS6" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">7</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS7" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3">数字化馆藏档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="7">&nbsp;</td>
+                  <td colspan="2">纸质文档</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="6" style="width:50px;">&nbsp;</td>
+                  <td rowspan="3">案卷</td>
+                  <td style="text-align:center;">8</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YS8" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">9</td>
+                  <td style="text-align:center;">幅</td>
+                  <td><input id="field_YS9" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">10</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS10" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td rowspan="3">以件为保管单位档案</td>
+                  <td style="text-align:center;">11</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YS11" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">12</td>
+                  <td style="text-align:center;">幅</td>
+                  <td><input id="field_YS12" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">13</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS13" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3" rowspan="2">照片档案</td>
+                  <td style="text-align:center;">14</td>
+                  <td style="text-align:center;">小时</td>
+                  <td><input id="field_YS14" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">15</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS15" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3" rowspan="2">录音磁带、录像磁带、影片档案</td>
+                  <td style="text-align:center;">16</td>
+                  <td style="text-align:center;">小时</td>
+                  <td><input id="field_YS16" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">17</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS17" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3" rowspan="2">其它</td>
+                  <td style="text-align:center;">18</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YS18" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">19</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS19" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">三、本年进馆数字档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="21">&nbsp;</td>
+                  <td colspan="3">归档电子文件</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="6">&nbsp;</td>
+                  <td colspan="2" rowspan="2">电子文件</td>
+                  <td style="text-align:center;">20</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YS20" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">21</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS21" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">数码照片</td>
+                  <td style="text-align:center;">22</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YS22" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">23</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS23" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">数字录音、数字录像</td>
+                  <td style="text-align:center;">24</td>
+                  <td style="text-align:center;">小时</td>
+                  <td><input id="field_YS24" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">25</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS25" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3">数字化馆藏档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="13">&nbsp;</td>
+                  <td colspan="2">纸质档案</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="6">&nbsp;</td>
+                  <td rowspan="3">案卷</td>
+                  <td style="text-align:center;">26</td>
+                  <td style="text-align:center;">卷</td>
+                  <td><input id="field_YS26" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">27</td>
+                  <td style="text-align:center;">幅</td>
+                  <td><input id="field_YS27" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">28</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS28" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td rowspan="3">以件为保管单位档案</td>
+                  <td style="text-align:center;">29</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YS29" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">30</td>
+                  <td style="text-align:center;">幅</td>
+                  <td><input id="field_YS30" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">31</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS31" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">照片档案</td>
+                  <td style="text-align:center;">32</td>
+                  <td style="text-align:center;">张</td>
+                  <td><input id="field_YS32" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">33</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS33" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">录音磁带、录像磁带、影片档案</td>
+                  <td style="text-align:center;">34</td>
+                  <td style="text-align:center;">小时</td>
+                  <td><input id="field_YS34" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">35</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS35" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">其它</td>
+                  <td style="text-align:center;">36</td>
+                  <td style="text-align:center;">件</td>
+                  <td><input id="field_YS36" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">37</td>
+                  <td style="text-align:center;">GB</td>
+                  <td><input id="field_YS37" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4" rowspan="2">四、本年利用数字档案</td>
+                  <td style="text-align:center;">38</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YS38" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">39</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YS39" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td rowspan="10">&nbsp;</td>
+                  <td colspan="3">数字档案类别</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="4">&nbsp;</td>
+                  <td colspan="2" rowspan="2">归档电子文件</td>
+                  <td style="text-align:center;">40</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YS40" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">41</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YS41" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">数字化馆藏档案</td>
+                  <td style="text-align:center;">42</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YS42" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">43</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YS43" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="3">利用者类别</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                  <td style="text-align:center;">--</td>
+                </tr>
+                <tr>
+                  <td rowspan="4">&nbsp;</td>
+                  <td colspan="2" rowspan="2">单位利用</td>
+                  <td style="text-align:center;">44</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YS44" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">45</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YS45" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="2" rowspan="2">个人利用</td>
+                  <td style="text-align:center;">46</td>
+                  <td style="text-align:center;">人次</td>
+                  <td><input id="field_YS46" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">47</td>
+                  <td style="text-align:center;">件次</td>
+                  <td><input id="field_YS47" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">五、档案网站</td>
+                  <td style="text-align:center;">48</td>
+                  <td style="text-align:center;">个</td>
+                  <td><input id="field_YS48" datatype="number" type="text"></td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td colspan="3">本年IP访问次数</td>
+                  <td style="text-align:center;">49</td>
+                  <td style="text-align:center;">次</td>
+                  <td><input id="field_YS49" datatype="number" type="text"></td>
+                </tr>
+                <!--  
+				<tr>
+                  <td colspan="4" style="border: 0px;">单位负责人：<input name="text7" type="text" id="text7" datatype="number" /></td>
+                  <td style="text-align:center;border: 0px;"></td>
+                  <td colspan="2" align="right" style="text-align:right;border: 0px;">填报日期：                  
+                  <input name="text73" type="text" id="text73" datatype="number" /></td>
+                </tr>
+                <tr>
+                  <td colspan="4" style="border: 0px;">填表人：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="text72" type="text" id="text72" datatype="number" /></td>
+                  <td style="text-align:center;border: 0px;"></td>
+                  <td colspan="2" style="text-align:right;border: 0px;">联系电话：
+                  <input name="text7" type="text" id="text7" datatype="number" /></td>
+                </tr> 
+                -->
+                <tr>
+                  <td colspan="7" style="border:0px;">&nbsp;</td>
+                </tr>
+              </table></td>
+            </tr>
+            <tr>
+              <td colspan="6"></td>
+            </tr>
+          </table>
+		</div>
+		<!-- /档基2表附表 -->
+	</div>
+</div>

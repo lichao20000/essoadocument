@@ -1,0 +1,87 @@
+@CHARSET "UTF-8";
+/*wangbo 20140325*/
+body,html{margin:0px;overflow:hidden;}
+input { margin:0; padding:0;}
+ol,ul{ margin:0; padding:0; list-style-type:none;}
+h2,p,form,table{ margin:0; padding:0; font-weight:normal;}
+#paper{ margin:0 auto;}
+
+#fileEquipGrid img{cursor:pointer;}
+a{
+	text-decoration : none ;
+}
+
+.formBuilder_manager_main {width: 96%;margin-left:2%;}
+.formBuilder_manager_main .formBuilder_model_tree {background-color:#133959;border-radius:5px;width:220px;height:100%;float:left;overflow: auto;margin-right:10px;}
+.formBuilder_manager_main .formBuilder_model_grid {}
+
+
+ 
+.deleteAll{background:url(../img/deleteAll.png) no-repeat 2px center;}
+.warnning{border:solid 2px #f00;}
+
+.esModelType{width:310px;overflow-y:hidden;overflow-x:hidden}
+.esModelType ul{width: 300px;text-align:center;}
+.esModelType ul li{width:270px;margin-left:20px;float:left;margin-top:10px;}
+.esModelType span{width:100px;height:30px;line-height:30px;text-align:left;float:left;}
+.esModelType ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.esModelType ul li select{width:165px;height:25px;float:left;line-height:25px;}
+.esModelType .esbottom{width:100%;float:left;margin-top:20px;}
+.esModelType button{width:60px;height:30px;cursor:pointer}
+
+.formbuilder_public {
+	background: url(../img/application_form.png) no-repeat center left;
+}
+.formbuilder_add {
+	background: url(../img/application_form_add.png) no-repeat center left;
+}
+.formbuilder_delete {
+	background: url(../img/application_form_delete.png) no-repeat center left;
+}
+.formbuilder_stop {
+	background: url(../img/stop.png) no-repeat center left;
+}
+.formbuilder_reRun {
+	background: url(../img/reRun.png) no-repeat center left;
+}
+.formbuilder_copy {
+	background: url(../img/copy.png) no-repeat center left;
+}
+.formbuilder_newWorkFlow {
+	background: url("../img/chart_organisation_add.png") no-repeat center left;
+}
+.formbuilder_addLink {
+	background: url("../img/addLink.png") no-repeat center left;
+}
+.formbuilder_dropLink {
+	background: url("../img/dropLink.png") no-repeat center left;
+}
+.formbuilder_book {
+	background: url(../img/book.png) no-repeat center left;
+}
+.formbuilder_Import {
+	background: url("../img/Grid_Data_Import.gif") no-repeat center left;
+}
+.formbuilder_Exort {
+	background: url("../img/Grid_Data_Export.gif") no-repeat center left;
+}
+.formbuilder_Stat {
+	background: url(../img/formbuilderStat.gif) no-repeat center left;
+}
+
+.formBuilder_manager_main_relation {height: 400px;width: 100%;border-left:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;}
+.formBuilder_manager_main_relation .formBuilder_model_tree {background: #fff;width:150px;height:100%;float:left;overflow: auto;border-top:1px solid #CCCCCC;}
+.formBuilder_manager_main_relation .formBuilder_model_grid {background: #fff;width:800px;height:400px;}
+
+#comboMetadataMainDiv {width: 100%;}
+#comboMetadataMainDiv .comboMetadataTitleDiv {background: #fff;width:600px;height:200px;}
+#comboMetadataMainDiv .comboMetadataDataDiv {background: #fff;width:600px;height:200px;}
+
+.formbuilderMetadata_edit {
+	background: url(../img/edit.jpg) no-repeat center left;
+}
+.formbuilderMetadata_select {
+	background: url(../img/tick.png) no-repeat center left;
+}
+
+.workflow_model_tree {top:30px;left:0; overflow-y: auto; overflow-x: hidden; height: 292px;width: 249px; }

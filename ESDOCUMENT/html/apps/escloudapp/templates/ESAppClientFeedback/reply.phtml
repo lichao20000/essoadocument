@@ -1,0 +1,27 @@
+<!-- yanghuiqiang 20140521 意见反馈回复窗口-->
+
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="replyFeedback" method="post" enctype="multipart/form-data">
+			<table style="height: 100px;">
+				<tr>
+					<td><input type="hidden" name="id" id="id" value="<?php echo $feedback->id;?>"
+						style="width: 380px; height: 0px;" /></td>
+				</tr>
+				<tr>
+					<td>回复内容：</td>
+					<td><textarea name="replyContent" id="name"
+						style="width: 380px; height: 100px;" ></textarea></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+

@@ -1,0 +1,216 @@
+<?php 
+// 是否已登录
+$isLogin = isLogin();
+$loginUrl = "";
+if(!$isLogin) {
+	$ssoAppId = AopConfig::get('sso.appid');
+	$successUrl = urlencode(AopConfig::get('sso.loginurl', url('user/token', true)));
+	$errorUrl = urlencode(AopConfig::get('sso.error'));
+	$baseurl = AopConfig::get('sso.baseurl') ;
+	$returnUrl = isset($_SERVER['HTTP_REFERER']) ? urlencode($_SERVER['HTTP_REFERER']) : '';
+	//登录URL地址
+	$loginUrl = AopConfig::get('sso.login')."?appid=".$ssoAppId."&success=".$successUrl."&error=".$errorUrl."&return=".$returnUrl."&baseurl=".$baseurl;
+}
+global $user;
+$appSList = isset($user->apps) ? $user->apps : array();
+AopCore::loadLibrary('app');
+$appList = AopApp::getList();
+$tagsList = array('专业应用', '数据应用', '工作流程', '其他应用');
+
+$systemInfo = AopApp::getInfo('system');
+$systemInstance = AopApp::getInstance($systemInfo);
+$order = $systemInstance->getProxyInstance('order');
+$grantApps=$order->getGrantAppByUserId($user->id);
+$isadmin=$user->id=='admin';
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:vml="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv=X-UA-Compatible content="IE=EmulateIE9"/>
+	<title>东方飞扬云平台管理系统</title> 
+	<script type="text/javascript" src="<?php echo $tplPath?>/js/jquery.js"></script>
+	<script type="text/javascript" src="<?php echo $tplPath?>/js/jquery.form.js"></script>
+	<script type="text/javascript" src="<?php echo $tplPath?>/js/jquery-ui.js"></script>
+	<script type="text/javascript" src='<?php echo $tplPath?>/js/jquery.order.show.js'></script>
+	<script type="text/javascript" src='<?php echo $tplPath?>/js/message.js'></script>
+	<script type="text/javascript" src='<?php echo $tplPath?>/messageUI/js/messageui.js'></script>
+	<script type="text/javascript" src='<?php echo $tplPath?>/js/js_ext.js'></script>
+	<link href="<?php echo $tplPath?>/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="<?php echo $tplPath?>/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+	<link href="<?php echo $tplPath?>/css/font-awesome.css" rel="stylesheet"/>
+	<link href="<?php echo $tplPath?>/css/style-responsive.css" rel="stylesheet"/>
+	<link href="<?php echo $tplPath?>/css/style-default.css" rel="stylesheet" id="style_color"/>
+	<link href="<?php echo $tplPath?>/css/jquery-ui.css" rel="stylesheet" id="style_color"/>
+	<link href="<?php echo $tplPath?>/css/header.css" rel="stylesheet"/>
+	<script>
+		App = {};
+		ChinaUnicom = {};
+		/** rongying 20150430 获取当前登陆的系统名称，显示在页面上 **/
+		$(document).ready(function() {
+			function getAppName(){
+				var scripts = document.getElementsByTagName('script');
+				var me = null;
+				for (i in scripts) {
+					// 如果通过第三方脚本加载器加载本文件，请保证文件名含有"appclient"字符
+					if (scripts[i].src && scripts[i].src.indexOf('appclient') !== -1)
+						me = scripts[i];
+				}
+				// 如果加载的脚本里没有，在获取自己（同步加载可用）
+				me = me || script[script.length - 1];
+				var saasId = me.src.replace(/\\/g, '/').split('baseurl=')[1];
+				saasId = saasId.substring(1,saasId.indexOf("/",2));
+				var apps = eval($("#grantApps").val());
+				for(var i = 0;i<apps.length;i++){
+					if(apps[i]['appid'] == saasId || saasId == 'escloudapp'){
+						var appnameHtml = "<div id='appname' class='btn-"+(i+1)+"'>"+apps[i]['appname']+"</div>";
+						$(".top-menu").after(appnameHtml);
+						return;
+					}
+				}
+			}
+			getAppName();
+		});
+	</script>
+</head>
+
+<!-- BEGIN BODY -->
+<body >
+<?php 
+/** rongying 20150430 将获取的所有服务传给js引用**/
+echo "<input type='hidden' id='grantApps' value='".json_encode($grantApps)."'>";
+?>
+	<div style = "position:absolute;z-index:-1;width:100%;height:100%;left:0px;"> <img src = "<?php echo $tplPath?>/images/body_background.png" style = "width:100%;height:100%;"></img> </div>
+	<div class="header">
+    	<div class="clothe">
+        	<div class="undies">
+            	<div class="logo"><img src="<?php echo $tplPath?>/images/logo.png" /></div>
+                <div class="left-box">
+                	<div class = "goHomeContainer" controller = "ESDefault" action = "index">
+	                	<div class="goHomeLogo" title= "回首页" >
+						</div>
+					</div>
+                    <div class="top-menu">
+                        <span class="ico"></span>
+                        <div class="list" id="page_app_list_container">
+                            <ul>
+    							<?php echo $this->render('page_app.phtml', array('appList' => $appList,'tagsList'=>$tagsList,'grantApps'=>$grantApps,'isadmin'=>$isadmin)) ?>
+		    			    </ul>
+		                        </div>
+		                    </div>
+		                </div>
+		                <div class="toolbar">
+		                    <div class="right-box">
+			                    <div class="msgLogoa" style = "margin-right:20px;" id = "msgLogoa" title= "消息" >
+			                    	<div class = "logoutTextClass">消息</div>
+								</div>
+		                    	<ul class="msgBox" currPage='1' userid="<?php echo $user->id;?>" getSoaMsgUrlForJava="" getSoaMsgUrl=<?php echo url('system/0/getSoaMsgUrl',true);?> downFileUrl=<?php echo url('system/0/updateMessageOver',true);?>>
+									<div class="header_inbox_toggle">
+									</div>
+									<li>
+										<p id="msgHeaderText">您有<span></span>条消息，请查阅！</p><p id="allMessage" class="allMessage"><a href="javascript:void(0)" onclick="allMessageDialog()">查看全部</a></p>
+									</li>
+									<div class="msgs"></div>
+									<li>
+										<div class = "msgDesContainer">
+											<div class = "msgDes">当前第<span class="currPage">1</span>页，共<span class="total">1</span>页</div> 
+											<div class = "msgPageBar">
+												<div id = "firstPage" enable=false>首页</div>
+												<div class = "sperateDes">|</div> 
+												<div id = "prePage" enable=false>上一页</div>
+												<div class = "sperateDes">|</div> 
+												<div id = "nextPage" enable=false>下一页</div>
+												<div class = "sperateDes">|</div>
+												<div id = "lastPage" enable=false>末页</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+		                        <!--<div id="show_date" class="date"></div>
+		                         <div id="show_time" class="time"></div>  -->
+<!-- 		                        <div class="search-box"> -->
+<!-- 		                            <div class="search-input"> -->
+<!-- 		                                <input type="text" class="text" id="mainSearchVal" value="Search..." /> -->
+<!-- 		                                <input type="button" class="btn" id="mainSearchBtn" value=" " /> -->
+<!-- 		                            </div> -->
+<!-- 		                        </div> -->
+		                        <a id = "loginoutSection" class = "loginoutSectionClass" href = "<?php echo url('user/logout') ?>">
+			                        <div id = "loginOutDiv" class = "loginOutClass" ></div>
+			                        <div class = "logoutTextClass">退出</div>
+		                        </a>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    	<div class="cap left"></div>
+		    	<div class="cap right"></div>
+		    </div>
+			<!-- liqiubo 20140922 平移4.0的消息提示框 -->
+<div id="msgDiv" onMouseOver="mouseOver()" onMouseOut="mouseOut()"  style="position:fixed; _position:absolute;float:center;top:-76px;word-break:break-all;z-index:999999;cursor:pointer;">
+	<table border='0' cellspacing='0' cellpadding='0'>
+		<tr>
+			<td width='7px' height='23px' style="width:7px;height:23px;background:url('<?php echo $tplPath?>/messageUI/images/top1.gif');">
+			</td>
+			<td height='23px' width='40px' style="background:url('<?php echo $tplPath?>/messageUI/images/top.gif') repeat-x;">
+			</td>
+			<td width='17px' height='23px' style="background:url('<?php echo $tplPath?>/messageUI/images/top2.gif') repeat-x;">
+			</td>
+			<td  height='23px' style="background:url('<?php echo $tplPath?>/messageUI/images/top.gif') repeat-x;">
+			</td>
+			<td width='6px' height='23px' style="background:url('<?php echo $tplPath?>/messageUI/images/top3.gif');">
+			</td>
+			<!-- xiaoxiong 20130615 添加关闭按钮 -->
+			<td width='16px' height='16px'>
+				<img id='msgDivCloseButton' onclick='closeMsgDivFun()' title='关闭' style='display:none;' src='<?php echo $tplPath?>/messageUI/images/close.png' >
+			</td>
+		</tr>
+		<tr>
+			<td style="width:7px;background:url('<?php echo $tplPath?>/messageUI/images/left.gif');">
+			</td>
+			<td style='background-color:#ffffff;' colspan="2" align="left">
+				<img id='messageUIImg' SRC='<?php echo $tplPath?>/messageUI/images/success.png' WIDTH='40px' height='40px'>
+			</td>
+			<td style='background-color:#ffffff;margin:0px;padding:0px;padding-right:4px;' valign="middle">
+				<!-- xiaoxiong 20130511 修改提示字体大小和居中显示 --> 
+				<div id='msgContentDiv' style='font-size: 12px;'>
+				</div>
+			</td>
+			<td style="width:6px;background:url('<?php echo $tplPath?>/messageUI/images/right.gif');">
+			</td>
+		</tr>
+		<tr>
+			<td width='7px' height='7px' style="background:url('<?php echo $tplPath?>/messageUI/images/bottom1.gif');">
+			</td>
+			<td height='7px' style="background:url('<?php echo $tplPath?>/messageUI/images/bottom.gif') repeat-x;">
+			</td>
+			<td height='7px' style="background:url('<?php echo $tplPath?>/messageUI/images/bottom.gif') repeat-x;">
+			</td>
+			<td height='7px' style="background:url('<?php echo $tplPath?>/messageUI/images/bottom.gif') repeat-x;">
+			</td>
+			<td width='6px' height='7px' style="background:url('<?php echo $tplPath?>/messageUI/images/bottom2.gif');">
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="preMsgShowDiv" title='展开消息' onMouseOver="preMsgShowMouseOver()" onMouseOut="preMsgShowMouseOut()" onclick="preMsgShowClick()"  style="position:fixed; _position:absolute;display:none;float:center;top:0px;word-break:break-all;z-index:999998;height:24px;width:100px;cursor:pointer;background:url('<?php echo $tplPath?>/messageUI/images/showPreMsg.png');">
+<!-- liqiubo 20140922 平移4.0的消息提示框  end-->
+</div>
+<!-- liqiubo 20150129 加入ajax请求提示框 -->
+<div id="loadingMsgDiv" title='正在努力加载中...'  style="display:none;position:fixed; _position:absolute;float:center;top:0px;left:298px;word-break:break-all;z-index:999998;height:24px;width:100px;cursor:pointer;background:url('<?php echo $tplPath?>/messageUI/images/loadbackground.png');">
+ <img src="<?php echo $tplPath?>/messageUI/images/loading.gif" style="width: 16px;height: 16px;position: relative;float: left;margin: 4px 5px 0;"></img><span style="line-height:24px;color:white;">加载中...<span/>
+</div>
+		<?php echo $content ?>
+		<!-- Load javascripts at bottom, this will reduce page load time -->
+	<script type="text/javascript" src="<?php echo $tplPath?>/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src='<?php echo $tplPath?>/js/jquery.nicescroll.js'></script>
+	<script type="text/javascript" src='<?php echo $tplPath?>/js/jquery.scrollTo.min.js'></script>
+	<script type="text/javascript" src="<?php echo $tplPath?>/js/jquery.sparkline.js"></script>
+	<script type="text/javascript" src="<?php echo $tplPath?>/js/jquery.slimscroll.min.js"></script>
+	<script type="text/javascript" src="<?php echo $tplPath?>/js/common-scripts.js"></script>
+	<script type="text/javascript" src="<?php echo $tplPath?>/js/webtoolkit.base64.js"></script>
+	<script type="text/javascript" src='<?php echo $tplPath?>/js/userInfoManager.js'></script>
+	<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

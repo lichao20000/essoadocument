@@ -1,0 +1,290 @@
+<?php
+/**
+ * 参建单位或部门服务代理
+ * @author dengguoqi
+ *
+ */
+class ProxyEsdocumentParticipatory extends AgentProxyAbstract {
+	const SERVICE_NAME = "participatory";
+	const SERVICE_NAME_USER = 'userqueryservice';
+	
+	/**
+	 *
+	 * @author dengguoqi
+	 *         获取参建单位个数
+	 * @return mixed
+	 */
+	public function getCount($pid, $where) {
+		$urlParam = array (
+				'count',
+				$pid 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 分页获取参建单位或部门列表
+	 *
+	 * @param int $page
+	 *        	第几页
+	 * @param int $pre
+	 *        	每页条数
+	 * @param int $pid
+	 *        	父级ID
+	 * @param string $where
+	 *        	条件，where子句，不包括where关键字
+	 */
+	public function getParticipatoryList($page, $pre, $pid, $where) {
+		$urlParam = array (
+				'list',
+				$page,
+				$pre,
+				$pid 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取指定ID的参建单位或部门
+	 *
+	 * @param int $id        	
+	 *
+	 */
+	public function getParticipatoryById($id) {
+		$urlParam = array (
+				'getParticipatoryById',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 指定条件获取参建单位或部门列表
+	 *
+	 * @param unknown $where        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getAllParticipatory($params) {
+		$urlParam = array (
+				'list'
+		); 
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 添加参建单位或部门
+	 *
+	 * @param string $part
+	 *        	参建单位或部门json
+	 */
+	public function addParticipatory($part) {
+		$urlParam = array (
+				'add' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $part, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 修改参建单位或部门
+	 *
+	 * @param string $part
+	 *        	参建单位或部门json
+	 * @return 错误消息，无错误返回空字符串
+	 */
+	public function updateParticipatory($part) {
+		$urlParam = array (
+				'update' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $part, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除参建单位或部门
+	 *
+	 * @param string $ids
+	 *        	参建单位或部门ID数组json
+	 */
+	public function deleteParticipatory($ids) {
+		$userId = $this->getUserId ();
+		$ip = $_SERVER ['REMOTE_ADDR'];
+		$urlParam = array (
+				'delete',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 验证单位部门代码唯一性
+	 *
+	 * @param string $code        	
+	 */
+	public function uniqueCode($code) {
+		$urlParam = array (
+				'uniqueCode' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $code, 'text/plain;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取文控人员列表
+	 *
+	 * @param unknown $param        	
+	 */
+	public function findUserList($param) {
+		$urlParam = array (
+				'findUserList' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_USER, $url, json_encode ( $param ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 验证参建单位唯一性
+	 *
+	 * @param unknown $part        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function uniqueName($part) {
+		$urlParam = array (
+				'uniqueName' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $part ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 添加部门员工
+	 *
+	 * @param unknown $userIds        	
+	 */
+	public function addMember($partId, $userId, $office) {
+		$urlParam = array (
+				'addMember',
+				$partId,
+				$userId,
+				$office 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取部门员工总条数
+	 *
+	 * @param unknown $partId        	
+	 * @param unknown $condition        	
+	 */
+	public function getMemberCount($partId, $condition) {
+		$urlParam = array (
+				'getMemberCount',
+				$partId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $condition ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取部门员工列表
+	 *
+	 * @param unknown $page        	
+	 * @param unknown $rp        	
+	 * @param unknown $partId        	
+	 * @param unknown $condition        	
+	 */
+	public function getMemberList($page, $rp, $partId, $condition) {
+		$urlParam = array (
+				'getMemberList',
+				$page,
+				$rp,
+				$partId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $condition ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除部门员工
+	 *
+	 * @param unknown $ids        	
+	 */
+	public function confirmDelMember($partId, $ids) {
+		$urlParam = array (
+				'confirmDelMember',
+				$partId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $ids ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 编辑部门员工    	
+	 */
+	public function getMemberById($param) {
+		$urlParam = array (
+				'getMemberById'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 编辑部门员工    	
+	 */
+	public function editMember($param) {
+		$urlParam = array (
+				'editMember'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 判断该部门下是否存在用户
+	 *
+	 * @param unknown $partId
+	 */
+	public function isExistUsers($partId) {
+		$urlParam = array (
+				'isExistUsers'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $partId, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 根据用户id获取部门员工列表
+	 *
+	 * @param unknown $userId
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getPartByUserId($userId) {
+		$urlParam = array (
+				'getPartByUserId',
+				$userId
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 通过单位部门id获取用户列表
+	 *
+	 * @param unknown $param
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getPartUserById($param) {
+		$urlParam = array (
+				'getPartUserById'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $param ), 'application/json;charset=UTF-8' );
+	}
+}

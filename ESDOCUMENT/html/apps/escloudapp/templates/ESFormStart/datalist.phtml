@@ -1,0 +1,168 @@
+<style>
+	/* 筛选功能通用样式 */
+	.h2{ width:100%;  line-height:25px; text-indent:25px; color:#555; border-bottom:1px solid #f3f3f3; float:left; margin:5px 0; background:#f9f9f9 url(../public/img/mess.png) no-repeat 5px 5px;}
+	#addrolefree{ width:655px; height:auto; overflow:hidden; float:left;}
+	#contents{ width:650px; height:150px; overflow:auto; marign-left:5px; _dispaly:inline;}
+	.contbox{ width:620px; height:30px; float:left; margin-left:5px; _display:inline;}
+	.w14090{ font-size:13px; color:#555; float:left; margin-right:10px; display:block;}
+	.hei30{ line-height:30px;}
+	.w140{ width:130px; padding-left:2px;}
+	.w90{ width:80px;}
+	.hei20{ height:20px; line-height:20px; margin-top:4px; border:1px solid #aaa;}
+	
+	/*分类号的目录树start*/
+	.escatagory{height:220px;width:162px;background:#fff;border:1px solid #aaa;display:none;z-index:888;position:absolute;overflow:auto;}
+	/*分类号的目录树end*/
+	
+	td .es_add{width:22px;height:22px;background:url('<?php echo $tplPath;?>/ESFormStart/img/add.gif') no-repeat}
+	td .es_del{width:22px;height:22px;background:url('<?php echo $tplPath;?>/ESFormStart/img/close.png') no-repeat}
+
+	#deadline{width:95px;background:#fff;display:none;position:absolute;z-index:901;text-align:left;border:1px #aaa solid}
+	#deadline ul li{padding-left:5px;width:90px;height:18px;float:left;cursor:pointer;line-height:18px}
+	#deadline ul li:hover{background:#eee;padding: 0px 2px;border-left: 1px solid #fff;border-top: 1px solid #fff;border-right: 1px solid #eee;border-bottom: 1px solid #eee;}
+
+</style>
+<table id="borrowlist"></table>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#borrowlist").flexigrid({
+		url:$.appClient.generateUrl({ESIdentify:'set_json',path:'<?php echo $path;?>'}),
+		dataType: 'json',
+		colModel : [
+			{display: '序号', name : 'num', width : 20, align: 'center'},
+			{display: '<input type="checkbox" id="selectAllDataButton">', name : 'ids', width : 40, align: 'center'},
+			<?php echo $fields;?>
+		],
+		buttons : [
+			{name: '筛选', bclass: 'filter',onpress:filterList}
+		],
+		usepager: true,
+		useRp: true,
+		rp: 20,
+		nomsg:"没有数据",
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: 600,
+		height: 266,
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	$('#borrowlistbox div[class="tDiv2"]').append('<div class="find-dialog"><input id="dataQuery" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="keyWord" value="请输入关键字" /><span id="dataQueryButton"></span></div>');
+	function dataQuery(){
+		var keyword = $.trim($('#dataQuery').val());
+		if(keyword == '' || keyword=='请输入关键字') {
+			keyword = '';
+		}
+		//guolanrui 20140925 修复流程中添加数据附件的界面中模糊检索不成功的BUG，将keyword参数用query传参：1223
+		var query = {};　//创建一个数组
+		query['keyword'] = keyword;
+		$("#borrowlist").flexOptions({url:$.appClient.generateUrl({ESIdentify:'set_json',keyword:encodeURI(keyword),path:'<?php echo $path;?>'}),query:query}).flexReload();
+	};
+
+	$('#dataQueryButton').click(function(e){
+		dataQuery();
+	});
+		
+	$(document).keydown(function(event){
+		if(event.keyCode == 13 && document.activeElement.id == 'dataQuery') {
+			dataQuery();
+		}
+	});
+	//全选
+	function selectAll(status,name,obj){
+		var dataObj=$("input[name="+name+"]",$(obj));
+		dataObj.attr('checked',status);
+		if(status){
+			$(obj).find("tr").addClass("trSelected");
+		}else{
+			$(obj).find("tr").removeClass("trSelected");
+		}
+	}
+
+	//全选
+	$("#selectAllDataButton").die().live('click',function(){
+		$("#borrowlist input[type='checkbox']").attr('checked',$(this).is(':checked'));
+		$("#selectAllDataButton").attr('checked',$(this).is(':checked'));
+	});
+	
+	//筛选增加、减少行 
+	$(function(){
+		var i=0;
+		$('.esadd').die().live('click',function(){
+			var $lastTr=$('#sift tr:last')
+			$lastTr.clone().insertAfter($lastTr);
+			i++;
+		});
+		$(".esreduce").die().live('click',function(){
+			if($('#sift tr').length == 2 )
+			{
+				return false;
+			}else{
+				$(this).parent().parent().remove();
+				i--;
+			}
+		});
+	});
+	//获取筛选条件
+	function filterValue()
+	{
+		var $where={};
+		var index = 0 ;
+		$("#sift tr:gt(0)").each(function(i){
+			 var esfields=$("[name='esfields']").eq(i).val();
+			 var comparison=$("[name='comparison']").eq(i).val();
+			 var esfieldvalue=$("[name='esfieldvalue']").eq(i).val();
+			 var relation=$("[name='relation']").eq(i).val();
+			 if(esfieldvalue){
+				 if(relation=="AND"){
+					 relation='true';
+				 }else{
+					 relation='false';
+				 }
+				 $where[index] = esfields+','+comparison +','+esfieldvalue+','+relation;
+				 index++ ;
+			 }
+		});
+		return $where;
+	}
+	//筛选档案著录明细
+	function filterList(){
+		$.ajax({
+		    url:$.appClient.generateUrl({ESIdentify:'filter',status:4,strucid:strucid},'x'),
+		    success:function(data){
+		    	$.dialog({
+			    	title:'筛选数据',
+		    		width: '600',
+		    	    height: '200',
+		    	   	fixed:true,
+		    	    resize: false,
+			    	content:data,
+			    	okVal:'确定',
+				    ok:function(){
+						var thisDialog=this;
+						var condition=filterValue();
+						thisDialog.close();
+						var query = {};　//创建一个数组
+						query['condition'] = condition ;
+						query['type'] = ''; // longjunhao 20140909 add 修复bug970筛选不能使用
+						$("#borrowlist").flexOptions({newp:1,query:query}).flexReload();
+				    	return false;
+				    },
+				    cancelVal: '取消',
+				    cancel: true 
+			    });
+			},
+			cache:false
+		});
+	}
+});
+function hideCata() {
+	$("#catagory").fadeOut("fast");
+}
+function clickBodyDown(event) {
+	if (!(event.target.id == "catagory" || event.target.id == "fication" || $(event.target).parents("#catagory").length>0)) {
+		hideCata();
+	}
+}
+</script>
+

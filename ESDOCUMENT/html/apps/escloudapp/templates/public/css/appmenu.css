@@ -1,0 +1,179 @@
+@CHARSET "UTF-8";
+/**  菜单的menu菜单位置   **/
+
+.subulPersonManage{background-position: 40px 16px;background-image:url(../img/icon_menu_1.png);background-repeat:no-repeat;}
+.subulArcCollecte{background-position: 40px 16px;background-image:url(../img/icon_menu_2.png);background-repeat:no-repeat;}
+.subulArcManage{background-position: 40px 16px;background-image:url(../img/icon_menu_3.png);background-repeat:no-repeat;}
+.subulArcUse{background-position: 40px 16px;background-image:url(../img/icon_menu_4.png);background-repeat:no-repeat;}
+.subulArcCount{background-position: 40px 16px;background-image:url(../img/icon_menu_5.png);background-repeat:no-repeat;}
+.subulTasks{background-position: 40px 16px;background-image:url(../img/icon_menu_6.png);background-repeat:no-repeat;}
+.subulSystemManage{background-position: 40px 16px;background-image:url(../img/icon_menu_7.png);background-repeat:no-repeat;}
+.subulAPPManage{background-position: 40px 16px;background-image:url(../img/icon_menu_8.png);background-repeat:no-repeat;}
+
+
+/** 首页添加模块菜单样式 ***/
+
+.ESDefault_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/backtohome_small.png);background-repeat:no-repeat;}
+.ESDefault_index{background-image:url(../img/appmenus/backtohome.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESCollaborative_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESCollaborative_small.png);background-repeat:no-repeat;}
+.ESCollaborative_index{background-image:url(../img/appmenus/ESCollaborative.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESDiscuss_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESDiscuss_small.png);background-repeat:no-repeat;}
+.ESDiscuss_index{background-image:url(../img/appmenus/ESDiscuss.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESIdentify_identify_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESIdentify_identify_small.png);background-repeat:no-repeat;}
+.ESIdentify_identify{background-image:url(../img/appmenus/ESIdentify_identify.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESIdentify_collation_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESIdentify_collation_small.png);background-repeat:no-repeat;}
+.ESIdentify_collation{background-image:url(../img/appmenus/ESIdentify_collation.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESIdentify_catalogue_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESIdentify_catalogue_small.png);background-repeat:no-repeat;}
+.ESIdentify_catalogue{background-image:url(../img/appmenus/ESIdentify_catalogue.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESIdentify_collationCatalogue_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESIdentify_collationCatalogue_small.png);background-repeat:no-repeat;}
+.ESIdentify_collationCatalogue{background-image:url(../img/appmenus/ESIdentify_collationCatalogue.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESIdentify_putIntoStore_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESIdentify_putIntoStore_small.png);background-repeat:no-repeat;}
+.ESIdentify_putIntoStore{background-image:url(../img/appmenus/ESIdentify_putIntoStore.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESIdentify_archiveedit_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESIdentify_archiveedit_small.png);background-repeat:no-repeat;}
+.ESIdentify_archiveedit{background-image:url(../img/appmenus/ESIdentify_archiveedit.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESArchiveLending_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESArchiveLending_index_small.png);background-repeat:no-repeat;}
+.ESArchiveLending_index{background-image:url(../img/appmenus/ESArchiveLending_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESStoreroom_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESStoreroom_index_small.png);background-repeat:no-repeat;}
+.ESStoreroom_index{background-image:url(../img/appmenus/ESStoreroom_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESInOut_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESInOut_index_small.png);background-repeat:no-repeat;}
+.ESInOut_index{background-image:url(../img/appmenus/ESInOut_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESArchiveDestroy_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESArchiveDestroy_index_small.png);background-repeat:no-repeat;}
+.ESArchiveDestroy_index{background-image:url(../img/appmenus/ESArchiveDestroy_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESStoreroom3D_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESStoreroom3D_index_small.png);background-repeat:no-repeat;}
+.ESStoreroom3D_index{background-image:url(../img/appmenus/ESStoreroom3D_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESArchiveSeache_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESArchiveSeache_index_small.png);background-repeat:no-repeat;}
+.ESArchiveSeache_index{background-image:url(../img/appmenus/ESArchiveSeache_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESCompilation_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESCompilation_index_small.png);background-repeat:no-repeat;}
+.ESCompilation_index{background-image:url(../img/appmenus/ESCompilation_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESReadingRoom_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESReadingRoom_index_small.png);background-repeat:no-repeat;}
+.ESReadingRoom_index{background-image:url(../img/appmenus/ESReadingRoom_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESYearlyReport_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESYearlyReport_index_small.png);background-repeat:no-repeat;}
+.ESYearlyReport_index{background-image:url(../img/appmenus/ESYearlyReport_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESHoldingStatistics_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESHoldingStatistics_index_small.png);background-repeat:no-repeat;}
+.ESHoldingStatistics_index{background-image:url(../img/appmenus/ESHoldingStatistics_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESUsingStatistics_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESUsingStatistics_index_small.png);background-repeat:no-repeat;}
+.ESUsingStatistics_index{background-image:url(../img/appmenus/ESUsingStatistics_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESFormStart_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESFormStart_index_small.png);background-repeat:no-repeat;}
+.ESFormStart_index{background-image:url(../img/appmenus/ESFormStart_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESWorkflow_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESWorkflow_index_small.png);background-repeat:no-repeat;}
+.ESWorkflow_index{background-image:url(../img/appmenus/ESWorkflow_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESFormBuilder_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESFormBuilder_index_small.png);background-repeat:no-repeat;}
+.ESFormBuilder_index{background-image:url(../img/appmenus/ESFormBuilder_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESFormAccredit_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESFormAccredit_index_small.png);background-repeat:no-repeat;}
+.ESFormAccredit_index{background-image:url(../img/appmenus/ESFormAccredit_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESWorkflowMonitor_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESWorkflowMonitor_index_small.png);background-repeat:no-repeat;}
+.ESWorkflowMonitor_index{background-image:url(../img/appmenus/ESWorkflowMonitor_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+
+.ESOrgAndUser_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESOrgAndUser_index_small.png);background-repeat:no-repeat;}
+.ESOrgAndUser_index{background-image:url(../img/appmenus/ESOrgAndUser_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESReport_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESReport_index_small.png);background-repeat:no-repeat;}
+.ESReport_index{background-image:url(../img/appmenus/ESReport_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESRole_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESRole_index_small.png);background-repeat:no-repeat;}
+.ESRole_index{background-image:url(../img/appmenus/ESRole_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESTemplate_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESTemplate_index_small.png);background-repeat:no-repeat;}
+.ESTemplate_index{background-image:url(../img/appmenus/ESTemplate_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESMetadata_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESMetadata_index_small.png);background-repeat:no-repeat;}
+.ESMetadata_index{background-image:url(../img/appmenus/ESMetadata_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESArchivePermission_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESArchivePermission_index_small.png);background-repeat:no-repeat;}
+.ESArchivePermission_index{background-image:url(../img/appmenus/ESArchivePermission_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESLucene_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESLucene_index_small.png);background-repeat:no-repeat;}
+.ESLucene_index{background-image:url(../img/appmenus/ESLucene_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESClassification_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESClassification_index_small.png);background-repeat:no-repeat;}
+.ESClassification_index{background-image:url(../img/appmenus/ESClassification_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESEFile_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESEFile_index_small.png);background-repeat:no-repeat;}
+.ESEFile_index{background-image:url(../img/appmenus/ESEFile_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESLog_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESLog_index_small.png);background-repeat:no-repeat;}
+.ESLog_index{background-image:url(../img/appmenus/ESLog_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESInformationPublish_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESInformationPublish_index_small.png);background-repeat:no-repeat;}
+.ESInformationPublish_index{background-image:url(../img/appmenus/ESInformationPublish_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESRecycleBin_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESRecycleBin_index_small.png);background-repeat:no-repeat;}
+.ESRecycleBin_index{background-image:url(../img/appmenus/ESRecycleBin_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESExternalSystem_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESExternalSystem_index_small.png);background-repeat:no-repeat;}
+.ESExternalSystem_index{background-image:url(../img/appmenus/ESExternalSystem_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESStructureModel_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESStructureModel_index_small.png);background-repeat:no-repeat;}
+.ESStructureModel_index{background-image:url(../img/appmenus/ESStructureModel_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESArchiveUsingModel_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESArchiveUsingModel_index_small.png);background-repeat:no-repeat;}
+.ESArchiveUsingModel_index{background-image:url(../img/appmenus/ESArchiveUsingModel_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESTaskSchedul_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESTaskSchedul_index_small.png);background-repeat:no-repeat;}
+.ESTaskSchedul_index{background-image:url(../img/appmenus/ESTaskSchedul_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientUpdate_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientUpdate_index_small.png);background-repeat:no-repeat;}
+.ESAppClientUpdate_index{background-image:url(../img/appmenus/ESAppClientUpdate_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientReserve_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientReserve_index_small.png);background-repeat:no-repeat;}
+.ESAppClientReserve_index{background-image:url(../img/appmenus/ESAppClientReserve_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientSubscribe_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientSubscribe_index_small.png);background-repeat:no-repeat;}
+.ESAppClientSubscribe_index{background-image:url(../img/appmenus/ESAppClientSubscribe_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientSearchKeyword_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientSearchKeyword_index_small.png);background-repeat:no-repeat;}
+.ESAppClientSearchKeyword_index{background-image:url(../img/appmenus/ESAppClientSearchKeyword_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientMessage_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientMessage_index_small.png);background-repeat:no-repeat;}
+.ESAppClientMessage_index{background-image:url(../img/appmenus/ESAppClientMessage_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientBanner_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientBanner_index_small.png);background-repeat:no-repeat;}
+.ESAppClientBanner_index{background-image:url(../img/appmenus/ESAppClientBanner_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientLoader_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientLoader_index_small.png);background-repeat:no-repeat;}
+.ESAppClientLoader_index{background-image:url(../img/appmenus/ESAppClientLoader_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientFeedback_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientFeedback_index_small.png);background-repeat:no-repeat;}
+.ESAppClientFeedback_index{background-image:url(../img/appmenus/ESAppClientFeedback_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientCrashReport_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientCrashReport_index_small.png);background-repeat:no-repeat;}
+.ESAppClientCrashReport_index{background-image:url(../img/appmenus/ESAppClientCrashReport_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppClientConfig_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppClientConfig_index_small.png);background-repeat:no-repeat;}
+.ESAppClientConfig_index{background-image:url(../img/appmenus/ESAppClientConfig_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESAppConfig_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESAppConfig_index_small.png);background-repeat:no-repeat;}
+.ESAppConfig_index{background-image:url(../img/appmenus/ESAppConfig_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESExtraKeyword_index_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESExtraKeyword_index_small.png);background-repeat:no-repeat;}
+.ESExtraKeyword_index{background-image:url(../img/appmenus/ESExtraKeyword_index.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+.ESIdentify_recycleBin_small{background-position: 40px 16px;background-image:url(../img/appmenus_small/ESIdentify_recycleBin_small.png);background-repeat:no-repeat;}
+.ESIdentify_recycleBin{background-image:url(../img/appmenus/ESIdentify_recycleBin.png);background-repeat:no-repeat;background-position:  center 15px;}
+
+

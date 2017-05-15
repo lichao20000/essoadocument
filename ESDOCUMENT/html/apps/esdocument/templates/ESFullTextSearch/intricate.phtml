@@ -1,0 +1,434 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath?>/ESFullTextSearch/css/index.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath?>/public/DatePicker/skin/WdatePicker.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<div class='paper' id='ESPaper'>
+	<div class='so-paper'>
+		<div class='ic-so'>
+			<form id='intr_form' name='intr_form'>
+			<div class='typeData_div'>
+				<h3 style="float:left">选择部门</h3>
+				<div class="typeData">
+					<div class="setting selectInput" id="indexDepartment" value="" style="float:left;overflow:hidden;margin-right:50px;" title="自定义参建单位部门"></div>
+					<span><i style='background:#41b3e5;color:white;'>不限</i></span>
+				</div>
+				<input type="hidden" value="" id="departmentCode">
+				<input type="hidden" value="" id="departmentName">
+			</div>
+			<div class='typeData_div'>
+				<h3 style="float:left">选择装置</h3>
+				<div class="typeData">
+					<div class="setting selectInput" id="indexDevice" value="" style="float:left;overflow:hidden;margin-right:50px;" title="自定义装置单元"></div>
+					<span><i style='background:#41b3e5;color:white;'>不限</i></span>
+				</div>
+				<input type="hidden" value="" id="deviceCode">
+				<input type="hidden" value="" id="deviceName">
+			</div>
+			<div class='head'>
+				<h3>收集范围</h3>
+				<!-- 
+				<div id='docClass' style='padding-top:15px;'>
+					<input name="dealType" class ="deal" id="stage" type="radio"  value="收集范围"  checked/><label for="stage" style="display:inline;">收集范围</label>
+				  	<input name="dealType" class ="deal" id="device" type="radio"  value="装置名称" /><label for="device" style="display:inline;">装置名称</label>
+				  	<input name="dealType" class ="deal" id="participatory" type="radio" value="拟定部门"/><label for="participatory" style="display:inline;">拟定部门</label>
+				</div>
+				 -->
+				<!-- lujixiang 20150416    动态获取已建立索引的收集范围    -->
+				<?php
+					$classContent="<div id='docClass' style='padding-top:7px;'>";
+					$classContent.="<div id='indexStage' style='float:left;overflow:hidden;margin-right:50px;' title='自定义收集范围(点击显示/隐藏)'></div>";
+					$classContent.="<span id='clearall'><i style='background:#41b3e5;color:white;'>不限</i></span>";
+					$classContent.= "<div id='selectStage' style='display:none;'>";
+					foreach ($stageTypes as $list){
+						$viewTitle = '';
+						if(mb_strlen(trim($list->name),'utf8')>5){
+							$viewTitle = mb_substr($list->name,0,5,'utf-8')."...";
+						}else{
+							$viewTitle = $list->name;
+						}
+						$classContent.="<label for='stage_".$list->code."'><input type='checkbox' id='".$list->code."' name='".$list->name."' value='".$list->code."' viewTitle='".$viewTitle."'/><i title='".$list->name."'>".$viewTitle."</i></label>";
+					}
+					$classContent.="</div>";
+					$classContent.="<input type='hidden' value='' id='stageCode'>";
+					$classContent.="<input type='hidden' value='' id='stageName'>";
+					$classContent.="</div>";
+					echo $classContent;
+				?>
+			</div>
+			<div class='keyword'>
+				<h3>关键字</h3>
+				<div style="padding-top:10px;">
+				<input type='text' name='searchWord'  placeholder='多个关键字用空格分开' id='searchWord' value=''/>
+				<a href='javascript:;' class='searchall'>搜索</a>
+				<a href='javascript:_query.base();' class='base-so'>普通搜索</a>
+				</div>
+			</div>
+			<div class='clear'></div>
+			</form>
+		</div>
+		<div class='so-result' id='so_result'></div>
+	</div>
+	<div class='so-hd'>
+		<div class='so-car' id='car'>
+			<i>提交申请</i>
+			<span class='so-st'><?php echo count($SESScommon);?></span>
+			<div class='product-list' id='product_list'>
+				<?php
+				if(count($SESScommon)==0){
+					echo "<h2 class='pl-null'>没有申请数据！</h2>";//liqiubo 20141011修改显示的文字，修复bug 1270
+				}else{
+					$shop="<h2 class='pl-hd'><b>申请数据清单</b></h2>";//liqiubo 20140929 修改显示的文字，修复bug 1270
+					$shop.="<ul class='pl-ul'>";
+					
+					foreach($SESScommon as $v){
+						$shop.="<li id='".$v->id."' class='thisli_".$v->id."'>";
+						$shop.="<span></span>";
+						$shop.="<div class='titlestyle'>".$v->title."</div>";
+						$shop.="<div class='deletestyle'><a href='javascript:delFormArchivesCar(".$v->id.");'>删除</a></div>";
+						$shop.="</li>"; 
+					}
+					$shop.="</ul>";
+					$shop.="<div class='pl-hr'><a onclick='javascript:delFormArchivesCar();'>清空</a></div>";
+					$shop.="<div class='pl-sb'>";
+					$shop.="<a href='javascript:submitBespeakCar();'>提交预约</a>";
+					$shop.="</div>";
+					echo $shop;
+				}
+				?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type='text/javascript' src='<?php echo $tplPath;?>/ESFullTextSearch/js/index.js'></script>
+<!-- <script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.excheck.min.js"></script> -->
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+<script type="text/javascript">
+
+$(function() {
+	//添加行
+	$('a.add').live('click',function() {
+		$(this).closest('div.cascadeTwo').clone().appendTo($(this).closest('div.cascade')).find('input').val('');
+		$('a.add,a.del').hide();
+	});
+	//删除行
+	$('a.del').live('click',function() {
+		if($(this).closest('div.cascade').children().length > 1) {
+			$(this).closest('div.cascadeTwo').remove();
+		}
+	});
+
+	$('div.cascadeTwo').live({
+		mouseover: function() {
+			$(this).find('a[class="add"],a[class="del"]').show();
+		},
+		mouseout: function() {
+			$(this).find('a[class="add"],a[class="del"]').hide();
+		}
+	});
+	//重置按钮
+$('#resetBtn').click(function(){
+	
+	$('#cascade div.cascadeTwo:gt(0)').remove();
+	$('#cascade input:hidden').remove();
+	$('#cascade select').removeAttr('disabled');
+	//清空所有的已选档案类型的状态
+	var spanEles=document.getElementById('docClass').childNodes;
+	for(var j=0;j<spanEles.length;j++){
+		spanEles[j].children[0].style.background='';
+		spanEles[j].children[0].style.color='';
+	}
+	//当前项标注为选中状态
+	$('#docClass span i').first().css({background:'#41b3e5',color:'white'});
+	clearConditon('clearall');
+});
+
+	//当前用户所在省份标记为选中
+	$('div.cascadeTwo:first').find('select[name="province"]').change();
+
+
+	/** 部门筛选条件 --start **/
+	$("#indexDepartment").selectInput({
+			url: $.appClient.generateUrl({
+	            ESParticipatory: "getTree"
+	        },
+	        'x'),
+	        chkStyle: "checkbox",
+	        onCheck: checkDePart,
+	        treatNodes: treatParts,
+	        width: 300,
+	        height: 300
+	});
+
+	function checkDePart(event, treeId, treeNode) {
+
+		var departmentCode = $("#departmentCode");
+		var departmentName = $("#departmentName");
+		if(treeNode.checked){
+			departmentCode.val(departmentCode.val() + "|" + treeNode.code);
+			departmentName.val(departmentName.val() + "|" + treeNode.name);
+			var title = treeNode.name.length > 10 ? treeNode.name.substring(0,10) + '...' : treeNode.name ;
+			var myself = departmentCode.parent().find(".typeData");
+			if(myself.find("span i").text() == '不限'){
+				myself.find("span i").remove();
+				$("#indexDepartment").css("margin-right","0px");
+			}
+			myself.find("span").append('<i class="indexItem departmentItem" title="' + treeNode.name + '" ><a>' + title + '</a><img class="itemDelete" style="display:none;" src="<?php echo $tplPath?>/ESFullTextSearch/img/delete.png"/><input type="hidden" value="' + treeNode.code + '" ><input type="hidden" value="' + treeNode.name + '" ></i>');
+		}else{
+
+			$('.departmentItem input').each(function(){
+
+				var myself = $(this);
+				if(treeNode.code == myself.val()){
+
+					var departmentCode = $("#departmentCode");
+		            departmentCode.val(departmentCode.val().replace('|'+myself.val(),''));
+		            myself.parent().remove();
+		            var myDiv = departmentCode.parent().find(".typeData");
+		            if(myDiv.find("span i").length == 0){
+		            	$("#indexDepartment").css("margin-right","50px");
+		            	myDiv.find("span").append('<i style="background:#41b3e5;color:white;">不限</i>');
+					}
+				}
+				if(treeNode.name == myself.val()){
+					var departmentName = $("#departmentName");
+					departmentName.val(departmentName.val().replace('|'+myself.val(),''));
+				}
+			});
+
+		}
+		
+	}
+
+	function treatParts(zNodes) {
+        var arrays = $("#departmentCode").val() != null && $("#departmentCode").val() != ''  ? $("#departmentCode").val().split('|') : new Array();
+        for (var i = 0; i < zNodes.length; i++) {
+            if (zNodes[i].code != '') {
+                if ($.inArray(zNodes[i].code, arrays) == -1) {
+                    zNodes[i].checked = false;
+                } else {
+                    zNodes[i].checked = true;
+                }
+            }
+            else if (zNodes[i].id == 0 || zNodes[i].code == '') {
+                zNodes[i].nocheck = true;
+            }
+        }
+    }
+
+	/** 部门和装置选项删除效果  **/
+	 $('.departmentItem').live('mouseover',function(){
+		$(this).find("img").attr("style","display:black");
+		var myself = $(this);
+		$(this).find("img").click(function(){
+			var departmentCode = $("#departmentCode");
+			var departmentName = $("#departmentName");
+	        departmentCode.val(departmentCode.val().replace('|'+myself.find(':input:eq(0)').val(),''));
+	        departmentName.val(departmentName.val().replace('|'+myself.find(':input:eq(1)').val(),''));
+	        myself.remove();
+	        var myDiv = departmentCode.parent().find(".typeData");
+            if(myDiv.find("span i").length == 0){
+            	$("#indexDepartment").css("margin-right","50px");
+            	myDiv.find("span").append('<i style="background:#41b3e5;color:white;">不限</i>');
+			}
+		});
+	}); 
+	$('.departmentItem').live('mouseout',function(){
+		$(this).find("img").attr("style","display:none");
+	});
+	/** 部门筛选条件 --end **/
+	
+	/** 装置筛选条件 --start **/
+	$("#indexDevice").selectInput({
+			url: $.appClient.generateUrl({
+				ESDevice: "getTree"
+	        },
+	        'x'),
+	        chkStyle: "checkbox",
+	        onCheck: checkDevice,
+	        treatNodes: treatDevice,
+	        width: 300,
+	        height: 300
+	});
+
+	function checkDevice(event, treeId, treeNode) {
+
+		var deviceCode = $("#deviceCode");
+		var deviceName = $("#deviceName");
+		if(treeNode.checked){
+			deviceCode.val(deviceCode.val() + "|" + treeNode.code);
+			deviceName.val(deviceName.val() + "|" + treeNode.name);
+			var title = treeNode.name.length > 10 ? treeNode.name.substring(0,10) + '...' : treeNode.name ;
+			var myself = deviceCode.parent().find(".typeData");
+			if(myself.find("span i").text() == '不限'){
+				myself.find("span i").remove();
+				$("#indexDevice").css("margin-right","0px");
+			}
+			myself.find("span").append('<i class="indexItem deviceItem" title="' + treeNode.name + '" > <a>' + title + '</a><img class="itemDelete" style="display:none;" src="<?php echo $tplPath?>/ESFullTextSearch/img/delete.png"/><input type="hidden" value="' + treeNode.code + '" ><input type="hidden" value="' + treeNode.name + '" ></i>');
+		}else{
+
+			$('.deviceItem input').each(function(){
+				
+				var myself = $(this);
+				if(treeNode.code == myself.val()){
+
+					var deviceCode = $("#deviceCode");
+					deviceCode.val(deviceCode.val().replace('|'+myself.val(),''));
+		            myself.parent().remove();
+		            var myDiv = deviceCode.parent().find(".typeData");
+		            if(myDiv.find("span i").length == 0){
+		            	$("#indexDevice").css("margin-right","50px");
+		            	myDiv.find("span").append('<i style="background:#41b3e5;color:white;">不限</i>');
+					}
+				}
+				if(treeNode.name == myself.val()){
+					var deviceName = $("#deviceName");
+					deviceName.val(deviceName.val().replace('|'+myself.val(),''));
+				}
+			});
+
+		}
+		
+	}
+
+	function treatDevice(zNodes) {
+        var arrays = $("#deviceCode").val() != null && $("#deviceCode").val() != ''  ? $("#deviceCode").val().split('|') : new Array();
+        for (var i = 0; i < zNodes.length; i++) {
+            if (zNodes[i].code != '') {
+                if ($.inArray(zNodes[i].code, arrays) == -1) {
+                    zNodes[i].checked = false;
+                } else {
+                    zNodes[i].checked = true;
+                }
+            }
+            else if (zNodes[i].id == 0 || zNodes[i].code == '') {
+                zNodes[i].nocheck = true;
+            }
+        }
+    }
+
+	/** 部门和装置选项删除效果  **/
+	$('.deviceItem').live('mouseover',function(){
+		$(this).find("img").attr("style","display:black");
+		var myself = $(this);
+		$(this).find("img").click(function(){
+			var deviceCode = $("#deviceCode");
+			deviceCode.val(deviceCode.val().replace('|'+myself.find(':input:eq(0)').val(),''));
+			var deviceName = $("#deviceName");
+			deviceName.val(deviceName.val().replace('|'+myself.find(':input:eq(1)').val(),''));
+            myself.remove();
+            var myDiv = deviceCode.parent().find(".typeData");
+            if(myDiv.find("span i").length == 0){
+            	$("#indexDevice").css("margin-right","50px");
+            	myDiv.find("span").append('<i style="background:#41b3e5;color:white;">不限</i>');
+			}
+		});
+	}); 
+	$('.deviceItem').live('mouseout',function(){
+		$(this).find("img").attr("style","display:none");
+	});
+
+	/** 装置筛选条件 --end **/
+
+	/** 收集范围 **/
+	//鼠标移出收集范围面板的范围，默认隐藏
+	$("#selectStage").live('mouseleave',function(){
+		$("#selectStage").attr("style","display:none");
+	});
+	//点击图片显示或隐藏收集范围选择项
+	$("#indexStage").live('click',function(){
+		if($("#selectStage").css("display") == 'none'){
+			$("#selectStage").attr("style","display:black");
+		}else{
+			$("#selectStage").attr("style","display:none");
+		}
+	});
+	//点击复选框后的label事件
+	$('#selectStage label i').live('click', function (){
+		if($(this).prev().attr('checked')){
+			$(this).prev().attr('checked',false);
+			var selectData = $(this).prev().attr("viewTitle");
+			$("#docClass span").find("i").each(function(index){
+				var myself = $("#docClass span").children().eq(index);
+				if(selectData == myself.text()){
+					$("#stageCode").val($("#stageCode").val().replace('|'+myself.attr('value'),''));
+					$("#stageName").val($("#stageName").val().replace('|'+ myself.attr('name'),''));
+					myself.remove();
+					if($("#docClass span").find("i").length == 0){
+						$("#indexStage").css("margin-right","50px");
+						$("#docClass span").append('<i style="background:#41b3e5;color:white;">不限</i>');
+					}
+				}
+			});
+		}else{
+			$(this).prev().attr('checked',true);
+			if($("#docClass span i").text() == '不限'){
+				$("#docClass span i").remove();
+				$("#indexStage").css("margin-right","0px");
+			}
+			$("#stageCode").val($("#stageCode").val() + "|" + $(this).prev().attr('value'));
+			$("#stageName").val($("#stageName").val() + "|" + $(this).prev().attr('name'));
+			$("#docClass span").append('<i title="'+$(this).prev().attr("name")+'" class="indexItem stageItem" value="'+$(this).prev().attr("value")+'"><a>'+$(this).prev().attr("viewTitle")+'</a><img class="itemDelete" style="display:none;" src="<?php echo $tplPath?>/ESFullTextSearch/img/delete.png"/></i>');
+		}
+	});
+	//点击复选框事件
+	$('#selectStage input[type="checkbox"]').live('click', function (){
+		if($(this).attr('checked')){
+			$(this).attr('checked',true);
+			if($("#docClass span i").text() == '不限'){
+				$("#docClass span i").remove();
+				$("#indexStage").css("margin-right","0px");
+			}
+			$("#stageCode").val($("#stageCode").val() + "|" + $(this).attr('value'));
+			$("#stageName").val($("#stageName").val() + "|" + $(this).attr('name'));
+			$("#docClass span").append('<i title="'+$(this).attr("name")+'" class="indexItem stageItem" value="'+$(this).attr("value")+'"><a>'+$(this).attr("viewTitle")+'</a><img class="itemDelete" style="display:none;" src="<?php echo $tplPath?>/ESFullTextSearch/img/delete.png"/></i>');
+		}else{
+			$(this).attr('checked',false);
+			var selectData = $(this).attr("viewTitle");
+			$("#docClass span").find("i").each(function(index){
+				var myself = $("#docClass span").children().eq(index);
+				if(selectData == myself.text()){
+					$("#stageCode").val($("#stageCode").val().replace('|'+myself.attr('value'),''));
+					$("#stageName").val($("#stageName").val().replace('|'+myself.attr('name'),''));
+					myself.remove();
+					if($("#docClass span").find("i").length == 0){
+						$("#indexStage").css("margin-right","50px");
+						$("#docClass span").append('<i style="background:#41b3e5;color:white;">不限</i>');
+					}
+				}
+			});
+		}
+	});
+	//收集范围，鼠标经过时显示删除图片，点击图片删除所选的收集范围
+	$('.stageItem').live('mouseover',function(){
+		$(this).find("img").attr("style","display:black;");
+		var myself = $(this);
+		$(this).find("img").click(function(){
+			$('#selectStage input[type="checkbox"]:checked').each(function(){
+				if($(this).attr("value") == myself.attr('value')){
+					$(this).attr("checked",false);
+				}
+			});
+			$("#stageCode").val($("#stageCode").val().replace('|'+myself.attr('value'),''));
+			$("#stageName").val($("#stageName").val().replace('|'+myself.attr('title'),''));
+            myself.remove();
+            if($("#docClass span").find("i").length == 0){
+            	$("#indexStage").css("margin-right","50px");
+				$("#docClass span").append('<i style="background:#41b3e5;color:white;">不限</i>');
+			}
+		});
+	});
+	$('.stageItem').live('mouseout',function(){
+		$(this).find("img").attr("style","display:none;");
+	});
+	
+});
+
+</script>

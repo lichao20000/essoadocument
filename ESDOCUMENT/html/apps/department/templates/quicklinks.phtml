@@ -1,0 +1,15 @@
+<?php if(isset($header)) echo $header; ?>
+<div class="content">
+  <div class="topTab">
+  </div>
+</div>
+<div class="content1000" >
+  <?php if($type == "image"){ ?>
+  <?php echo $this->render('sidebar', array('editable' => $editable, 'appadmin' => $appadmin, 'menuitem' => 'quicklinks')) ?>
+  <?php }elseif($type == "text"){ ?>
+  <?php echo $this->render('sidebar', array('editable' => $editable, 'appadmin' => $appadmin, 'menuitem' => 'textlinks')) ?>
+  <?php } ?>
+  <div style="width:680px; padding:0px; background:#f8f8f8; float:left;">
+    <?php echo $html;?>
+  </div>
+</div>

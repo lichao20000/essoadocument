@@ -1,0 +1,50 @@
+<div class='rule-public'>
+	<div class='condition-free'>
+		<ul>
+			<li class='long middle'>字段名</li>
+			<li class='short'>比较符</li>
+			<li class='long'>字段值</li>
+			<li class='short'>关系符</li>
+			<li style="text-align: center;">添加行</li>
+			<li style="text-align: center;">删除行</li>
+		</ul>
+		<div class='condition' id='condition'>
+			<?php
+				for($i=0; $i<5; $i++){
+			?>
+			<ul>
+				<li class='long middle'>
+					<select name='key'><?php echo $options; ?></select>
+				</li>
+				<li class='short'>
+					<select name='comparison'>
+						<option value="=">等于</option>
+						<option value=">">大于</option>
+						<option value="<">小于</option>
+						<option value="!=">不等于</option>
+						<option value=">=">大于等于</option>
+						<option value="<=">小于等于</option>
+						<option value="%">包含</option>
+						<option value="!%">不包含</option>
+					</select>
+				</li>
+				<li class='long'>
+					<input type='text' name='value' />
+				</li>
+				<li class='short'>
+					<select name='relation'>
+						<option value='and'>并且</option>
+						<option value='or'>或者</option>
+					</select>
+				</li>
+				<li style="margin-left: 13px;">
+					<a href='javascript:;' class='add'></a>
+				</li>
+				<li class='clear' style="margin-left: 2px;">
+					<a href='javascript:;' class='del'></a>
+				</li>
+			</ul>
+			<?php } ?>
+		</div>
+	</div>
+</div>

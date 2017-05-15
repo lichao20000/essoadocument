@@ -1,0 +1,70 @@
+<link href="<?php echo $tplPath?>/ESOrder/css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+ <script type="text/javascript" src="<?php echo $tplPath;?>/ESOrder/js/autovalidate/validate.js"></script>
+<script type="text/javascript">
+
+	(function(){
+		$.ajax({
+	        url : $.appClient.generateUrl({ESOrder : 'apply'},'x'),
+		    success:function(data){
+		    	$.dialog({
+			    	title:'申请',
+			    	modal:true, 
+		    	   	fixed:false,
+		    	   	stack: true ,
+		    	    resize: false,
+		    	    height:200,
+		    	    lock : true,
+					opacity : 0.1,
+			    	okVal:'申请',
+				    ok:true,
+				    cancelVal: '取消',
+				    cancel: true,
+				    content:data,
+				    ok:function(){
+				    	if(!$("#registerForm").validate()){
+				    		$.dialog.notice({icon:'warning',content:'表单验证未通过！',time:3});
+				    		return false;
+				    	}
+				    	var emailaddressZZ = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+				   	 	var emailaddress = $("#registerForm input[name='superUserName']").val();
+				   	 	emailaddress=emailaddress.replace(/[ ]/g,"");
+				   	 	if(emailaddressZZ.test(emailaddress)==false){
+				   	 		$.dialog.notice({icon:'warning',content:'管理员名称必须为邮箱格式！',time:3});
+				   	 		return false;
+				   	 	}
+				    	if($("#password").val()!=$("#confirmPassword").val()){
+				    		$("#confirmPassword").addClass("invalid-text");
+				    		$.dialog.notice({icon:'warning',content:'确认密码与密码输入不同！',time:3});
+				    		return false;
+				    	}else{
+				    		$("#confirmPassword").removeClass("invalid-text");
+				    	}
+				    	$.ajax({
+				    		url:$.appClient.generateUrl({ESOrder : 'addApplySaas'},'x'),
+				    		type:'post',
+				    		timeout: 300000,
+				    		dataType:'json',
+				    		data:{formData:$("#registerForm").serialize()},
+				    		success:function(rt){
+				    			if(rt.success == "true"){
+					    			$.dialog.notice({icon:'succeed',content:rt.msg,time:3});
+				    			}else{
+				    				$.dialog.notice({icon:'error',content:rt.msg,time:3});
+				    			}
+				    		}
+				    	});
+				    	window.location.href="http://localhost";
+				    	this.close();
+					},
+					init:function(){
+						$("#registerForm").autovalidate();
+					}
+			    });
+		    },
+		    cache:false
+		});
+		
+	})();
+</script>

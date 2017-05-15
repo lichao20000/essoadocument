@@ -1,0 +1,51 @@
+<style type="text/css">
+<!--
+#userRole .userList{ width:190px; height:230px; float:left; margin-top:10px; border:1px solid #ccc; overflow-y:scroll;}
+-->
+</style>
+<div id='userRole'>
+  <div id='' class='useLis'>
+  	<input id="boxRuleDataId" type="hidden" value="<?php echo $id;?>">
+  	<input id="boxRuleDataIds" type="hidden" value="<?php echo $ids;?>">
+    <div class='searchRole'>
+      <input type='text' id='one' class='searchusername' value='' onKeyUp="show(this.value,'left');"/>
+	  <input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+	</div>
+    <ul id='listRole' class='userList'>
+        <?php foreach ($left as $k=>$val){ ?>
+    	<li id="<?php echo $val->tagId;?>" ><?php echo $val->display;?></li>
+    	<?php }?>
+
+	</ul>
+  </div>
+	<div id='esbutton' class='selBut'>  
+
+		<span id="estop" class="estop" title='置顶'></span>
+		<span id="esup" class="esup" title='上移'></span>
+		<span id="esleftall" class="esleftall" title='全部左移'></span>
+		<span id="esleft" class="esleft" title='左移'></span>
+		<span id="esrightall" class="esrightall" title='全部右移'></span>
+		<span id="esright" class="esright" title='右移'></span>
+		<span id="esdown" class="esdown" title='下移'></span>
+		<span id="esbottom" class="esbottom endspan" title='置底'></span>
+		
+		
+	</div>
+	
+	
+	<div id='' class='useLis'>
+		<div class='searchRole'>
+			<input type='text' id='two' class='searchusername'  value='' onKeyUp="show(this.value,'right');"/>
+			<input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+		</div>
+		<ul id='useRole' class='userList'>
+		    <?php foreach ($right as $k=>$val){ ?>
+    		<li id="<?php echo $val->tagId;?>" ><?php echo $val->display;?></li>
+  		    <?php }?>
+		</ul>
+	</div>
+</div>
+<div id='bottom' style="background:blue;display:none;width:600px;height:100px;clear:both;margin-top:10px"></div>
+<script type="text/javascript">
+
+</script>

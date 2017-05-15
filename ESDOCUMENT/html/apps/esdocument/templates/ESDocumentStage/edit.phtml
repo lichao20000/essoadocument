@@ -1,0 +1,67 @@
+<style>
+<!--
+.button {cursor: pointer;padding: 5px;background-color: #6F6E81;color: #FFF;border: 0px none;outline: 0px none;}
+-->
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="editDataForm" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="level" id="level" value="<?php echo $level; ?>" />
+			<input type="hidden" name="pId" id="pId" value="<?php echo $pId; ?>" />
+			<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
+			<input type="hidden" name="id_seq" id="id_seq" value="<?php echo $id_seq; ?>"/>
+			<table id="table_detail" class="table_detail">
+				<tr>
+					<td>名称<font color="red" size="3" >*</font></td>
+					<td><input type="text" name="name" id="name" verify="unspecial/200/1/0" value="<?php echo $name; ?>" class="inputtext" />
+					<input type="hidden" name="oldName" id="oldName" value="<?php echo isset($name)?$name:''; ?>"/></td>
+				</tr>
+				<tr>
+					<td>分类代码<font color="red" size="3" >*</font></td>
+					<td><input type="text" name="code" id="code" verify="english-num/50/1/0" value="<?php echo $code; ?>" readonly="readonly" class="inputtext" />
+					<input type="hidden" name="oldCode" id="oldCode" value="<?php echo isset($code)?$code:''; ?>"/></td>
+				</tr>
+				<tr>
+					<td>是否节点<font color="red" size="3" >*</font></td>
+					<td>
+						<input type="radio" name="isnode" id="isnode1" disabled <?php echo $isnode=='1'?'checked':''; ?> value="1"/><label style="display: inline;" for="isnode1">节点</label>
+						<input type="radio" name="isnode" id="isnode0" disabled <?php echo $isnode=='0'?'checked':''; ?> value="0"/><label style="display: inline;" for="isnode0">文件</label>
+					</td>
+				</tr>
+				<?php if($isnode!=='0'){?>
+				<tr>
+					<td>未来组卷方式</td>
+					<td>
+						<select id="paperWay" name="paperWay" class="paperWay" <?php echo $isnode=='0'?'disabled hidden':''; ?>>
+						    <option value="0">---请选择---</option>
+							<option value="1" <?php echo $paperWay=='1'?'selected':''; ?> >单项工程</option>
+							<option value="2" <?php echo $paperWay=='2'?'selected':''; ?> >整体项目</option>
+						</select>
+					</td>						
+				</tr>
+				<?php }?>
+				<tr>
+					<td>保管期限<font color="red" size="3">*</font></td>
+					<td>
+					<div class="editSelect">
+						<div class="selectInputSpan">
+							<input type="text" name="period" id="period" class="inputtext2" value="<?php echo $period; ?>" verify="unspecial/50/1/0" >
+						</div>
+						<div class="selectSpan">
+							<select id="beautySelect" onchange="javascript:$('#period').val($(this).val());$('#period').removeClass('invalid-text').attr('title','');">
+							<option value="">--请选择--</option>
+							<option value="3年" <?php echo $period=='3年'?'selected':''; ?>>3年</option>
+							<option value="5年" <?php echo $period=='5年'?'selected':'';; ?>>5年</option>
+							<option value="10年" <?php echo $period=='10年'?'selected':'';; ?>>10年</option>
+							<option value="短期" <?php echo $period=='短期'?'selected':'';; ?>>短期</option>
+							<option value="长期" <?php echo $period=='长期'?'selected':'';; ?>>长期</option>
+							<option value="永久" <?php echo $period=='永久'?'selected':'';; ?> >永久</option>
+							</select>
+						</div>
+					</div>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

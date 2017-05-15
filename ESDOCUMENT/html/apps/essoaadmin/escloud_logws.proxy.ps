@@ -1,0 +1,46 @@
+<?php
+/*
+ *日志管理
+* @author wangbo 20140327
+*/
+class ProxyEssoaadminEscloud_logws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "log";
+	 /**
+	 * 获取总记录数
+	 * 
+	 */
+	public function getCountAll($wb)
+	{
+		$url = "getCount";
+		return $this->post(self::SERVICE_NAME,$url,$wb,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	* 分页获取日志信息
+	*/
+	public function getAllLog($canshu)
+	{
+		$url = "getLogs";
+		return $this->post(self::SERVICE_NAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	
+ 
+	/**
+	*删除部分日志
+	*/
+	public function deleteLogList($data){
+	    $url = "delLog";
+		return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	/**
+	*清空所有日志
+	*/
+	public function deleteAllLog(){
+	      $url = "delLog";
+	      $data="";
+	      return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	 
+	 
+}

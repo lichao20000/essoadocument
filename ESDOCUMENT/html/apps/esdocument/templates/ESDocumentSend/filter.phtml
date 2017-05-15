@@ -1,0 +1,41 @@
+<div id="filterContents" style="padding:20px; padding-bottom: 40px;">
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span>
+		<span class='w90 w14090 hei30'>比较符</span>
+		<span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">添加行</span></span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">删除行</span></span>
+	</p>
+	<div id='contents'>
+		<?php for($fly=1;$fly<6;$fly++){ ?>
+		<p class='contbox creatediv'  style="overflow:hidden;">
+			<select class='w140 w14090 hei20 filedname'>
+				<option value=''>请选择</option>
+				<option value='no'>编号</option>
+				<option value='fileflow_name'>收发流程名称</option>
+				<option value='creater'>发起人</option>
+				<option value='createTime'>发起时间</option>
+				<option value='status'>状态</option>
+			</select>
+			<select class='w90 w14090 hei20 comparison'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select>
+			<input type='text' class='w140 w14090 hei20 filedvalue' />
+			<select id='' class='w14090 w90 hei20 relationship'>
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select>
+			<a class='newfilter'></a><a class='delfilter'></a>
+		</p>
+		<?php }?>
+	</div>
+	<br/>
+</div>

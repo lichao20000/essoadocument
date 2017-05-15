@@ -1,0 +1,101 @@
+<style>
+<!--
+.button {
+	cursor: pointer;
+	padding: 5px;
+	background-color: #6F6E81;
+	color: #FFF;
+	border: 0px none;
+	outline: 0px none;
+}
+-->
+</style>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDocumentsCollection/js/addOrUpdate.js"></script>
+<div class="documentStyle" >
+	<form id="addDataForm" method="post" enctype="multipart/form-data">
+		 <input type="hidden" name="stageId" id="stageId" value="" />
+		 <input type="hidden" name="participatoryCode" id="participatoryCode" value="<?php echo $participatoryCode; ?>" />
+		 <input type="hidden" name="participatoryName" id="participatoryName" value="<?php echo $participatoryName; ?>" />
+		 <input type="hidden" name="fileList" id="fileList" value="" /> 
+		 <div class="estransfer">
+			<ul>
+			    <li>
+					<span>从附件收集</span>
+					<span style="width:50px">
+					<input type="radio"  name="collectionType" style="width: 13px;height:13px;" id="type2"  value="2"/><label style="display: inline;width:auto;height:16px;" for="type1">是</label>
+					</span>
+					<span style="width:50px">
+					<input type="radio"  name="collectionType" style="width: 13px;height:13px;" id="type1"  value="1" checked="checked"/><label style="display: inline;width:auto;height:16px;" for="type1">否</label>
+					</span>
+				</li>
+				 <?php 
+				 $arr = array();//数组存储数据
+				 $index = 0; //下标
+				 foreach ( $formData as $value ) {
+				 	if ($value['name']=='stageName' || $value['name']=='deviceName' ||
+				 	$value['name']=='participatoryName' || $value['name']=='documentTypeName' ||
+				 	$value['name']=='engineeringName' || $value['name']=='stageId'){
+				 		continue;
+				 	}
+					$defaultValue='';
+					if ($value['defaultValue']!=null){
+						$defaultValue=$value['defaultValue'];
+					}
+					if ($value['name']=='stageCode'){
+						echo '<li><span> 选择文件 <font color="red" size="3"> * </font> </span><input type="text" id="stageName" name="stageName" class="selectInput" readonly="readonly" verify="text/200/1/0" value=""  /><input type="hidden" name="stageCode" id="stageCode" value="'.$defaultValue.'" /></li>';
+					}else if($value['name']=='deviceCode'){
+						echo '<li><span> 装置名称 <font color="red" size="3"> * </font></span><input type="text" id="deviceName" class="selectInput" readonly="readonly" name="deviceName" verify="text/50/1/0" value=""  /> <input type="hidden" name="deviceCode" id="deviceCode" value="'.$defaultValue.'" /></li>';
+					}else if($value['name']=='participatoryCode'){
+						continue;
+					}else if($value['name']=='documentCode'){
+						echo '<li><span> 文件类型代码<font color="red" size="3"> * </font></span><input type="text" name="documentTypeName" id="documentName" verify="text/50/1/0" value="" class="selectInput"/><img id="documentBtn" class="clickImg"/><input type="hidden" name="documentCode" id="documentCode" value="'.$defaultValue.'" /></li>';
+					}else if($value['name']=='engineeringCode'){
+						echo '<li><span> 文件专业代码<font color="red" size="3"> * </font> </span><input type="text" name="engineeringName" id="engineeringName" verify="text/50/1/0" value="" class="selectInput"/><img id="engineeringBtn" class="clickImg"/><input type="hidden" name="engineeringCode" id="engineeringCode" value="'.$defaultValue.'" /></li>';
+					}else{//过滤出项目代码，调整按部门添加页面字段的顺序
+						if($value['name']=='projectCode'){
+							echo '<li style="width:260px" ><span>' . $value ['lable'] .'<font color="red" size="3">*</font></span><input type="text" name="' . $value ['name'] . '" id="' . $value ['name'] . '" value="'.$defaultValue.'" verify="' . $value ['verify'] . '"  isedit="' . $value ['isSystem'] . '" class="notselectInput" /></li>';
+						}else{
+							$arr[$index] = $value;
+							$index++;
+						}
+					}
+				 }
+				 foreach ($arr as $value){//遍历
+				 	$isNull = '';
+				 	$edittage = '';
+				 	$liwidth = '260px';
+					if ($value ['isNull'] == 1) {
+						$isNull = '<font color="red" size="3">*</font>';
+					}
+					$defaultValue='';
+					if ($value['defaultValue']!=null){
+						$defaultValue=$value['defaultValue'];
+					}
+				 	if ($value ['type'] == 'BOOL') {
+				 		$edittage = '<select name="' . $value ['name'] . '" id="' . $value ['name'] . '"  verify="' . $value ['verify'] . '"  isedit="' . $value ['isSystem'] . '" class="notselectInput"><option value="是">是</option><option value="否" selected="'.$defaultValue.'">否</option></select>';
+				 	} else {
+				 		if ($value ['length'] >= 200) {
+				 			$liwidth = '550px';
+				 			$edittage = '<textarea  name="' . $value ['name'] . '" id="' . $value ['name'] . '"  verify="' . $value ['verify'] . '" style="width:440px;margin-bottom:10px;"  isedit="' . $value ['isSystem'] . '" class="notselectInput">'.$defaultValue.'</textarea>';
+				 		} else {
+				 			$readOnly='';
+				 			if($value['name']=='docNo'){
+				 				$readOnly='readonly';
+				 			}else if($value['name']=='person'){
+				 				$readOnly='readonly';
+				 				$defaultValue=$person_;
+				 			}
+				 			$edittage = '<input type="text" name="' . $value ['name'] . '" id="' . $value ['name'] . '" value="'.$defaultValue.'" verify="' . $value ['verify'] . '"  isedit="' . $value ['isSystem'] . '"  '.$readOnly.' class="notselectInput"/>';
+				 		}
+				 	}
+				 	echo '<li style="width:' . $liwidth . '" ><span>' . $value ['lable'] . $isNull . '</span>' . $edittage . '</li>';
+				 }	
+				?>
+			</ul>
+		</div>
+	</form>
+	<div class="esbottom">
+		<table id="efiletable" style="width: auto;">
+		</table>
+	</div>
+</div>

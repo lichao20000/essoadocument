@@ -1,0 +1,86 @@
+
+<div style="width: 570px;height:350px;overflow-y:auto;overflow-x:hidden;">
+		<div class="estransfer">
+		<form id="transferBillCreateForm" method="post" enctype="multipart/form-data" >
+		<input type="hidden"  name="flowId" id="flowId" value="<?php echo $flowId?>" />
+		<input type="hidden"  name="step" id="step" value="<?php echo $step?>" />
+		<input type="hidden"  name="id" id="id" value="<?php echo $id?>" />
+		<input type="hidden"  name="actionId" id="actionId" value="" />
+		<input type="hidden"  name="stageId" id="stageId" value="<?php echo $stageId?>" />
+			<ul>
+				<?php  foreach ( $formList as $value ) {
+					$isNull='';
+					$edittage='';
+					$liwidth='250px';
+					$readonly='readonly';
+					if($value->isEdit&&!$value->name=='stageCode'){
+						$isNull='<font color="red" size="3">*</font>';
+						$readonly='';
+					}
+					if ($value->name=='participatoryCode'||$value->name=='deviceCode'){
+						$edittage='<input type="text" name="'.$value->name.'" id="'.$value->name.'" value="'.$value->value.'"  isEdit="'.$value->isEdit.'" '.$readonly.' class="selectInput" />';
+					}else{
+						if($value->length>=200){
+							$liwidth='525px';
+							$edittage='<textarea  name="'.$value->name.'" id="'.$value->name.'"   style="width:430px;background:#eee;" isEdit="'.$value->isEdit.'" '.$readonly.' >'.$value->value.'</textarea>';
+						}else{
+							$edittage='<input type="text" name="'.$value->name.'" id="'.$value->name.'" value="'.$value->value.'"  isEdit="'.$value->isEdit.'" '.$readonly.' style="border: 1px solid #ccc;" />';
+							
+						}
+					}
+					echo '<li style="width:'.$liwidth.'" ><span>'.$value->lable.$isNull.'</span>'.$edittage.'</li>';
+				}
+				?>
+			</ul>
+		</form>
+		</div>
+		<div id="menuContent" class="menuContent"
+			style="display: none; position: fixed;">
+			<ul id="treeDemo" class="ztree selectztree"></ul>
+		</div>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".selectInput").each(function(){
+		var code=$(this).attr("name");
+		if($(this).attr("isEdit")==true){
+			//收集范围	
+			if(code=="stageCode"){		
+				var url=$.appClient.generateUrl({ESDocumentsCollection: "getTree"},'x');
+				showTree(code,url);	
+			}
+			//单位部门
+			if(code=="participatoryCode"){
+				var url=$.appClient.generateUrl({ESParticipatory: "getTree"},'x');
+				showTree(code,url);		
+			}
+			//装置
+			if(code=="deviceCode"){
+				var url=$.appClient.generateUrl({ ESDevice: "getTree", maxLevel: 3},'x');
+				showTree(code,url);
+			}
+		}
+		
+	});
+
+	function showTree(code,url){
+		$("#"+code).attr("readonly",true);
+		$("#"+code).selectInput({
+	        url: url,
+	        chkStyle: "radio",
+	        onCheck:function(event, treeId, treeNode){        	
+	        	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	    		nodes = zTree.getCheckedNodes(true);
+	    		if(nodes.length==1){
+		    		var value=nodes[0].code;
+	    			$("#"+code).attr("value", value);
+	    			$("#"+code).attr("code", value);
+		    	}
+			},
+			width: 300,
+	        height: 300
+	 	});
+	}
+});
+</script>

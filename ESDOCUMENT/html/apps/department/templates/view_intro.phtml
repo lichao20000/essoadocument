@@ -1,0 +1,26 @@
+<style>
+#indexIntroduce {border:1px solid #ddd;width:258px;float:left !important;margin-bottom:10px !important;}
+#indexIntroduce .indexIntroduceLine {background:#99ccff;height:2px;}
+#indexIntroduce .introcontent {float:left;width:236px;border-left:1px solid #ddd;border-right:1px solid #ddd;padding:10px;}
+#indexIntroduce .introcontent .introdetail{float:left;  color:#666; width:236px;}
+#indexIntroduce .introcontent .introdetail p{margin-top:5px; float:left; line-height:20px;}
+</style>
+<div id="indexIntroduce">
+  <div class="indexIntroduceLine"></div>
+  <div class="introcontent">
+    <div>
+<?php if ($setting->pic): ?>
+      <img src="<?php echo url($setting->pic) . '?' . mt_rand() ?>" width="80" height="80" class="marginRight10 floatLeft">
+<?php endif ?>
+      <h1 class="font14 floatLeft color555 margin10"><?php echo $this->plain($setting->title) ?></h1>
+      <p style="width: 145px;" class="floatLeft margin20 color999">管理员：
+<?php foreach ($ownersInfo as $ownerInfo): ?>
+        <a class="font12" style="color:#369;"><?php echo $this->plain($ownerInfo->displayName) ?></a>
+<?php endforeach ?>
+      </p>
+    </div>
+    <div class="introdetail">
+      <p class="margin10"><?php echo nl2br($this->plain($setting->description)) ?></p>
+    </div>
+  </div>
+</div>

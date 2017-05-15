@@ -1,0 +1,66 @@
+@charset "utf-8";
+.globalForm {
+	margin:0px;
+}
+.globalForm ul {
+	clear:both;
+	float:left;
+	margin-bottom:6px;
+}
+.globalForm li {
+	float:left;
+	line-height:28px;
+}
+.globalFormInput, .formBg {
+	height:24px !important;
+	line-height:24px !important;
+	border:1px solid #c0c0c0;
+	padding:0 5px;
+}
+.globalFormSelect {
+	height:24px !important;
+	line-height:24px !important;
+	border:1px solid #c0c0c0;
+}
+.inputOn {
+	border:1px solid #a9d6f5 !important;
+}
+.inputWrong {
+	border:1px solid #f31b01 !important;
+}
+.globalFormTitle {
+	border-bottom:1px solid #d8d8d8;
+	padding:0 20px 15px 20px;
+	margin-bottom:20px;
+	float:left;
+}
+.globalFormTitleFont {
+	color:#222 !important;
+	line-height:20px !important;
+}
+.globalFormText {
+	padding:0 20px 15px 20px;
+	margin-bottom:20px;
+	color:#222 !important;
+	font-size:14px;
+	line-height:22px;
+	float:left;
+}
+
+.formBut {
+	border:1px solid #bbb;
+	line-height:24px !important;
+	height:24px !important;
+	text-align:center;
+	cursor:pointer;
+	background:#e2e2e2;
+	color:#808080;
+	float:left;
+	padding:0 5px;
+	display:inline;
+	margin-left:10px;
+}
+.formBut a {
+	text-decoration:none;
+	color:#222;
+}

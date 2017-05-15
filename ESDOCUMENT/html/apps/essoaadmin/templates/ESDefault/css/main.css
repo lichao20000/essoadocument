@@ -1,0 +1,262 @@
+@charset "utf-8";
+/* @author liuhezeng  CSS Document */
+
+/** 左侧功能区 **/
+.mainFunContent {
+	float:left;
+	margin-right:20px;
+	height:500px;
+	
+}
+
+.centerFunc{
+	height:500px;
+	align:center;
+	margin:0 auto;
+	width:1140px;
+	padding-left:100px;
+}
+
+.mainFunContent{
+	
+	width:860px;
+}
+
+/*   换行符  */
+.clearFloat {
+	clear:both;
+}
+
+.lineModelLeft1,.lineModelRight1,.lineModelLeft2,.lineModelRight2,.lineModelLeft3,.lineModelRight3{
+	cursor:pointer;
+	width:340px;
+	height:170px;
+}
+.lineModelRight1Login
+{
+	cursor:pointer;
+	width:170px;
+	height:170px;
+}
+
+.lineModelRight1,.lineModelLeft2,.lineModelRight2,.lineModelLeft3,.lineModelRight3{	
+	overflow-y: auto;
+}
+
+
+
+.lineModelLeft1 {
+	float:left;
+	background-color: #133959;
+}
+.lineModelRight1 {
+	background-color: #133959;
+	float:left;
+	margin-left:10px;
+}
+.lineModelRight1Login{
+	background-color:#e8687f;
+	margin-left:10px;
+	float:left;
+ 	margin-left:10px;
+}
+
+.loginModelText{
+	margin-top:65px;
+	margin-left:55px;
+	text-algin:center;
+	font-size:28px;	
+	color:#ffffff;
+	font-weight:bolder;
+}
+
+.lineModelLeft2 {
+	float:left;
+	background-color: #133959;
+	margin:10px 10px 0px 0px;
+}
+.lineModelRight2 {
+	background-color: #133959;
+	float:left;
+	margin-top:10px;
+}
+.lineModelLeft3 {
+	float:left;
+	background-color: #133959;
+	margin:0px 0px 0px 10px;
+}
+.lineModelRight3 {
+	background-color: #133959;
+	float:left;
+	margin-top:10px;
+	margin-left:10px;
+}
+
+.lineModelRight14{
+	cursor:pointer;
+	background-color:#db562d;
+	float:left;
+ 	margin-left:10px;
+ 	height:170px;
+	width:320px;
+}
+
+.lineModelRight33{
+	cursor:pointer;
+	float:left;
+	margin-left:20px;
+	background-color:#af1a40;
+	height:350px;
+	width:500px;
+	margin-top:-170px;
+}
+
+/**  登录区 **/
+
+.loginSectionContainer {
+	position:absolute;
+	width:400px;
+	height:400px;
+}
+
+
+.dateSection{
+	margin-top:50px;
+}
+.hourSection {
+	color: #ffffff;
+	font-size:24px;
+	margin-left:30px;
+	margin-top:30px;	
+}
+.daySection{
+	color: #ffffff;
+	float:right;
+	font-size:36px;
+	margin-right:8px;
+	margin-top:-40px;;
+}
+.monthSection{
+	float:right;
+	color:#ffffff;
+	font-size:12px;	
+	margin-right:8px;
+	margin-top:20px;
+}
+.weekSection{
+	float:right;
+	color:#ffffff;
+	font-size:12px;
+	margin-right:8px;
+}
+.dataLogo{
+	width:28px;
+	height:28px;
+	margin:-8px 0px 0px 8px;
+		
+}
+.titleLineRight1{
+	font-size:12px;	
+	color:#ffffff;
+	margin-left:10px;
+	margin-top:10px;
+	font-weight:bolder;
+}
+
+.titleImgArcs{
+	color:#ffffff;
+	font-size:20px;
+	margin-left:20px;
+	margin-top:70px;	
+}
+
+.hideTextAreaUpLeft2,.hideTextAreaUpRight14,.hideTextAreaUpRight2,.hideTextAreaUpRight3{
+	margin-top:20px;
+	display:none;
+}
+
+.titleLineRightContent{
+	font-size:12px;	
+	color:#ffffff;
+	margin-left:10px;
+	margin-top:3px;
+}
+
+.titleImgArcsLogo{
+	color:#ffffff;
+}
+
+.logoItem{
+	position:absolute;
+	width:500px;
+	height:45px;
+	clear:both;
+	left:80px;
+	top:80px;
+}
+.rememberUserName{
+	margin:5px 0px 5px 0px;	
+	margin-bottom:10px;
+	vertical-align:middle;
+	line-height:0px;
+	margin-left:10px;
+}
+.rememberUserNameLabe{
+	font-size:14px;
+	vertical-align:middle;
+	line-height:5px;
+	margin-left:5px;
+}
+.userNamelabel,.userPassWordlabel{
+	float:left;
+	margin-top:12px;	
+}
+.menuItem{
+	position:absolute;
+	bottom:10px;
+	left:6%;
+	width:55px;
+	height:48px;
+}
+.showSectionClass{
+	margin-left:15px;
+	font-color:#ffffff;
+}
+.noborder,.details,li{
+	color:#ffffff;
+}
+.noborder:hover,.details:hover,li:hover{
+	color:#ffffff;
+}
+
+
+.arcStandardImg{
+	margin-top:60px;
+	margin-left:70px;
+}
+
+.arcStandardImg:hover{
+	text-decoration:none;
+}
+
+.arcStandardImg,.titleImgArcs{
+	float:left;
+	color:#ffffff;
+	
+}
+
+.hideTextAreaUpRight1Login{
+	display:none;
+	margin-left:65px;
+	margin-top:55px;
+}
+
+.loginImg{
+	color:#ffffff;
+}
+
+#loginImgId{
+	text-decoration: none;
+}
+
+

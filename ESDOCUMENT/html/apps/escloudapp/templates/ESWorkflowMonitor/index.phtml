@@ -1,0 +1,27 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeTbar.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+
+<link href="<?php echo $tplPath?>/ESWorkflowMonitor/css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflowMonitor/js/init.js"></script>
+
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"流程监控", content:"#workflowControlDataGridDiv"});
+});
+</script>
+<div class='workflowControl_main'>
+	<div id='workflowControl_tree' class='workflowControl_tree'>
+		<div id='workflowControlTree' class='ztree' style = "margin-top:10px;"></div>
+	</div>
+	<div id='workflowControlDataGridDiv' class='workflowControl_grid'>
+		<table id='workflowControlDataGrid' status='flow'></table>
+	</div>
+</div>

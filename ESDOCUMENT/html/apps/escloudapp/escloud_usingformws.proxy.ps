@@ -1,0 +1,653 @@
+<?php
+/**
+ * 借阅管理表单数据的代理
+ * @author yuanzhonghua
+ *
+ */
+class ProxyEscloudappEscloud_usingformws extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_usingformws";
+  /**
+   * 添加借阅管理表单
+   * @param jsonData $param
+   * @return boolean
+   */
+  public function addform($param)
+  {
+      $ip = $_SERVER['REMOTE_ADDR'];
+  	$appId=$this->getAppId();
+  	$appToken=$this->getAppToken();
+  	$urlParam = array('saveUsingForm',$appId,$appToken,$ip);
+  	$url = implode('/', $urlParam);
+  	//return $param;
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * @yzh  201307
+   * 添加会计档案借阅表单
+   * @param jsonData $param
+   * @return boolean
+   */
+  public function addAccountForm($param)
+  {
+    $ip = $_SERVER['REMOTE_ADDR'];
+  	$appId=$this->getAppId();
+  	$appToken=$this->getAppToken();
+  	$urlParam = array('saveUsingFormAccount',$appId,$appToken,$ip);
+  	$url = implode('/', $urlParam);
+  	//return $param;
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 获取借阅管理的列表->显示
+   */
+  public function getList($start,$limit,$userid,$statusForTree)
+  {
+  	$urlParam = array('getUsingFormList',$start,$limit,$userid,$statusForTree);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * @yzh  201307
+   * 获取会计档案借阅的列表->显示
+   */
+  public function getAccountList($orgid,$start,$limit)
+  {
+  	$urlParam = array('getUsingFormAccountList',$orgid,$start,$limit);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 获取列表的总条数
+   */
+  public function getTotal($userid){
+  	$urlParam=array('countAll',$userid);
+  	$url=implode('/',$urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 依据ID删除相应的借阅管理表单
+   */
+  public function delList($param){
+  	$appId=$this->getAppId();
+  	$appToken=$this->getAppToken();
+  	$urlParam=array('deleteBatchUsingForm',$appId,$appToken);
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * @yzh   201307
+   * 依据ID删除相应的会计档案借阅表单
+   */
+  public function delAccountList($param){
+  	$ip = $_SERVER['REMOTE_ADDR'];
+  	$appId=$this->getAppId();
+  	$appToken=$this->getAppToken();
+  	$urlParam=array('deleteUsingFormAccount',$appId,$appToken,$ip);
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 筛选借阅管理表单数据filterAccountBorrow
+   */
+  public function filterBorrow($param){
+  	$urlParam=array('getUsingFormListByCondition');
+  	$url=implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * @yzh   201307
+   * 筛选会计档案借阅表单数据
+   */
+  public function filterAccountBorrow($userid,$start,$limit,$param){
+  	$urlParam=array('getUsingFormAccountListByCondition',$userid,$start,$limit);
+  	$url=implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 根据筛选条件获取总数
+   */
+  public function countAllByFilter($userid,$param){
+  	$urlParam=array('countAllByCondition',$userid);
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 根据id查找借阅单
+   * @param  $param
+   */
+  public function getItem($id){
+    $urlParam=array('getUsingForm',$id);
+    $url=implode('/',$urlParam);
+    return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * @yzh  201307
+   * 根据id查看、编辑会计借阅单
+   */
+  public function getAccountItem($id){
+    $urlParam=array('getUsingFormAccount',$id);
+    $url=implode('/',$urlParam);
+    return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 根据借阅单id分页查询借阅明细
+   * @param unknown_type $id
+   * @return Ambigous <return_type, mixed, string>
+   */
+  public function getDetails($id,$status,$start,$limit){
+  	$urlParam=array('getUsingDetailList',$id,$status,$start,$limit);
+  	$url=implode('/',$urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * @yzh  201307
+   * 根据会计借阅单id分页查询借阅明细
+   * @param $id
+   * @return Ambigous <return_type, mixed, string>
+   */
+  public function getAccountDetails($id,$start,$limit){
+  	$urlParam=array('getUsingDetailAccountList',$id,$start,$limit);
+  	$url=implode('/',$urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   *  保存修改借阅单
+   * @param  $param
+   */
+  public function saveForm($userId,$param){
+  	$ip = $_SERVER['REMOTE_ADDR'];
+  	$urlParam=array('updateUsingForm',$userId,$ip);
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * @yzh   201307
+   *  保存修改会计档案借阅单
+   * @param  $param
+   */
+  public function saveAccountForm($userId,$param){
+  	$ip = $_SERVER['REMOTE_ADDR'];
+  	$urlParam=array('updateUsingFormAccount',$userId,$ip);
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 批量修改借阅明细
+   * @param $param
+   */
+  public function changeDetails($param){
+  	$urlParam=array('updateBatchUsingDetail');
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * @yzh   201307
+   * 批量修改会计档案借阅明细
+   * @param $param
+   */
+  public function changeAccountDetails($param){
+  	$urlParam=array('updateUsingDetailaccount');
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 编辑借阅明细时批量添加借阅明细(在借阅单没发起流程时或者借阅单被退回后)
+   * @param $param
+   */
+  public function addDetails($param){
+  	$urlParam=array('saveBatchUsingDetail');
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * @yzh  201307
+   * 编辑借阅明细时批量添加会计档案借阅明细(在借阅单没发起流程时或者借阅单被退回后)
+   * @param $param
+   */
+  public function addAccountDetails($param){
+  	$urlParam=array('saveUsingDetailAccount');
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 批量删除借阅明细
+   */
+  public function delDetails($param){
+  	$urlParam=array('deleteBatchUsingDetail');
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * @yzh   201307
+   * 批量删除会计档案借阅明细
+   */
+  public function delAccountDetails($param){
+  	$urlParam=array('deleteUsingDetailAccount');
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  
+  /**
+   * 根据用户id获得子机构
+   * @param int $id
+   */
+  public function getOrg($id){
+  	$urlParam = array('getOrg',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 根据机构id获取子机构
+   * @param  $orgId
+   * @return 
+   */
+  public function getSubOrg($orgId)
+  {
+  	$urlParam = array('getSubCompanyListByParentid',$orgId);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 获取人员信息列表
+   * @param  $orgid
+   * @return 
+   */
+  public function getPerson($orgid){
+  	$urlParam=array('getUserList',$orgid);
+  	$url=implode('/',$urlParam);
+  	return $this->get(self::SERVICE_NAME,$url);
+  }
+  
+  /**
+   * 发起年检督办流程
+   * @author niyang
+   * @date 2013-11-06
+   * @return
+   */
+  public function startInspectProcess($processDefinitionKey,$businessKey,$userId,$leaderId,$param) {
+ 	$appId = $this->getAppId();
+ 	$appToken = $this->getAppToken();
+  	$urlParam=array('startInspectProcess',$appId,$appToken,$processDefinitionKey,$businessKey,$userId,$leaderId);
+  	$url=implode('/',$urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');  	
+  }
+  
+	/**
+	 * 获取督办详细信息
+	 * @author niyang
+	 * @date 2013-11-06
+	 * @return
+	 */
+  public function getInspectTodoDetail($workid) {
+  	$urlParam=array('getInspectTodoDetail',$workid);
+  	$url=implode('/',$urlParam);
+  	return $this->get(self::SERVICE_NAME,$url);
+  }
+
+	/**
+	 * 领导审批
+	 * @author niyang
+	 * @param appId np046
+     * @param appToken wwwwww
+     * @param taskId 任务ID
+     * @param userId 当前的登陆用户（只有在转审批时传入的是选择人的userId）
+     * @param operation  传入complete
+     * @param localvar   传入false
+     * @return true/false
+	 * @return
+	 */
+	public function taskInspectOperation($taskid,$userid,$operation,$localvar,$workflowid){
+	 	$appId = $this->getAppId();
+	 	$appToken = $this->getAppToken();
+	  	$urlParam=array('taskInspectOperation',$appId,$appToken,$taskid,$userid,$operation,$localvar,$workflowid);
+	  	$url=implode('/',$urlParam);
+	  	return $this->get(self::SERVICE_NAME,$url);	
+	}  
+	/**
+	 * 根据用户id获得子机构
+	 * @param int $id
+	 */
+	public function getOrg1($map){
+		$urlParam = array('getOrg');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');  	
+	}
+	/**
+	 * 根据机构id获取子机构
+	 * @param  $orgId
+	 * @return
+	 */
+	public function getSubOrg1($map)
+	{
+		$urlParam = array('getSubCompanyListByParentid');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,json_encode($map),'application/json;charset=UTF-8');  	
+	}
+	/**
+	 * shimao 20140617 保存用户列表
+	 * @param unknown_type $map
+	 */
+	public function getPerson1($map)
+	{
+		$urlParam = array('getUserList');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');  	
+	}
+	/**
+	 * shimiao 20140617 得到目录树的数据
+	 * @param unknown_type $map
+	 */
+	public function getTreeDates($map){
+		$urlParam = array('getTreeDates');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 得到新的数据
+	 * @param unknown_type $map
+	 */
+	public function getListNew($map){
+		$urlParam = array('getListNew');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 得到角色数据
+	 * @param unknown_type $map
+	 */
+	public function getRoleData($map){
+		$urlParam = array('getRoleData');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,json_encode($map),'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 保存续借次数
+	 * @param unknown_type $data
+	 */
+	public function saveRelendRoleLend($data){
+		$urlParam = array('saveRelendRoleLend');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$data,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 保存角色借阅天数
+	 * @param unknown_type $map
+	 */
+	public function saveRoleLends($map){
+		$urlParam = array('saveRoleLends');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 得到续借次数
+	 * @param unknown_type $map
+	 */
+	public function getRelendRoleLend($map){
+		$urlParam = array('getRelendRoleLend');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 得到角色的借阅天数
+	 * @param unknown_type $map
+	 */
+	public function getRoleLend($map){
+		$urlParam = array('getRoleLendCount');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 删除续借的最大续借次数
+	 * @param unknown_type $map
+	 */
+	public function deleteRelendMax($map){
+		$urlParam = array('deleteRelendMax');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 得到普通用户
+	 * @param unknown_type $map
+	 */
+	public function getCommonUserByRole($map){
+		$urlParam = array('getCommonUserByRole');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 将普通用户的改变为特殊用户
+	 * @param unknown_type $map
+	 */
+	public function removeCommonUserToVip($map){
+		$urlParam = array('removeCommonUserToVip');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 将特殊用户改变为普通用户
+	 * @param unknown_type $map
+	 */
+	public function moveVipToCommon($map){
+		$urlParam = array('moveVipToCommon');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 得到特殊用户
+	 * @param unknown_type $map
+	 */
+	public function getVipUserByRole($map){
+		$urlParam = array('getVipUserByRole');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 得到特殊用户的最新信息
+	 * @param unknown_type $map
+	 */
+	public function getVipUserNews($map){
+		$urlParam = array('getVipUserNews');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 保存特殊用户的续借次数
+	 * @param unknown_type $map
+	 */
+	public function saveVipRelendCount($map){
+		$urlParam = array('saveVipRelendCount');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 保存特殊是用户的具体信息
+	 * @param unknown_type $map
+	 */
+	public function saveVipUser($map){
+		$urlParam = array('saveVipUser');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20440617 保存临时用户
+	 * @param unknown_type $map
+	 */
+	public function saveTempUser($map){
+		$urlParam = array('saveTempUser');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 得到临时用户
+	 * @param unknown_type $map
+	 */
+	public function getTempUsers($map){
+		$urlParam = array('getTempUsers');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 删除临时用户
+	 * @param unknown_type $map
+	 */
+	public function deleteTampUsers($map){
+		$urlParam = array('deleteTampUsers');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 得懂啊续借最大次数
+	 * @param unknown_type $map
+	 */
+	public function getMaxArchiveCount($map){
+		$urlParam = array('getMaxArchiveCount');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140617 更新利用单的状态值
+	 * @param unknown_type $map
+	 */
+	public function updateDetailToOrder($map){
+		$urlParam = array('updateDetailToOrder');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140610 保存利用单字段
+	 * @param unknown_type $map
+	 */
+	public function saveUsingField($map){
+		$urlParam = array('saveUsingField');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140610 获取using字段列表
+	 * @param unknown_type $map
+	 */
+	public function getUsingFields($map){
+		$urlParam = array('getUsingFields');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140610 获取using字段列表
+	 * @param unknown_type $map
+	 */
+	public function getUsingFieldForForm($map){
+		$urlParam = array('getUsingFieldForForm');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140610  根据id删除using字段列表
+	 * @param unknown_type $map
+	 */
+	public function deleteUsingField($map){
+		$urlParam = array('deleteUsingField');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140610  根据id删除using字段列表
+	 * @param unknown_type $map
+	 */
+	public function getUsingFieldId($map){
+		$urlParam = array('getUsingFieldId');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140610  根据id删除using字段列表
+	 * @param unknown_type $map
+	 */
+	public function showDetailsFormUsing($map){
+		$urlParam = array('showDetailsFormUsing');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * shimiao 20140610  检验档案是否可以续借
+	 * @param unknown_type $map
+	 */
+	public function checkCanLendArchive($map){
+		$urlParam = array('checkCanLendArchive');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140624 校验预约数据
+	 * @param unknown_type $map
+	 */
+	public function checkOrderPath($map){
+		$urlParam = array('checkOrderPath');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140624 通过预约的数据得到对应的form表单
+	 * @param unknown_type $map
+	 */
+	public function getFormDataOfPath($map){
+		$urlParam = array('getFormDataOfPath');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	/**
+	 * shimiao 20140624 查看预约数据
+	 * @param unknown_type $map
+	 */
+	public function showOrderPaths($map){
+		$urlParam = array('showOrderPaths');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	public function getList_keyword($map){
+		$urlParam = array('getUsingFormListForNew');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	public function getList_store_keyword($map){
+		$urlParam = array('getUsingStoreListForNew');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	public function getTempUserByUserName($map){
+		$urlParam = array('getTempUserByUserName');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}
+	public function endUsingForm($id){
+		$urlParam=array('endUsingForm',$id);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	public function relendForForm($id){
+		$urlParam=array('relendForForm',$id);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	public function returnForForm($param){
+		$urlParam = array('returnForForm');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	public function directForLendUsingForm($param){
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$appId=$this->getAppId();
+		$appToken=$this->getAppToken();
+		$urlParam = array('directForLendUsingForm',$appId,$appToken,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	public function getFormType($param){
+		$urlParam = array('getFormType');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+}

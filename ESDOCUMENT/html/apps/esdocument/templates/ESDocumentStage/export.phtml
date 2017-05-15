@@ -1,0 +1,20 @@
+<div id="reportstyle">
+	<form name="esreport" method="post" action='' id="esreport" style="width: 600px">
+		<span class="tabs">导出文件格式选择</span>
+		<hr width="100%">
+		<span class='tabs'>
+			<input type='radio' class="cbx" name='export_formats' value="formats_Excel" checked='checked' id='formats_Excel'>
+			<label for="formats_Excel" style="padding: 0px; display: inline;">Excel</label>
+			<input type='radio' class="cbx" name='export_formats' value="formats_xml" id='formats_xml'>
+			<label for="formats_xml" style="padding: 0px; display: inline;">Xml</label> 
+			<input type='radio' class="cbx" name='export_formats' id='formats_dbf' value='formats_dbf'>
+			<label for="formats_dbf" style="padding: 0px; display: inline;">Dbf</label>
+		</span>
+	</form>
+	<br>
+	<?php if($display){?>
+	<span class="tabs">导出数据筛选</span>
+	<hr width="100%">
+	<?php include (dirname(__FILE__)."/filter.phtml")?>
+	<?php } ?>
+</div>

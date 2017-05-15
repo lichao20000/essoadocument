@@ -1,0 +1,267 @@
+<script type="text/javascript">
+var menuitem = 'menu_appcenter';
+var appCount = <?php
+$c = 0;
+foreach($list as $id => $app)
+  if($app['is_singleton'])
+    $c++;
+echo $c;
+?>;
+</script>
+<link href="<?php echo $tplPath?>/css/app_center.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+function subscribe(app, pid, title){
+  var c = parseInt($('#sub_count_' + app).attr('rel'));
+  if(isNaN(c)){
+    alert('应用开通次数出错');
+    return;
+  }
+  if($('#info-' + app).length === 0){
+    if(c > 0){
+      alert('不能再开通应用');
+      return;
+    }
+  }
+  if (typeof title == 'undefined') {
+    title = app;
+  }
+ $("#dialog-confirm").dialog({
+      open: function(){
+        $(this).removeClass("bgonebtn");
+      },
+      modal: true,
+      draggable: false,
+      resizable: false,
+      buttons: {
+        " 确 认 ": function() {
+          $.ajax({
+            dataType: "json",
+            url:'/app/subscribe/'+ app + '/' + pid,
+            success:function(data){
+              if(data.status == 'ok') {
+                  if(data.is_check == '0'){  //不需要审核
+                    if($('#info-' + app).length === 0){
+                      $('#action_' + app).click(function(e) {
+                        e.preventDefault();
+                      })
+                      .removeClass('btn_blue').html('已审核').css('font-weight',100).addClass('color000 floatRight font12');
+                    }
+                    c = c+1;
+                    $('#sub_count_' + app).attr('rel',c);
+                  } else {  //需要审核
+                    if($('#info-' + app).length === 0){
+                      $('#action_' + app).click(function(e) {
+                        e.preventDefault();
+                      })
+                      .removeClass('btn_blue').html('审核中').css('font-weight',100).addClass('color000 floatRight font12');
+                    }
+                    c = c+1;
+                    $('#sub_count_' + app).attr('rel',c);
+                  }
+              } else {
+                alert('订购出错！');
+              }
+            }
+          });
+          $(this).dialog('close');
+        },
+        " 取 消 ": function() {
+          $(this).dialog('close');
+        }
+      }
+    });
+    $("#dialog-confirm").html("<span style='font-size: 14px;' class='dialog_s'>确定申请开通\"" + title + "\"吗?</span>");
+}
+function unsubscribe(app, instanceid, title,id){
+  var c = parseInt($('#sub_count_' + app).attr('rel'));
+  if(isNaN(c) || c <= 0){
+    alert('应用开通次数出错');
+    return;
+  }
+  if (typeof title == 'undefined') {
+    title = app;
+  }
+
+ $("#dialog-confirm").dialog({
+      open: function(){
+        $(this).removeClass("bgonebtn");
+      },
+      modal: true,
+      draggable: false,
+      resizable: false,
+      buttons: {
+        " 确 认 ": function() {
+          $.ajax({
+            url:'/app/unsubscribe/'+ app + '/' + instanceid,
+            success:function(resp){
+              alert('"' + title + '"取消开通成功');
+              $('#li-'+id).html('&nbsp;');
+                c = c-1;
+                $('#sub_count_' + app).attr('rel',c);
+                if (c === 0) {
+                  $('#action_' + app).removeClass('gray_but').addClass('btn_blue').html('申请开通').attr('href',"javascript:subscribe('"+app+"',"+id+",'"+title+"')");
+                }
+            }
+          });
+          $(this).dialog('close');
+        },
+        " 取 消 ": function() {
+          $(this).dialog('close');
+        }
+      }
+    });
+    $("#dialog-confirm").html("<span style='font-size: 14px;' class='dialog_s'>确定要取消开通\"" + title + "\"吗?</span>");
+}
+
+var onTabLoad = function(el) {
+var cur_page = 0;
+el.find('#pPage').css('cursor','pointer');
+el.find('#nPage').css('cursor','pointer');
+el.find('#pPage').css('opacity',0.33);
+if( appCount > 10 )
+  $('#nPage').css('opacity',1);
+else
+  $('#nPage').css('opacity',0.33);
+for( i=0;i<10 && i<appCount; i++)
+  $('.page-content').find('#list_' + i).show();
+for( i=10;i<appCount;i++)
+  $('.page-content').find('#list_' + i).hide();
+
+
+el.find('#pPage').click(function(e){
+  if( cur_page >= 1 ){
+      cur_page -= 1;
+      start = 10 * cur_page;
+      end = start+10;
+      for( i=end;i<end+10;i++ )
+        el.find('#list_' + i).hide();
+      for( i=start;i<end;i++ )
+        el.find('#list_' + i).show();
+      if( cur_page === 0 )
+        el.find('#pPage').css('opacity',0.33);
+      if((cur_page+1)*10 < appCount )
+        el.find('#nPage').css('opacity',1);
+      el.find('#page-tip').html((start+1)+'-'+end);
+    }
+});
+el.find('#nPage').click(function(e){
+  if( (cur_page+1) * 10 < appCount ){
+     cur_page += 1;
+     start = 10 * cur_page;
+     end = start+10;
+     for( i=start-10;i<start;i++ )
+       el.find('#list_' + i).hide();
+     for( i=start;i<end && i<appCount;i++ )
+       el.find('#list_' + i).show();
+     if( (cur_page+1) * 10 >= appCount)
+       el.find('#nPage').css('opacity',0.33);
+     $('#pPage').css('opacity',1);
+     el.find('#page-tip').html('' + (start+1)+'-'+((end>appCount)?appCount:end));
+  }
+});
+
+}
+</script>
+<div id="page-nav" class="topNav">
+  <div class="topNavL"><img src="<?php echo $tplPath ?>/images/icons/app_center.gif" width="30" height="32" alt="应用中心"/>应用中心</div>
+  <div class="topNavC">
+    <div class="topNavMenuOn textAlignCenter"><a href="#" style=" line-height:31px;" class="bold">应用管理</a></div>
+  </div>
+</div>
+<div id="page-body" class="content">
+<div id="page-tab" class="topTab">
+  <span class="floatLeft" style="display:none;"><img src="<?php echo $tplPath ?>/images/ok.gif" width="28" height="28" alt="订购成功"  style=" margin:3px 5px 0 180px;" align="absmiddle"/>订单已提交，请等待审核 </span>
+
+  <div class="topTabPage">
+
+    <div style="float:left;"><span id="page-tip" class="bold font14">1-<?php echo ($c>=10)?10:$c;?></span> <span>of</span> <span class="bold font14"><?php echo $c?></span></div>
+    <div id="pPage" class="but2 butNoBg margin0"><a href="#" ><img src="<?php echo $tplPath ?>/images/bt_pre.gif" width="32" height="32" alt="往前" /></a></div>
+    <div id="nPage" class="but1 butNoBg margin0"><a href="#" ><img src="<?php echo $tplPath ?>/images/bt_next.gif" width="32" height="32" alt="往后" /></a></div>
+  </div>
+</div>
+  <div class="left page-sidebar">
+    <ul style="background:none">
+<?php if ($index == -1): ?>
+      <li class="leftOn bold">全部</li>
+<?php else: ?>
+      <li><a href="<?php echo url('app/center') ?>">全部</a></li>
+<?php endif ?>
+<?php
+foreach ($tagsList as $key => $tag):
+  if ($index == $key):
+?>
+      <li class="leftOn bold"><?php echo $this->plain($tag) ?></li>
+<?php else: ?>
+      <li><a href="<?php echo url('app/center/tag' . $key) ?>"><?php echo $this->plain($tag) ?></a></li>
+<?php
+  endif;
+endforeach;
+?>
+    </ul>
+  </div>
+  <div class="page-content centerNoRight ">
+    <?php
+    $i = 0;
+    foreach ($list as $appid => $app):
+      if(!$app['is_singleton'])continue;
+    ?>
+
+    <div class="listBox " id="list_<?php echo $i;?>">
+      <?php if (isset($subscribed_apps[$appid]) && $app['is_singleton']): ?>
+      <div   id="sub_count_<?php echo $appid?>" rel="1"></div>
+      <?php else:?>
+      <div   id="sub_count_<?php echo $appid?>" rel="<?php echo isset($subscribed_apps[$appid]) ? count($subscribed_apps[$appid]) : 0;?>"></div>
+      <?php endif;?>
+
+
+      <label for="checkbox"></label>
+      <div class="appCenterIcon">
+        <div class="appCenterIconImg"><img src="<?php echo $app['icon']?>" alt="name" width="32" height="32" /></div>
+      </div>
+      <div class="listText" style="_float:left">
+        <h1>
+<?php
+if (!$app['is_public']){
+  if (isset($subscribed_apps[$appid]) && $app['is_singleton']){
+    if ($subscribed_apps[$appid][0]['status']){
+      $instanceId = $subscribed_apps[$appid][0];
+?>
+        <a href="/<?php echo $appid?>/<?php echo $instanceId['id'];?>" style="padding-left:2px"><?php echo $app['productName'] ?></a>
+        <a id="action_<?php echo $appid?>" href="javascript:unsubscribe('<?php echo $appid ?>', '<?php echo $instanceId['id']?>','<?php echo $this->plain($app['productName']) ?>',<?php echo $app['id']?>)" class="gray_but floatRight" >取消开通</a>
+<?php }else{ ?>
+        <a href="javascript:void(0);" style="padding-left:2px"><?php echo $app['productName'] ?></a>
+        <a href="javascript:;" class=" color000 floatRight  font12" style="font-weight:100;">审核中</a>
+<?php
+      }
+  }else{
+?>
+        <a href="javascript:void(0);" style="padding-left:2px"><?php echo $app['productName'] ?></a>
+        <a id="action_<?php echo $appid?>" href="javascript:subscribe('<?php echo $appid?>', <?php echo $app['id']?>, '<?php echo $this->plain($app['productName']) ?>')" class="btn_blue floatRight" >申请开通</a>
+<?php
+  }
+}else{
+?>
+    <a href="/<?php echo $appid?>" style="padding-left:2px"><?php echo $app['productName'] ?></a>
+<?php }?>
+        </h1>
+        <h2 class="color999">
+<?php
+foreach ($app['tag'] as $tag):
+  if (false === ($key = array_search($tag, $tagsList))) {
+    continue;
+  }
+?>
+          <a href="<?php echo url('app/center/tag' . $key) ?>"><?php echo $this->plain($tag) ?></a>
+<?php endforeach ?>
+        </h2>
+        <p class="height29" style="padding:2px"><?php echo $app['description'] ?></p>
+      </div>
+    </div>
+<?php
+  $i++;
+endforeach;
+?>
+  </div>
+</div>
+<div id="dialog-confirm" title="提示信息" style="vertical-align:middle;">
+</div>

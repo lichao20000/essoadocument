@@ -1,0 +1,22 @@
+@charset "utf-8";
+/* CSS Document */
+
+a img {border: 0 none;}
+a{text-decoration:none;}
+.main{position:relative;width:100%;overflow:hidden;font-family:Arial;font-size:14px;color:#333333;}
+.main .content2{width:1024px;min-width:980px;margin:0 auto;}
+.main .submit{text-align:left;border-bottom:1px solid #999999;padding-bottom:10px;padding-top:10px;}
+.main .submit input{width:86px;height:36px;background:url("../img/approve.gif");border:0 none;cursor:pointer;}
+.main .basic{margin-top:10px;}
+.main .basic input{height:20px;}
+.main .basic table{border-collapse:collapse;text-align:right;}
+.main .basic table td{height:20px;padding-top:10px;padding-left:15px;}
+.main .detail{text-align:left;margin-top:30px;}
+.main .detail .border{margin-top:10px;border-top:1px solid #999999;}
+.main .detail .list {float:left;margin-top:5px;}
+.title{font-size:19px;}
+.state{font-family:Arial;font-size:13px;font-weight:normal;font-style:normal;text-decoration:none;margin-top:5px;}
+.state label{color:#999999;}
+.state span{color:#333333;}
+.border .del{text-align:right;float:right;margin-top:15px;font-family:Arial;font-size:14px;font-weight:normal;font-style:normal;text-decoration:underline;color:#0000CC;}
+.clear{clear:both;}

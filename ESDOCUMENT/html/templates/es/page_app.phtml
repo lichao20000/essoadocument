@@ -1,0 +1,17 @@
+	<?php $counter = 1 ?>
+		<?php 
+		foreach ($grantApps as $grantApp){
+			$grant=(array)$grantApp;
+			$appname=$grant['appname'];
+			$appid=$grant['appid']=='essoaapp'?'escloudapp':$grant['appid'];
+			$bigorgname=$grant['bigorgname'];
+			$saasid=$grant['saasid']==-1?0:$grant['saasid'];
+			if ($saasid!=0&&$bigorgname!=null){
+				$appname=$appname.'[ '.$bigorgname.' ]';
+			}
+			if($appname!=null&&$appname!=''){
+		?>
+		<li><a href="javascript:void(0);" url="<?php echo url($appid)?>" onclick="userInfoManager.setSassId(this)" saasid="<?php echo $saasid?>" appid="<?php echo $appid?>" class = "btn-<?php echo $counter?>"> <?php echo $appname;?></a></li>
+       <?php  
+       $counter++;
+		}}?>

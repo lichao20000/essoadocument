@@ -1,0 +1,353 @@
+/*
+ * Ext JS Library 2.1
+ * Copyright(c) 2006-2008, Ext JS, LLC.
+ * licensing@extjs.com
+ * 
+ * http://extjs.com/license
+ */
+
+html, body {
+/*	font: normal 12px tahoma, arial, verdana, sans-serif;*/ /* 解决样式冲突 */
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+	overflow: hidden;
+	height: 100%;
+}
+
+.ext-el-mask {
+    background:#dadadb;
+}
+.x-grid3-td-title b {
+    font-family:tahoma, verdana;
+    display:block;
+    color:#333;
+}
+.x-grid3-td-title b i {
+    font-weight:normal;
+    font-style: normal;
+    color:#000;
+}
+.x-grid3-td-title .topic {
+    padding-left:20px;
+}
+.x-grid3-td-title .x-grid3-cell-inner {
+    white-space:normal;
+}
+.x-grid3-td-title a {
+    color: #385F95;
+    text-decoration:none;
+}
+.x-grid3-td-title a:hover {
+    text-decoration:underline;
+}
+.x-grid3-row-body p {
+    margin:5px 20px 10px 25px !important;
+    color:#555;
+}
+.post-date {
+    font-weight:bold;
+    color:#333;
+}
+.author {
+    color:#333;
+}
+.x-tree {
+    background:#fff !important;
+}
+.x-border-layout-ct {
+    background:transparent;
+}
+body.x-border-layout-ct {
+    /**background:#c3d5ed url(images/bg.gif) repeat-x left top !important;**/
+    background:#c3d5ed;
+}
+.x-layout-split {
+    background-color:transparent !important;
+}
+.x-tree-node div.feeds-node{
+    /**background:#eee url(images/cmp-bg.gif) repeat-x;**/
+    background:#eee;
+    margin-top:1px;
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ccc;
+    padding-top:2px;
+    padding-bottom:1px;
+}
+.feeds-node .x-tree-node-icon {
+    display:none;
+}
+.forum-ct a span {
+    font-weight:bold;
+    color:#222;
+}
+.feed {
+    border:1px solid #fff;
+    margin:3px;
+}
+.feed .x-tree-ec-icon {
+    display:none;
+}
+.cut-icon {
+    background-image:url(../../js/workflow/images/cut.gif) !important;
+}
+.copy-icon {
+    background-image:url(../../js/workflow/images/copy.gif) !important;
+}
+.paste-icon {
+    background-image:url(../../js/workflow/images/paste.gif) !important;
+}
+.undo-icon {
+    background-image:url(../../js/workflow/images/undo.gif) !important;
+}
+.redo-icon {
+    background-image:url(../../js/workflow/images/redo.gif) !important;
+}
+.group-icon {
+    background-image:url(../../js/workflow/images/group.gif) !important;
+}
+.ungroup-icon {
+    background-image:url(../../js/workflow/images/ungroup.gif) !important;
+}
+.grid-icon {
+    background-image:url(../../js/workflow/images/grid.gif) !important;
+}
+.connect-icon {
+    background-image:url(../../js/workflow/images/connect.gif) !important;
+}
+.bold-icon {
+    background-image:url(../../js/workflow/images/bold.gif) !important;
+}
+.italic-icon {
+    background-image:url(../../js/workflow/images/italic.gif) !important;
+}
+.underline-icon {
+    background-image:url(../../js/workflow/images/underline.gif) !important;
+}
+.preferences-icon {
+    background-image:url(../../js/workflow/images/preferences.gif) !important;
+}
+.fit-icon {
+    background-image:url(../../js/workflow/images/fit.gif) !important;
+}
+.preview-icon {
+    background-image:url(../../js/workflow/images/preview.gif) !important;
+}
+.print-icon {
+    background-image:url(../../js/workflow/images/print.gif) !important;
+}
+.zoom-icon {
+    background-image:url(../../js/workflow/images/zoom.gif) !important;
+}
+.zoomin-icon {
+    background-image:url(../../js/workflow/images/zoomin.gif) !important;
+}
+.zoomout-icon {
+    background-image:url(../../js/workflow/images/zoomout.gif) !important;
+}
+.zoomactual-icon {
+    background-image:url(../../js/workflow/images/zoomactual.gif) !important;
+}
+.collapse-icon {
+    background-image:url(../../js/workflow/images/collapse.gif) !important;
+}
+.expand-icon {
+    background-image:url(../../js/workflow/images/expand.gif) !important;
+}
+.new-icon {
+    background-image:url(../../js/workflow/images/new.gif) !important;
+}
+.gear-icon {
+    background-image:url(../../js/workflow/images/gear.gif) !important;
+}
+.tree-icon {
+    background-image:url(../../js/workflow/images/tree.gif) !important;
+}
+.diagram-icon {
+    background-image:url(../../js/workflow/images/diagram.gif) !important;
+}
+.left-icon {
+    background-image:url(../../js/workflow/images/left.gif) !important;
+}
+.right-icon {
+    background-image:url(../../js/workflow/images/right.gif) !important;
+}
+.center-icon {
+    background-image:url(../../js/workflow/images/center.gif) !important;
+}
+.top-icon {
+    background-image:url(../../js/workflow/images/top.gif) !important;
+}
+.bottom-icon {
+    background-image:url(../../js/workflow/images/bottom.gif) !important;
+}
+.middle-icon {
+    background-image:url(../../js/workflow/images/middle.gif) !important;
+}
+.fillcolor-icon {
+    background-image:url(../../js/workflow/images/fillcolor.gif) !important;
+}
+.linecolor-icon {
+    background-image:url(../../js/workflow/images/linecolor.gif) !important;
+}
+.fontcolor-icon {
+    background-image:url(../../js/workflow/images/fontcolor.gif) !important;
+}
+.collapse-icon {
+    background-image:url(../../js/workflow/images/collapse.gif) !important;
+}
+.expand-icon {
+    background-image:url(../../js/workflow/images/expand.gif) !important;
+}
+.up-icon {
+    background-image:url(../../js/workflow/images/up.gif) !important;
+}
+.home-icon {
+    background-image:url(../../js/workflow/images/house.gif) !important;
+}
+.down-icon {
+    background-image:url(../../js/workflow/images/down.gif) !important;
+}
+.delete-icon {
+    background-image:url(../../js/workflow/images/delete.gif) !important;
+}
+.x-tree-selected {
+    border:1px dotted #a3bae9;
+    background:#DFE8F6;
+}
+.x-tree-node .x-tree-selected a span{
+	background:transparent;
+	color:#15428b;
+    font-weight:bold;
+}
+
+#topic-grid .x-panel-tbar .x-toolbar {
+   /* border-top:0 none; */
+}
+
+
+#main-tabs .x-tab-panel-body {
+    background:transparent;
+    border:0 none;
+}
+
+/* Preview classes */
+
+.preview .x-panel-body {
+    background:#fff;
+    color:#222;
+    font:normal 12px tahoma,verdana,arial,sans-serif;
+}
+
+.preview .x-panel-body p {
+    line-height:18px;
+    margin:8px 0;
+}
+
+.preview .x-panel-body ul {
+    margin-left:18px;
+}
+
+.preview .x-panel-body ul li {
+    display:list-item;
+    list-style-image:none !important;
+    list-style-position:outside !important;
+    list-style-type:disc !important;
+    margin-left:18px;
+}
+
+.preview .x-panel-body pre, #preview .x-panel-body code {
+    background:#f1f1f1;
+    display:block;
+}
+
+.preview .x-panel-body h4.post-author {
+    font-weight:normal;
+    color:#555;
+    font-size:11px;
+}
+.preview .x-panel-body span.post-date {
+    font-weight:normal;
+    color:#555;
+    float:right;
+    font-size:11px;
+}
+.preview .x-panel-body div.post-data {
+    background:#f1f2f4;
+    padding:5px;
+    border-bottom:1px solid #dadadb;
+}
+.preview .x-panel-body div.post-body {
+    padding:10px;
+}
+/*.single-preview .x-toolbar, #right-preview .preview .x-toolbar {
+    border-top:0 none;
+}*/
+.reading-menu .x-menu-item-checked {
+   border:1px dotted #a3bae9 !important;
+    background:#DFE8F6;
+	padding:0;
+}
+.x-tab-panel-header {
+    border-bottom-width:0 !important;
+}
+#suggested {
+    border-top:0 none;
+}
+#suggested a {
+    text-decoration:none;
+    font-size:11px;
+    color:#15428B;
+    display:block;
+    padding:3px;
+    float:right;
+    margin-right:4px;
+}
+#suggested a:hover {
+    text-decoration:underline;
+    color:#15428B;
+}
+.x-combo-list-item {
+    zoom:1;
+}
+.x-combo-list-item strong {
+    color:#777;
+    font-size:11px;
+    font-style: normal;
+    float:left;
+}
+.x-combo-list-item em {
+    color:#222;
+    font-size:12px;
+    font-style: normal;
+    float:left;
+    width:325px;
+}
+.x-node-ctx {
+    background:#eee !important;
+    border:1px solid #ccc !important;
+}
+.floatLeft {
+	float: left;
+	padding: 1px;
+}
+
+.allowFloat {
+	clear: none !important;
+}
+
+.stopFloat {
+	clear: both !important;
+}
+.add-icon {
+    background-image:url(../../js/workflow/images/add.gif) !important;
+}
+.del-icon {
+    background-image:url(../../js/workflow/images/del.gif) !important;
+}
+.workflow_save {
+	background-image:url(../../js/workflow/images/save.gif) !important;
+}
+.workflow_cancle {
+	background-image:url(../../js/workflow/images/cross.gif) !important;
+}

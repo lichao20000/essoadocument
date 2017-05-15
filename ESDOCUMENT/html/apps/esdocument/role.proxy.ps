@@ -1,0 +1,373 @@
+<?php
+/**
+ * 角色管理
+ *
+ */
+class ProxyEsdocumentRole extends AgentProxyAbstract
+{
+	const SERVICE_NAME="role";
+	//引用平台服务
+	const SERVICE_NAME_USER='escloud_userws';
+	const SERVICE_NAME_FILE = "mainFileServer";
+   
+	public function add($data) {
+		$urlParam = array (
+				'add'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+	public function del($ids) {
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'delete',
+				$userId,
+				$ip
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, "application/json;charset=UTF-8" );
+	}
+	public function update($data) {
+		$urlParam = array (
+				'update'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+	public function findRoleList($condition) {
+		$urlParam = array (
+				'list'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $condition, "application/json;charset=UTF-8" );
+	}
+	public function getCount()
+	{
+		$urlParam=array('count');
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	public function getCountByCondition($param) {
+		$urlParam = array (
+				'getCountByCondition'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function getRoleById($id) {
+		return $this->get ( self::SERVICE_NAME, "getRoleById/" . $id );
+	}
+	public function getRoleByCondition($param) {
+		$urlParam = array (
+				'getRoleByCondition'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 判断某标识角色标识是否已存在
+	 */
+	public function judgeIfExistsRoleId($params){
+		return $this->post(self::SERVICE_NAME, 'judgeIfExistsRoleId',$params,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 判断某标识角色名称是否已存在
+	 */
+	public function judgeIfExistsRoleName($params){
+		return $this->post(self::SERVICE_NAME, 'judgeIfExistsRoleName',$params,'application/json;charset=UTF-8');
+	}
+	
+	public  function  getAllMenu(){
+		$urlParam = array (
+				'getAllMenu'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url);
+	}
+	public  function  getArchiveAuthMenuByRole($param){
+		$urlParam = array (
+				'getArchiveAuthMenuByRole'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public  function  saveMenuAuth($param){
+		$urlParam = array (
+				'saveMenuAuth'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public  function  getAuthTree($param){
+		$urlParam = array (
+				'getAuthTree'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public  function  saveAuthTreeNodes($param){
+		$urlParam = array (
+				'saveAuthTreeNodes'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public  function  getDataTree($param){
+		$urlParam = array (
+				'getDataTree'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public  function  preGetPackageRight($param){
+		$urlParam = array (
+				'preGetPackageRight'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public  function  getDataAuth($param){
+		$urlParam = array (
+				'getDataAuth'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public  function  saveDataAuth($param){
+		$urlParam = array (
+				'saveDataAuth'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public  function  getDataAuthById($id){
+		$urlParam = array (
+				'getDataAuthById',
+				$id
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post( self::SERVICE_NAME, $url);
+	}
+	public  function  deleteDataAuth($authIds){
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'deleteDataAuth',
+				$authIds,
+				$userId,
+				$ip
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post( self::SERVICE_NAME, $url);
+	}
+	public  function  findNoOrgUserList($param){
+		$urlParam = array (
+				'findNoOrgUserList'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post( self::SERVICE_NAME_USER, $url,$param, "application/json;charset=UTF-8" );
+	}
+	public  function  findUserListByOrgid($param){
+		$urlParam = array (
+				'findUserListByOrgid'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post( self::SERVICE_NAME_USER, $url,$param, "application/json;charset=UTF-8" );
+	}
+	public  function  getCountAll($param){
+		$urlParam = array (
+				'getCount'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post( self::SERVICE_NAME_USER, $url,$param, "application/json;charset=UTF-8" );
+	}
+	
+	public function getRoleListByUserCode($userId) {
+		$url = "getRoleListByUserCode/".$userId;
+		return $this->get ( self::SERVICE_NAME, $url);
+	}
+	
+	public function getRolesByUserId($userId) {
+		$url = "getRolesByUserId";
+		return $this->post ( self::SERVICE_NAME, $url, $userId, "text/plain;charset=UTF-8" );
+	}
+	
+	public function getUserRole($canshu) {
+		$url = "getUserRole";
+		return $this->post ( self::SERVICE_NAME, $url, $canshu, "application/json;charset=UTF-8" );
+	}
+	
+	public function saveUserRole($param) {
+		$url = "saveUserRole";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function getCountAllRole($param) {
+		$url = "getCountAllRole";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function getAllRoleServer($param) {
+		$url = "getAllRoleServer";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function deleteUserRole($param) {
+		$url = "deleteUserRole";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	// ---借阅权限------
+	public function saveRelendRoleLend($param){
+		$url = "saveRelendRoleLend";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function getRelendByRole($param){
+		$url = "getRelendByRole";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	
+	public function saveRoleLends($param){
+		$url = "saveRoleLends";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function getLendByRole($id){
+		$urlParam = array (
+				'getLendByRole',
+				 $id
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url);
+	}
+	public function deleteRelend($id){
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'deleteRelend',
+				 $id,
+				 $userId,
+				 $ip
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url);
+	}
+
+	public function getArchiveAuthMenu($param){
+		$url = "getArchiveAuthMenu";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	
+	public function getDeskMenuTree($param){
+		$url = "getDeskMenuTree";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	
+	public function getUserDeskAppsDetails($param){
+		$url = "getUserDeskAppsDetails";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	
+	public function saveUserDeskApps($param){
+		$url = "saveUserDeskApps";
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	
+	//------------调用档案中获取头像的服务---------------------
+	/**
+	 * 根据userId获取头像的地址
+	 */
+	public function getIconByUserId($param) {
+		return $this->post(self::SERVICE_NAME_USER, "getIconByUserId",$param,"application/json;charset=UTF-8");
+	}
+	public function saveHeaderImageId($param) {
+		return $this->post(self::SERVICE_NAME_USER, "saveHeaderImageId",$param,"application/json;charset=UTF-8");
+	}
+	public function getIconById($id) {
+		$urlparam=array('getIconById', $id);
+		$url=implode('/', $urlparam);
+		return $this->get(self::SERVICE_NAME_USER, $url);
+	}
+	
+	public function setOrgForNew($param){
+		$url = "setOrgForNew";
+		return $this->post ( self::SERVICE_NAME_USER, $url, $param, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 修改用户
+	 */
+	public function updateUser($userInfo) {
+		$url = "modifyUser";
+		return $this->post ( self::SERVICE_NAME_USER, $url, $userInfo, "application/json;charset=UTF-8" );
+	}
+	public function modifyPassword($postData){
+		$url = "modifyPassword";
+		return $this->post(self::SERVICE_NAME_USER, $url,$postData,"application/json;charset=UTF-8");
+	}
+	public function getUserByUserid($userId){
+		$urlparam=array('getUserByUserid', $userId);
+		$url=implode('/', $urlparam);
+		return $this->get(self::SERVICE_NAME_USER, $url);
+	}
+	public function getUserByid($id){
+		$urlparam=array('getUserInfoById', $id);
+		$url=implode('/', $urlparam);
+		return $this->get("userqueryservice", $url);
+	}
+
+	public function getFileDownLoadUrl($id){
+		$urlParam = array('getFileDownLoadUrl',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME_FILE, $url);
+	}
+	/**
+	 * guolanrui 20141213 添加网段设置后，增加的新方法
+	 * 添加获取上传URL方法
+	 */
+	public function getNewUploadUrl($postData){
+		$urlParam=array('getNewUploadUrl');
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME_FILE, $url, $postData, "application/json;charset=UTF-8");
+	}
+	
+	public function getDirNodeAuth($param){
+		$urlParam=array('getDirNodeAuth');
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取当前登录用户目录树和数据权限
+	 * @param unknown $userId
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getTreeAndDataAuth($userId,$admin) {
+		$urlParam = array (
+				'getTreeAndDataAuth',
+				$userId,
+				$admin
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 验证是否存在满足筛选条件的文件
+	 * @param unknown $data
+	 */
+	public function getDocFilterById($data){
+		$urlParam = array (
+				'getDocFilterById'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 验证是否存在满足筛选条件的电子文件
+	 * @param unknown $data
+	 */
+	public function getFileFilterById($data){
+		$urlParam = array (
+				'getFileFilterById'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+}

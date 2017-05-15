@@ -1,0 +1,17 @@
+<?php
+class ProxyEscloudappEscloud_keywordservice extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_keywordservice";
+  public function getlist()
+  {
+    
+    //return self::SERVICE_NAME;exit;
+    $urlParam = array('getKeyWordList',0,20);
+    $url = implode('/', $urlParam);
+    var_dump($url);
+    //return $url;
+    //采用GET方式访问
+    return $this->get(self::SERVICE_NAME, $url);
+    
+  }
+}

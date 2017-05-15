@@ -1,0 +1,145 @@
+<div id="reportlsit" style="width: 600px;">
+<table id="selectreport"></table>
+<?php if($_GET['display']=="black"){?>
+<br>
+<div>
+	<span class="tabs" style="padding-left:20px;padding-right:20px;">数据筛选</span>
+	<hr width="92%" style="margin-bottom:0px;">
+	<?php include (dirname(__FILE__)."/filter.phtml")?>
+</div>
+<?php } ?>
+
+	
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+        $("#selectreport").flexigrid({
+            url: $.appClient.generateUrl({
+                ESReport: 'reportList',
+                dataType: 'radio',
+                reportType: 'using'
+            },
+            'x'),
+            dataType: 'json',
+            minwidth: 20,
+            colModel: [{
+                display: '序号',
+                name: 'rownum',
+                width: 20,
+                align: 'center'
+            },
+            {
+                display: '操作',
+                name: 'id',
+                metadata : 'id',
+                width: 40,
+                align: 'center'
+            },
+            {
+                display: '报表标题',
+                name: 'title',
+                metadata : 'title',
+                width: 100,
+                sortable: true,
+                align: 'left',
+                validate: /^\d+$/i,
+                validateMsg: "必须为数字"
+            },
+            {
+                display: '输出格式',
+                name: 'reportstyle',
+                metadata : 'reportstyle',
+                width: 100,
+                sortable: true,
+                align: 'center'
+            },
+            {
+                display: '报表样式',
+                name: 'resourcelevel',
+                metadata : 'resourcelevel',
+                width: 80,
+                sortable: true,
+                align: 'center',
+                dropdown: ["", "表格", "复合报表", "测试"],
+                hide: true
+            },
+            {
+                display: '每页条数',
+                name: 'perpage',
+                metadata : 'perpage',
+                width: 50,
+                sortable: true,
+                align: 'right',
+                hide: true
+            },
+            {
+                display: '报表模板文件',
+                name: 'reportmodel',
+                metadata : 'reportmodel',
+                width: 80,
+                sortable: true,
+                align: 'left',
+                hide: true
+            },
+            {
+                display: '是否存在',
+                name: 'ishave',
+                metadata : 'ishave',
+                width: 80,
+                sortable: true,
+                align: 'center',
+                hide: true
+            },
+            {
+                display: '上传者',
+                name: 'uplodaer',
+                metadata : 'uplodaer',
+                width: 100,
+                sortable: true,
+                align: 'left'
+            }],
+            buttons: [],
+            sortname: "c3",
+            sortorder: "asc",
+            usepager: true,
+            title: '报表列表',
+            useRp: true,
+            rp: 20,
+            nomsg: "没有数据",
+            showTableToggleBtn: false,
+            pagetext: '第',
+            itemtext: '页',
+            outof: '页 /共',
+            width: 600,
+            pagestat: ' 显示 {from} 到 {to}条 / 共{total} 条',
+            procmsg: '正在加载数据，请稍候...'
+        });
+		$('div[class="tDiv2"]').css("height","28px");
+        $("#reportlsit").find('div[class="tDiv2"]').append('<div class="find-dialog"><input id="KeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="KeyWord" value="请输入关键字" /><span  onclick="reportQuery();"></span></div>');
+     
+   
+    });
+	function reportQuery() {
+	    var keyword = $.trim($('input[name="KeyWord"]').val());
+	    if (keyword == '' || keyword == '请输入关键字') {
+	        keyword = '';
+	    }
+	    var url = $.appClient.generateUrl({
+	        ESReport: 'reportList',
+	        dataType: 'radio',
+	        keyWord: encodeURI(keyword),
+	        reportType: 'using'
+	    },
+	    'x');
+	    $("#selectreport").flexOptions({
+	        url: url,
+	        newp: 1
+	    }).flexReload();
+	    return false;
+	};
+	$(document).keydown(function(event) {
+	    if (event.keyCode == 13 && document.activeElement.id == 'KeyWord') {
+	        reportQuery();
+	    }
+	});
+</script>

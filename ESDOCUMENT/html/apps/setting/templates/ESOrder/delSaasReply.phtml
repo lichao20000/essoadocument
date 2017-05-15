@@ -1,0 +1,44 @@
+ <link href="<?php echo $tplPath?>/ESOrder/css/saas.css" rel="stylesheet" type="text/css">
+ <form id="registerForm" action="" method="post" >
+ 	<input type="hidden" id="password" name="password" value="<?php echo $applysaas->password;?>"/>
+	<div class="estranssass">
+		<ul>
+			<li>
+				<span>机构组织名称<font color="red" size="3">*</font></span>
+				<input type="text" name="bigOrgName"  title="例如:北京东方飞扬软件股份有限公司" value="<?php echo $applysaas->bigOrgName;?>" readonly="readonly">
+				<input name="id" type="hidden" value="-1">
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>申请应用<font color="red" size="3">*</font></span>
+				<select id="attachApp" name="attachApp" readonly="readonly">
+				<?php foreach ($applist as $key=>$app){?>
+				<option myValue="<?php echo $app['appToken'];?>" <?php echo $app['id']==$applysaas->attachApp?'selectid':'';?> value="<?php echo $app['id'];?>"><?php echo $app['appNameCn'];?></option>
+				<?php }?>
+				</select>
+			</li>
+			<li>
+				<span>管理员名称<font color="red" size="3">*</font></span>
+				<input type="text" name="superUserName"  value="<?php echo $applysaas->superUserName;?>" title="例如:fy@flyingsoft.cn" readonly="readonly" >
+			</li>
+		</ul>
+		
+		<ul>
+			<li>
+				<span>姓<font color="red" size="3">*</font></span>
+				<input type="text" name="lastName"  value="<?php echo $applysaas->lastName;?>"  readonly="readonly">
+			</li>
+			<li>
+				<span>名<font color="red" size="3">*</font></span>
+				<input type="text" name="firstName"  value="<?php echo $applysaas->firstName;?>" readonly="readonly" >
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>手机</span>
+				<input type="text" name="cellPhone"  value="<?php echo $applysaas->cellPhone;?>" readonly="readonly">
+			</li>
+		</ul>
+	</div>
+</form>

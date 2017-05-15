@@ -1,0 +1,24 @@
+<div class="content">
+  <div class="calendarBox" style="width:1000px;">
+    <div class="left">&nbsp; </div>
+    <div class="calendar" style="width:780px;">
+      <!-- <div class="errorText2">404</div> -->
+      <div class="errorText2"></div>
+      <div class="errorText1"><img src="<?php echo $tplPath;?>/images/warn.gif" width="32" height="32" alt="搜索"  align="absmiddle" style="margin-left:10px;"/><span class="font16 bold" style="margin-left:20px;">非常抱歉，无法找到该资源</span>
+        <!-- <p>请确认您输入的网址是否正确</p> -->
+      </div>
+<?php if (AopConfig::get('debug', false)): ?>
+      <pre style="clear:both;margin-top:20px;font-size:14px;color:red;font-family:'Bitstream Vera Sans Mono','Courier New',Courier,monospace">
+<?php print_r($exception->getRouter()); ?>
+      </pre>
+<?php endif ?>
+<!--       <div class="errorSearch">
+        <p>您可以重新输入网页地址</p>
+        <label for="textfield"></label>
+        <input type="text" name="textfield" id="textfield" style="width:300px;" class="globalFormInput"/>
+        <img src="<?php echo $tplPath?>/images/search_but.gif" width="72" height="29" alt="搜索"  align="absmiddle" style="margin-left:10px;"/> </div>
+      <div class="errorTip"><span class=" bold color000 font14">或者</span><a href="">返回首页</a><a href="">返回应用中心</a><a href="">返回APP应用</a><a href="">联系我们</a></div>
+     -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+<?php
+/**
+ * 分类库代理服务
+ * @author ldm
+ *
+ */
+class ProxyEscloudappEscloud_essclassws extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_essclassws";
+  //获取
+  public function gettree($id)
+  {
+    $urlParam = array('getEssClassList',$id);
+    $url = implode('/', $urlParam);
+    return $this->get(self::SERVICE_NAME, $url);
+    
+  }
+  //获取
+  public function CheckisParent($id)
+  {
+  	$urlParam = array('CheckisParent',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  
+  }
+  //获取一个节点信息
+  public function getone($id){
+  	$urlParam = array('getEssClass',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  //编辑树节点
+  public function edits($param)
+  {
+  	$urlParam = array('updateEssClass');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  //添加树节点
+  public function add($id,$param){
+  	$urlParam = array('saveSubEssClass',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  //树节点的删除
+  public function del($id)
+  {
+  	$urlParam = array('removeEssClass',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->remove(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 分类名称唯一性检测
+   * @author ldm
+   */
+  public function checkEssClassName($params){
+  	return $this->post(self::SERVICE_NAME,'checkEssClassName',$params,'application/json;charset=UTF-8');
+  }
+  /**
+   * 分类号唯一性检测
+   * @author ldm
+   */
+  public function checkEssClassCode($params){
+  	return $this->post(self::SERVICE_NAME, 'checkEssClassCode',$params,'application/json;charset=UTF-8');
+  }
+  /**
+   * @author wangtao 
+   * 根据档案门类获取分类数据
+   * @param $archiveType
+   */
+  public function getClassList($archiveType)
+  {
+  	$urlParam = array('getClassList',$archiveType);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 根据结构id获取分类树
+   * @param unknown $params
+   */
+  public function getClassListBySId($params){
+  	return $this->post(self::SERVICE_NAME,"getClassListBySId",$params,'application/json;charset=UTF-8');
+  }
+}

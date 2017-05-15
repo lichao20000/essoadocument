@@ -1,0 +1,48 @@
+/** xiaoxiong 20140512 ���zTree���TBar��ʽ�� **/
+.treeTbar {
+	padding-top:4px;
+	padding-bottom:4px;
+	position: relative;
+	border-bottom: 1px solid #ccc;
+	overflow: hidden;
+}
+.treeTbar div.tbarDiv {
+	float: left;
+	clear: both;
+	padding: 1px;
+	padding:5px;
+}
+.treeTbar div.tbarDiv div.tbarButton {
+	float: left;
+	display: block;
+	cursor: pointer;
+	padding: 1px;
+	margin-left:5px;
+	color:#FFF;
+	border: 0px none;
+    outline: 0px none;
+}
+.treeTbar div.tbarDiv div.tbarButton:hover,.treeTbar div.tbarDiv div.tbarButton.fbOver {
+	border: 0px none;
+    outline: 0px none;
+	background-color: #6f6e81;
+	border-radius:5px;
+}
+.treeTbar div.tbarDiv div.tbarButton div {
+	float: left;
+	padding: 1px 3px;
+}
+.treeTbar div.tbarDiv div.tbarButton span {
+	float: left;
+	display: block;
+	padding: 3px;
+}
+.treeTbar div.tbarDiv div.tbarButton .add {
+	background: url(img/tbar/add.png) no-repeat center left;
+}
+.treeTbar div.tbarDiv div.tbarButton .edit {
+	background: url(img/tbar/edit.png) no-repeat center left;
+}
+.treeTbar div.tbarDiv div.tbarButton .delete {
+	background: url(img/tbar/delete.png) no-repeat center left;
+}

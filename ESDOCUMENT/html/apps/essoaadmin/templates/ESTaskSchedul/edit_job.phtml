@@ -1,0 +1,185 @@
+<form id="editjobForm" class = "jobform">
+	<input type="hidden" name="id" value="<?php echo $id;?>"/>
+	<input type="hidden" name="triggerName" value="<?php echo $triggerName;?>"/>
+	<input type="hidden" name="triggerGroupName" value="<?php echo $triggerGroupName;?>"/>
+	<fieldset class="fieldset_taskschedul">
+		<legend class="legend_taskshedul">请输入任务调度信息：</legend>
+		<p>
+			<label class="label_taskshedul">任务名称：
+			<input type="text" verify="text/70/1/0" name="jobName" class="text_taskschedul" value="<?php echo $jobName;?>"/><span style="color:red"> *</span>
+			</label>
+		</p>
+		<p>
+			<label class="label_taskshedul">任务类名：
+			<select class="select_taskshedul" name="jobClass" id = "taskClassName">					
+			</select>
+			</label>
+		</p>
+		<p>
+			<label class="label_taskshedul">任务描述：
+			<input type="text" verify="text/110/1/0" class="text_taskschedul" name="description" value="<?php echo $description;?>"/><span style="color:red"> *</span>
+			</label>
+		</p>
+	</fieldset>
+
+	<fieldset class="fieldset_taskschedul">
+		<legend class="legend_taskshedul">请选择频率(*请选择一种发生方式)：</legend>
+		<p>
+			<label class="label_taskshedul">设置频率：
+				<input name="seleteNumber" type="radio" value="1" class="radio_selectNumber" />每天 
+				<input name="seleteNumber" type="radio" value="2" class="radio_selectNumber" />每周 
+				<input name="seleteNumber" type="radio" value="3" class="radio_selectNumber" />每月
+			</label>
+		</p>
+		<p>
+			<label class="label_taskshedul">精确时间： 
+				<input type="text" id="ererydaytime" class="Wdate" name="ererydaytime" onClick="WdatePicker({dateFmt:'H:mm:ss'})" value="<?php echo $everyDay;?>" />
+			</label>
+		</p>
+		<p>
+			<label class="label_taskshedul" id="everyMothLabel">每&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月：
+				<input type="text" id="ererymonth" class="Wdate" name="ererymonth" onClick="WdatePicker({dateFmt:'dd'})" value="01" />
+			</label>
+		</p>
+		<p id = "everyWeekP">
+			<label class="label_taskshedul" style="visibility: hidden" id="everyWeekLabel">每&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;周：
+				<select class="select_taskshedul" name="ereryweek" style="visibility: hidden" id="everyWeekOption">
+					<option value="1">星期一</option>
+					<option value="2">星期二</option>
+					<option value="3">星期三</option>
+					<option value="4">星期四</option>
+					<option value="5">星期五</option>
+					<option value="6">星期六</option>
+					<option value="7">星期天</option>
+				</select>
+			</label>
+		</p>
+		<p>
+			<label class="label_taskshedul" style="visibility: hidden" id="everyWeekGeLabel">每隔几周： 
+				<input name="weekday" verify="number/10/1/0" class="text_taskschedul" onkeyup="this.value=this.value.replace(/\D/g,'')" value="2"
+					onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="5" size="14" name="amount" style="visibility: hidden" id="everyWeekGeDate" />
+			</label>
+		</p>
+	</fieldset>
+
+	<fieldset class="fieldset_taskschedul">
+		<legend class="legend_taskshedul">请选择年份范围：</legend>
+		<p>
+			<label class="label_taskshedul">设置结束：
+				<input name="isHasEndtime" type="radio" value="1" class="radio_taskshedul" checked="checked" />否
+				<input name="isHasEndtime" type="radio" value="2" class="radio_taskshedul" />是
+			</label>
+		</p>
+		<p>
+			<label class="label_taskshedul" id = "startYearlabel">开始年份： 
+				<input type="text" class="Wdate" name="start" onClick="WdatePicker({dateFmt:'yyyy'})" value = "<?php echo $startYear;?>" />
+			</label>
+		</p>
+		<p>
+			<label class="label_taskshedul" id="endYearlabel" style="visibility: hidden">结束年份： 
+				<input type="text" class="Wdate" name="end" onClick="WdatePicker({dateFmt:'yyyy'})" value = "<?php echo $endYear;?>" />
+			</label>
+		</p>
+	</fieldset>
+</form>
+<script>
+	$.post($.appClient.generateUrl({ESTaskSchedul : 'reconfigSelections'}, 'x'), function(res) {
+		var results =  jQuery.parseJSON(res);
+		var options = "";
+		$.each(results.rows, function(i, item) {
+			options += "<option class = 'isExistOption' value='"+item.classname+"|"+item.excutemethodname+"|"+item.bigOrgId+"'>"+item.restname+"</option>"
+        });
+		$("#taskClassName").append(options);
+
+		$('#taskClassName option[value="<?php echo $jobClassValue;?>"]').attr("selected",true);
+	});	
+
+/* 年份范围事件 */
+$(".radio_taskshedul").change(function() {
+	var $selectedvalue = $("input[name='isHasEndtime']:checked").val();
+	if($selectedvalue == 2){
+		$("#endYearlabel").css("visibility","");
+		$("#endYearDate").css("visibility","");
+	}else{
+		$("#endYearlabel").css("visibility","hidden");
+		$("#endYearDate").css("visibility","hidden");
+	}
+});
+
+/** 频率事件**/
+$(".radio_selectNumber").change(function() {
+	var $selectedvalue = $("input[name='seleteNumber']:checked").val();
+	if($selectedvalue == 1){
+		$("#everyMothLabel").css("visibility","hidden");
+		$("#everyMothDate").css("visibility","hidden");
+		$("#everyWeekLabel").css("visibility","hidden");
+		$("#everyWeekOption").css("visibility","hidden");
+		$("#everyWeekGeLabel").css("visibility","hidden");
+		$("#everyWeekGeDate").css("visibility","hidden");
+	}else if($selectedvalue == 2){
+		$("#everyMothLabel").css("visibility","hidden");
+		$("#everyMothDate").css("visibility","hidden");
+		
+		$("#everyWeekLabel").css("visibility","");
+		$("#everyWeekOption").css("visibility","");
+		$("#everyWeekP").css("margin-top","-20px");
+		
+		$("#everyWeekGeLabel").css("visibility","");
+		$("#everyWeekGeDate").css("visibility","");
+	}else{
+		$("#everyMothLabel").css("visibility","");
+		$("#everyMothDate").css("visibility","");
+		$("#everyWeekLabel").css("visibility","hidden");
+		$("#everyWeekOption").css("visibility","hidden");
+		$("#everyWeekGeLabel").css("visibility","hidden");
+		$("#everyWeekGeDate").css("visibility","hidden");
+	}
+});
+
+$(function(){
+	// 初始化频率
+	if ('<?php echo $days?>' != '') { // 每天
+		$("input[name='seleteNumber'][value='2']").attr("checked",true);
+
+		$('#everyWeekOption option[value="<?php echo $weeks?>"]').attr('selected',true);
+		$("#everyWeekGeDate").val('<?php echo $days?>');
+		
+		$("#everyMothLabel").css("visibility","hidden");
+		$("#everyMothDate").css("visibility","hidden");
+		$("#everyWeekLabel").css("visibility","");
+		$("#everyWeekOption").css("visibility","");
+		$("#everyWeekP").css("margin-top","-20px");
+		$("#everyWeekGeLabel").css("visibility","");
+		$("#everyWeekGeDate").css("visibility","");
+	} else if ('<?php echo $monthDay?>' != '') { // 每月
+		$("input[name='seleteNumber'][value='3']").attr("checked",true);
+		$("#everyMothLabel").css("visibility","");
+		$("#everyMothDate").css("visibility","");
+		$("#everyWeekLabel").css("visibility","hidden");
+		$("#everyWeekOption").css("visibility","hidden");
+		$("#everyWeekGeLabel").css("visibility","hidden");
+		$("#everyWeekGeDate").css("visibility","hidden");
+	} else { // 每周
+		$("input[name='seleteNumber'][value='1']").attr("checked",true);
+		$("#everyMothLabel").css("visibility","hidden");
+		$("#everyMothDate").css("visibility","hidden");
+		$("#everyWeekLabel").css("visibility","hidden");
+		$("#everyWeekOption").css("visibility","hidden");
+		$("#everyWeekGeLabel").css("visibility","hidden");
+		$("#everyWeekGeDate").css("visibility","hidden");
+	}
+	
+	
+	// 初始化年份
+	if ('<?php echo $endYear;?>'=='') {
+		$('[name="isHasEndtime"]').eq(0).attr("checked",true);
+		$("#endYearlabel").css("visibility","hidden");
+		$("#endYearDate").css("visibility","hidden");
+	} else {
+		$('[name="isHasEndtime"]').eq(1).attr("checked",true);
+		$("#endYearlabel").css("visibility","");
+		$("#endYearDate").css("visibility","");
+	}
+});
+</script>
+

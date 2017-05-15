@@ -1,0 +1,35 @@
+@charset "utf-8";
+/* CSS Document */
+a img {border: 0 none;}
+a{text-decoration:none;}
+
+.main{position:relative;width:100%;overflow:hidden;font-family:Arial;font-size:14px;color:#333333;}
+.main .content{width:1024px;min-width:980px;margin-left:12%;];border:1px solid #ccc;border-top:0 none;}
+
+.content .left_content{position:relative;z-index:-1;width:761px;border-right:1px solid #CCCCCC;float:left;overflow:hidden;}
+.left_top{text-align:left;margin-left:2px;}
+
+.content .left_content label{font-family:Arial;font-size:13px;font-weight:normal;font-style:normal;text-decoration:none;color:#666666;}
+.content .left_content span{font-family:Arial;font-size:13px;font-weight:normal;font-style:normal;text-decoration:none;color:#333333;}
+.content .left_top .title{padding-top:10px;margin-left:25px;}
+.content .left_top .title span{font-size:18px;font-weight:bold;font-style:normal;text-decoration:none;color:#333333;}
+.content .lc{width:761px;background:#F5F5F5;height:142px;}
+.content .lc .left_con{float:left;background:url("../img/dbg.gif");width:764px;height:56px;position:relative;left:-3px;text-align:center;margin-top:5px;}
+.content .lc .left_con img{vertical-align:middle;}
+.content .lc .left_con .o1,.o2,.o3,.o4{float:left;border-right:1px solid #ccc;height:50px;margin-top:3px;line-height:50px;padding-left:5px;padding-right:10px;}
+.content .lc .left_con .o1{margin-left:5px;}
+.content .left_content .efile{background:#F5F5F5;width:760px;height:33px;position:relative;text-align:left;line-height:30px;}
+.content .left_content .efile span,img{}
+.content .document{width:760px; overflow:hidden;}
+.content .right_content{float:left;text-align:left;font-family:Arial;font-weight:normal;font-style:normal;text-decoration:none;}
+.content .right_content .right_ctop{margin-top:15px;margin-left:10px;font-size:13px;color:#999999;}
+.content .right_content .right_ctop div{margin-top:8px;}
+.content .right_content .right_ctop .ctop_title{font-size:14px;font-weight:bold;color:#333333;}
+.content .right_content .ctop_bottom {margin-top:30px;margin-left:10px;}
+.content .right_content .ctop_bottom .bottom_title{font-size:14px;font-weight:bold;color:#000099;border-bottom:1px solid #999;padding-bottom:10px;}
+.content .right_content .ctop_bottom  div{margin-top:8px;}
+.content .right_content .ctop_bottom  img{vertical-align:middle;}
+.content .right_content .ctop_bottom{font-family:΢ź;font-size:13px;font-weight:normal;font-style:normal;text-decoration:none;color:#0000CC;}
+.content .right_content .ctop_bottom a{color:blue;}
+.content .right_content .ctop_bottom label{float:right;font-family:Arial;font-size:13px;font-weight:normal;font-style:normal;text-decoration:none;color:#999999;}
+.clear{clear:both;}

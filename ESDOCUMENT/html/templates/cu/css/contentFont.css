@@ -1,0 +1,45 @@
+@charset "utf-8";
+/*=======================================字体大小样式=======================================*/
+.font12{ font-size:12px !important;}
+.font14{ font-size:14px;}
+.font16{ font-size:16px;}
+.font18{ font-size:18px;}
+.bold{ font-weight:bold !important;}
+.weight100{ font-weight:100 !important;}
+.textAlignCenter{ text-align:center !important;}
+.textAlignRight{ text-align:right !important;}
+.textAlignLeft{ text-align:left !important;}
+
+/*=======================================字体颜色样式=======================================*/
+.color000{ color:#000;}
+.color999{ color:#999;}
+.color900{ color:#900;}
+.color03c{ color:#03c;}
+.color390{ color:#390;}
+.color666{ color:#666;}
+.colorf90{ color:#f90;}
+.color90c{ color:#90c;}
+.colorf00{ color:#f00;}
+.colorc69{ color:#c69;}
+.color069{ color:#069;}
+.color393{ color:#393;}
+.colorc66{ color:#c66;}
+.color66c{ color:#66c;}
+.colorccc{ color:#ccc;}
+.color555{ color:#555 !important;}
+.color808080{ color:#808080;}
+.red{ color:#d14836;}
+.blue{ color:#12c;}
+
+
+
+
+
+/*=======================================背景颜色样式=======================================*/
+.bgec7000{background:#ec7000;}
+.bg64992c{background:#64992c;}
+.bg3c78d8{background:#3c78d8;}
+.bg5a6986{background:#5a6986;}
+.bg6ad36c{background:#6ad36c;}
+.bgf5f5f5{background:#f5f5f5;}
+.bgfff{ background:#fff !important;}

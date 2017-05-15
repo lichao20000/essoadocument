@@ -1,0 +1,11 @@
+<div id='importFormDiv'>
+	<form id='importForm' enctype='multipart/form-data' method='post'>
+		<div style='padding:7px 0 10px 10px;margin:2px;width:380px;height:25px;'>
+	        <div style='margin-bottom:12px'><div style='width:120px;height:20px;line-height:20px;float:left;'>选择表单文件：</div><input type='file' style='width:250px;height:19px;' name='formFile' /></div>
+		</div>
+		<input type='hidden' name='modelTypeId' value='<?php echo $data[0];?>'/>
+		<input type='hidden' name='modelTypeName' value='<?php echo $data[1];?>'/>
+		<input type='hidden' name='userId' value='<?php echo $data[2];?>'/>
+		<input type='hidden' name='remoteAddr' value='<?php echo $data[3];?>'/>
+	</form>
+</div>

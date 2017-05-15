@@ -1,0 +1,92 @@
+<table>
+		<tr>
+		<td>
+		<div id='filetreebox' style='width:200px; height:375px;overflow:auto;'><ul id='filetree' class='ztree'></ul></div>
+		</td>
+		<td>
+			<div style='height:30px;line-height:30px;'>
+				<span style='float:left;'>附件类别:<select id='addFileSelect'><option value='正文'>正文</option><option value='附件'>附件</option><option value='处理单'>处理单</option></select></span>
+				<div class='find-dialog' style='float:right;'><input id='dataQueryFile' nodeId='' onblur="if($(this).val()=='')$(this).val('请输入关键字')" onfocus="if($(this).val()=='请输入关键字')$(this).val('')" type='text' name='keyWord' value='请输入关键字' /><span id='dataQueryButtonFile' onclick='addFileSearch()'></span></div>
+			</div>
+			<div id='filelistbox' style='height:350px;overflow:auto;clear:both;'>
+				<table id='filelist'></table>
+			</div>
+		</td>
+		</tr>
+		</table>
+		
+<script>
+//初始化选择文件界面
+	createFolderTree();
+	createFileList();
+//创建树目录
+function createFolderTree(){
+	var url = $.appClient.generateUrl({ESEFile:'access'},'x');
+	var setting = {
+		async: {
+			enable: true,
+			dataType: 'json',
+			url: url,
+			autoParam: ["id=param"]
+		},	
+		data: {
+			key: {
+				name: 'estitle',
+				children: 'isPid'
+			},
+			simpleData: {
+				enable: true,
+				idKey: 'id',
+				pIdKey: 'parentid',
+				rootPId: 0
+			}
+		},
+		callback: {
+			beforeClick: beforeClick,
+			onClick : nodeClick
+		}
+	};
+	$.fn.zTree.init($("#filetree"), setting);
+	var efileTree = $.fn.zTree.getZTreeObj("filetree");
+	function beforeClick(treeId, node) {
+		if (node.isParent) {
+			efileTree.expandNode(node);
+		}
+	};
+	function nodeClick(event, treeId, node){
+		$("#dataQueryFile").attr("nodeId",node.id);
+		var query={};
+		query['folderid'] = node.id;
+		
+		$("#filelist").flexOptions({url: $.appClient.generateUrl({ESEFile:'getFileListForNoLink'},'x'),query:query}).flexReload();
+	};
+};
+
+// 创建文件列表
+function createFileList(){
+	$("#filelist").flexigrid({
+		url: $.appClient.generateUrl({ESEFile:'getFileListForNoLink'}, 'x'),
+		query:{'folderid':0},
+		dataType: 'json',
+		editable: true,
+		colModel : [
+			{display: '<input type="checkbox" id="fileSelectAll">', name : 'ids', width : 40, align: 'center'},
+			{display: '文件名', name: 'estitle', width:230},
+			{display: '创建时间', name: 'createTime', width:230},
+			{display: '文件大小', name: 'essize'},
+			{display: '文件验证', name: 'esmd5'}
+		],
+		usepager: true,
+		rp: 50,
+		useRp: true,
+		width: 600,
+		height: 275
+	});
+	$("#fileSelectAll").die("click").live("click", function(){
+		document.title = this.checked;
+		$("#filelist").find("input[name='id']").attr("checked", this.checked);
+	});
+}
+
+
+</script>

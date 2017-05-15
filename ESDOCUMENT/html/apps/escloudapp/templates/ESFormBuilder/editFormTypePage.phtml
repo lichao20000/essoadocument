@@ -1,0 +1,24 @@
+<form id="modelTypeForm" action="" method="post">
+	<div class="esModelType">
+		<ul>
+			<li>
+				<span>分类名称<font color="red" size="3">*</font></span>
+				<input  type="text" name="modelTypeName" value="<?php echo $data[1];?>" verify="text/50/1/0">
+				<input  type="hidden" name="oldModelTypeName" value="<?php echo $data[1];?>">
+				<input type="hidden" name="id" value="<?php echo $data[0];?>"  >
+			</li>
+		</ul>
+	</div>
+</form>
+<script type="text/javascript">
+	 $("#modelTypeForm input[name='modelTypeName']").bind('blur',function(){
+	 	var modelTypeName = $(this).val().trim() ;
+	 	if(modelTypeName == ''){
+	 		$(this).addClass("warnning");
+		 	$(this).attr("title","不能为空！");
+	 		return false;
+	 	}
+	 	$(this).removeClass("warnning");
+	 	$(this).attr("title","");
+	 });
+</script>

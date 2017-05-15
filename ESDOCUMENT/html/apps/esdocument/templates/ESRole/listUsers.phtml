@@ -1,0 +1,180 @@
+<div id="eslist"  style="width: 650px;height:3250x;">
+        <div class="find-dialog" >
+        <input id="userKeyWord" onblur="if($(this).val()=='')$(this).val('请输入关键字')" onfocus="if($(this).val()=='请输入关键字')$(this).val('')" type="text" name="userKeyWord" value="请输入关键字" /><span onclick="getUserQuery()"></span></div>
+		<br><br><table id = "userGrid"></table>
+ </div>
+ <script type="text/javascript">
+$(document).ready(function(){
+	$("#userGrid").flexigrid({
+		url : $.appClient.generateUrl({	ESRole : 'findUserListByOrgid'}, 'x'),
+		dataType : 'json',
+		border:false,
+		colModel : [ {
+			display : '',
+			name : 'startNum',
+			width : 30,
+			align : 'center'
+		}, {
+			display : '操作',
+			name : 'operate',
+			width : 40,
+			sortable : true,
+			align : 'center'
+		}, {
+			display : 'ID',
+			name : 'id',
+			metadata : 'id',
+			hide : true,
+			align : 'center'
+		}, {
+			display : '用户名',
+			name : 'userid',
+			metadata : 'userid',
+			width : 100,
+			align : 'left'
+		}, {
+			display : '姓名',
+			name : 'Name',
+			metadata : 'Name',
+			width : 100,
+			sortable : true,
+			align : 'left',
+		}, {
+			name : 'lastName',
+			metadata : 'lastName',
+			width : 50,
+			sortable : true,
+			align : 'left',
+			hide : true
+		}, {
+			name : 'firstName',
+			metadata : 'firstName',
+			width : 80,
+			sortable : true,
+			align : 'left',
+			hide : true
+		}, {
+			display : '状态',
+			name : 'userStatus',
+			metadata : 'userStatus',
+			width : 30,
+			sortable : true,
+			align : 'left'
+		}, {
+			display : '手机',
+			name : 'mobTel',
+			metadata : 'mobTel',
+			width : 100,
+			sortable : true,
+			align : 'left'
+		}, {
+			display : '邮件',
+			name : 'emailAddress',
+			metadata : 'emailAddress',
+			width : 150,
+			sortable : true,
+			align : 'left',
+			hide : true
+		}, {
+			display : '机构',
+			name : 'orgname',
+			metadata : 'orgname',
+			width : 200,
+			sortable : true,
+			align : 'left'
+		} ],
+		singleSelect : true,
+		usepager : true,
+		useRp : true,
+		rp : 20,
+		nomsg : "没有数据",
+		showTableToggleBtn : false,
+		pagetext : '第',
+		outof : '页 /共',
+		pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+		// 全选
+		$("#userIdList").die().live('click', function() {
+			$("input[name='userId']").attr('checked', $(this).is(':checked'));
+		});
+		//给编辑用户按钮绑定事件
+		$("#userGrid .lends").die().live("click", function(){
+				edit_user($(this).closest("tr"));
+		});
+		var selectedIds="";
+		var mark = false;
+});
+//修改用户
+function edit_user(tr){
+	var columns = ['id','userid','lastName','firstName','userStatus','mobTel','emailAddress'];
+	var colValues = $("#userGrid").flexGetColumnValue(tr,columns);
+		$.ajax({
+		    url : $.appClient.generateUrl({ESRole : 'edit_user'},'x'),
+		    type : 'post',
+		    data : {data:colValues},
+		    success:function(data){
+			      $.dialog({
+				    	title:'分配角色',
+			    	   	fixed:false,
+			    	    resize: false,
+			    	    lock : true,
+						opacity : 0.1,
+				    	content:data,
+				    	padding:0,
+// 					    cancelVal: '关闭',
+// 					    cancel: true,
+					    okVal:'关闭',
+					    ok:true,
+					    init : function() {
+							$('#editUser').autovalidate();
+						},
+					    ok:function()
+				    	{ 
+					    	  mark = false;
+							  selectedIds='';
+							  this.close();
+					    	/* var form=$('#editUser');
+				    		if (!form.validate()) {
+				    			return false;
+				    		}
+					     	var url = $.appClient.generateUrl({ESRole : 'updateUser'}, 'x');
+					    	$("#editUser input[name='roleIds']").val(selectedIds);
+					    	var userInfo = $("#editUser").serialize();
+					    		$.post(url,{data : userInfo}, function(res){
+					    			if (res == 'true') {
+					    				$.dialog.notice({icon : 'succeed',content : '修改成功',title : '3秒后自动关闭',time : 3});
+					    				$("#userGrid").flexReload();
+					    				mark  = false;
+					    				selectedIds  ='';
+					    				return;
+					    			} else {
+					    				$.dialog.notice({icon : 'error',content : '修改失败',title : '3秒后自动关闭',time : 3});
+					    				mark = false;
+										selectedIds='';
+					    				return;
+					    			}
+					    		}); */
+						}
+				    });
+			    },
+			    cache:false
+		});
+}
+function getUserQuery(){
+	var keyword=$.trim($('input[name="userKeyWord"]').val());
+	if(keyword=='' || keyword=='请输入关键字') {
+		keyword = '';
+	}
+	//var data = orgSeq+orgId;
+	var url=$.appClient.generateUrl({ESRole:'findUserListByOrgid',keyWord:encodeURI(keyword)},'x');
+	$("#userGrid").flexOptions({url:url}).flexReload();
+	return false;
+}
+//回车事件
+$(document).keydown(function(event) {
+    if (event.keyCode == 13 && document.activeElement.id == 'userKeyWord') {
+    	getUserQuery();
+    }
+});
+</script>
+ 

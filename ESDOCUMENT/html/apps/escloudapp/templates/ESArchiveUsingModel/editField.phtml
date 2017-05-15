@@ -1,0 +1,171 @@
+<style>
+.fileditNew {
+	width: 100%;
+	height: 115px;
+	float: left;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+.fileditdivNew {
+	width: 250px;
+	height: 25px;
+	float: left;
+	margin-left: 10px;
+	padding: 5px 20px 5px 20px;
+}
+
+.fileditdivAreaNew {
+	width: 250px;
+	height: 68px;
+	float: left;
+	margin-left: 50px;
+	padding: 5px 20px 5px 20px;
+}
+
+.filednameNew {
+	width: 100px;
+	line-height: 25px;
+	text-indent: 5px;
+	float: left;
+}
+
+.filedvalueNew {
+	width: 100px;
+	height: 25px;
+	float: left
+}
+.fileditdivNew select{
+	width:150px;
+}
+</style>
+<div id='showField' height="315px" class="showField">
+	<div class='fileditdivNew'>
+		<p class='filednameNew'>&nbsp;字段：</p>
+		<p class='filedvalueNew'>
+			<input class='input' type="text" id='field' name="field"  value="<?php echo $field?>"/>
+	
+	</div>
+	<div class='fileditdivNew'>
+		<p class='filednameNew'>&nbsp;类型：</p>
+		<p class='filedvalueNew'>
+		<select name="type" id="type" >
+				<option value="TEXT" <?php if($type == 'TEXT') echo 'selected'?> >文本</option>
+				<option value="NUMBER"  <?php if($type == 'NUMBER') echo 'selected'?> >数值</option>
+				<option value="DATE" <?php if($type == 'DATE') echo 'selected'?> >日期</option>
+				<option value="FLOAT" <?php if($type == 'FLOAT') echo 'selected'?> >浮点</option>
+				<option value="TIME" <?php if($type == 'TIME') echo 'selected'?> >时间</option>
+				<option value="BOOLEAN" <?php if($type == 'BOOLEAN') echo 'selected'?> >布尔</option>
+			</select>
+	</div>
+	<div class='fileditdivNew'>
+		<p class='filednameNew'>&nbsp;字段长度：</p>
+		<p class='filedvalueNew'>
+			<input class='input' type="text" id='length' name="length" value="<?php echo $length?>" />
+	</div>
+	<div class='fileditdivNew'>
+		<p class='filednameNew'>&nbsp;小数点位数：</p>
+		<p class='filedvalueNew'>
+			<input class='input' type="text" id='doLength' name="doLength" value="<?php echo $doLength?>"/>
+	
+	</div>
+	<div class='fileditdivNew'>
+		<p class='filednameNew'>&nbsp;元数据：</p>
+		<p class='filedvalueNew'>
+			<input class='input' type="text" id='metaData' name="metaData"
+				readonly="readonly" value="<?php echo $metaData?>" title='请双击后，进行选择元数据'/>
+	
+	</div>
+	<div class='fileditdivNew'>
+		<p class='filednameNew'>&nbsp;是否为必填项：</p>
+		<p class='filedvalueNew'>
+		<select id='isNull' name="isNull" >
+				<option value="false" <?php if($isNull == 'false') echo 'selected'?> >否</option>
+				<option value="true" <?php if($isNull == 'true') echo 'selected'?>>是</option>
+			</select>
+	</div>
+	<div class='fileditdivNew'>
+		<p class='filednameNew'>&nbsp;描述：</p>
+		<p class='filedvalueNew'>
+			<input class='input' type="text" id='desc' name="desc" value="<?php echo $desc?>" />
+	
+	</div>
+</div>
+<script type="text/javascript">
+
+	$("#field").blur(function(){
+		if($('#field').val()=='' ){
+			$("#field").addClass("invalid-text").attr("title","此项不能为空");
+			return false;
+		}
+		$("#field").removeClass("invalid-text").attr("title","");
+		});
+
+	if('<?php echo $type?>' == '文本'){
+		$("#length").blur(function(){
+			var reg=/^[1-9]\d*$/;
+			if(!reg.test($('#length').val())){
+				$("#length").addClass("invalid-text").attr("title","此项不能为空且只能输入大于零的数字");
+				$('#length').val('');
+				return false;
+			}
+			$("#length").removeClass("invalid-text").attr("title","");
+			});
+		$("#doLength").attr("disabled","disabled");
+	}else if('<?php echo $type?>' == '数值' ){
+		$("#length").blur(function(){
+			var reg=/^[1-9]\d$/;
+			if(!reg.test($('#length').val())){
+				$("#length").addClass("invalid-text").attr("title","此项不能为空且只能输入最大值为9");
+				$('#length').val('');
+				return false;
+			}else if($('#length').val()>9){
+				$("#length").addClass("invalid-text").attr("title","此项不能为空且只能输入最大值为9");
+				return false;
+				}
+			$("#length").removeClass("invalid-text").attr("title","");
+			});
+		$("#length").val(4);
+		$("#doLength").attr("disabled","disabled");
+	}else  if('<?php echo $type?>' == '浮点'){
+		$("#length").blur(function(){
+			var reg=/^[1-9]\d*$/;
+			if(!reg.test($('#length').val())){
+				$("#length").addClass("invalid-text").attr("title","此项不能为空且只能输入最大值为17");
+				$('#length').val('');
+				return false;
+			}else if($('#length').val()>17){
+				$("#length").addClass("invalid-text").attr("title","此项不能为空且只能输入最大值为17");
+				return false;
+				}
+			$("#length").removeClass("invalid-text").attr("title","");
+			});
+		$("#length").val(4);
+		$("#doLength").blur(function(){
+			var reg=/^[1-9]\d*$/;
+			if(!reg.test($('#doLength').val())){
+				$("#doLength").addClass("invalid-text").attr("title","此项不能为空且只能输入大于零的数字");
+				$('#doLength').val('');
+				return false;
+			}else if(($("#length").val() - $('#doLength').val())<=0){
+				$("#doLength").addClass("invalid-text").attr("title","小数位不能大于或等于总长度");
+				return false;
+			}
+			$("#doLength").removeClass("invalid-text").attr("title","");
+			});
+		$("#doLength").val(2);
+		}else if('<?php echo $type?>' == '日期'){
+			$("#length").val(10);
+			$("#doLength").attr("disabled","disabled");
+			$("#length").attr("disabled","disabled");
+			}else if('<?php echo $type?>' == '时间'){
+				$("#length").val(8);
+				$("#doLength").attr("disabled","disabled");
+				$("#length").attr("disabled","disabled");
+				}else if('<?php echo $type?>' == '布尔'){
+					$("#length").val(5);
+					$("#doLength").attr("disabled","disabled");
+					$("#length").attr("disabled","disabled");
+					}
+
+</script>

@@ -1,0 +1,62 @@
+<style>
+<!--
+.button {
+	cursor: pointer;
+	padding: 5px;
+	background-color: #6F6E81;
+	color: #FFF;
+	border: 0px none;
+	outline: 0px none;
+}
+-->
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="addContractItemForm" method="post"
+			enctype="multipart/form-data">
+			<table id="table_detail" style="height: 400px;">
+				<tr>
+					<td>合同工程名称：</td>
+					<td><input type="text" name="escontractname" id="escontractname" verify="unspecial/64/1/0"
+						value="" style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>合同号：</td>
+					<td><input type="text" name="escontractnum" id="escontractnum" verify="english-num/20/1/0"
+						value="" style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>项目名称：</td>
+					<td><input type="text" name="esprojectname" id="esprojectname" verify="unspecial/64/0/0"
+						value="" style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>负责装置：</td>
+					<td><input type="text" name="esdevice" id="esdevice"
+						class="selectInput" readonly="readonly" value="" verify="text/64/1/0"
+						style="width: 380px; height: 20px;" />
+						<input type="hidden" name="esdeviceNo"  id="esdeviceNo"  value="" />
+						<input type="hidden" id="esdeviceId" value="0" /></td>
+				</tr>
+				<tr>
+					<td>中标单位：</td>
+					<td><input type="text" name="escompany" id="escompany"
+						class="selectInput" readonly="readonly" value="" verify="text/64/1/0"
+						style="width: 380px; height: 20px;" />
+						</td>
+				</tr>
+				<tr>
+					<td>联系人：</td>
+					<td><input type="text" name="esperson" id="esperson" value="" verify="unspecial/20/0/0"
+						style="width: 384px; height: 25px;" /></td>
+				</tr>
+				<tr>
+					<td>联系方式：</td>
+					<td><input type="text" name="esperstel" id="esperstel" value="" verify="mobile"
+						style="width: 384px; height: 25px;" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESContractItem/js/addOrUpdate.js"></script>

@@ -1,0 +1,251 @@
+@CHARSET "UTF-8";
+  
+html,body,div,span,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,address,big,cite,code,del,em,font,img,ins,small,strong,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend
+	{
+	margin: 0;
+	padding: 0;
+}
+
+textarea{ resize:none;}
+input,textarea{ outline:0;}
+select{ _font-size:12px;}
+html,body{overflow:hidden;}
+a{
+	text-decoration : none ;
+}
+ol,ul {
+	list-style: none;
+}
+
+.esmain {
+	width: 96%;
+	
+	margin-left:2%;
+	
+}
+
+.esmain .eshead {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #ccc;
+	
+}
+.esmain .esleft {
+	background: #fff;
+	width:220px;
+	float:left;
+	overflow: auto;
+	/* border-left: 1px solid #ccc; */
+	background-color:#133959;
+	margin-right:10px;
+	border-radius: 5px;
+	padding-top:12px;
+}
+/* 
+.esmain .esright {
+	background: #fff;
+	}
+	*/
+.editbtn {display:inline-block; width:16px; height:16px; background:url(../../public/img/edit.jpg) no-repeat no-repeat; cursor:pointer;}
+.link {display:inline-block; width:16px; height:16px; background:url(../images/file.png) no-repeat no-repeat; cursor:pointer;}
+.nolinkviewright {display:inline-block; width:16px; height:16px; background:url(../images/filenoviewright.png) no-repeat no-repeat; }
+.show {display:inline-block; width:16px; height:16px; background:url(../images/grid.png) no-repeat no-repeat; cursor:pointer;}
+.paperflag {display:inline-block; width:16px; height:16px; background:url(../images/page_white_text.png) no-repeat no-repeat;}
+.pflag {cursor:pointer;display:inline-block; width:16px; height:16px; background:url(../images/package_link.png) no-repeat no-repeat;}
+.efile-int{display:inline-block; width:16px; height:16px; background:url(../images/efile-int.gif) no-repeat no-repeat;} /*电子附件是否完整标识 */
+/*文件鉴定的批量挂接样式<------start------->*/
+#massHanging{width:600px;height:400px;overflow-y:auto;overflow-x:hidden;}
+#massHanging .tabs{height:30px; line-height:30px;display:block;}
+#massHanging .nameRule{font-size:16px;font-weight:bold;}
+#selectMatchingField{font-size:13px;vertical-align:middle;padding-bottom:2px\9;line-height:24px;width:163px;width:167px !important;height:24px;*height:26px;margin-left:5px;margin-left:3px\9;*margin-left:0px;}
+#massHanging .Bit{margin-top:10px;}
+#massHanging .tops{margin-top:10px;}
+#massHanging .lef{margin-left:30px;}
+.tops #fileBut{width:60px;height:25px;}
+#massHanging .contentR{margin-left:150px;margin-top:20px;}
+#massHanging #matchingRule,#involveSubFile{vertical-align:text-bottom;margin-bottom:2px;*margin-bottom:-2px;}
+/*文件鉴定的批量挂接样式<------end------->*/
+
+/*报表弹出框样式<------start------->*/
+/** wanghongchen 20140808 修改宽度为固定600 **/
+#reportstyle{width:600px;min-height:150px;overflow-y:auto;overflow-x:hidden;}
+#batchmodifystyle{height:320px;overflow-y:auto;overflow-x:hidden;}
+#reportstyle .tabs{height:30px; line-height:30px;display:block;}
+#reportstyle table{width:300px}
+#sift tr{height:30px;}
+td .es_add{width:22px;height:22px;background:url('../images/add.png') no-repeat}
+td .es_del{width:22px;height:22px;background:url('../images/del.png') no-repeat}
+.es_view{width:17px;height:15px;background:url('../images/view.jpg') no-repeat center;float:left;}
+.es_file{width:17px;height:15px;background:url('../images/file.png') no-repeat center;float:left;margin-left:10px}
+/*报表弹出框样式<------end------->*/
+
+/*新建移交清册页面样式  <-----start----->*/
+.estransfer{width:560px;overflow-y:auto;overflow-x:hidden;height:400px;}
+.estransfer ul{width: 550px; height:auto; overflow:hidden; text-align:center;}
+.estransfer ul li{width:250px;margin-left:20px;float:left;margin-top:10px;_display:inline}
+.estransfer span{width:80px;height:30px;line-height:30px;text-align:left;float:left;}
+.estransfer ul li input, .estransfer ul li select{height:20px;float:left;line-height:20px;width:160px;}
+.estransfer ul li .select-acc-range{ width:168px; padding:0;}
+.estransfer ul li select{width:162px;height:22px;float:left;}
+.estransfer ul li textarea{width:430px;height:50px;line-height:18px;font-size:13px;float:left}
+.escatagory{height:220px;width:166px;background:#fff;border:1px solid #aaa;display:none;z-index:888;position:absolute;overflow:auto;}
+/*新建移交清册页面样式  <-----end----->*/
+
+/*新建盒信息页面样式  <-----start----->*/
+.espakcet{width:560px;overflow-y:auto;overflow-x:hidden;}
+.espakcet ul{width: 550px; height:auto; overflow:hidden; text-align:center;}
+.espakcet ul li{width:250px;margin-left:20px;float:left;margin-top:10px;_display:inline}
+.espakcet span{width:80px;height:30px;line-height:30px;text-align:left;float:left;}
+.espakcet ul li input, .estransfer ul li select{height:20px;float:left;line-height:20px;width:160px;}
+.espakcet ul li .select-acc-range{ width:168px; padding:0;}
+.espakcet ul li select{width:162px;height:22px;float:left;}
+.espakcet ul li textarea{width:430px;height:50px;line-height:18px;font-size:13px;float:left}
+.esselected{background:#eee;color:#fff;}
+
+#recordRule input{height:20px;float:left;width:143px;}
+#recordRule select{height:22px;float:left;width:145px;}
+
+/*系统角色列表UL,导出导入按钮DIV,已选角色列表UL*/
+#userRole,.referValues{ width:466px; height:auto; overflow:hidden; float:left;}
+.referValues{ clear:left; display:none; margin-top:20px; border-radius:5px;}
+
+.ruleTitle{ width:100%; height:25px; float:left; margin-bottom:10px;}
+.ruleTitle span{ line-height:25px; float:left; padding:0 10px; background:#eee; border-radius:5px;}
+
+.useLis,.selBut{ height:auto; overflow:hidden; float:left;}
+.useLis{ width:193px;}
+.selBut{ width:80px; padding-top:35px; position:relative;}
+.selBut span{width:20px; height:20px; float:right; margin:0 30px 10px; cursor:pointer; background:url(../images/button.bg.gif) no-repeat;}
+.selBut .endspan{ margin-bottom:0;}
+.selBut .estop{ background-position:0px 0px;}
+.selBut .esup{ background-position:0px -20px;}
+.selBut .esleft{ background-position:0px -40px;}
+.selBut .esright{ background-position:0px -60px;}
+.selBut .esdown{ background-position:0px -80px;}
+.selBut .endspan{ background-position:0px -100px;}
+/*gengqianfeng 20140910 修改排序样式图标*/
+.selBut .A-Z{ background-position:0px -140px;}
+.selBut .Z-A{ background-position:0px -120px;}
+
+.zerorule{ width:80px; height:22px; position:absolute; top:0; left:0; z-index:200}
+.selBut .zerorule .spa{ width:35px; line-height:22px; text-align:center; float:left; font-size:12px;}
+.selBut .zerorule .inpu{ width:40px; height:20px; line-height:20px; float:left; border:1px solid #eee;}
+
+/*搜索文本框和搜索按钮*/
+.searchRole{ width:187px; height:20px; float:left; padding-left:2px; border:1px solid #ccc;}
+.searchusername{ width:165px; height:20px; float:left; border:0; font-size:13px; color:#555;}
+.searchuserbutton{ width:20px; height:20px; float:right; border:none;}
+
+/*两个列表*/
+.userList{ width:190px; height:200px; float:left; margin-top:10px; border:1px solid #ccc; overflow-y:scroll;}
+.userList li{ width:170px; height:22px;line-height:22px;color:#555; text-indent:4px; cursor:pointer;}
+/*规则设置样式 <----end--->*/
+
+/* 目录报表样式 方吉祥  */
+.reportsfree{ width:500px; height:auto; overflow:hidden; float:left;}
+.reportsfree h2{ width:100%; line-height:25px; font-weight:normal; text-indent:15px; float:left; background:#eee; border-bottom:1px solid #ccc;}
+.reportselect{ width:100%; height:auto;overflow:hidden; float:left;}
+.onlyispace{ width:100%; height:10px; float:left;}
+.reportselect p{ width:100%; height:30px; float:left; cursor:default;}
+.reportselect p input{ float:left; margin:8px 0 0 15px; _margin-top:5px;}
+.reportselect p span{ float:left; margin:8px 0 0 10px;}
+/* end */
+
+/* 卷档案,卷内,无数据 按钮样式 方吉祥 */
+.showinfo,.showchildinfo,.noinfo{ width:16px; height:16px; border:0; background:url(../../public/flexigrid/css/images/grid.png) no-repeat center center; cursor:pointer;}
+/* 链接电子档案 */
+.showedocument{ width:16px; height:16px; border:0; background:url(../images/link.png) no-repeat center center; cursor:pointer}
+/* end */
+
+/* 选择部门,选择移交人窗口样式  */
+.select_box{ width:auto; height:auto; overflow:hidden; float:left;}
+.select_org{ width:250px; height:390px; float:left; overflow:auto;}
+.select_user{ width:500px; height:400px; float:left; background:pink;}
+#deadline{width:95px;background:#fff;display:none;position:absolute;z-index:901;text-align:left;border:1px #aaa solid}
+#deadline ul li{padding-left:5px;width:90px;height:18px;float:left;cursor:pointer;line-height:18px}
+#deadline ul li:hover{background:#eee;padding: 0px 2px;border-left: 1px solid #fff;border-top: 1px solid #fff;border-right: 1px solid #eee;border-bottom: 1px solid #eee;}
+/* form validate */
+textarea.invalid-text,input.invalid-text,select.invalid-text{border:2px #DD0000 solid;}
+textarea.valid-text,input.valid-text,select.valid-text{border:2px #06AC87 solid;}
+
+/* 装盒界面 */
+.data-into-box{ width:500px; height:260px; float:left; margin:10px 15px; _display:inline;}
+.data-into-box .select-menu{ width:500px; height:22px; float:left; margin-bottom:10px;}
+.data-into-box .select-menu li{ width:240px; float:left;}
+.data-into-box .select-menu .fright{ float:right;}
+.data-into-box .select-menu li h2{ width:70px; font:normal normal normal 14px/22px 微软雅黑,黑体,宋体,arial; float:left;}
+.data-into-box .select-menu li h2 b{ color:#f00;}
+.data-into-box .select-menu li select{ width:170px; float:left; border:1px solid #5586A3;}
+.data-into-box .recordid-list{ width:500px; height:130px; float:left;}
+
+/*wanghongchen 20140515 鉴定销毁 start*/
+.rows{margin:8px 0; clear:both;}
+.rows .len{width:465px;}
+.rows .h{line-height:22px; height:22px;}
+.rows span{width:80px; text-align:right; line-height:22px; float:left;}
+.rows .l3{width:97px; float:left;}
+.rows .l2{width:189px; float:left;}
+.position{ position:relative;}
+.position b{ width:16px; height:16px; position:absolute; top:4px; right:4px; cursor:pointer;}
+.position .user_bg{ background:url(../../public/flexigrid/css/images/group.png);}
+/*wanghongchen 20140515 鉴定销毁 end*/
+/* 选择鉴定授权人员窗口样式 */
+.select_user_box{ width:900px; height:auto; float:left; overflow:hidden;}
+.org_tree{ width:250px; height:490px; float:left; overflow:auto;}
+.user_list{ width:640px; height:500px; float:left;}
+/* 选择鉴定授权人员窗口样式结束 */
+.flexigrid div.fbutton .grid_data_batch_delete {background: url(../images/Batch_Delete.gif) no-repeat center left;}
+
+.not-allowed{color:#ffffff; cursor:not-allowed;}
+
+/** xiaoxiong 20140825 添加可编辑下来框组件样式 **/
+.editSelect {
+	margin-left:80px;
+}
+.editSelect font{
+	font-size:9pt;
+}
+.editSelect .selectSpan {
+	border-top:1pt solid #c1c1c1;
+	border-right:1pt solid #c1c1c1;
+	border-bottom:1pt solid #c1c1c1;
+	overflow:hidden;
+	width:17px;
+	height:20px;
+	float:left;
+	clip:rect(-1px 162px 162px 142px);
+}
+.editSelect .selectSpan select{
+	width:162px;
+	height:20px;
+	border:0pt;
+	margin:0px 0px 0px -145px;
+}
+.editSelect .selectInputSpan{
+	border-top:1pt solid #c1c1c1;
+	border-left:1pt solid #c1c1c1;
+	border-bottom:1pt solid #c1c1c1;
+	width:142px;
+	height:20px;
+	padding:0px;
+	border:false;
+	padding:0px;
+	float:left;
+}
+.editSelect .selectInputSpan .selectInput{
+	width:142px;
+	float:left;
+	border:0pt;
+	font-size:9pt; 
+	padding:0px;
+	margin:0px;
+	background-color: white;
+}
+/** wanghongchen 20140917 流程附件样式 **/
+.opens{ width:16px; height:16px; display:inline-block; background:url(../images/editor.gif) no-repeat no-repeat; cursor:pointer;}
+}
+.aui_content{
+	left:0px;
+}
+.warnning{border:solid 2px #f00;}

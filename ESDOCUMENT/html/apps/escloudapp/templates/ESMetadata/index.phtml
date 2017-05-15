@@ -1,0 +1,209 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESMetadata/css/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'元数据管理'));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"元数据管理", content:"#ESSystemIndex"});
+});
+</script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESMetadata/js/autovalidate/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESMetadata/js/autovalidate/validate.js"></script>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<div >
+  <script type="text/javascript">
+  	var issave = 0;//是否保存
+  	var addid = 0;//添加操作后返回的id
+  	var operate="";//执行的操作
+  	
+	//元数据弹出框
+	var uri3 = "";
+	function getsubdata(id,unique,metaname)
+	{
+		uri3 = $.appClient.generateUrl({ESMetadata:'rules_json',id:id});
+		var url = $.appClient.generateUrl({ESMetadata:'metadataadd',id:id,unique:unique,metaname:metaname},'x');
+    	$.ajax({
+    	    url:url,
+    	    success:function(data){
+    	    	$.dialog({
+//     		    	title:'元数据属性维护',
+    		    	title:'编辑元数据',
+    		    	width: 500,
+    	    	    height: 200,
+    	    	   	fixed:true,
+    	    	   	padding:0,
+    	    	    resize: false,
+    		    	content:data
+    		    	});
+    	    	uri3 = $.appClient.generateUrl({ESMetadata:'rules_json'});
+    		    },
+    		    cache:false
+    	});	
+	}
+	function attrdata(id)
+	{
+		var url = $.appClient.generateUrl({ESMetadata:'attributeadd',id:id},'x');
+    	$.ajax({
+    	    url:url,
+    	    success:function(data){
+    	    	$.dialog({
+    		    	title:'编辑属性',
+    		    	width: 500,
+    	    	    height: 150,
+    	    	   	fixed:true,
+    	    	    resize: false,
+    		    	content:data,
+    		    	padding:0,
+    		    	ok:true,
+    				okVal:'确定',
+    				cancel:true,
+    				cancelVal:'取消',
+    				init : function() {
+    					$('#attrform').autovalidate();
+    				},
+    				ok:function(){
+
+    					if(operate=="add"){
+    						var form=$('#attrform');
+    						if (!form.validate()) {
+    							return false;
+    						}
+    						/** guolanrui 20140814 添加对特殊符号的正则验证，不允许输入特殊符号 BUG:684 **/
+    						
+    						var data=form.serialize();
+    						$.ajax({
+    							url:$.appClient.generateUrl({ESMetadata:'addattr'},'x'),
+    							type: "POST",
+    							data:{
+    								metaid:addid,
+    								param:data
+    							},
+    							dataType:"json",
+    							error:function(){
+    								$.dialog.notice({icon:'error',content:'添加失败，请重试',time:3});
+    							},
+    							success:function(datas){
+    								if(datas==true){
+//     									$('#attributetable').flexOptions({newp: 1}).flexReload();
+//     									$('#attributetable').flexOptions({url: uri3}).flexReload();
+    									$('#attributetable').flexOptions().flexReload();
+    									$.dialog.notice({icon:'succeed',content:'操作成功',time:3});
+    									diaa.close();
+    									/** guolanrui 20140812 修改原来添加元数据后为其添加一条属性值保存后直接将元数据添加窗口关闭了的BUG：704 **/
+//     									diac.close();
+    								}else{
+    									$.dialog.notice({icon:'error',content:'添加失败，请重试',time:3});
+    								}
+    								
+    							}
+    						});
+    					}
+    					if(operate=="edit"){
+
+    						var form=$('#attrform');
+    						if (!form.validate()) {
+    							return false;
+    						}
+    						/** guolanrui 20140814 添加对特殊符号的正则验证，不允许输入特殊符号 BUG:684 **/
+    						//TODO
+    						
+    						var data=form.serialize();
+    						var id = metaid;
+    						$.ajax({
+    							url:$.appClient.generateUrl({ESMetadata:'addattr'},'x'),
+    							type: "POST",
+    							data:{
+    								metaid:id,
+    								param:data
+    							},
+    							dataType:"json",
+    							error:function(){
+    								$.dialog.notice({icon:'error',content:'保存失败，请重试',time:3});
+    							},
+    							success:function(datas){
+    								if(datas==true){
+//     									$('#attributetable').flexOptions({newp: 1}).flexReload();
+//     									$('#attributetable').flexOptions({url: uri3}).flexReload();
+    									$('#attributetable').flexOptions().flexReload();
+    									$.dialog.notice({icon:'succeed',content:'操作成功',time:3});
+    									diaa.close();
+    									//diac.close();
+    								}else{
+    									$.dialog.notice({icon:'error',content:'保存失败，请重试',time:3});
+    								}
+    								
+    							}
+    						});
+    					}
+    				}
+    		    });
+    		    },
+    		    cache:false
+    	});	
+    	
+	}
+    function setdataadd()
+    {
+        var url = $.appClient.generateUrl({ESMetadata:'setdataadd'},'x');
+    	$.ajax({
+    	    url:url,
+    	    success:function(data){
+    	    	$.dialog({
+//     		    	title:'元数据属性维护',
+    		    	title:'编辑元数据',
+    	    		width: '40%',
+    	    	    height: '40%',
+    	    	   	fixed:true,
+    	    	    resize: false,
+    		    	content:data
+    		    });
+    	    	
+    		    },
+    		    cache:false
+    	});	
+    }
+  //删除数据
+	function delData()
+	{
+		id=check_selected('删除');
+		if(id=='' || id==='undefined' || id==0)
+		{
+			return false;
+		}
+		$.dialog({
+				content:'确定要删除吗?',
+				ok:true,
+				okVal:'确定',
+				cancel:true,
+				cancelVal:'取消',
+				ok:function(){
+					var url='<?php echo $esaction->generateUrl(Array('ESMetadata'=>'do_del'));?>';
+					$.get(url,{id:id},function(data){
+						$("input[name='ids']").attr("checked",false);
+						$.dialog.notice({icon:'succeed',content:'数据删除成功'+data,time:3,title:'3秒后自动关闭'});
+						$('#flexme1').flexOptions({newp: 1}).flexReload();
+
+						});
+					
+
+				}
+
+			})
+	}
+    </script>
+
+</div>
+
+<div id="metadata" class = "metadataContainer">
+  <table id="flexme2">
+  </table>
+  <div id="extra"></div>
+    <script type="text/javascript">
+
+    </script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESMetadata/js/template.js"></script>
+
+</div>

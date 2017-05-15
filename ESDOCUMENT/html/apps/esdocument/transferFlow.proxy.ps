@@ -1,0 +1,666 @@
+<?php
+/**
+ * 工作流管理模块
+ * @author gengqianfeng
+ *
+ */
+class ProxyEsdocumentTransferFlow extends AgentProxyAbstract {
+	const SERVICE_NAME = "transferFlow";
+	const SERVICE_NAME_USER = 'userqueryservice';
+	
+	/**
+	 * 添加类型
+	 *
+	 * @param unknown $type        	
+	 */
+	public function addType($type) {
+		$urlParam = array (
+				'addType' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $type ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 编辑类型
+	 *
+	 * @param unknown $type        	
+	 */
+	public function editType($type) {
+		$urlParam = array (
+				'editType' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $type ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 删除类型
+	 *
+	 * @param unknown $ids        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function delType($ids) {
+		$userId = $this->getUserId ();
+		$ip = $_SERVER ['REMOTE_ADDR'];
+		$urlParam = array (
+				'delType',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $ids ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取类型树
+	 *
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getTree() {
+		$urlParam = array (
+				'getTree' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 通过id获取单个类型
+	 *
+	 * @param unknown $id        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getTypeById($id) {
+		$urlParam = array (
+				'getTypeById',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取工作流列表总条数
+	 *
+	 * @param unknown $type_id        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getCount($type_id, $where) {
+		$urlParam = array (
+				'count',
+				$type_id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取工作流列表
+	 *
+	 * @param unknown $page        	
+	 * @param unknown $pre        	
+	 * @param unknown $type_id        	
+	 * @param unknown $where        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findTransferList($page, $pre, $type_id, $where) {
+		$urlParam = array (
+				'list',
+				$page,
+				$pre,
+				$type_id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 通过模型id获取单条工作流信息
+	 *
+	 * @param unknown $modelId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getModelInit($modelId) {
+		$urlParam = array (
+				'getModelInit',
+				$modelId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 保存初始模型工作流
+	 *
+	 * @param unknown $model        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function saveWFModelInit($model) {
+		$urlParam = array (
+				'saveWFModelInit' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $model ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 验证表单流转状态
+	 *
+	 * @param unknown $formId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getFlowingWF($formId) {
+		$urlParam = array (
+				'getFlowingWF',
+				$formId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取流程xml
+	 *
+	 * @param unknown $modelId        	
+	 */
+	public function getWorkFlowXml($modelId) {
+		$urlParam = array (
+				'getWorkFlowXml',
+				$modelId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取文控人员列表
+	 *
+	 * @param unknown $param        	
+	 */
+	public function findUserList($param) {
+		$urlParam = array (
+				'findUserList' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_USER, $url, json_encode ( $param ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 通过用户标示获取用户id
+	 *
+	 * @param unknown $userName        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getUserByName($userName) {
+		$urlParam = array (
+				'getUserByUserName',
+				$userName 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME_USER, $url );
+	}
+	
+	/**
+	 * 通过流id和步骤id获取处理人员
+	 *
+	 * @param unknown $flowId        	
+	 * @param unknown $stepId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getStepUser($flowId, $stepId) {
+		$urlParam = array (
+				'getStepUser',
+				$flowId,
+				$stepId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 通过角色获取用户ids
+	 *
+	 * @param unknown $roleId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getUserIdsByRole($roleIds) {
+		$urlParam = array (
+				'getUserIdsByRole' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $roleIds, 'text/plain;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取角色列表
+	 *
+	 * @param unknown $page        	
+	 * @param unknown $pre        	
+	 * @param unknown $searchKeyword        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findRoleList($page, $pre, $searchKeyword) {
+		$urlParam = array (
+				'findRoleList',
+				$page,
+				$pre 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $searchKeyword, 'text/plain;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取步骤选中用户列表
+	 *
+	 * @param unknown $modelId        	
+	 * @param unknown $stepId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findStepUserList($modelId, $stepId) {
+		$urlParam = array (
+				'findStepUserList',
+				$modelId,
+				$stepId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 保存步骤信息
+	 *
+	 * @param unknown $step        	
+	 */
+	public function saveStepInit($step) {
+		$urlParam = array (
+				'saveStepInit' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $step ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取函数总条数
+	 *
+	 * @param unknown $keyWord        	
+	 */
+	public function getFunctionCount($keyWord) {
+		$urlParam = array (
+				'getFunctionCount' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $keyWord ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取函数列表
+	 *
+	 * @param unknown $data        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getFunctionList($data) {
+		$urlParam = array (
+				'getFunctionList' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $data ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 添加函数
+	 *
+	 * @param unknown $function        	
+	 */
+	public function addFun($function) {
+		$urlParam = array (
+				'addFun' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $function, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除函数
+	 *
+	 * @param unknown $ids        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function delFun($ids) {
+		$userId = $this->getUserId ();
+		$ip = $_SERVER ['REMOTE_ADDR'];
+		$urlParam = array (
+				'delFun',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $ids ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 初始加载动作页面
+	 *
+	 * @param unknown $postData        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function actionCheckMethodNew($postData) {
+		$urlParam = array (
+				'actionCheckMethodNew' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $postData, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取动作知情人列表
+	 */
+	public function getNoticeUsersNew($modelId, $actionId) {
+		$urlParam = array (
+				'getNoticeUsersNew',
+				$modelId,
+				$actionId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 保存知会人信息
+	 *
+	 * @param unknown $action        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function saveActionForNoticeInit($action) {
+		$urlParam = array (
+				'saveActionForNoticeInit' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $action ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 保存动作信息
+	 *
+	 * @param unknown $action        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function saveActionInit($action) {
+		$urlParam = array (
+				'saveActionInit' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $action ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取分支信息
+	 *
+	 * @param unknown $condition        	
+	 */
+	public function getConditionToShowNew($condition) {
+		$urlParam = array (
+				'getConditionToShowNew' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $condition ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 保存分支信息
+	 *
+	 * @param unknown $condition        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function saveSplitCondition($condition) {
+		$urlParam = array (
+				'saveSplitCondition' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $condition ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 保存工作流
+	 *
+	 * @param unknown $flow        	
+	 */
+	public function saveWfModel($flow) {
+		$urlParam = array (
+				'saveWfModel' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 发布工作流
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function publicWorkFlow($flow) {
+		$urlParam = array (
+				'publicWorkFlow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 判断是否存在已流转的数据
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function isHavedWFData($flow) {
+		$urlParam = array (
+				'isHavedWFData' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除流程
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function deleteWorkflow($flow) {
+		$urlParam = array (
+				'deleteWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 复制流程
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function copyWorkflow($flow) {
+		$urlParam = array (
+				'copyWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 判断流程是否需要测试
+	 *
+	 * @param unknown $flow        	
+	 */
+	public function stationWorkflow($flow) {
+		$urlParam = array (
+				'stationWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 测试流程
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function detectionWorkflow($flow) {
+		$urlParam = array (
+				'detectionWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取导入的url地址
+	 */
+	public function importWorkflow() {
+		$userId = $this->getUserId ();
+		$ip = $_SERVER ['REMOTE_ADDR'];
+		$urlParam = array (
+				'importWorkflow',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->getUri ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 导出工作流
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function exportWorkflow($flow) {
+		$urlParam = array (
+				'exportWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除工作流步骤
+	 *
+	 * @param unknown $flow        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function deleteCellfromDB($flow) {
+		$urlParam = array (
+				'deleteCellfromDB' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 判断待删除工作流步骤是否存在待办数据
+	 *
+	 * @param unknown $flow        	
+	 */
+	public function verificationIsHasNotDealWf($flow) {
+		$urlParam = array (
+				'verificationIsHasNotDealWf' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 根据流程id删除工作流
+	 *
+	 * @param unknown $flow        	
+	 */
+	public function dropWfModel($flow) {
+		$urlParam = array (
+				'dropWfModel' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $flow ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取工作流报表列表
+	 *
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getWorkflowReportList() {
+		$urlParam = array (
+				'getWorkflowReportList' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取工作流表单元数据列表
+	 *
+	 * @param unknown $stageId        	
+	 */
+	public function getWorkflowMetaList($stageId) {
+		$urlParam = array (
+				'getWorkflowMetaList',
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 保存待发
+	 *
+	 * @author xuekun 2015年3月12日 上午9:52:12
+	 * @param unknown $postData        	
+	 */
+	public function saveWorkFlow($postData) {
+		$url = "saveWorkFlow";
+		return $this->post ( self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 验证流程类型名称唯一性
+	 *
+	 * @param unknown $flowType        	
+	 */
+	public function uniqueName($flowType) {
+		$urlParam = array (
+				'uniqueName' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $flowType, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 函数名称唯一性验证
+	 * 
+	 * @param unknown $name        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function uniqueFunName($name) {
+		$urlParam = array (
+				'uniqueFunName'				 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$name, 'text/plain;charset=UTF-8');
+	}
+	
+	
+	/** lujixiang 20150421 
+	 *  暂停工作流
+	 * 
+	 * @param unknown $name        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function haltWorkFlow($flowId) {
+		$urlParam = array (
+				'haltWorkFlow'				 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$flowId, 'text/plain;charset=UTF-8');
+	}
+}

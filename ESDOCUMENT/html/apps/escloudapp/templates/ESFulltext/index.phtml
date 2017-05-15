@@ -1,0 +1,51 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'全文索引库管理'));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"全文索引库管理", content:"#ESSystemIndex"});
+	$("#estabs").esTabs("open", {title:"fdsafdsa", content:"#fdsafdsa", canClose:true});
+	$("#estabs").esTabs("open", {title:"dddddddd", content:"#dddddddd", canClose:true, activated:true});
+	$("#estabs").esTabs("select", "全文索引库管理");
+});
+</script>
+
+<!-- 左侧 -->
+<div id="leftdiv" class="leftdiv" style="float:left;width:180px;margin-left:5px;">
+  <div style="background-color: #ECECEC;height:22px;margin-top:5px;">
+  <img src="<?php echo $tplPath?>/ESTemplate/img/chakan.jpg" /><span>全文索引库管理树</span>
+</div>	
+
+  <div style="clear:both;"></div>
+  <ul id="treeDemo" class="ztree" style="margin-top:-30px;"></ul>	
+</div>
+<div id="ESSystemIndex" >
+<div id="fdsafdsa" style="background:green;">fdsafdas</div>
+<div id="dddddddd" style="background:blue;">dddddddd</div>
+
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<!-- 右侧 -->
+<div id="rightdiv" style="float:left;width:180px;margin-left:5px;">
+<div>
+  <table id="flexme1">
+  </table>
+  <script type="text/javascript">
+    var uri="<?php echo url($this->getUrl($esaction->generateUrl(Array('ESFulltext'=>'set_json'))));?>";</script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESFulltext/js/template.js"></script>
+
+</div>
+
+<div >
+  <table id="flexme2">
+  </table>
+  <script type="text/javascript">
+    var uri="<?php echo url($this->getUrl($esaction->generateUrl(Array('ESFulltext'=>'get_json'))));?>";</script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESFulltext/js/template.js"></script>
+
+</div>
+</div>
+</div>

@@ -1,0 +1,132 @@
+<link rel="stylesheet"
+	href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css"
+	type="text/css">
+<link
+	rel="stylesheet" type="text/css"
+	href="<?php echo $tplPath;?>/ESArchiveUsingModel/css/index.css" />
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link
+	rel="stylesheet" type="text/css"
+	href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'借阅模板设置'));?>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"借阅模板设置", content:"#ESSystemIndex"});
+	$("#estabs").esTabs("select", "借阅模板设置");
+});
+</script>
+
+<div id="ESSystemIndex">
+	<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+	<div id="usingModel" class="usingModel">
+		<!-- 标签切换 -->
+		<ul id="subnav" class="subnav">
+			<li id='setPermission'><span class='setPermission-show'
+				id="setPermission-show"> 设置权限</span>
+			</li>
+			<li id='casualUser'><span class='casualUser-show'
+				id="casualUser-show"> 临时用户</span>
+			</li>
+			<li id='usingFormField'><span class='usingFormField-show'
+				id="usingFormField-show"> 自定义利用单字段</span>
+			</li>
+			<li id='usingFormStoreField'><span class='usingFormStoreField-show'
+				id="usingFormStoreField-show">自定义利用库字段</span>
+			</li>
+
+		</ul>
+	</div>
+	<div id='setUsingModel'>
+	<div id="model1" class="models">
+		<div id="rolegrid" class="rolegrid">
+			<table id="roleTable">
+			</table>
+		</div>
+		<div id='theBigGrid' class="theBigGrid">
+			<div id='oneForm' class="showRoleNews1">
+				<div id='STRU_BTN' class='buttoncss'>
+					<div><span class='title' >角色设置</span><span id ='saveRole' class='button not-allowed'>保存</span></div>
+				</div>
+				<div class='fileditdiv'>
+					<p class='filedname'>  &nbsp;角色名称：</p>
+					<p class='filedvalue'><input class='input'type="text"  readonly='readonly' id='roleName' name="roleName" />
+				</div>
+				<div class='fileditdivArea'>
+					<p class='filedname'>  &nbsp;角色描述： </p>
+					<p class='filedvalue'><textarea class='text' type='text' readonly='readonly' name="roleDesc" id="roleDesc" rows="4" cols="23" ></textarea>
+				</div>
+				<div class='fileditdiv'>
+					<p class='filedname'>  &nbsp;借阅件数： </p>
+					<p class='filedvalue'><input class='input'type="text"   id='lendCount' name="lendCount" />
+				</div>
+				<div class='fileditdiv'>
+					<p class='filedname'>  &nbsp;借阅天数： </p>
+					<p class='filedvalue'><input class='input'type="text"   id='lendDay' name="lendDay" />
+				</div>
+			</div>
+			<div id="threetGrid" class="showRoleNews">
+				<table id="threeTable">
+				
+				</table>
+			</div>
+			<div id="twoGrid" class="showRoleNews">
+				<table id="twoTable">
+				
+				</table>
+			</div>
+			<div id="fourGrid" class="showRoleNews">
+				<table id="fourTable">
+				
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div id="model2" class="models">
+	<div id="tempUserGrid" class="tempUserGrid">
+				<table id="tempUserTable">
+				
+				</table>
+		</div>
+	</div>
+	
+	<div id="model3" class="models">
+	<div id="usingFormGrid" class="usingFormGrid">
+				<table id="usingFormTable">
+				
+				</table>
+		</div>
+	</div>
+	
+	<div id="model4" class="models">
+	<div id="usingStoreGrid" class="usingStoreGrid">
+				<table id="usingStoreTable">
+				
+				</table>
+		</div>
+	</div>
+	
+	</div>
+</div>
+
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/ESArchiveUsingModel/js/index.js"></script>
+<script type="text/javascript">
+
+</script>
+</div>
+</div>

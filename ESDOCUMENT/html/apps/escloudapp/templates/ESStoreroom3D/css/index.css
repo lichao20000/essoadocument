@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+body,html{margin:0px;overflow:hidden;}
+input { margin:0; padding:0;}
+ol,ul{ margin:0; padding:0; list-style-type:none;}
+h2,p,form,table{ margin:0; padding:0; font-weight:normal;}
+#paper{ margin:0 auto;}
+
+.essContainer{width:96%;margin-left:2%; background-color: white;}

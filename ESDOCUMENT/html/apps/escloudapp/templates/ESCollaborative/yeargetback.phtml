@@ -1,0 +1,72 @@
+<style type="text/css">
+.borrowing_message .positionbtn{ width:383px; height:auto; overflow:hidden; float:right;}
+</style>
+<div class='borrowing_message'>
+	<div class='positionbtn'>
+		<div class='buttons'>
+			<input type='button' value='归还' id="back" class='basebtn basebtn_border  process' />
+		</div>
+	</div>
+
+	<div class='message_list'>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>填报单位：</span>
+				<input type='text' value="<?php echo $list->borrow_base->manager_reader==''?$list->borrow_base->display_name:$list->borrow_base->manager_reader;?>" readonly='readonly' />
+			</p>
+			<p class='like_input'>
+				<span>制表人：</span>
+				<input type='text' value="<?php echo $list->borrow_base->lymd_f2;?>" readonly='readonly' />
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>年报类型：</span>
+				<input type='text' value="<?php echo $list->borrow_base->dw_f3;?>" readonly='readonly' />
+			</p>
+			<p class='like_input'>
+				<span>年度：</span>
+				<input type='text' value="<?php echo $list->borrow_base->dh_f4;?>" readonly='readonly' />
+			</p>
+		</div>
+		<div class='like_textarea'>
+			<h2>描述：</h2>
+			<textarea readonly='readonly' class='extextarea'><?php echo $list->borrow_base->jyms_f7;?></textarea>
+		</div>
+	</div>
+	<input type="hidden" name="workid" value="<?php echo $list->borrow_base->workflowid;?>" />
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#back").click(function(){
+		var workid = $("input[name='workid']").val();
+		var url = $.appClient.generateUrl({ESCollaborative:'doback'},'x');
+		$.dialog({
+		    	content:"确定要归还么",
+		    	okVal:'确定',
+		    	cancelVal:'取消',
+		    	ok:true,
+			    cancel: true,
+			    ok:function(){
+			    	var ext = /\((\d+)\)/;
+			    	var val = $("#left_top .turn").text().match(ext)[1];
+			    	var newval = Number(val)-1;
+			    	var newhtml = "待办业务("+newval+")";
+			    	$.post(url,{workid:workid},function(result){
+						if(result){
+							$.dialog.notice({icon:"succeed",content:"归还成功",time:2});
+							$("#mylist").flexOptions({newp:1}).flexReload();
+							$("#left_top .turn a").html(newhtml);
+							dia.close();
+							return;
+						}else{
+							$.dialog.notice({icon:"error",content:"归还失败",time:2});
+						}
+						
+					});
+				}
+		});
+	
+	});
+});
+</script>

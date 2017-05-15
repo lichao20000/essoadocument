@@ -1,0 +1,159 @@
+<!-- wangbo 20140325-->
+<form id="editConsoleServer" action=""	method="post">
+<div class="estransfer">
+<ul>
+<li><span>ID<font color="red" size="3">*</font></span><input type="text" name="serviceId"     value= "<?php echo $data[1];?>"  ><input type="hidden" name="id"     value= "<?php echo $data[0];?>"  ></li>
+<li><span>服务名称<font color="red" size="3">*</font></span><input type="text" name="serviceName"     value= "<?php echo $data[2];?>"></li>
+<li><span>接口全类名<font color="red" size="3">*</font></span><input type="text" name="interfaceName"    value= "<?php echo $data[3];?>"></li>
+<li><span>访问路径<font color="red" size="3">*</font></span><input type="text" name="url"  title="例如:http://www.flyingsoft.cn"  value="<?php echo $data[4];?>"></li>
+<!-- <li><span>所属应用<font color="red" size="3">*</font></span><select id="attachApp" name="attachApp"  ></select></li> -->
+<!-- <li><span>口令<font color="red" size="3">*</font></span><input type="text" name="token" value="<?php // echo $data[7];?>" readonly="readonly"    ></li>-->
+<li><span>是否启用<font color="red" size="3">*</font></span>
+		<select name="enableState">
+		     <option <?php echo  $data[5]=="启用"?'selected':'' ; ?>  value='1'>是</option>
+		     <option <?php echo  $data[5]=="禁用"?'selected':'' ; ?>  value='0'>否</option>
+		</select>
+</li>
+<li style="width: 525px;">
+	<div id="reasonDiv">
+	<span>禁用原因</span>
+	<textarea name="reason" rows="4" cols="60"><?php echo $data[6];?></textarea>
+	</div>
+</li>
+</ul>
+</div>
+</form>
+ <script type="text/javascript">
+ var simpleZZ  =  new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+ var interfaceZZ  =  new RegExp("[`~!@#$^&*()=|{}':;',\\[\\]<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+// var tokenZZ = /^\w{2}|\w{15}$/;
+ var urlZZ = /^http:\/\/.*$/;
+
+// var mark = 0;
+// function getApp(){
+//	var suoshuApp =  <?php echo $data[1];?>;
+//	 if(mark==0){
+//		$.ajax({
+//				url:$.appClient.generateUrl({ESConsoleServer:'getAppName'},'x'),
+//				success:function(data){
+//					var datas = eval(data);
+//					mark = 1;
+//					$.each(datas,function(index,myData){ 
+//				       $("#editConsoleServer select[name='attachApp']").append("<option myValue='"+myData.appToken+"' value='"+myData.id+"'>"+myData.appNameCn+"</option>"); 
+//						});
+//					$("#attachApp option[value='"+suoshuApp+"']").attr("selected", true);
+///				}
+//		});	
+//	  }
+// }
+ 
+ //验证serviceid
+ $("#editConsoleServer input[name='serviceId']").bind('blur',function(){
+		var serviceId = $(this).val();
+		serviceId=serviceId.replace(/[ ]/g,"");
+		if(serviceId==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(simpleZZ.test(serviceId)==true){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+	//验证serviceName
+ $("#editConsoleServer input[name='serviceName']").bind('blur',function(){
+		var serviceName = $(this).val();
+		serviceName=serviceName.replace(/[ ]/g,"");
+		if(serviceName==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(simpleZZ.test(serviceName)==true){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+	//验证接口
+ $("#editConsoleServer input[name='interfaceName']").bind('blur',function(){
+		var interfaceName = $(this).val();
+		interfaceName=interfaceName.replace(/[ ]/g,"");
+		if(interfaceName==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(interfaceZZ.test(interfaceName)==true){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+	//验证url
+ $("#editConsoleServer input[name='url']").bind('blur',function(){
+		var url = $(this).val();
+		url=url.replace(/[ ]/g,"");
+		if(url==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(urlZZ.test(url)==false){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+	//验证口令
+// $("#editConsoleServer input[name='token']").bind('blur',function(){
+//		var token = $(this).val();
+//		token=token.replace(/[ ]/g,"");
+//		if(token==''){
+//			$(this).addClass("warnning");
+///			return false;
+//		}
+//		if(tokenZZ.test(token)==false){
+//			$(this).addClass("warnning");
+//			return false;
+//		}
+//		$(this).removeClass("warnning");
+//	});
+	//验证启用状态
+ $("#editConsoleServer select[name='enableState']").bind('blur',function(){
+		var enableState = $(this).val();
+		enableState=enableState.replace(/[ ]/g,"");
+		if(enableState==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+	//当选择所属应用时，口令跟着变化
+//	 $("#editConsoleServer select[name='attachApp']").bind('change',function(){
+//		        $("#editConsoleServer input[name='token']").attr("value",$(this).find("option:selected").attr("myValue"));
+//		});
+// $(document).ready(function(){
+//		getApp();
+//	});
+
+$(function(){
+
+	$('#editConsoleServer [name="enableState"]').bind('change',function(){
+		checkStatus();
+	});
+	
+	// 根据状态,判断是否显示禁用原因textarea
+	function checkStatus() {
+		var status = $('#editConsoleServer [name="enableState"]').val();
+		if (status == '0') {
+			// 显示禁用原因
+			$('#reasonDiv').show();
+		} else {
+			$('#editConsoleServer [name="reason"]').val("");
+			// 隐藏禁用原因
+			$('#reasonDiv').hide();
+		}
+	}	
+	checkStatus();
+	
+});
+</script>

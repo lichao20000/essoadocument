@@ -1,0 +1,69 @@
+<style type="text/css">
+.selectztree {
+	border: 1px solid #808080;
+	background: #f0f6e4;
+	overflow-y: scroll;
+	overflow-x: auto;
+}
+</style>
+<form id="editWorkFlowFun" action=""	method="post">
+<div class="estransfer">
+<ul>
+	<li class="funLi">
+		<span class="funSpan">方法名称<font color="red" size="3">*</font></span>
+		<input  type="text" name="functionName" id="functionName" oldName="<?php echo $data[1];?>" value= "<?php echo $data[1];?>"  verify="unspecial/100/1/0" />
+		<input type="hidden" name="id"    value= "<?php echo $data[0];?>" /> 
+	</li>
+	<li class="funLi">
+		<span class="funSpan">rest服务全类名<font color="red" size="3">*</font></span>
+		<input type="text" name="restFullClassName"  value= "<?php echo $data[2];?>" verify="flowFun/500/1/0" />
+	</li>
+	<li class="funLi">
+		<span class="funSpan">执行方法<font color="red" size="3">*</font></span>
+		<input type="text" name="exeFunction"   value= "<?php echo $data[3];?>" verify="english/500/1/0" />
+	</li>
+	<li class="funLi">
+		<span class="funSpan">选择收集范围<font color="red" size="3">*</font></span>
+		<input type="text" name="relationBusiness" id="relationBusiness" readonly="readonly" code="<?php echo $data[5];?>" value="<?php echo $data[4];?>" verify="text/500/1/0"  />
+		<div id="menuContent" class="menuContent" style="display: none; position: fixed;">
+			<ul id="treeDemo" class="ztree selectztree" style="margin-top: 0; width: 200px; height: 300px; color: #000"></ul>
+		</div>
+	</li>
+	<li class="funLi">
+		<span class="funSpan">描述信息</span>
+		<textarea name="description" style="width:188px;height:50px;float:left"><?php echo $data[6];?></textarea>
+	</li>
+</ul>
+</div>
+</form> 
+<script type="text/javascript">
+$(document).ready(function(){	
+	var Setting = {
+			chkStyle:"checkbox",
+			inputId:"relationBusiness",//触发事件的id
+			treeDIVId:"menuContent",
+			treeUlId:"treeDemo",
+			selectId:"beautySelect",//可选
+			url:$.appClient.generateUrl({ESDocumentsCollection : "getTree"}, 'x')
+		};
+	$.treeSelected._onCheck = function(e, treeId, treeNode) {
+		var zTree = $.fn.zTree.getZTreeObj(Setting.treeUlId);
+		nodes = zTree.getCheckedNodes(true);
+		var v = "";
+		var d = "";
+		for (var i=0, l=nodes.length; i<l; i++) {
+			v += nodes[i].name + ",";
+			d += nodes[i].id + ",";
+		}
+		if (v.length > 0 && d.length>0) {
+			v = v.substring(0, v.length-1);
+			d = d.substring(0, d.length-1);
+		}
+		$("#"+Setting.inputId).attr("value", v);
+		$("#"+Setting.inputId).attr("code", d);
+		$("#"+Setting.inputId).removeClass("invalid-text");
+		$("#"+Setting.inputId).attr('title',"");
+	};
+	$.treeSelected._init(Setting);
+});
+</script>

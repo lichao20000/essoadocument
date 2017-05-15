@@ -1,0 +1,36 @@
+<?php
+/*
+ * 机构组织注册
+ * @author wanghongchen 20140610
+ */
+class ProxyEssoaadminEscloud_orgRegisterws extends AgentProxyAbstract {
+	const SERVICE_NAME = "orgRegisterws";
+	
+	/**
+	 * 添加组织机构
+	 */
+	public function addOrEdit($params) {
+		return $this->post ( self::SERVICE_NAME, "addOrEdit", $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 删除一个SAAS机构
+	 */
+	public function deleteOrg($params) {
+		return $this->post ( self::SERVICE_NAME, "deleteOrg", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 获取注册机构列表
+	 */
+	public function getList($params) {
+		return $this->post ( self::SERVICE_NAME, "getList", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 根据id获取一个注册机构
+	 */
+	public function getById($id){
+		$urlParam=array('getById',$id);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+}

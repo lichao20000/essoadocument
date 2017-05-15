@@ -1,0 +1,242 @@
+<style type="text/css">
+.showornot{display:none;}
+.clear{clear:both;}
+.comsave{text-align:center;}
+.extrascanrule{width:80px; height:22px; position:absolute; top:0; left:0; z-index:200;}
+#centerRole{margin-top:15px;}
+#centerRole .selBut{width:90px; padding-top:35px; position:relative;}
+.myfilepath{background:#EBEBE4;width:260px;height:25px;border:1px solid #ccc;}
+#extrabutton .zerorule{ width:90px; height:22px; position:absolute; top:0; left:0; z-index:200}
+.mychoose{float: right;height: 28px;color: #fff;line-height: 28px;padding: 0 5px 0px 5px;padding-left: 28px;_border-top-color: tomato;_border-left-color: tomato;_filter: chroma(color =       tomato);background-position-x: 5px;_border-top-color: tomato;cursor: pointer;background: url(<?php echo $tplPath;?>/ESTemplate/img/choose.png) no-repeat
+		5px;background-color: #6f6e81;}
+.mychoose:HOVER {
+	background-color: #133959;
+}
+.chanClass{float: left;height:18px; background: #6f6e81;color: #fff; font: 12px;padding: 3px 1px 1px 1px;}
+.chanClass:HOVER {
+	background-color: #133959;
+}
+#comRole .userList,#centerRole .userList{ width:190px; height:180px; float:left; margin-top:10px; border:1px solid #ccc; overflow-y:scroll;}
+</style>
+
+<div id="topRole">
+<span>请选择远程路径：</span><input class="myfilepath" type="text" name="filepath" path="<?php echo $path ;?>" readonly="readonly" value='<?php echo $title ;?>' /><span class="mychoose">请选择路径</span>
+</div>
+
+
+<div id='centerRole'>
+  <div id='' class='useLis'>
+    <div class='searchRole'>
+      <input type='text' id='one' class='searchusername' value='' onKeyUp="showr(this.value,'left');"/>
+	  <input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+	</div>
+    <ul id='extraRole' class='userList'><?php echo $left;?></ul>
+  </div>
+  
+  	
+	<div id='extrabutton' class='selBut'>
+	<div id="extrarule" class="zerorule" ><p  class='spa' style="font-size:10px;width:40px;">连接符</p><input  type="text" name="comlen" class="inpu" style="width:15px;border:1px solid #CCCCCC;" /><p id="chan" style="width:18px;" class='chanClass'><img src='<?php echo $tplPath;?>/public/flexigrid/css/images/Grid_Data_Export.gif'></p></div>
+		<span id="extratop" class="estop" title="置顶"></span>
+		<span id="extraup" class="esup" title="上移"></span>
+		<span id="extraleft" class="esleft" title="左移"></span>
+		<span id="extraright" class="esright" title="右移"></span>
+		<span id="extradown" class="esdown" title="下移" ></span>
+		<span id="extrabottom" class="esbottom endspan" title="置底"></span>
+	</div>
+	<div id='' class='useLis' style="">
+		<div class='searchRole'>
+			<input type='text' id='two' class='searchusername'  value='' onKeyUp="showr(this.value,'right');"/>
+			<input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+		</div>
+		<ul id='extrasaveRole' class='userList'><?php echo $right;?></ul>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+var ssfilepath = "";
+var ddalog="";//电子文件中心弹出框
+var trimext = /\|\w+/;
+$('#centerRole li').die().live('click',function(){
+	$('#centerRole li').removeClass('esselected');
+	$(this).addClass('esselected');
+});
+
+//左移
+$("#extraleft").die().live('click',function(){
+	var st = $('#extrasaveRole .esselected').text().match(trimext).toString().substr(1);
+	if(st=="FIELD"){
+		var temp = $('#extrasaveRole .esselected').text().replace(trimext,"");
+		var html = $('#extrasaveRole .esselected').html(temp);
+		$('#extraRole').append(html);
+	}else{
+		$('#extrasaveRole .esselected').remove();
+	}
+	
+});
+//右移
+$("#extraright").die().live('click',function(){
+	var html = $('#extraRole .esselected').html();
+	html+='|FIELD';
+	$('#extraRole .esselected').html(html);
+	$('#extraRole .esselected').appendTo('#extrasaveRole');
+});
+$("#chan").die().live('click',function(){
+	var length = $("input[name='comlen']").val();
+	if(length==""){
+		$.dialog.notice({icon:'error',content:'请先填写连接符',time:3,title:'3秒后自动关闭'});
+		return;
+	}
+	length+='|CONNECTOR';
+	var html='<li id="">'+length+'</li>';
+	$('#extrasaveRole').append(html);
+});
+$(".filepath").die().live('click',function(){
+	var content = '|PATH';
+	var html='<li id="">'+content+'</li>';
+	$('#extrasaveRole').append(html);
+});
+//置顶
+$("#extratop").die().live('click',function(){
+	if($("#extrasaveRole .esselected").html()==$('#extrasaveRole li:eq(0)').html()){
+		return;
+	}
+	$('#extrasaveRole li:eq(0)').before($("#extrasaveRole .esselected"));
+});
+//置底
+$("#extrabottom").die().live('click',function(){
+	if($("#extrasaveRole .esselected").html()==$('#extrasaveRole li:last').html()){
+		return;
+	}
+	$('#extrasaveRole li:last').after($("#extrasaveRole .esselected"));
+});
+//上移
+$("#extraup").die().live('click',function(){
+	var index=$('#extrasaveRole .esselected').index()-1;
+	//guolanrui 20141014 添加index的判断，避免在IE8下选择最上的字段上移时字段消失BUG：1352
+	if(index>-1){
+		$('#extrasaveRole li:eq('+index+')').before($("#extrasaveRole .esselected"));
+	}	
+});
+//下移
+$("#extradown").die().live('click',function(){
+	var index=$('#extrasaveRole .esselected').index()+1;
+	$('#extrasaveRole li:eq('+index+')').after($("#extrasaveRole .esselected"));
+});
+//左双击
+$('#extraRole li').die().live('dblclick',function (){
+	var ext = $(this).html();
+	ext+='|FIELD';
+	$(this).html(ext);
+	$('#extrasaveRole').append($(this));
+});
+//右双击
+$("#extrasaveRole li").die().live('dblclick',function(){
+	var st = $(this).text().match(trimext).toString().substr(1);
+	//alert(st);return;
+	if(st=="FIELD"){
+		var temp = $(this).text().replace(trimext,"");
+		$(this).html(temp);
+		$('#extraRole').append($(this));
+	}else{
+		$(this).remove();
+	}
+});
+
+//筛选
+function showr(value,position)
+{
+	if($.trim(value)==''){
+		$('#extraRole li').show();
+		$('#extrasaveRole li').show();
+		return;
+	}
+	if(position=='left' && $.trim(value)!='')
+	{
+		$('#extraRole li').hide();
+		var liObj=$('#extraRole li:contains('+value+')').show();
+		$('#extraRole').append(liObj);
+	}else if(position=='right' && $.trim(value)!='')
+	{
+		$('#extrasaveRole li').hide();
+		var liObj=$('#extrasaveRole li:contains('+value+')').show();
+		$('#extrasaveRole').append(liObj);
+	}else{
+		return;
+	}
+}
+
+$(".mychoose").click(function(){
+	//alert(1111);return;
+	
+	$.ajax({
+	    url:$.appClient.generateUrl({ESTemplate:'pathchoose'},'x'),
+	    success:function(data){
+	    	ddalog=$.dialog({
+		    	title:'电子文件列表',
+	    		width: '50%',
+	    	   	fixed:false,
+	    	    resize: false,
+	    	    //width:800,
+	    	   // height:600,
+		    	content:data,
+		    	okVal:'确定',
+			    ok:true,
+			    cancelVal: '关闭',
+			    cancel: true,
+			    content:data,
+			    ok:function()
+		    	{
+			    	var filepath = $('.filemain .selected').closest(".list").find(".esfilepath").val();
+			    	if(filepath==undefined&&ssfilepath==""){
+				    	$.dialog.notice({icon:'warning',content:"您还没有选择文件",time:2});
+				    	return false;
+				    }
+				    if(filepath==undefined&&ssfilepath!=""){
+					    filepath = ssfilepath;
+					}
+					if(filepath!=undefined){
+						filepath = filepath;
+					}
+					//liqiubo 20140819 获得路径后，再获取一下中文显示，修复bug 755
+					$.post(
+		    				$.appClient.generateUrl({ESEFile:'getTitlePath'}, 'x'),
+		    				{path:filepath.replace("/","")},
+		    				function (res){ 
+								$("#topRole input[name='filepath']").val(res);
+								$("#topRole input[name='filepath']").attr("path",filepath);
+								ddalog.close();
+		    				}
+		    		);
+				 }
+		    });
+	    	
+		    },
+		    cache:false
+	});
+	
+});
+//筛选
+function show(value,position)
+{
+	if($.trim(value)==''){
+		$('#extraRole li').show();
+		$('#extrasaveRole li').show();
+		return;
+	}
+	if(position=='left' && $.trim(value)!='')
+	{
+		
+		$('#extraRole li').hide();
+		var liObj=$('#extraRole li:contains('+value+')').show();
+		$('#extraRole').append(liObj);
+	}else if(position=='right' && $.trim(value)!='')
+	{
+		$('#extrasaveRole li').hide();
+		var liObj=$('#extrasaveRole li:contains('+value+')').show();
+		$('#extrasaveRole').append(liObj);
+	}else{
+		return;
+	}
+}
+</script>

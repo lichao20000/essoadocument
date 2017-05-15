@@ -1,0 +1,80 @@
+<div class="linkFile">
+	<div class="linkLeft">
+		<ul id="esTree" class="ztree" treenodeid=''></ul>
+	</div>
+	<div id="div_esFile" class="linkRight">
+		<table id="esFile"></table>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var depSetting = {
+			view: {
+				dblClickExpand: false,
+				showLine: false,
+				fontCss : {color:"black"}
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			async:{
+				autoParam:['id','column','path','number'],
+				enable:true
+			},
+			callback: {
+				onClick: onDepClick
+			}
+		};
+	// 获取文件收集范围树目录
+	$.getJSON($.appClient.generateUrl({ESDocumentsCollection : "getTree"}, 'x'), function(zNodes) {
+		$.fn.zTree.init($("#esTree"), depSetting, zNodes);
+	});		
+
+	function onDepClick(e,treeId, treeNode) {		
+		var url=$.appClient.generateUrl({ESFiling: 'findDocumentList',code:treeNode.code,stageId:treeNode.id}, 'x');
+		$("#esFile").flexOptions({newp:1,url:url}).flexReload();
+	}
+	
+	var colModel=[{display: '序号', name : 'num', width : 20, align: 'center'}, 
+				{display: '<input type="checkbox" name="chk">', name : 'ids', width : 20, align: 'center'},
+				{display: '文件标题', name : 'title', width : 220, align: 'left'},
+				{display: '文件编码', name : 'docNo', width : 120, align: 'left'},
+				{display: '项目名称', name : 'itemName', width : 220, align: 'left'},
+				{display: '装置', name : 'device', width : 120, align: 'left'},
+				{display: '拟定部门', name : 'part', width : 80, align: 'left'},
+				{display: '拟定人', name : 'person', width : 60, align: 'left'},
+				{display: '拟定日期', name : 'date', width : 80, align: 'center'}];
+	$.post($.appClient.generateUrl({ESFiling : "findMoveCols"}, 'x'),{stageId:"0"},function(data){
+		if(data){
+			for(var i=0;i<data.length;i++){
+				colModel.push({display : data[i].name,name : data[i].code, width : 80, align : 'center'});
+			}
+		}
+		$("#div_esFile").html('<table id="esFile"></table>');
+		$("#esFile").flexigrid({
+			url : $.appClient.generateUrl({ESFiling: 'findDocumentList'}, 'x'),
+			dataType : 'json',
+			colModel : colModel,
+			usepager: true,
+			title: '&nbsp;',
+			nomsg:"没有数据",
+			useRp: true,
+			width: 600,
+			height:328,
+			showTableToggleBtn: true,
+			pagetext: '第',
+			itemtext: '页',
+			outof: '页 /共',
+			pagestat:' 显示 {from} 到 {to}条 / 共{total} 条',
+			procmsg:'正在加载数据，请稍候...'
+		});
+	},"json");
+	
+	//全选
+	$("#div_esFile input[name='chk']:checkbox").die().live("click",function(){
+		$("#esFile").find("input[type='checkbox']").attr('checked',$(this).is(':checked'));
+	});
+});
+</script>

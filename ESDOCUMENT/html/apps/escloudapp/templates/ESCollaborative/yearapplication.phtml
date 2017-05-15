@@ -1,0 +1,190 @@
+<style type="text/css">
+.borrowing_message .positionbtn{ width:403px; height:auto; overflow:hidden; float:right;}
+.checkTime{float:right;margin-right:20px;}
+</style>
+<div class='borrowing_message'>
+	<div class='positionbtn'>
+		<div class='buttons'>
+			<input type="button" id="yearnewspaper_modify" value="修改" class="basebtn basebtn_border btn modify">
+			<input type='button' id="apply" value='提交' class='basebtn basebtn_border btn agree' />
+			<input type='button' value='流程图' class='basebtn basebtn_border image process' />
+		</div>
+	</div>
+	
+	<div class='message_list'>
+	<form id="myform">
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>填报单位：</span>
+				<input type='text' name="fillunit" id="fillunit" value="<?php echo $list->yearnewspaper_approval->fillunit;?>" readonly='readonly' />
+			</p>
+			<p class='like_input'>
+				<span>制表人：</span>
+				<input type='text' name="lister" id="lister" value="<?php echo $list->yearnewspaper_approval->lister;?>" readonly='readonly' />
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>年报类型：</span>
+				<input type='text' name="datacs" id="datacs" value="<?php echo $list->yearnewspaper_approval->yearnewspaper_type;?>" readonly='readonly' />
+			</p>
+			<p class='like_input'>
+				<span>年度：</span>
+				<input type='text' name="fillyear" id="fillyear" value="<?php echo $list->yearnewspaper_approval->fillyear;?>" readonly='readonly' />
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>浏览附件：</span>
+				<span><a id="detailse" href="javascript:void(0);">查看</a></span>
+			</p>
+		</div>
+		<div class='like_textarea'>
+			<h2>描述：</h2>
+			<textarea readonly='readonly' id="yearnewspaper_desc" class='extextarea'><?php echo $list->yearnewspaper_approval->yearnewspaper_desc;?></textarea>
+		</div>
+	</form>
+		
+	<?php
+		echo '<script type="text/javascript">nowuse = "fileClerkApprovalResult" ;</script>';
+		foreach ($list->yearnewspaper_opinion as $k=>$val){
+	?>
+	<div class='like_textarea'>
+			<h2><?php echo $val->opinion_user_name;?>审批意见：<span class="checkTime"><?php echo $val->opinion_time;?></span></h2>
+			<textarea readonly='readonly' class='extextarea'><?php echo $val->opinion_approval;?></textarea>
+	</div>
+	<?php 
+		}
+	?>
+	</div>
+	<input type="hidden" id="workid" name="workid" value="<?php echo $list->yearnewspaper_approval->workflowid;;?>" />
+	<input type="hidden" id="taskid" name="taskid" value="<?php echo $list->yearnewspaper_approval->task_id;?>" />
+	<input type="hidden" id="yearnewspaper_id" name="yearnewspaper_id" value="<?php echo $list->yearnewspaper_approval->yearnewspaper_id;?>" />
+	<input type="hidden" name="creatime" value="<?php echo $list->yearnewspaper_approval->create_time;?>" />
+	<input type="hidden" id="status" name="status" value="<?php echo $list->yearnewspaper_approval->status;?>" />
+	<input type="hidden" id="treeiD" name="treeiD" value="<?php echo $list->yearnewspaper_approval->treeid;?>" />
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#apply").die().live('click',function(){
+		var yearnewspaper_id=$("#yearnewspaper_id").val();
+		var yearnewspaper_desc=$("#yearnewspaper_desc").val();
+		var status=document.getElementById('status').value;
+		var yearunit=$("#fillunit").val();
+		var yeary=$("#fillyear").val();
+		var yearperson=$("#lister").val();
+		var datacs=$("#datacs").val();
+		$.post(
+			$.appClient.generateUrl({ESInformationPublish:'findLeaderByuserId'},'x'),
+			function (htm){
+				if(htm === 'false'){
+					$.dialog.notice({ icon: 'warning', content: '对不起，没找到领导!'});
+					return;
+				}else if(htm.indexOf('onlyone')!=-1){
+					var approveUserId=htm.substring(7);
+					if(approveUserId ==''){
+						return false;
+					}
+					$.ajax({
+					    url:$.appClient.generateUrl({ESYearlyReport:'submityear'},'x'),
+					    type:'post',
+					     data:'checkboxvalue=' + yearnewspaper_id + '&bewrite=' + yearnewspaper_desc + '&yearunit=' + yearunit + '&yearperson=' + yearperson + '&yearstatus=' + status+ '&datacs=' + datacs+ '&yeary=' + yeary+'&approveUserId='+approveUserId,
+					    success:function(data){
+					    	yeardia.close();
+							$("#mylist").flexOptions({newp:1}).flexReload();
+					    	$.dialog.notice({content:'提交成功，请等待审批',icon:"success",time:3,width:200});
+						},
+						cache:false
+				    });
+				}else{
+					$.dialog({
+						title: '选择审批领导',
+						content: htm,
+						okVal: '确定',
+						cancelVal: '取消',
+						cancel: true,
+						ok:function(){
+							var forms = document.getElementById('check_approval_list').elements,fl=forms.length;
+							var approveUserId='';
+							for(var f=0; f<fl; f++)
+							{
+								if(forms[f].checked){
+									approveUserId = forms[f].id;
+									break;
+								}
+							}
+							if(approveUserId ==''){
+								return false;
+							}
+							$.ajax({
+							    url:$.appClient.generateUrl({ESYearlyReport:'submityear'},'x'),
+							    type:'post',
+							     data:'checkboxvalue=' + yearnewspaper_id + '&bewrite=' + yearnewspaper_desc + '&yearunit=' + yearunit + '&yearperson=' + yearperson + '&yearstatus=' + status+ '&datacs=' + datacs+ '&yeary=' + yeary+'&approveUserId='+approveUserId,
+							    success:function(data){
+							    	yeardia.close();
+									$("#mylist").flexOptions({newp:1}).flexReload();
+							    	$.dialog.notice({content:'提交成功，请等待审批',icon:"success",time:3,width:200});
+								},
+								cache:false
+						    });
+						}
+					});
+					
+				}
+			}
+		);
+	});
+	$(".image").die().live('click',function(){
+		var workid = $("input[name='workid']").val();
+		var url = $.appClient.generateUrl({ESCollaborative:'imgview', workid:workid},'x');
+		var html = '<img src = "'+ url +'" />';
+		$.dialog({
+		    	title:'详细信息',
+		    	padding:0,
+	    	   	fixed:true,
+	    	    resize: false,
+	    	   	width:580,
+	    	   	height:390,
+		    	content:html
+		    });
+		
+	});
+	$("#detailse").die().live('click',function(){
+		var yearId = $("input[name='yearnewspaper_id']").val();
+		var datacs = $("input[name='datacs']").val();
+		if(yearId){
+			$.ajax({
+			    url:$.appClient.generateUrl({ESYearlyReport:'datacs', yearId:yearId},'x'),
+			    type:'post',
+			    data:'datacs=' + datacs,
+			    success:function(data){
+			    	$.dialog({
+			    		id:"yearDialog",
+				    	title:'查看年报',
+				    	width:750,
+				    	height:500,
+				    	padding:'0px',
+				    	content:data
+				    });
+				},
+				cache:false
+			});
+		}
+	});
+	$("#yearnewspaper_modify").live('click',function(){
+		var data=[];
+  		data.push(document.getElementById('yearnewspaper_id').value);
+  		data.push(document.getElementById('status').value);
+  		data.push(document.getElementById('treeiD').value);
+  		data.push(document.getElementById('yearnewspaper_desc').value);
+  		data.push(document.getElementById('fillunit').value);
+  		data.push(document.getElementById('lister').value);
+  		data.push(document.getElementById('datacs').value);
+  		data.push(document.getElementById('fillyear').value);
+  		var baseUrl = $.appClient.generateUrl({ESYearlyReport:'index'});
+  		// 数据顺序一定,hash值有好几个值
+  		window.location.href = baseUrl+'#back|'+data.join('|')+'|'+new Date().getTime();
+	});
+});
+</script>

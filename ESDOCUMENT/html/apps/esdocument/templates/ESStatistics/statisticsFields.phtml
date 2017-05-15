@@ -1,0 +1,43 @@
+<fieldset class='a-fieldset'
+	style="width: 670px; border: 1px solid #B5B8C8; margin-left: 40px; padding-left: 10px;">
+	<legend class="s-fieldsetlegend">统计字段</legend>
+	<div class='s-fieldset-bwrap' style="width: 650px;">
+		<div id='statisticsField' class="statisticsField">
+			<fieldset class='a-fieldset a-child'>
+				<legend class="s-fieldsetlegend">所有字段</legend>
+				<div class='useLis'>
+					<div class='searchField'>
+						<input type='text' id='s_one' class='searchFieldName' value=''
+							onKeyUp="show2(this.value,'left');" /> <img alt=""
+							class='searchFieldButton'
+							src="<?php echo $tplPath;?>/ESStatistics/img/search.bg.gif">
+					</div>
+					<ul id='s_fieldList' class='fieldList'
+						style="height: 190px; overflow-y: scroll;">
+					</ul>
+				</div>
+			</fieldset>
+			<div id='esbutton2' class='selBut'>
+				<span id="estop2" class="estop" title='置顶'></span> <span id="esup2"
+					class="esup" title='上移'></span> <span id="esleft2" class="esleft"
+					title='左移'></span> <span id="esright2" class="esright" title='右移'></span>
+				<span id="esdown2" class="esdown" title='下移'></span> <span
+					id="esbottom2" class="esbottom endspan" title='置底'></span>
+			</div>
+			<fieldset class='a-fieldset a-child'>
+				<legend class="s-fieldsetlegend">已选择字段</legend>
+				<div class='useLis'>
+					<div class='searchField'>
+						<input type='text' id='s_two' class='searchFieldName' value=''
+							onKeyUp="show2(this.value,'right');" /> <img alt=""
+							class='searchFieldButton'
+							src="<?php echo $tplPath;?>/ESStatistics/img/search.bg.gif">
+					</div>
+					<ul id='s_fieldList2' class='fieldList referenceValues'
+						style="height: 190px; overflow-y: scroll;">
+					</ul>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+</fieldset>

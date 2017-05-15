@@ -1,0 +1,215 @@
+<div id="reportlsit" style="width: 600px;">
+<table id="selectreport"></table>
+<?php if($_GET['display']=="black"){?>
+<br>
+<div>
+	<div id='filterContents' style='padding:0 20px;'>
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span>
+		<span class='w90 w14090 hei30'>比较符</span>
+		<span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">添加行</span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">删除行</span>
+	</p>
+	<div id='contents'>
+		<?php for($fly=1;$fly<6;$fly++){ ?>
+		<p class='contbox creatediv'  style="overflow:hidden;">
+			<select name="esfields" class='w140 w14090 hei20 filedname' id='esfields_<?php echo $fly ?>' onchange="filterControl(<?php echo $fly ?>)">
+				<option value=''>请选择</option>
+				<?php
+				foreach($dataList as $value){
+					echo '<option value='.$value['code'].' type='.$value['type'].' >'.$value['name'].'</option>';
+				}
+				?>
+			</select>
+			<select name="comparison" class='w90 w14090 hei20 comparison' id='comparison_<?php echo $fly ?>'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select>
+			<input type='text' class='w140 w14090 hei20 filedvalue'  name="esfieldvalue" id='esfieldvalue_<?php echo $fly ?>' />
+			<select id='' class='w14090 w90 hei20 relationship' name="relation">
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select>
+			<a class='newfilter'></a><a class='delfilter'></a>
+		</p>
+		<?php }?>
+	</div>
+</div>
+</div>
+<?php } ?>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+        $("#selectreport").flexigrid({
+            url: $.appClient.generateUrl({
+                ESReport: 'reportList',
+                dataType: 'radio',
+                reportType: 'collection'
+            },
+            'x'),
+            dataType: 'json',
+            minwidth: 20,
+            colModel: [{
+                display: '',
+                name: 'rownum',
+                width: 20,
+                align: 'center'
+            },
+            {
+                display: '',
+                name: 'id',
+                width: 40,
+                align: 'center'
+            },
+            {
+                display: '报表标题',
+                name: 'title',
+                width: 100,
+                sortable: true,
+                align: 'left',
+                validate: /^\d+$/i,
+                validateMsg: "必须为数字"
+            },
+            {
+                display: '输出格式',
+                name: 'reportstyle',
+                width: 100,
+                sortable: true,
+                align: 'center'
+            },
+           /*  {
+                display: '报表样式',
+                name: 'resourcelevel',
+                width: 80,
+                sortable: true,
+                align: 'center',
+                dropdown: ["", "表格", "复合报表", "测试"],
+                hide: true
+            },
+            {
+                display: '每页条数',
+                name: 'perpage',
+                width: 50,
+                sortable: true,
+                align: 'right',
+                hide: true
+            },
+            {
+                display: '报表模板文件',
+                name: 'reportmodel',
+                width: 80,
+                sortable: true,
+                align: 'left',
+                hide: true
+            },
+            {
+                display: '是否存在',
+                name: 'ishave',
+                width: 80,
+                sortable: true,
+                align: 'center',
+                hide: true
+            }, */
+            {
+                display: '上传者',
+                name: 'uplodaer',
+                width: 100,
+                sortable: true,
+                align: 'left'
+            }],
+            buttons: [],
+            sortname: "c3",
+            sortorder: "asc",
+            usepager: true,
+            title: '报表列表',
+            useRp: true,
+            rp: 20,
+            nomsg: "没有数据",
+            showTableToggleBtn: false,
+            pagetext: '第',
+            itemtext: '页',
+            outof: '页 /共',
+            width: 600,
+            height:150,
+            pagestat: ' 显示 {from} 到 {to}条 / 共{total} 条',
+            procmsg: '正在加载数据，请稍候...'
+        });
+		$('div[class="tDiv2"]').css("height","28px");
+        $("#reportlsit").find('div[class="tDiv2"]').append('<div class="find-dialog"><input id="KeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="KeyWord" value="请输入关键字" /><span  onclick="reportQuery();"></span></div>');
+     
+   
+    });
+	function reportQuery() {
+	    var keyword = $.trim($('input[name="KeyWord"]').val());
+	    if (keyword == '' || keyword == '请输入关键字') {
+	        keyword = '';
+	    }
+	    var url = $.appClient.generateUrl({
+	        ESReport: 'reportList',
+	        dataType: 'radio',
+	        keyWord: encodeURI(keyword),
+	        reportType: 'collection'
+	    },
+	    'x');
+	    $("#selectreport").flexOptions({
+	        url: url,
+	        newp: 1
+	    }).flexReload();
+	    return false;
+	};
+	$(document).keydown(function(event) {
+	    if (event.keyCode == 13 && document.activeElement.id == 'KeyWord') {
+	        reportQuery();
+	    }
+	});
+	function filterControl(i){
+		
+		var selectValue = $("#esfields_"+i).val();
+		var selectType = $("#esfields_"+i+" option:selected").attr('type');
+		if("DATE" == selectType || "TIME" == selectType){
+			
+			/** 清空比较符，只添加大于、小于、等于三种比较符 **/
+			$("#comparison_"+i + " option").remove();  
+			var comparison = $("#comparison_"+i) ;
+			comparison.append("<option value='equal' selected>等于</option>"); 
+			comparison.append("<option value='greaterThan'>大于</option>"); 
+			comparison.append("<option value='lessThan'>小于</option>"); 
+
+			/** 添加日期插件 **/
+			var esfieldvalueObj = $("#esfieldvalue_"+i) ;
+			esfieldvalueObj.val('');
+			esfieldvalueObj.addClass("Wdate");
+			esfieldvalueObj.bind("click",WdatePicker);
+			
+		}else{
+
+			/** 还原设置 **/
+			$("#comparison_"+i + " option").remove();  
+			var comparison = $("#comparison_"+i) ;
+			comparison.append("<option value='equal'>等于</option>"); 
+			comparison.append("<option value='greaterThan'>大于</option>"); 
+			comparison.append("<option value='lessThan'>小于</option>"); 
+			comparison.append("<option value='notEqual'>不等于</option>"); 
+			comparison.append("<option value='greaterEqual'>大于等于</option>"); 
+			comparison.append("<option value='lessEqual'>小于等于</option>"); 
+			comparison.append("<option value='like' selected>包含</option>"); 
+			comparison.append("<option value='notLike'>不包含</option>"); 
+
+			/** 添加日期插件 **/
+			var esfieldvalueObj = $("#esfieldvalue_"+i) ;
+			esfieldvalueObj.removeClass("Wdate");
+			esfieldvalueObj.unbind("click");
+			esfieldvalueObj.attr('readonly',false);
+			esfieldvalueObj.removeAttr('disabled');
+			esfieldvalueObj.val('');
+		}
+	}
+</script>

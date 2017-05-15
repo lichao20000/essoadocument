@@ -1,0 +1,669 @@
+<?php
+
+/*
+ * @author fangjixiang
+ * @model 档案权限管理 
+ */
+ 
+class ProxyEscloudappEscloud_authservice extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_authservice";
+  
+  /**
+   * 当前用户是否拥有admin角色
+   * @author yzh 20131018
+   * @param $userid
+   * @return boolean
+   */
+  public function isAdmin($userid){
+  	$urlParam = array('isAdmin',$userid);
+    $url = implode('/', $urlParam);
+    return $this->get(self::SERVICE_NAME,$url);
+  }
+ /*
+  * 查询系统的所有的角色|分页 20130704停用
+  * @author fangjixiang 20120925
+  * @return
+  */
+  public function findAllRoleList($start, $limt, $userid)
+  {
+  	$urlParam = array('findAllRoleList',$start, $limt, $userid);
+    $url = implode('/', $urlParam);
+    //return $url;
+    return $this->get(self::SERVICE_NAME,$url);
+  }
+  
+  /*
+   * 根据用户id获得所有角色
+  * @author xiewenda 20140928
+  * @return
+  */
+  public function getRoleByUserId($userId)
+  {
+  	$urlParam = array('getRoleByUserId', $userId);
+  	$url = implode('/', $urlParam);
+  	//return $url;
+  	return $this->get(self::SERVICE_NAME,$url);
+  }
+  
+  /*
+   * 获取目录权限树节点[20130709停用]
+   * author fangjixiang
+   * PathParam("businessId")long businessId,
+   * PathParam("roleCode")String roleCode,
+   * PathParam("accountid")String accountid,
+   * PathParam("modelId") long modelId);
+   */
+  public function getAllPkgRightTreeNodes($businessId,$roleCode,$accountid,$modelId)
+  {
+  	$urlParam = array('getAllPkgRightTreeNodes',$businessId,$roleCode,$accountid,$modelId);
+    $url = implode('/', $urlParam);
+    //return $url;
+    return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+  }
+  
+  
+   /**
+	* @获取数据权限树节点[20130711 停用]
+	* @author fangjixiang 20121008
+	* @param businessId 业务id
+	* @param roleId 角色编码
+	* @param modelId 状态id
+	* @param haveCheckBox 是否需要复选框标识
+	* @return 返回目录树
+	*/
+  public function getPkgRightTreeNodes($businessId,$roleCode,$modelId,$haveCheckBox)
+  {
+  	$urlParam = array('getPkgRightTreeNodes',$businessId,$roleCode,$modelId,$haveCheckBox);
+    $url = implode('/', $urlParam);
+    //return $url;
+    return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+  }
+  
+  
+	
+  
+	/* @保存目录树节点[20130709停用]
+	 * @Path("osSaveCatalogAuthorize/{businessId}/{roleCode}/{modelId}/{nodePath}")
+	 * @author fangjixiang 20121011
+	 * @param businessId 业务id
+	 * @param roleId 角色编码
+	 * @param modelId 状态id
+	 * @param nodePath 树叶子节点path
+	 * @return 返回目录树
+	 */
+	public function osSaveCatalogAuthorize($businessId,$roleCode,$modelId,$params)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$appId = $this->getAppId();
+  		$appToken = $this->getAppToken();
+		$urlParam = array('osSaveCatalogAuthorize',$businessId,$roleCode,$modelId,$appId,$appToken,$ip);
+		$url = implode('/', $urlParam);
+		//return $url.'********'.$params;
+		return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	}
+	
+	/*
+	 * @获取要授权的数据节点path[20130709停用]
+	 * @author fangjixiang 20121011
+	 * @param nodePath 树叶子节点path
+	 * @return 返回nodePath数组
+	 */
+	public function preGetPackageRight($nodePath)
+	{
+		$urlParam = array('preGetPackageRight',$nodePath);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @获取要授权的数据[20130715 停用]
+	 * @author fangjixiang 20121011
+	 * @param businessId 业务id
+	 * @param roleId 角色编码
+	 * @param modelId 状态id
+	 * @param nodePath 树叶子节点path
+	 * @return 返回节点path
+	 */
+	public function osGetPackageRight($businessId,$roleCode,$modelId,$nodePath)
+	{
+		$urlParam = array('osGetPackageRight',$businessId,$roleCode,$modelId,$nodePath);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @see 保存结构的数据权限，现在已不区分结构权限和节点权限，传入的nodePath必须包含结构id[20130712停用]
+	 * @author zhangwenbin 20121010
+	 * @param businessId 业务id
+	 * @param modelId 状态id
+	 * @param roleId 角色编码
+	 * @param nodePath 包含结构的path
+	 * @param conditionAndRights 条件 和 权限 种类的 HashMap<String,List<String>>
+	 * @return 返回操作 结果信息
+	 */
+	public function osAddPackageRight($businessId,$modelId,$roleCode,$nodePath,$params)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];//add ldm
+		$appId = $this->getAppId();
+  		$appToken = $this->getAppToken();
+		$urlParam = array('osAddPackageRight',$businessId,$modelId,$roleCode,$nodePath,$appId,$appToken,$ip);
+		$url = implode('/', $urlParam);
+		//return $url.'---'.$params;
+		return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 修改数据权限
+	 * @author fangjixiang 20130521
+	 * @param businessId 业务id
+	 * @param modelId 状态id
+	 * @param roleId 角色编码
+	 * @param nodePath 包含结构的path
+	 * @param userid
+	 * @param ip
+	 * @param map 与保存数据权限权限是的map的格式相同
+	 * @param rightIds 与数据权限删除的格式相同
+	 * @return
+	 */
+	public function updateDataAuth($businessId, $modelId, $roleId, $nodePath, $params, $deleteId)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('updateDataAuth', $businessId, $modelId, $roleId, $nodePath, $deleteId, $ip);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+	}
+	
+	// 删除数据权限@方吉祥
+	public function osDeletePackageRight($businessId,$modelId,$roleCode,$nodePath,$rightIds,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('osDeletePackageRight',$businessId,$modelId,$roleCode,$nodePath,$rightIds,$userid,$ip);
+		$url = implode('/', $urlParam);
+		//return $url.'---'.$params;
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	}
+	
+	
+	/**
+	 * 创建角色 @20130704 停用
+	 * @author fangjixiang 20120905
+	 * @param roleentry 角色的实体信息
+	 * @return 成功返回true 失败返回false
+	 */
+	public function createRole($roleId,$roleCode,$roleName,$roleRemark,$userId,$operation)
+	{
+		$appId = $this->getAppId();
+  		$appToken = $this->getAppToken();
+		$urlParam = array('createRole',$roleId,$roleCode,$roleName,$roleRemark,$userId,$appId,$appToken);
+		$url = implode('/', $urlParam);
+		// return $url;
+		return $this->post(self::SERVICE_NAME,$url,$operation,"application/json;charset=UTF-8");
+	}
+	
+	// 根据用户获取系统角色信息(左边列表)@方吉祥
+	public function findRoleList($userId)
+	{
+		$urlParam = array('findRoleList',$userId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	// 获取未选择的系统角色
+	public function findNoSelectRoleListByAccountid($accountId)
+	{
+		$urlParam = array('findNoSelectRoleListByAccountid',$accountId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->post(self::SERVICE_NAME, $url, '',"application/json;charset=UTF-8");
+	}
+	
+	// 根据用户获取已选角色信息(右边列表)@方吉祥(20130703停用)
+	public function findRoleListByAccountid($accountId)
+	{
+		$urlParam = array('findRoleListByAccountid',$accountId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	// 保存用户角色设置@方吉祥
+	public function saveSelectRoleForAccountid($userId, $useRole, $userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveSelectRoleForAccountid', $userId, $userid, $ip);
+	    $url = implode('/', $urlParam);
+	    //return $url.'--'.$roleCodeList;
+	    return $this->post(self::SERVICE_NAME, $url, $useRole, "application/json;charset=UTF-8");
+	}
+	
+	// 删除角色(20130703 停用)
+	public function batchDeleteRole($roleCodes)
+	{
+		
+		$urlParam = array('batchDeleteRole');
+		$url = implode('/', $urlParam);
+		//return $roleCodes;
+		return $this->post(self::SERVICE_NAME,$url,$roleCodes,"application/json;charset=UTF-8");
+		
+	}
+	
+	/**
+	 *
+	 * @see 创建角色,
+	 * @author fangjixiang 20130704
+	 * @param roleCode 角色标识
+	 * @param roleName 角色 名称
+	 * @param roleRemark 角色备注
+	 * @param roleid  角色唯一标识
+	 * @return
+	 */
+	public function addRole($params)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('addRole', $ip);
+		$url = implode('/', $urlParam);
+		//return $params;
+		return $this->post(self::SERVICE_NAME,$url, $params ,"application/json;charset=UTF-8");
+		
+	}
+	
+	/**
+	 * 查询系统的所有的角色
+	 * @author fangjixiang 20130704
+	 * @param start 第几页
+	 * @param limt  显示多少
+	 * @param  userid
+	 * @return
+	 */
+	public function getAllRoleList( $page, $size, $userId ,$userBigOrgId)
+	{
+		$urlParam = array('getAllRoleList', $page, $size, $userId,$userBigOrgId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+		//return $roleCodes;
+		//return $this->post(self::SERVICE_NAME,$url,$roleCodes,"application/json;charset=UTF-8");
+	
+	}
+	
+	/**
+	 * 根据角色编码查找角色
+	 * @author fangjixiang 20120703
+	 * @param roleid 角色编码
+	 * @return 角色对象
+	 */
+	
+	public function getRoleByRoleid( $roleId )
+	{
+	
+		$urlParam = array('getRoleByRoleid', $roleId);
+		$url = implode('/', $urlParam);
+		//return $roleCodes;
+		return $this->get(self::SERVICE_NAME, $url);
+	
+	}
+	
+	/**
+	 * 根据角色标识搜索查询角色
+	 * @author fangjixiang 20130704
+	 * @param roleCode
+	 * @return
+	 */
+	public function secrchRoleCode($page, $size, $roleCode, $userId , $userBigOrgId)
+	{
+		$urlParam = array('secrchRoleCode', $page, $size, $userId , $userBigOrgId);
+		$url = implode('/', $urlParam);
+		//return $roleCodes;
+		return $this->post(self::SERVICE_NAME, $url, $roleCode, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 检测角色编码的唯一性
+	 * @author fangjixiang 20130704
+	 * @param roleCode
+	 * @return true 为唯一的 false 则不是唯一的
+	 */
+	public function checkRoleCode($roleCode)
+	{
+		$urlParam = array('checkRoleCode', $roleCode);
+		$url = implode('/', $urlParam);
+		//return $roleCodes;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 
+	 * @see 删除角色
+	 * @author fangjixiang 20130703 
+	 * @param roleId 角色唯一标识
+	 * @return
+	 */
+	public function removeRole($uId, $roleIds)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('removeRole', $uId, $ip);
+		$url = implode('/', $urlParam);
+		//return $roleCodes;
+		return $this->post(self::SERVICE_NAME,$url, $roleIds, "application/json;charset=UTF-8");
+		
+	}
+	
+	/**
+	 * 保存目录权限
+	 * @author fangjixiang 20130708
+	 * @param roleId
+	 * @param modelId
+	 * @param userid
+	 * @return
+	 */
+	public function getTreeNodes($roleId, $bussModelId, $userId)
+	{
+		$urlParam = array('getTreeNodes', $roleId, $bussModelId, $userId);
+		$url = implode('/', $urlParam);
+		//return $roleCodes;
+		return $this->post(self::SERVICE_NAME, $url, '', "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 保存目录权限[单击删除或保存暂停使用]
+	 * @author fangjixiang 20130708
+	 * @param roleId
+	 * @param modelId
+	 * @param userid
+	 * @return
+	 */
+	public function saveTreeNode($roleId, $bussModelId, $userId, $path)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveTreeNode',$roleId, $bussModelId, $userId, $ip);
+		$url = implode('/', $urlParam);
+		//return $roleCodes;
+		return $this->post(self::SERVICE_NAME, $url, $path, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 *  保存修改目录权限（保存页面最终确定的节点的方法）
+	 * @author fangjixiang 20130826
+	 * @param roleId
+	 * @param bussModelId
+	 * @param userid
+	 * @param ip
+	 * @param nodepathMap map中deletePath 为要删除的节点 savePath为最终要保存的path
+	 * @return
+	 */
+	public function saveAuthTreeNode($roleId, $bussModelId, $userId, $path)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveAuthTreeNode',$roleId, $bussModelId, $userId, $ip);
+		$url = implode('/', $urlParam);
+		//return $roleCodes;
+		return $this->post(self::SERVICE_NAME, $url, $path, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 删除目录权限
+	 * @author fangjixiang 20130708
+	 * @param roleId
+	 * @param bussModelId
+	 * @param selectedNodeIds
+	 * @return
+	 */
+	public function deleteTreeNode($roleId, $bussModelId, $userId, $path)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteTreeNode',$roleId, $bussModelId, $userId, $ip);
+		$url = implode('/', $urlParam);
+		//return $roleCodes;
+		return $this->post(self::SERVICE_NAME, $url, $path, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 根据角色、model获取一个业务的model下，角色所拥有的目录树节点 （ 用于数据授权时，获取权限范围内的目录树）
+	 * @author fangjixiang 20130709
+	 * @param roleId
+	 * @param modelId
+	 * @param userid
+	 * @return
+	 */
+	public function getCheckedTreeNodes($roleId, $bussModelId, $userId)
+	{
+		$urlParam = array('getCheckedTreeNodes',$roleId, $bussModelId, $userId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, '', "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 保存,修改，当前角色，modelId，和档案类型下的数据权限
+	 * @author fangjixiang 20130709
+	 * @param roleId  
+	 * @param modelId  
+	 * @param selectedNodeId  
+	 * @param userid 
+	 * @param ip 
+	 * @param map id 若存在则为编辑， 若没有则为添加   fileDown = 0 没有现在权限 1 有下载权限
+	 * fileRead，filePrint，itemRead，itemUpdate，itemDelete，
+	 * dataAuth value 存数据权限为list
+	 * @return
+	 */
+	public function saveDataAuth($treeId, $roleId, $modelId, $path, $userid, $data)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveDataAuth', $treeId, $roleId, $modelId, $path, $userid, $ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 根据目录树角色id，当前状态，和当前节点 获取数据权限
+	 * @author fangjixiang 20130711
+	 * @param roleId
+	 * @param modelId
+	 * @param selectedNodePath
+	 * @return
+	 */
+	public function getDataAuth($roleId, $modelId, $path, $userId)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('getDataAuth', $roleId, $modelId, $path, $userId, $ip);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 根据id删除数据权限
+	 * @author fangjixiang 20130711
+	 * @param ids
+	 * @return
+	 */
+	public function deleteDataAuth($uId, $authId, $roleId, $bussModelId)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteDataAuth', $uId, $ip, $roleId, $bussModelId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $authId, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 根据id获取数据权限 为编辑做准备
+	 * @author fangjixiang 20130711
+	 * @param id 数据权限的唯一标识
+	 * @return
+	 */
+	public function getDataAuthById($authId)
+	{
+		$urlParam = array('getDataAuthById', $authId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 
+	 * @see 给用户绑定角色
+	 * @author fangjixiang 2013-7-8 
+	 * @param accountIds
+	 * @param roleCodeList
+	 * @param userid
+	 * @param ip
+	 * @return
+	 */
+	public function bindingRolesForAccountid($uId, $param)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('bindingRolesForAccountid', $uId, $ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 *
+	 * @see 获得当前用户的授权列表和未授权列表
+	 * selectroles 标识 当前用户已授权的列表
+	 * noselectroles 标识 当前用户未授权的列表
+	 * @author fangjixiang 2013-7-16
+	 * @param accountId
+	 * @return
+	 */
+	public function getRolesforUser($uId, $onlineUser)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('getRolesforUser', $uId, $onlineUser);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->post(self::SERVICE_NAME, $url, '', "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 *
+	 * @see 根据当前用户id获取用户已经授权的角色权限列表
+	 * $userId 所选用户ID中的任意一个
+	 * @author fangjixiang 2013-7-16
+	 * @return
+	 */
+	public function getRolehasBangUser($userId)
+	{
+		$urlParam = array('getRolehasBangUser', $userId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/** 
+	 * @批量授权
+	 * @author fangjixiang 2013-7-16
+	 * @return
+	 */
+	public function getAllroleByUserId($userId)
+	{
+		$urlParam = array('getAllroleByUserId', $userId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * @yzh  20130729
+	 * $userId 所选用户ID中的任意一个
+	 * 查找部门的领导
+	 */
+	public function findLeaderByuserId($userId){
+		$urlParam = array('findLeaderByuserId', $userId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+
+	/**
+	 * @author yzh
+	 * @date   20131009
+	 * 获取大部门的orgId
+	 */
+	public function getBigDeptOrgId($userId){
+		$authId = $this->getAppId();
+  		$authToken = $this->getAppToken();
+  		$urlParam = array('getBigDeptOrgId',$authId,$authToken,$userId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 设置是否跨部门
+	 * @author: niyang
+	 * @date: 2013-10-14
+	 * @return
+	 */	
+	public function setTransDepartment($treeid,$istransdepartment) {
+		$urlParam = array('setNeedOrgCon',$treeid,$istransdepartment);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 获取是否跨部门
+	 * @author: niyang
+	 * @date: 2013-10-14
+	 * @return
+	 */	
+	public function getTransDepartment($treeid) {
+		return false ;
+// 		$urlParam = array('getNeedOrgCon',$treeid);
+// 		$url = implode('/', $urlParam);
+// 		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 设置数据权限是否优先级
+	 * 数据权限是否优先，若为true则获取数据时和org的关系为OR 否则和数据权限的关系为and
+	 * @author niyang 2013-10-31
+	 */
+	public function setDataAuthPriority($treeid, $isDataAuthPriority) {
+		$urlParam = array('setDataAuthPriority',$treeid,$isDataAuthPriority);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);		
+	}
+
+	/**
+	 * 获取是否优先数据权限（若优先则和org的关系为or否则为and）
+	 * @author niyang 2013-10-31
+	 */
+	public function getDataAuthPriority($treeid) {
+		return false ;
+// 		$urlParam = array('getDataAuthPriority',$treeid);
+// 		$url = implode('/', $urlParam);
+// 		return $this->get(self::SERVICE_NAME, $url);		
+	}
+	/**
+	 *
+	 * @see 获取目录树节点
+	 * @author shimiao 20140528 
+	 * @param accountId
+	 * @return
+	 */
+	public function getBusinessTreeforAuth($param)
+	{
+		$urlParam = array('getBusinessTreeforAuth');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+	}
+	/**
+	 * 获取用户功能权限列表(新增方法，支持模糊检索)
+	 * guolanrui 20140716
+	 * @param userId
+	 * @return
+	 */
+	public function getAllRoleListForKeword($postData){
+		$url = "getAllRoleListForKeword";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	public function getModelByNodePath($param)
+	{
+		$urlParam = array('getModelByNodePath');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+	}
+}

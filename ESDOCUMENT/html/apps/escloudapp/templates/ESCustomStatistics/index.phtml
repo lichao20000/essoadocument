@@ -1,0 +1,68 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>4));?>
+
+
+	
+		<table id="statistics">		
+		</table>  
+	         <script type="text/javascript">
+	    //var uri="<?php echo url($this->getUrl($esaction->generateUrl(Array('ESCatalogue'=>'set_json'))));?>";
+		$("#statistics").flexigrid({
+	//url: uri,
+	//dataType: 'json',
+	colModel : [
+		{display: '序号', name : 'num', width : 40, align: 'center'}, 
+		{display: '<input type="checkbox" name="ids">', name : 'id', width : 40, align: 'center'},
+		{display: '统计方案名称', name : 'operate', width : 420, align: 'center'},
+		{display: '执行', name : 'c3', width :160, sortable : true, align: 'center'},
+		{display: '修改', name : 'c4', width : 160, sortable : true, align: 'center'},
+		{display: '删除', name : 'c5', width : 160, sortable : true, align: 'center'},
+		{display: '查看', name : 'c6', width : 160, sortable : true, align: 'center'}
+		],
+	buttons : [
+		{name: '添加', bclass: 'add',onpress:addpanel},
+		{name: '删除', bclass: 'delete'},
+		],
+	searchitems : [
+       	{display: 'c3', name : 'c3'},
+       	{display: 'c4', name : 'c4', isdefault: true}
+       	],
+	sortname: "id",
+	sortorder: "asc",
+	usepager: true,
+	title: '文件鉴定',
+	useRp: true,
+	rp: 20,
+	nomsg:"没有数据",
+	pagetext: '第',
+	outof: '页 /共',
+	width: 1180,
+	height: 675,
+	pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+});
+		function addpanel()
+		{
+			$.ajax({
+			    url:"<?php echo url($this->getUrl($esaction->generateUrl(Array('ESCustomStatistics'=>'add_panel'),'x')));?>",
+			    success:function(data){
+			    	$.dialog({
+				    	title:'目录报表',
+			    		width: '50%',
+			    	    height: '40%',
+			    	   	fixed:true,
+			    	    resize: false,
+				    	content:data,
+				    	okVal:'确定',
+					    ok:true,
+					    cancelVal: '关闭',
+					    cancel: true 
+				    });
+				    },
+				    cache:false
+			});
+		}
+	        </script>

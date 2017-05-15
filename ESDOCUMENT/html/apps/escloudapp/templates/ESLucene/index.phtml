@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESLucene/css/index.css" />
+<link rel='stylesheet' type='text/css' href='<?php echo $tplPath;?>/ESLucene/css/filter.css' />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'索引库管理'));?>
+<script type="text/javascript" charset="UTF-8" src="<?php echo $tplPath;?>/ESLucene/js/template.js"></script>
+
+<div id="ESLuceneIndex" class = "ESLuceneIndexContainer">
+	<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+	<!-- xiaoxiong 20140805 添加宽度与滚动条设置 -->
+	<div id="Lucene_treeDiv" class='init-style' style="width:230px;">
+		<div id='lucene_tree' class='ztree'  style="overflow:auto;margin-top:10px;"></div>
+	</div>
+	<div class='init-style'>
+		<div id='tableCreated'></div>
+		<div id='tableNoCreate'></div>
+	</div>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>

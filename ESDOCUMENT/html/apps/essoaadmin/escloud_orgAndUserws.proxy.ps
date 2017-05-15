@@ -1,0 +1,117 @@
+<?php
+/*
+ *机构和用户管理
+* @author wangbo 20140403
+*/
+class ProxyEssoaadminEscloud_orgAndUserws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "userServer";
+	const ORGSERVICENAME="orgServer";
+	const CONSOLESERVICENAME="consoleServer";
+    const ROLESERVICE_NAME = "roleServer";
+	/**
+	*  删除用户
+	*/
+	public function deleteUserList($userIds){
+	    $url = "deleteUserByid";
+		return $this->post(self::SERVICE_NAME,$url,$userIds,"application/json;charset=UTF-8");
+	}
+	/**
+	*  添加用户
+	*/
+	public function addUser($userInfo){
+	    $url = "addUser";
+		return $this->post(self::SERVICE_NAME,$url,$userInfo,"application/json;charset=UTF-8");
+	}
+	/**
+	 *  修改用户
+	 */
+	public function updateUser($userInfo){
+		$url = "modifyUser";
+		return $this->post(self::SERVICE_NAME,$url,$userInfo,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 根据机构的id获取该机构下的所有用户
+	 */
+	public function findUserListByOrgid($canshu)
+	{
+		$url = "findUserListByOrgid";
+		return $this->post(self::SERVICE_NAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 获取左侧的机构树
+	 */
+	public function getOrgListTree($canshu){
+		$url ="findOrgListByParentid";
+		return $this->post(self::ORGSERVICENAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 获取最左侧的应用树
+	 */
+	public function getAppList($canshu){
+		$url ="getAppList";
+		return $this->post(self::CONSOLESERVICENAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	 /**
+	 * 在以机构为条件的前提下获取用户的总记录数
+	 * 
+	 */
+	public function getCountAll($countCanshu)
+	{
+		$url = "getCount";
+		return $this->post(self::SERVICE_NAME,$url,$countCanshu,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	*添加机构
+	*/
+	 public function addOrg($orgInfor){
+		    $url = "addOrgEntity";
+			return $this->post(self::ORGSERVICENAME,$url,$orgInfor,"application/json;charset=UTF-8");
+	 }
+	 /**
+	 *删除机构以及子机构，以及这些机构下的用户
+	 */
+	 public function deleteOrgEntry($canshu){
+	        $url = "deleteOrgEntry";
+			return $this->post(self::ORGSERVICENAME,$url,$canshu,"application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	 *编辑机构
+	 */
+	 public function modifyOrgEntry($data){
+	        $url = "modifyOrgEntry";
+			return $this->post(self::ORGSERVICENAME,$url,$data,"application/json;charset=UTF-8");
+	 }
+	 
+	 	/**
+	* 获取所有角色信息
+	*/
+	public function getAllRoleServer($canshu)
+	{
+		$url = "getDataList";
+		return $this->post(self::ROLESERVICE_NAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	 /**
+	 * 获取角色总记录数
+	 * 
+	 */
+	public function getCountAllRole($canshu)
+	{
+		$url = "getCount";
+		return $this->post(self::ROLESERVICE_NAME,$url,$canshu,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 获取用户选择的角色列表
+	 */
+	public function getUserRole($canshu){
+	     $url = "getUserRole";
+		 return $this->post(self::ROLESERVICE_NAME,$url,$canshu,"application/json;charset=UTF-8");
+	}
+	
+	public function getRolesByUserId($userId){
+	     $url = "getRolesByUserId";
+		 return $this->post(self::SERVICE_NAME,$url,$userId,"text/plain;charset=UTF-8");
+	}
+}

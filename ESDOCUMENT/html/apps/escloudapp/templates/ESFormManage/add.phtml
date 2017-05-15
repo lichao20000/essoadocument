@@ -1,0 +1,133 @@
+<style type="text/css">
+  .clear:after{content:',';height:0px;visibility:hidden;display:block;clear:both;}
+  .esBorrow{width:500px;height:200px;}
+  .leftTitle{width:80px;height:19px;line-height:20px;}
+  .rightTitle{width:80px;height:19px;line-height:20px;margin-left:20px;}
+  .esBorrow ul,li{list-style:none;}
+  .esBorrow ul{float:left;margin-top:10px;}
+  .esBorrow ul li{float:left;}
+  #leftD{width:150px;height:19px;line-height:20px;}
+  #rightD{width:150px;height:19px;line-height:20px;}
+</style>
+<div style="width:500px;height:300px;">
+    <div style="margin-top: 5px;">
+      <form id="formId" method="post" action="" enctype="multipart/form-data">
+        <!-- <input type="hidden" name="submit" value="add"/> -->
+        <div class="esBorrow">
+        	<ul>
+        		<li class="leftTitle">表单名称</li>
+        		<li><input type="text" value="" name="title" id="leftD"/></li>
+        		<li class="rightTitle">状态</li>
+        		<li><input type="text" value="" name="state" id="rightD"/></li>
+        	</ul>
+        	<ul>
+        		<li class="leftTitle">创建人</li>
+        		<li><input type="text" value="" name="creator" id="leftD"/></li>
+        		<li class="rightTitle">创建时间</li>
+        		<li><input type="text" value="" name="creatTime" id="rightD"/></li>
+        	</ul>
+        	<ul>
+        		<li class="leftTitle">修改人</li>
+        		<li><input type="text" value="" name="updateBy" id="leftD"/></li>
+        		<li class="rightTitle">修改时间</li>
+        		<li><input type="text" value="" name="updateTime" id="rightD"/></li>
+        	</ul>
+        	<ul>
+        		<li class="leftTitle">版本号</li>
+        		<li><input type="text" value="" name="state" id="leftD"/></li>
+        	</ul>
+        	<ul>
+        		<li class="leftTitle">备注</li>
+        		<li><textarea name="mark" cols="10" rows="6" style="width:400px;font-size:12px;font-family:Arial, Helvetica, sans-serif, 宋体"></textarea></li>
+        	</ul>
+        	<ul>
+        		<li class="leftTitle">上传文件</li>
+        		<li><input id="btnAdd" type="button" value=" 添加文件 "/></li>
+        		<li style="display:none;"><input id="btnCancel" type="button" value=" 取消上传 " /></li>
+        	</ul>
+        	<ul>
+        		<li class="leftTitle"></li>
+        		<li><div id="fsUploadProgress"></div></li>
+        	</ul>
+        </div>
+      </form>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+//function createSWFUpload(){
+	//alert("ok");
+	var upload = new SWFUpload({
+		//提交路径
+		upload_url: "http://10.3.189.5:8080/escloud/rest/escloud_formws/saveFormXml",
+		//向后台传递额外的参数10.3.189.5
+		//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+		//上传文件的名称
+		file_post_name: "file",
+		
+		//post_params:{sd:"gfd"},
+		file_size_limit : "1048576",	// 100MB  longjunhao 20140905 修改为1024MB=1GB
+		file_types : "*.*",
+		file_types_description : "所有文件",
+		file_upload_limit : "1",
+		file_queue_limit : "0",
+
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnAdd",
+		button_width: 72,
+		button_height: 28,
+		
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel",
+			startButtonId : "btnStart",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data){$("#returndata").html($("#returndata").html() + "<br/>" + data);}
+		},
+		
+		// Debug 设置
+		debug: true
+	});
+	$("#btnCancel").click(function(){cancelQueue(upload);});
+	$("#btnStart").click(function(){
+		var title = $("#formId input[name='title']").val();
+		var state = $("#formId input[name='state']").val();
+		var formVersion = $("#formId input[name='formVersion']").val();
+		var creator = $("#formId input[name='creator']").val();
+		var updateBy = $("#formId input[name='updateBy']").val();
+		var creatTime = $("#formId input[name='creatTime']").val();
+		var updateTime = $("#formId input[name='updateTime']").val();
+		var mark=$("#formId textarea[name='mark']").val();
+		//alert(mark);
+		upload.addPostParam("title",title);
+		upload.addPostParam("state",state);
+		upload.addPostParam("formVersion",formVersion);
+		upload.addPostParam("creator",creator);
+		upload.addPostParam("updateBy",updateBy);
+		upload.addPostParam("creatTime",creatTime);
+		upload.addPostParam("updateTime",updateTime);
+		upload.addPostParam("mark",mark);
+		
+		startQueue(upload);
+	});
+	//return upload;
+//};
+});
+</script>

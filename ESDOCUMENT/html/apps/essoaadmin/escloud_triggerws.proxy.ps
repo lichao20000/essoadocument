@@ -1,0 +1,77 @@
+<?php
+
+/*
+ * 结构服务
+* 张吉日木图
+*/
+class ProxyEssoaadminEscloud_triggerws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_triggerws";
+
+	/**
+	 * 获取总记录数
+	 *
+	 */
+	public function getCountAll($wb)
+	{
+		$url = "getCountAll";
+		return $this->post(self::SERVICE_NAME,$url,$wb,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取所有任务调度信息
+	 */
+	public function getJobDataList($jobpropertites)
+	{
+		$url = "getJobDataList";
+		return $this->post(self::SERVICE_NAME, $url,$jobpropertites,"application/json;charset=UTF-8");
+	}
+	
+	
+	/**
+	 * 添加一个任务调度
+	 */
+	public function saveJob($jobpropertites)
+	{
+		$url = "saveJob";
+		return $this->post(self::SERVICE_NAME, $url,$jobpropertites,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 编辑一个任务调度
+	 */
+	public function editJob($jobpropertites)
+	{
+		$url = "editJob";
+		return $this->post(self::SERVICE_NAME, $url,$jobpropertites,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 暂停一个任务调度
+	 */
+	public function pauseJob($jobpropertites)
+	{
+		$url = "pauseJob";
+		return $this->post(self::SERVICE_NAME, $url,$jobpropertites,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 重启一个任务调度
+	 */
+	public function resumeJob($jobpropertites)
+	{
+		$url = "resumeJob";
+		return $this->post(self::SERVICE_NAME, $url,$jobpropertites,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 删除一个任务调度
+	 */
+	public function deleteJobTrigger($jobpropertites)
+	{
+		$url = "deleteJob";
+		return $this->post(self::SERVICE_NAME, $url,$jobpropertites,"application/json;charset=UTF-8");
+	}
+	
+}
+?>

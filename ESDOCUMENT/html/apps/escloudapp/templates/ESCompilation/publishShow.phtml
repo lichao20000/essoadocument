@@ -1,0 +1,76 @@
+<link href='<?php echo $tplPath?>/ESCompilation/css/index.css' rel="stylesheet">
+	<div class="page">
+    	<div class="wrap">
+        	<div class="main">
+            	<div class="page_box">
+                	<div class="page_content">
+                        <div class="p_b">
+                        	<div class="p_t"><?php echo $title;?></div>
+                            <div class="p_c">
+                            	<div class="attr">
+                                	<span>编研类别：<?php echo $type;?></span>
+                                    <span>发布机构：<?php echo $createOrg;?></span>
+                                    <span>发布人：<?php echo $displayName;?></span>
+                                    <span>发布时间：<?php echo $publishDate==''?'未发布':$publishDate;?></span>
+                                </div>
+                                <div class='summary'>
+									<span>摘要：</span>
+									<p id = "summaryText"><?php echo $summary; ?></p>
+								</div>
+                                <div class="cont"><?php echo $content;?></div>
+                                <?php
+									if ($accessory) {
+								?>
+								<div id="fujian" style="margin-left: 50px;"><h2 style="margin-top:5px;color:red">附件</h2><div id="loadfile" class="loadfile"></div></div>
+								<?php 
+									}
+								?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+//如果摘要为空那么隐藏摘要内容
+if($("#summaryText").text()==""){
+	$(".summary").css("display","none");
+}
+$(function(){
+
+	spereator(";","<?php echo $accessory?>");
+	$('#loadfile a').attr('title','点击下载附件');
+	/**
+	 * 隔开数据
+	 * @author ldm
+	 */
+	function spereator(limit,string){
+		$("#loadfile").html("");
+		if(string!=null){
+			var sep = string.split(limit);
+			var res = new Array();
+			for(var i=0;i<sep.length;i++){
+				if(sep[i]!=""){
+					var source = sep[i].split("|");
+					var title = source[1];
+					var html='<div><a fileId="'+source[0].split(".")[0]+'" fullpath="'+sep[i]+';'+'" href="#">'+title+'</a></div>';
+					$("#loadfile").append(html);
+				}
+			}
+		}
+	}
+	$("#fujian a").die().live('click',function(){
+		var fileId = $(this).attr("fileId");
+		$.ajax({
+			url: $.appClient.generateUrl({ESFormStart : 'downloadFile',fileId:fileId},'x'),
+			success: function(url){
+				window.location=url;
+			}
+		});
+	});
+});
+</script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>

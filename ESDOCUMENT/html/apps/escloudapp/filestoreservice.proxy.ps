@@ -1,0 +1,125 @@
+<?php
+class ProxyEscloudappFilestoreservice extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "filestoreservice";
+	
+	/**
+	 * 测试服务
+	 */
+	public function hit()
+	{
+		return $this->get(self::SERVICE_NAME, "hit");
+	}
+	/**
+	 * 根据文件ID查找相关文档，返回匹配的相关文件位置信息
+	 * @param unknown_type $fileId 文件ID
+	 * @param unknown_type $company 公司编码
+	 * @param unknown_type $clientIp 客户端IP
+	 * @param unknown_type $fileType 文件类型，即：flv或*
+	 */
+	public function findbyfileid($fileId, $company="*", $clientIp="*", $fileType="*")
+	{
+		$urlParam = array('findbyfileid',$this->getAppId(), $this->getAppToken(), $fileId, $company, $clientIp, $fileType);
+		$url = implode('/', $urlParam);
+		
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 查找所有的FileStoreNode
+	 */
+	public function getallfilestorenodes()
+	{
+		return $this->get(self::SERVICE_NAME, "getallfilestorenodes");
+	}
+	
+	/**
+	 * 查找最佳的FileStoreNode
+	 * @param unknown_type $company
+	 * @param unknown_type $clientIp
+	 */
+	public function findbestfileuploadurl($company="*", $clientIp="*")
+	{
+		$urlParam = array('findbestfileuploadurl', $this->getAppId(), $this->getAppToken(), $company, $clientIp);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 获取一个全局唯一的文件Id
+	 */
+	public function genfileid()
+	{
+		$urlParam = array('findbyfileid',$this->getAppId(), $this->getAppToken());
+		$url = implode('/', $urlParam);
+		
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 上传新文件。该函数访问的服务地址只能在表单中直接post，直接调用该方法会出错
+	 * @param unknown_type $company
+	 * @param unknown_type $needtransfer
+	 * @param unknown_type $file
+	 */
+	public function storenewfile($company, $needtransfer, $file)
+	{
+		$urlParam = array('storenewfile',$this->getAppId(), $this->getAppToken(), $company, $needtransfer);
+		$url = implode('/', $urlParam);
+		
+  		return $this->post(self::SERVICE_NAME, "storenewfile", $file, "application/json;charset=UTF-8");		
+	}
+	
+	/**
+	 * 下载文件。该函数访问的服务地址只能在浏览器中直接访问，直接调用该方法会出错
+	 * @param unknown_type $company
+	 * @param unknown_type $fileId
+	 * @param unknown_type $check
+	 */
+	public function getfile($company, $fileId, $check)
+	{
+		$urlParam = array('getfile',$this->getAppId(), $this->getAppToken(), $company, $fileId, $check);
+		$url = implode('/', $urlParam);
+		
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 删除文件
+	 * @param unknown_type $fileId
+	 * @param unknown_type $logicDelete
+	 */
+	public function deletefile($fileId, $logicDelete=true)
+	{
+		$urlParam = array('deletefile',$this->getAppId(), $this->getAppToken(), $fileId, $logicDelete);
+		$url = implode('/', $urlParam);
+		
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 恢复逻辑删除的文件
+	 * @param unknown_type $fileId
+	 */
+	public function recoverfile($fileId)
+	{
+		$urlParam = array('recoverfile',$this->getAppId(), $this->getAppToken(), $fileId);
+		$url = implode('/', $urlParam);
+		
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 复制本地文件
+	 */
+	public function nativecopyfile()
+	{
+		
+	}
+	/**
+	 * 将本地的文件上传到本地节点系统中
+	 */
+	public function nativestorefile()
+	{
+		
+	}
+}

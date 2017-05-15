@@ -1,0 +1,205 @@
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+<style>
+.selectztree {
+	margin-top: 0px;
+	border: 1px solid #808080;
+	border-top: 0px;
+	background: #f0f6e4;
+	width: 342px;
+	height: 300px;
+	overflow: auto;
+}
+</style>
+<div id="filterContents" style="padding: 20px; padding-bottom: 40px;">
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span> <span
+			class='w90 w14090 hei30'>比较符</span> <span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span> <span
+			class='w90 w14090 hei30'
+			style="text-align: center; margin-right: 0px; width: 60px;">添加行</span></span>
+		<span class='w90 w14090 hei30'
+			style="text-align: center; margin-right: 0px; width: 60px;">删除行</span></span>
+	</p>
+	<div id='contents'>
+		<?php for($fly=1;$fly<6;$fly++){ ?>
+		<p class='contbox creatediv' style="overflow: hidden;" indx="<?php echo $fly; ?>" >
+			<select class='w140 w14090 hei20 filedname'>
+				<option value=''>请选择</option>
+				<option value='code'>设计变更单</option>
+				<option value='part_code'>接收单位部门</option>
+				<option value='receiveId'>接收用户</option>
+				<option value='copies'>份数</option>
+				<option value='creater'>发起人</option>
+				<option value='createtime'>发起时间</option>
+				<option value='receiver'>接收操作人</option>
+				<option value='sign'>接收签字人</option>
+				<option value='receivetime'>接收时间</option>
+				<option value='status'>状态</option>
+			</select> <select class='w90 w14090 hei20 comparison'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select> <input type='text' class='w140 w14090 hei20 filedvalue' />
+			<input type='text' class='w140 w14090 hei20 nameFiledvalue'
+				readonly="readonly" style="display: none;"
+				id="nameFiledvalue<?php echo $fly; ?>" /> <select
+				class='w140 w14090 hei20 selFiledvalue' style="display: none;">
+				<option value="">请选择</option>
+				<option value="0">未接收</option>
+				<option value="1">已接收</option>
+			</select> <select id='' class='w14090 w90 hei20 relationship'>
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select> <a class='newfilter'></a><a class='delfilter'></a>
+		</p>
+		<?php }?>
+	</div>
+	<br />
+</div>
+<div id="menuContent" class="menuContent"
+	style="margin-top: 2px; display: none; position: fixed;">
+	<ul id="treeDemo" class="ztree selectztree"></ul>
+</div>
+<div class='receiveUser' id='receiveUser'>
+	<div id="receiveUserTB"></div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#contents .filedname").die().live("change",function(){
+		if($(this).val()=="status"){
+			$(this).closest("p").find(".filedvalue").hide();
+			$(this).closest("p").find(".selFiledvalue").show();
+			$(this).closest("p").find(".nameFiledvalue").hide();
+		}else if($(this).val()=="part_code" || $(this).val()=="receiveId"){
+			$(this).closest("p").find(".filedvalue").hide();
+			$(this).closest("p").find(".selFiledvalue").hide();
+			$(this).closest("p").find(".nameFiledvalue").show();
+			loadPart($(this));		
+			partAndUserClick($(this));
+		}else {
+			$(this).closest("p").find(".filedvalue").show();
+			$(this).closest("p").find(".selFiledvalue").hide();		
+			$(this).closest("p").find(".nameFiledvalue").hide();	
+		}
+	});
+
+	function partAndUserClick(obj){
+		var vl=obj.closest("p").find(".nameFiledvalue");
+		vl.click(function(){
+			if(obj.val()=="part_code"){		
+				$('#receiveUser').hide();						
+				$("#menuContent").show();		
+			}else{
+				$("#menuContent").hide();	
+				var offset=$(this).offset();
+				$('#receiveUser').show().offset({top:offset.top+23,left:offset.left});
+				userClick(obj);
+			}
+		});	
+	}
+
+	//参见单位部门选择树
+	function loadPart(obj){
+		var indx=obj.closest("p").attr("indx");
+		$("#nameFiledvalue"+indx).selectInput({
+	        url: $.appClient.generateUrl({ESParticipatory: "getTree"},'x'),
+	        chkStyle: "radio",
+	        width:300,
+	        onCheck:function(treeNode,obj){
+	        	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	    		nodes = zTree.getCheckedNodes(true);
+	    		var names = '';
+	    		var codes = '';
+	    		if(nodes.length>0){
+		    		for(var i = 0;i<nodes.length;i++){
+			    		if(i==0){
+			    			names += nodes[0].name;
+				    		codes += nodes[0].code;
+				    	}else{
+					    	names += ","+nodes[i].name;
+				    		codes += ","+nodes[i].code;
+				    	}
+			    		$("#nameFiledvalue"+indx).val(names);
+			    		$("#nameFiledvalue"+indx).prev(".filedvalue").val(codes);
+		    		}
+	    		}
+			}
+	 	});
+	}
+
+	//所有角色
+	var colModelUsers = [
+		    {display: '序号', name : 'num', width : 30, align: 'center'}, 
+		    {display: 'ID', name : 'id',metadata:'id',hide:true, width : 50, align: 'center'},
+			{display: '用户名', name : 'userid',metadata:'userid', width : 150, align: 'center'},
+			{display: '姓名', name : 'name',metadata:'name', width : 150, align: 'center'},
+			{display: '邮箱', name : 'emailAddress', width : 150, align: 'center'},
+			{display: '手机', name : 'mobtel', width : 120, align: 'center'}
+		];
+	
+	//查询所有角色
+	$("#receiveUserTB").flexigrid({
+		url : $.appClient.generateUrl({ESParticipatory : 'findControlerList'}, 'x'),
+		dataType : 'json',
+		border:true,
+		colModel : colModelUsers,
+		singleSelect : true,
+		usepager : true,
+		useRp : true,
+		rp : 20,
+		nomsg : "没有数据",
+		showTableToggleBtn : false,
+		pagetext : '第',
+		outof : '页 /共',
+		width : 'auto',
+		height : 135,
+		pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+
+	//初始加载用户搜索框
+	$('#receiveUser .nDiv').after('<div style="height:42px;line-height:42px;"><div class="find-dialog" style="margin-top:9px;"><input id="userKeyWordCond" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="userKeyWord" value="请输入关键字" /><span class="searchUser"></span></div></div>');
+
+	function userClick(obj){
+		var indx=obj.closest("p").attr("indx");
+		//角色数据单击事件
+		$('#receiveUserTB').find("tr").die().live("click", function(){
+			var	id=$('#receiveUserTB').flexGetColumnValue($(this),['id']);
+			var	name=$('#receiveUserTB').flexGetColumnValue($(this),['name']);		
+    		$("#nameFiledvalue"+indx).prev(".filedvalue").val(id);
+			$("#nameFiledvalue"+indx).val(name);
+		});
+	}
+	
+	//鼠标按下事件捕获
+	$("body").bind("mousedown", clickBodyDown);
+
+	function clickBodyDown(event) {
+		if (!(event.target.id == "receiveUser" || event.target.id == "receiveUserTB" || $(event.target).parents("#receiveUser").length>0)) {
+			$("#receiveUser").fadeOut("fast");//隐藏用户选择弹出框
+		}
+	}
+
+	//用户搜索
+	$('#receiveUser .searchUser').die().live("click",function(){
+		var userKeyword = $('#receiveUser #userKeyWordCond').val();
+		if (userKeyword == '请输入关键字') {
+			userKeyword = '';
+		}
+		$("#receiveUserTB").flexOptions({url:$.appClient.generateUrl({ESParticipatory : 'findControlerList',keyWord:userKeyword}, 'x'),newp:1}).flexReload();	
+	});
+
+	$(document).keydown(function(event){
+		var activeId = document.activeElement.id;
+		if(event.keyCode == 13 && activeId == 'userKeyWordCond') {
+			jQuery("#receiveUser .searchUser").click();  
+			return false;
+		}
+	});
+});
+</script>

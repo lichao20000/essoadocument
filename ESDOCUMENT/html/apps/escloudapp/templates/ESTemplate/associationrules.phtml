@@ -1,0 +1,369 @@
+<style type="text/css">
+.correBox{ width:820px; height:500px;}
+.SourceFiled{ width:200px; height:423px; float:left;overflow:auto;}
+.SourceFiled li{width:180px;text-align:center;}
+.asstitle{width:200px;float:left;}
+.title{text-align:center;height:52px;line-height:25px; border-top:1px solid #f9f9f9;background:url(<?php echo $tplPath;?>/public/flexigrid/css/images/fhbg.gif) left bottom;}
+.SourceFiled li{width:200px; height:24px;line-height:24px;color:#555; text-indent:4px; cursor:pointer; z-index:2000;}
+.correBox .buttoncss1{border:0; padding:0;}
+
+
+.buttoncss1 {
+	padding-left: 5px;
+}
+
+.buttoncss1 div {
+	float: left;
+	margin-top: 5px;
+	margin-right: 5px;
+	border: 1px solid transparent;
+}
+
+.buttoncss1 span {
+	margin-right: 5px;
+}
+
+.buttoncss1 span.title1 {
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 5px 0px 20px;
+	margin-left: 5px;
+	border-right: 1px solid #ccc;
+	margin-top: 3px;
+}
+
+.buttoncss1 span.button1 {
+	float: left;
+	height: 28px;
+	color: #fff;
+	line-height: 28px;
+	padding: 0 5px 0px 5px;
+	padding-left: 28px;
+	_border-top-color: tomato;
+	_border-left-color: tomato;
+	_filter: chroma(color =       tomato);
+	background-position-x: 5px;
+	_border-top-color: tomato;
+	cursor: pointer;
+}
+
+
+.button1 {
+	background-color: #4a8bc2;
+}
+
+.buttoncss1 {
+	width: 100%;
+	height: 40px;
+	float: left;
+	padding: 0px;
+	border-left: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+#savecorrerules{
+	background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/save.png) no-repeat
+		5px;
+	background-color: #6f6e81;
+}
+#resetrules{
+	background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/table_refresh.png) no-repeat
+		5px;
+	background-color: #6f6e81;
+}
+#autocorrerules{
+background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/Grid_Zip_Import.png) no-repeat
+		5px;
+	background-color: #6f6e81;
+}
+#deletetreenode{
+background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/close.png) no-repeat
+		5px;
+	background-color: #6f6e81;
+}
+#cancelRelevance{
+background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/close.png) no-repeat
+		5px;
+	background-color: #6f6e81;
+}
+.buttoncss1 span#savecorrerules:HOVER {
+	background-color: #133959;
+}
+.buttoncss1 span#resetrules:HOVER {
+	background-color: #133959;
+}
+.buttoncss1 span#autocorrerules:HOVER {
+	background-color: #133959;
+}
+.buttoncss1 span#cancelRelevance:HOVER {
+	background-color: #133959;
+}
+
+</style>
+<div class='correBox'>
+<div class='buttoncss1'>
+<div><span class='button1' id='savecorrerules' style="margin-left:5px;">保存</span></div>
+<div><span class='button1' id='autocorrerules'>自动对应</span></div>
+<div><span class='button1' id='resetrules'>复位</span></div>
+<div><span class='button1' id='cancelRelevance'>取消关联</span></div>
+</div>
+<div class="asstitle" style="border: 1px solid #ccc;margin-right: 2px;">
+<h2 class='title' style="height: 29px;border-bottom: 1px solid #ccc;">源字段列表</h2>
+<ul class='SourceFiled' id='SourceFiled'>
+
+<?php 
+$sourcearr = array();
+foreach ($lists as $val){
+?>
+<li sourcetagid="<?php echo $val->tagId;?>" targettagid="" ><?php echo $val->display;?></li>
+<?php
+$temp = '<li sourcetagid="'.$val->tagId.'" targettagid="" >'.$val->display.'</li>';
+array_push($sourcearr,$temp);
+
+//$sourcearr[]='<li sourcetagid="'.$val->tagId.'" targettagid="" >'.$val->display.'</li>';
+}
+echo '<script type="text/javascript">var starr = new Array();</script>';
+foreach ($sourcearr as $k=>$val){
+	echo '<script type="text/javascript">starr['.$k.']=\''.$val.'\' ;</script>';
+}
+//echo '<script type="text/javascript">var starr = new Array();starr="'.$sourcearr.'" ;</script>';
+?>
+</ul>
+<div class="clear"></div>
+</div>
+<div class="myasstable">
+<table id='assocrules'></table>
+
+</div>
+</div>
+<script type="text/javascript">
+var sourcefield = "";//源字段
+var temsourcefield = "";//源字段临时字段
+var targetfield = "";//目标字段
+var tablecol="";
+$(function(){
+		$("#assocrules").flexigrid({
+			url:$.appClient.generateUrl({ESTemplate:'association_json',moid:molid,stid:structureID,innerid:inid},'x'),
+			dataType: 'json',
+			editable: true,
+			colModel : [
+				{display: '源字段列表', name : 'source', width : 150, align: 'center'},
+				{display: '目标字段列表', name : 'target', width : 160, align: 'center'},
+				{display: '对应关系', name : 'compare', width : 160, align: 'center',editable: true,dropdown:["相等", "求和","起始值","计数"]},
+				{display: '是否关联', name : 'isrelation', width :60, align: 'center'}
+				],
+			title:'文书档案分类库二级',
+			procmsg:'操作中，请稍候...',
+			nomsg:"没有数据",
+			resizable:false,
+			width:600,
+			height:388,
+			rpOptions: [50, 100],
+			usepager: true,
+			useRp: true,
+			rp: 50,
+			pagetext: '第',
+			outof: '页 /共',
+			pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+		});
+	//源字段操作
+	$('#SourceFiled li').die().live('mouseover click',function(event){
+		if(event.type=='mouseover'){
+			$('#SourceFiled li').removeClass('esselected');
+			$(this).addClass('esselected');
+		}
+		if(event.type=='click'){
+			sourcefield = "";
+			temsourcefield = $(this);
+			sourcefield = "<span sourcetagid='"+$(this).attr("sourcetagid")+"' targettagid='"+$(this).attr("targettagid")+"'>"+$(this).text()+"</span>";
+		}
+		
+	});
+	//目标字段操作
+	$("#assocrules tr td:nth-child(1)").die().live('click dblclick',function(event){
+		if(event.type=='click'){
+			if(sourcefield=="")return;
+			if($(this).text()!=""){
+				var targetfield = "<li sourcetagid='"+$(this).find("span").attr("sourcetagid")+"' targettagid='"+$(this).find("span").attr("targettagid")+"'>"+$(this).text()+"</li>";
+				$('#SourceFiled').append(targetfield);
+			}
+				$(this).find("div").html(sourcefield);
+				sourcefield = "";
+				temsourcefield.remove();
+			var trstate = $(this).closest("tr");
+			trstate.find("td:eq(2) div").html("相等");
+			$(this).addClass("editing");
+			trstate.attr("datastate","modify");
+		}else{
+			if($(this).find("div").text()=="")return;
+			var tempdata = "<li sourcetagid='"+$(this).find("span").attr("sourcetagid")+"' targettagid='"+$(this).find("span").attr("targettagid")+"'>"+$(this).text()+"</li>";
+			$(this).find("div").html("");
+			$(this).closest("tr").find("td:eq(2) div").html("");
+			$('#SourceFiled').append(tempdata);
+			$(this).removeClass("editing");
+		}
+		
+	});
+	//复位
+	$("#resetrules").click(function(){
+		$('#SourceFiled').html("");
+		var length = starr.length;
+		for(var i=0;i<length;i++){
+			$('#SourceFiled').append(starr[i]);
+		}
+		$("#assocrules").flexOptions({newp:1}).flexReload();
+	});
+	//保存
+	$("#savecorrerules").click(function(){
+		var mydata = new Array();
+			$('#assocrules tr').each(function(i){
+			if($(this).find("td:eq(0)").text()=="")return;
+				var a0 = $(this).find("td:eq(0) span").attr("sourcetagid");
+				var a1 = $(this).find("td:eq(1) span").attr("targettagid");
+				var a2 = $(this).find("td:eq(2)").text();
+				switch(a2){
+					case "相等": a2 = "EQUAL";break;
+					case "求和": a2 = "SUM";break;
+					case "起始值": a2="MIN2MAX";break;
+					case "计数": a2="STATISTICS";break;
+				}
+				var a3 = $(this).find("td:eq(3) img").attr("state");
+				mydata.push({'sourceStructureId':structureID,'targetStructureId':inid,'idBusiModel':molid,'sourceTagId':a0,'targetTagId':a1,'relationCompare':a2,'isRelation':a3,'esstage':""});
+			});
+			//guolanrui 20140822 保存关联规则时，如果起止值字段的长度太小，则给出提示，提供自动匹配长度方法
+			var checkMIN2MAXFieldLengthUrl = $.appClient.generateUrl({ESTemplate:'checkMIN2MAXFieldLength'},'x');
+			$.post(checkMIN2MAXFieldLengthUrl,{stid:structureID,innerid:inid,moid:molid,param:mydata},function(checkResult){
+				var success = checkResult.success;
+// 				alert(success);
+				if(success){//如果通过验证，直接保存
+					var url = $.appClient.generateUrl({ESTemplate:'saverelation'},'x');
+					$.post(url,{stid:structureID,innerid:inid,moid:molid,param:mydata},function(result){
+						if(result){
+							starr.length=0;
+							$('#SourceFiled li').each(function(i){
+								starr.push($(this));
+							});
+							$.dialog.notice({icon:"succeed",content:'保存成功',time:3});
+							$('#assocrules').flexReload();
+							$('#edit_rule_tbl').flexReload();
+							return;
+						}
+					});
+				}else{//如果没有通过验证，弹窗提醒
+					var msg = checkResult.msg;
+					var dataList = checkResult.dataList;
+					$.dialog({
+		    			okVal:'自动匹配长度',
+					    cancelVal: '取消',
+					    content:msg,
+					    icon:'warning',
+					    cancel: true,
+					    ok: function(){
+							//首先需要修改字段的长度，成功后再去调用保存关联规则的方法
+					    	var autoModifyTagLengthUrl = $.appClient.generateUrl({ESTemplate:'autoModifyTagLength'},'x');
+							$.post(autoModifyTagLengthUrl,{dataList:dataList},function(modifyResult){
+								var modifyFlag = modifyResult.success;
+								if(modifyFlag){//修改成功，将关联规则进行保存
+									var url = $.appClient.generateUrl({ESTemplate:'saverelation'},'x');
+									$.post(url,{stid:structureID,innerid:inid,moid:molid,param:mydata},function(result){
+										if(result){
+											starr.length=0;
+											$('#SourceFiled li').each(function(i){
+												starr.push($(this));
+											});
+											$.dialog.notice({icon:"succeed",content:'保存成功',time:3});
+											$('#assocrules').flexReload();
+											$('#edit_rule_tbl').flexReload();
+											$('#edit_stru_tbl').flexReload();
+											return;
+										}
+									});
+								}else{//修改失败，提示
+									$.dialog.notice({icon:"error",content:'自动匹配长度失败，请手动修改字段长度或稍后重试！',time:3});
+								}	
+							},'json');
+					    }
+		    		});
+				}
+			},'json');
+	});
+	//改变状态
+	$('.changestate').die().live('click',function(){
+		var state = Number($(this).attr("state"));
+		if((state+1)%2==0){
+			$(this).attr("state","0");
+			$(this).attr("src","<?php echo $tplPath;?>/ESTemplate/img/no.gif");
+		}else{
+			$(this).attr("state","1");
+			$(this).attr("src","<?php echo $tplPath;?>/ESTemplate/img/yes.gif");
+		}
+	});
+	//自动对应
+	$("#autocorrerules").die().live('click',function(){
+		var temp = new Array();
+		var arr = new Array();
+		var sss =new Array();
+		var target = new Array();
+		$('#SourceFiled li').each(function(i){
+			arr.push($(this));
+			sss.push($(this));
+		});
+		$('#assocrules tr').each(function(i){
+			if($(this).find("td:eq(0)").text()=="")return;
+			arr.push($(this).find("td:eq(0) div span"));
+		});
+		var length = arr.length;
+		$('#test tr td:nth-child(1) div').html("");
+		$('#assocrules tr td:nth-child(2)').each(function(i){
+			target.push($(this).text());
+			for(var j=0;j<length;j++){
+				if($(this).text()==arr[j].text()){
+					var item = "<span sourcetagid='"+arr[j].attr("sourcetagid")+"' targettagid='"+arr[j].attr("targettagid")+"'>"+arr[j].text()+"</span>";
+					$(this).closest("tr").find("td:eq(0) div").html(item);
+					$(this).closest("tr").find("td:eq(2) div").html("相等");
+				}
+			}
+		});
+		for(var i=0;i<sss.length;i++){
+			var flag=true;
+			for(var j=0;j<target.length;j++){
+				if(target[j]==sss[i].text()){
+					flag = false;
+				}
+			}
+			if(flag){
+				temp.push(sss[i]);
+			}
+		}
+		var html = '';
+		for(var i=0;i<temp.length;i++){
+			html += '<li sourcetagid="'+temp[i].attr("sourcetagid")+'" targettagid="'+temp[i].attr("targettagid")+'">'+temp[i].text()+'</li>';
+		}
+		$('#SourceFiled').html(html);
+		
+	});
+	//取消关联 shimiao 20140711 
+	$('#cancelRelevance').click(function(){
+		var url = $.appClient.generateUrl({ESTemplate:'deleteRelation'},'x');
+		$.post(url,{stid:structureID,innerid:inid,moid:molid},function(result){
+			if(result == 'false'){
+				$.dialog.notice({icon:"error",content:'取消关联失败！',time:3});
+				return;
+			}
+			var data = eval(result);
+			$('#SourceFiled li').remove();
+			starr = new Array();
+			for(var i=0;i<data.length;i++){
+				var html = '<li sourcetagid="'+data[i].tagId+'" targettagid="" >'+data[i].display+'</li>';
+				starr[i]=html;
+				$('#SourceFiled').append(html);
+			}
+			$("#assocrules").flexOptions({newp:1}).flexReload();
+			$.dialog.notice({icon:"succeed",content:'取消关联成功！',time:3});
+			return;
+		});
+		
+	});
+});
+</script>

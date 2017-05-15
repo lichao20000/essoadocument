@@ -1,0 +1,46 @@
+<div class="editReceive">
+	<form id="editReceive">
+		<table id="table_detail" style="height: 200px;">
+			<tr>
+				<input type="hidden" name="id" value="<?php echo $result->id;?>"/>
+				<td>接收人签名<font size="3px" color="red">*</font>&nbsp;&nbsp;</td>
+				<td><input type="text" name="sign" id="sign" verify="unspecial/50/1/0" value="<?php echo isset($result->sign)?$result->sign:''; ?>"
+					style="width: 300px; height: 20px;" /></td>
+			</tr>
+			<tr>
+				<td>手机号<font size="3px" color="red">*</font></td>
+				<td><input type="text" name="mobile" id="mobile" verify="mobile/11/1/0" value="<?php echo isset($result->mobile)?$result->mobile:''; ?>"
+					style="width: 300px; height: 20px;" /></td>
+			</tr>
+			<tr>
+				<td>回复内容</td>
+				<td><textarea name="reply_content" id="reply_content" verify="text/150/0/0" value=""
+					style="width: 300px; height: 50px;" ><?php echo isset($result->reply_content)?$result->reply_content:''; ?></textarea></td>
+			</tr>
+			<tr>
+				<td><span>附件<font color="red" size="3">*</font></span></td>	
+				<td><input type="button" id="fileUp" value='签字单上传' class='fileUpButton'/></td>
+			</tr>
+		</table>
+		<div id="loadfile"></div>
+	</form>
+</div>
+ <script type="text/javascript">
+ $(function(){
+	 var  filePath='<?php echo $result->filePath;?>';
+	 var  fileName='<?php echo $result->fileName;?>';
+	 if(fileName){
+		 $('#loadfile').append('<div><a href="javascript:void(0)" title="点击下载附件">'+fileName+'</a><input type="hidden" name="filePath" value="'+filePath+'"/><input type="hidden" name="fileName" value="'+fileName+'"/></div>');
+		 var NY_img = '<img style="cursor:pointer;" id="NI_img"  src="<?php echo $tplPath;?>/public/flexigrid/css/images/cross.png" alt="删除附件" title="删除附件" />';
+	 $('#loadfile div').hover(
+	 		function() {
+	 			$('#NI_img').remove();
+	 			$(this).find('a').after(NY_img);
+	 		} ,
+	 		function() {
+	 			$('#NI_img').remove();
+	 		}
+	 	);
+	 }
+ });
+ </script>

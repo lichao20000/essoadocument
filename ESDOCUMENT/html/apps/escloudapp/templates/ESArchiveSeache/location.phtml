@@ -1,0 +1,11 @@
+<form name="myform" action="<?php echo $esaction->generateUrl(array('ESArchiveSeache'=>'searchresults'));?>" method="POST">
+	<textarea name="condition" rows="10" cols="3" style="display: none;"><?php echo $condition; ?></textarea>
+	<input type="text"  name="key" value="<?php echo $searchWord;?>" />
+	<input type='submit' value='搜索' />
+</form>
+<script>
+function sub(){
+	document.myform.submit();
+}
+setTimeout(sub,10);
+</script>

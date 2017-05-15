@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+/*添加表单样式开始*/
+  .clear:after{content:',';height:0px;visibility:hidden;display:block;clear:both;}
+  .esContent{width:600px;height:200px;}
+  .leftTitle{width:80px;height:19px;line-height:20px;}
+  .rightTitle{width:80px;height:19px;line-height:20px;margin-left:20px;}
+  .esContent ul,li{list-style:none;}
+  .esContent ul{float:left;margin-top:18px;}
+  .esContent ul li{float:left;}
+  #leftD{width:150px;height:21px;line-height:21px;}
+  #rightD{width:150px;height:21px;line-height:21px;}
+  #sysPath{width:406px;height:21px;line-height:21px;}
+/*添加表单样式结束*/
+
+/* form validate */
+textarea.novalid-text,input.novalid-text,select.novalid-text{border:2px #DD0000 solid;}
+textarea.valid-text,input.valid-text,select.valid-text{border:2px #06AC87 solid;}
+input.backcolor-text{background-color:#EEEEEE;}
+.editbtn{display:inline-block; width:16px; height:16px; background:url(../../public/img/edit.jpg) no-repeat no-repeat; cursor:pointer;}
+

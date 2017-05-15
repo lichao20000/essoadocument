@@ -1,0 +1,50 @@
+<div class="scanFile" style="width: 800px; height: 331px;">
+	<table id="esFile"></table>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#esFile .viewfile").die().live("click",function(){
+		var id=$(this).closest("tr").prop("id").substr(3);
+		var stageId=$(this).attr("stageId");
+		alert(id+","+stageId);
+// 		viewFile(id,"",stageId);
+	});
+
+	function viewFile(id,fileId,stageId){
+		 var url = $.appClient.generateUrl({
+			 ESDocumentsCollection: 'file_view',
+		        id: id,
+		        fileId: fileId,
+		        stageId:stageId,
+		        tempReadRight:'true',
+				tempPrintRight:'true',
+				tempDownloadRight:'true'
+		    },
+		    'x');
+		    // 修改结束
+		    $.ajax({
+		        url: url,
+		        cache: false,
+		        success: function(data) {
+		            if (data === 'idErr') {
+		                $.dialog.notice({
+		                    content: '参数不正确（id）',
+		                    time: 2,
+		                    icon: 'warning',
+		                    lock: false
+		                });
+		            }
+		            $.dialog({
+		                title: '浏览电子文件',
+		                width: '960px',
+		                fixed: false,
+		                resize: false,
+		                padding: 0,
+		                top: '10px',
+		                content: data
+		            });
+		        }
+		    });
+	}
+});
+</script>

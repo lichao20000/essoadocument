@@ -1,0 +1,22 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/storestructure.js"></script>
+<link href="<?php echo $tplPath?>/ESIdentify/css/store.css" rel="stylesheet" type="text/css">
+<div style="width:760px;height:450px;float:left;overflow-x:auto;overflow-y:hidden">
+<div id = "navContainer"><div class = "nav" value = "0" name = "首页">首页</div></div>
+<div style = "clear:both"></div>
+<div id = "storeContainer" class = "storeContainer">
+<?php foreach ($storeList as $value){
+	echo '<div class = "moudle" value = "'.$value['id'].'" name = "'.$value['name'].'"espath = "'.$value['espath'].'">';
+		echo '<div	class = "storelogo"></div>';
+		if(mb_strlen($value['name'],'utf-8')<3)
+			echo '<div	class = "storeCode">库房['.$value['name'].']</div>';
+		if(mb_strlen($value['name'],'utf-8')>=3){
+			if(ctype_alnum($value['name']))
+				$temp = mb_substr($value['name'], 0,3,'utf-8');
+			else
+				$temp = mb_substr($value['name'], 0,2,'utf-8');
+			echo '<div	class = "storeCode" title="'.$value['name'].'">库房['.$temp.'...]</div>';
+		}
+	echo '</div>';
+}?>
+</div>
+</div>

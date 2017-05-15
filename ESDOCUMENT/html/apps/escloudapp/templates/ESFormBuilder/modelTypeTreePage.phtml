@@ -1,0 +1,79 @@
+<style>
+.ztree li span{
+	color:#444;
+}
+.model_type_tree {top:30px;left:0; overflow-y: auto; overflow-x: auto; height: 330px;width: 300px; }
+</style>
+<script>
+//生成树形结构的方法
+$(document).ready(function() {
+	var zTreeObj;
+	var zTreeNodes;
+	var setting = {
+		view : {
+			selectedMulti : false,
+			showLine : false
+		},
+		callback : {
+			onClick : onZTreeObjClick
+		}
+	};
+
+	function onZTreeObjClick(e,treeId, treeNode) {
+		createWorkFlow(treeNode);
+	}
+	
+	$.ajax({
+		dataType : "json",
+		url : $.appClient.generateUrl({ ESWorkflow : 'showModelTypeTree' }, 'x'),// 请求的action路径
+		error : function() {// 请求失败处理函数
+			alert('请求失败');
+		},
+		success : function(data) { // 请求成功后处理函数。
+			zTreeNodes = data; // 把后台封装好的简单Json格式赋给treeNodes
+			zTreeObj = $.fn.zTree.init($("#modelTypeTreeSelect"), setting, zTreeNodes);
+    		zTreeObj.selectNode(zTreeObj.getNodes()[0]);
+		}
+	});
+
+	// 新建工作流模版
+	function createWorkFlow (treeNode) {
+		var formId = $("[name='formId']").val();
+		var modelTypeId = treeNode.id;
+		if (modelTypeId == "") {
+			return;
+		}
+		//modelTypeID,modelId,formId,esGraphXml
+		var data = modelTypeId+",-1,"+formId+"," ;
+		$.ajax({
+			type:'POST',
+	        url : $.appClient.generateUrl({ESWorkflow : 'createWorkFlowPage'},'x'),
+	        data: {data:data},
+		    success:function(data){
+		    	$.dialog({
+		    		id:'createWorkFlowDialog',
+			    	title:'创建工作流',
+			    	modal:true, //蒙层（弹出会影响页面大小） 
+		    	   	fixed:false,
+		    	   	stack: true ,
+		    	    resize: false,
+		    	    lock : true,
+					opacity : 0.1,
+					padding: '2px',
+				    content:data,
+				    close:function(){
+					    // 关闭前，先关闭选择模版类型的dialog
+						parent.art.dialog.list['selectModelType'].close();
+						$('#formBuilderDataGrid').flexReload();
+				    }
+			    });
+		    },
+		    cache:false
+		});
+	}
+});
+</script>
+	<div id='model_type_tree' class='model_type_tree'>
+		<ul id='modelTypeTreeSelect' class='ztree'></ul>
+	</div>
+<input type='hidden' name='formId' value='<?php echo $data[0];?>'/>

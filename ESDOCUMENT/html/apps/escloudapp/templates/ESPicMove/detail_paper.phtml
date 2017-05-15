@@ -1,0 +1,116 @@
+<link href='<?php echo $tplPath?>/ESPicMove/css/pic.css'
+	rel="stylesheet">
+<link
+	href='<?php echo $tplPath?>/ESPicMove/css/index.css' rel="stylesheet">
+<div class="page" id="picPage">
+	<div class="wrap">
+		<div class="main">
+			<div class="page_box">
+				<div class="page_content">
+
+					<div class="p_b">
+						<div class="p_t">
+							<em class="ttl" id='ttlForNew'></em>&nbsp;<span sizcache="14"
+								sizset="0"><em class="red curIdx">0</em>/<em class="cntItem">0</em>
+							</span> <a href="#" class="home showMore_data"
+								rel='<?php echo $boardId;?>' title="返回列表"></a>
+						</div>
+						<div class="p_c">
+							<div class="attr">
+								<div class="l" sizcache="31" sizset="6">
+									<span class="default" sizcache="31" sizset="6"><a title="查看原图"
+										class="rawPic" href="javascript:void(0)" target="_blank">查看原图</a>
+									</span>
+								</div>
+								<span id='forUser_new'></span>
+							</div>
+							<div class="cont">
+
+								<div id='lockscreen' class='lockscreen'>
+									<div class="area" id="contentA" sizcache="41" sizset="0">
+										<div class="mainFrame" sizcache="41" sizset="2">
+											<div class="lineA"></div>
+											<div class="mainBox" sizcache="41" sizset="2">
+												<div class="showBox adWall" id="showBox" sizcache="41"
+													sizset="1">
+													<div class="loading" id="picLoading" style="display: none;"></div>
+													<div title="点击浏览上一张图片" class="arrL" style="height: 626px;"></div>
+													<div title="点击浏览下一张图片" class="arrR" style="height: 626px;"></div>
+													<div class="btnPrev" style="display: none;" sizcache="39"
+														sizset="15">
+														<a href="javascript:void(0)"></a>
+													</div>
+													<div class="btnNext" style="display: none;" sizcache="39"
+														sizset="16">
+														<a href="javascript:void(0)"></a>
+													</div>
+													<div class="pic" id="picPlayerWrap" sizcache="31"
+														sizset="16" style='width: 870px; height: 625px;'></div>
+													<div class="area" id="contentE"
+														style='width: 870px; margin: 20px auto 0 auto;'>
+														<span><span id='forTitle'
+															style="font-weight: bold; font-size: 16"></span><span
+															id='forUser_new'
+															style="float: right; font-family: '宋体'; font-size: 12px; color: #999;"></span>
+														</span>
+														<div class="txt" sizcache="26" sizset="0" id='forText'
+															style='width: 870px; margin: 10px auto 0 auto; font-family: "宋体"; font-size: 14px; color: #666;'>
+														</div>
+													</div>
+													<div class="tab" id="picPlayerTab" style="zoom: 1;"
+														sizcache="45" sizset="3">
+														<div class="prevGroup" sizcache="39" sizset="29"></div>
+														<div class="nextGroup" sizcache="39" sizset="30"></div>
+														<div class="roll" sizcache="45" sizset="3">
+															<div class="btnL" sizcache="39" sizset="31">
+																<a class="stop" href="javascript:void(0)"></a>
+															</div>
+															<div class="btnR" sizcache="39" sizset="32">
+																<a class="stop" href="javascript:void(0)"></a>
+															</div>
+															<div class="pp" sizcache="39" sizset="33">
+																<ul class="clear" id='putAll_pic' sizcache="39"
+																	sizset="33">
+																</ul>
+															</div>
+															<div class="btn2" style="margin: 0 auto 0 auto;">
+																<span class="now"> </span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="lineH"></div>
+										</div>
+									</div>
+
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script
+	type="text/javascript"
+	src='<?php echo $tplPath?>/ESPicMove/js/picView.js'></script>
+<script
+	type="text/javascript"
+	src='<?php echo $tplPath?>/ESPicMove/js/index.js'></script>
+<script type="text/javascript">
+var boardId = '<?php echo $boardId;?>';
+var topicId = '<?php echo $topicId;?>';
+_opens.browsePhoto({boardId: boardId, id: topicId});
+</script>

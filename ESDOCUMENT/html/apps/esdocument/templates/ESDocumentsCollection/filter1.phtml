@@ -1,0 +1,60 @@
+
+<style>
+.ztree li a span{
+	color:#444;
+}
+</style>
+<form id="esfilter">
+<table style="width:600px;" id="sift">
+	<tr>
+		<td>字段名</td>
+		<td>比较符</td>
+		<td>字段值</td>
+		<td>关系符</td>
+		<td>增加行</td>
+		<td>删除行</td>
+	</tr>
+<?php for($i=0;$i<5;$i++){?>
+	<tr>
+		<td> <select name="esfields" class="filedname" style="width: 120px;">
+				<option value="">--请选择--</option>
+		<?php 
+		foreach($searchField as $val){
+				echo "<option value=".$val->code.">".$val->name."</option>";
+        }?>
+             </select></td>
+		<td> <select name="comparison" class="comparison" style="width: 70px;">
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select></td>
+		<td><input type="text" value="" class="filedvalue" name="esfieldvalue" ></td>
+		<td><select name="relation" class="relationship"  style="width: 60px;">
+				<option value="AND">并且</option>
+				<option value="OR">或者</option>
+				</select></td>
+		<td><a href="javascript:void(0)" class ="newfilter"></a></td>
+		<td><a href="javascript:void(0)" class ="delfilter"></a></td>
+	<?php }?>
+		</tr>
+</table>
+</div>
+</form>
+<script type="text/javascript">
+$(function(){
+		//添加行,删除行按钮
+		$('.newfilter').die().live('click',function (){
+			$($('#sift tr:last').clone()).appendTo($('#sift'));			
+		});
+
+		$('.delfilter').die().live('click',function (){
+			$('#sift tr').length > 5 ? $(this).closest('tr').remove() : '';
+		});
+});
+</script>
+

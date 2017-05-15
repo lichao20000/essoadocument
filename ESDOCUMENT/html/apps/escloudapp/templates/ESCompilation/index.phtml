@@ -1,0 +1,403 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="<?php echo $tplPath?>/ESCompilation/css/index.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ckeditor/ckeditor.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCompilation/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css">
+
+<link href="<?php echo $tplPath?>/ESCompilation/js/autovalidate/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCompilation/js/autovalidate/validate.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"档案编研", content:".esmain"});
+	$(".leftnav").css("height",esleftH);//设置左侧菜单
+	$("#form").css("width",winW-$(".leftnav").width()-80);//wanghongchen 20140928 设置右侧宽度
+
+	$('#form').autovalidate();
+});
+</script>
+<div style="clear: both;"></div>
+<div class="esmain">
+<div class="leftnav">
+<div id="left_top" class="left_top">
+<ul>
+<li class="l2 turn" state="all" ><a href="javascript:void(0)">全部</a></li>
+<li class="l2" state="edit"><a href="javascript:void(0)">编辑</a></li>
+<li class="l2" state="publish"><a href="javascript:void(0)">发布</a></li>
+</ul>
+</div>
+</div>
+<div class="ldmright" id="ldmright">
+<div id="showtable" ><table id="escompilate"></table></div>
+
+<div id="showedit" class="edit showornot" >
+<div id="addnew">
+	<div class="addtop">
+		<div class='buttons'>
+			<input type='button' id="save" value='保存' class='saveButton subbtn' />
+			<input type='button' id="back" value='返回' class='backButton' />
+		</div>
+	</div>
+	<div class="clear"></div>
+	<form id="form" style="overflow-y:auto;overflow-x:hidden;position:relative;" action="" enctype="multipart/form-data">
+	<div class="addcenter" >
+		<div class="centerleft">
+			<div style="width:450px;">
+			<label style = "float:left;" >题名：</label><input type="text" verify="text/250/1/0" name="title"/><span style="color: red"> *</span>
+			<div class = "seprateLine"></div>
+			<label style = "float:left;">编研类别：</label><select class="select" id="select" name="type"><option>专题</option><option>年鉴</option><option>大事记</option><option>组织沿革</option><option>其他</option></select>
+			</div>
+			<div style="margin-top:10px;width:450px;">
+			<label style = "float:left;">摘要：</label><textarea id="summary" name="summary" verify="text/60000/0/0"></textarea>
+			</div>
+			<div style="margin-top:10px;width:750px;margin-left:-10px;">
+				<table id="mytable" cellspacing="7">
+					<tr><td class = "padLeftLable">状态:</td><td class="es"><span id="state"></span></td></tr>
+					<tr><td>创建机构:</td><td class="es"><span id="userorgan"></span></td></tr>
+					<tr><td>创建人:</td><td class="es"><span id="username" userid=""></span></td></tr>
+				</table>
+				<input type="hidden" name="editid" id="editid" value="" />
+			</div>
+			<div id="extradate" style="margin-top:10px;width:450px;display:none;">
+				<label class="createdate">创建日期：</label><span class="createdate" id="createdate"></span>
+				<label class="submitdate">提交日期：</label><span class="submitdate" id="submitdate"></span>
+				<label class="publishdate">发布日期：</label><span class="publishdate" id="publishdate"></span>
+			</div>
+		
+		</div>
+		<div class="centerright">
+			<label style="display:block;float:left;">封面图片：</label>
+			<div class="img"><a href="javascript:void(0);"><img id="coverimg" src="<?php echo $tplPath;?>/ESCompilation/img/blank.gif" /></a></div>
+			 <div id="upload"><input id="btnAdd" type="button" value=" 添加文件 " />
+			 <input id="btnCancel" style="display:none;" type="button" value=" 取消" />
+			 <div style="height:25px;width:20px;" id="fsUploadProgress"></div>
+			 <div class="complete"></div>
+			 </div>
+		</div>
+	
+	</div>
+	<div class="clear"></div>
+	<div class="centerbottom">
+		<div class="linetitle"><span >在线编研</span></div>
+		<div class="mybuttons">
+		<input type='button' id="insertarchive" value='插入档案' class='insertarchiveButton' />
+		<input type='button' id="insertcomply" value='插入编研' class='insertcomplyButton'/>
+		<input type='button' id="insertlocal" value='附件上传' class='insertlocalButton'/>
+		</div>
+		<div id="fujian" class="fujian"><h2 style="margin-top:5px;">附件</h2><div id="loadfile" class="loadfile"></div></div>
+		<div class="onlineeditor"><textarea id="oneditor" class="oneditor" name="myeditor" verify="text/60000/0/0"></textarea></div>
+	
+	</div>
+	</form>
+
+</div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<script type="text/javascript">
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".leftnav").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".leftnav").offset().top;
+var esleftH=winH-eslefttop-1;
+var height=winH-eslefttop-115;
+window.onresize=function()
+{
+	var winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".leftnav").width()-5;
+	}
+	var winH=$(window).height();
+	var height=winH-eslefttop-115;
+	$(".flexigrid").css({width:width});	
+}
+
+$(document).ready(function(){
+	// 上传照片
+		var upload = new SWFUpload({
+			//提交路径
+			upload_url: $.appClient.generateUrl({ESCompilation:'imgupload'},'x'),
+			//向后台传递额外的参数
+			//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+			//上传文件的名称
+			file_post_name: "file_txt",
+			
+			file_size_limit : "1024",	// 100MB
+			file_types : "*.jpg;*.png;*.jpeg;*.gif",
+			file_types_description : "图片文件",
+			file_upload_limit : "1",
+			file_queue_limit : "0",
+
+			// 事件处理
+			swfupload_loaded_handler : swfuploadLoaded,
+			file_dialog_start_handler : fileDialogStart,
+			file_queued_handler : fileQueued,
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : imageDialogComplete,
+			upload_start_handler : uploadStart,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+
+			// 按钮的处理
+			button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+			button_placeholder_id : "btnAdd",
+			button_width: 72,
+			button_height: 28,
+			button_window_mode : SWFUpload.WINDOW_MODE.OPAQUE,
+			
+			// Flash文件地址设置
+			flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+			
+			custom_settings : {
+				progressTarget : "fsUploadProgress",
+				cancelButtonId : "btnCancel",
+				//startButtonId : "save",
+				// 上传成功的回调函数
+				uploadSuccess : function(file, data){
+					issave = true;
+					var stats = upload.getStats();
+					stats.successful_uploads--;
+					upload.setStats(stats);
+					$('#coverimg').attr("src",data);
+				}
+			},
+			
+			// Debug 设置
+			debug: false
+		});
+		//upload.WINDOW_MODE = {OPAQUE : "opaque"};
+		$("#btnCancel").click(function(){cancelQueue(upload);});
+		
+		$(".subbtn").click(function(){
+			
+			var clickwhat = $(this).attr("id");
+			var title = $("#form input[name='title']").val();
+			var type = $("#form select option:selected").val();
+			var summary = $("#form textarea[name='summary']").val();
+			var editid = $('#form input[name="editid"]').val();
+			var content = editor.document.getBody().getHtml();
+			var imgurl = $('#coverimg').attr("src");
+			var accessory = '';
+			$('#loadfile a').each(function(i){
+				accessory += $(this).attr("fullpath");
+			});
+			if(!$('#form').validate()){return false;}
+			//alert(accessory);return;
+			if(title==""){
+				$.dialog.notice({icon:'warning', content:"题名不能为空!", time:2});
+				return;
+			}
+			if(imgurl=="/apps/escloudapp/templates/ESCompilation/img/blank.gif"){
+				$.dialog.notice({icon:'warning', content:"请添加封面图片!", time:2});
+				return;
+			}
+			var create_org = $('#userorgan').text();
+			var create_person = $('#username').text();
+			var userid = $('#username').attr('userid');
+			var createdate = $('#createdate').text();
+			var submitdate = $('#submitdate').text();
+			var publishdate = $('#publishdate').text();
+			var state = $('#state').text();
+			if(clickwhat=='save'){
+				var url = $.appClient.generateUrl({ESCompilation:'save'},'x');
+				$.post(url,{id:editid,accessory:accessory,title:title,type:type,summary:summary,content:content,create_org:create_org,create_person:create_person,userid:userid,createdate:createdate,submitdate:submitdate,publishdate:publishdate,state:state,clickbtn:clickwhat,imgurl:imgurl},function(result){
+					$.dialog.notice({icon:'succeed', content:"操作成功!", time:2});
+					$('#showtable').removeClass("showornot");
+					$('#showedit').addClass("showornot");
+					$('#escompilate').flexOptions({newp: 1}).flexReload();
+				});
+			}else if(clickwhat=='submit'){
+				$.post(
+					$.appClient.generateUrl({ESInformationPublish:'findLeaderByuserId'},'x'),
+					function (htm){
+						if(htm === 'false'){
+							$.dialog.notice({ icon: 'warning', content: '对不起，没找到领导!'});
+							return;
+						}else if(htm.indexOf('onlyone')!=-1){
+							var approveUserId=htm.substring(7);
+							if(approveUserId ==''){
+								return false;
+							}
+							var url = $.appClient.generateUrl({ESCompilation:'save'},'x');
+							$.post(url,{approveUserId:approveUserId,id:editid,accessory:accessory,title:title,type:type,summary:summary,content:content,create_org:create_org,create_person:create_person,userid:userid,createdate:createdate,submitdate:submitdate,publishdate:publishdate,state:state,clickbtn:clickwhat,imgurl:imgurl},function(result){
+								$.dialog.notice({icon:'succeed', content:"操作成功!", time:2});
+								$('#showtable').removeClass("showornot");
+								$('#showedit').addClass("showornot");
+								$('#escompilate').flexOptions({newp: 1}).flexReload();
+							});
+						}else{
+							$.dialog({
+								title: '选择审批领导',
+								content: htm,
+								okVal: '确定',
+								cancelVal: '取消',
+								cancel: true,
+								ok:function(){
+									var forms = document.getElementById('check_approval_list').elements,fl=forms.length;
+									var approveUserId='';
+									for(var f=0; f<fl; f++)
+									{
+										if(forms[f].checked){
+											approveUserId = forms[f].id;
+											break;
+										}
+									}
+									if(approveUserId ==''){
+										return false;
+									}
+									var url = $.appClient.generateUrl({ESCompilation:'save'},'x');
+									$.post(url,{approveUserId:approveUserId,id:editid,accessory:accessory,title:title,type:type,summary:summary,content:content,create_org:create_org,create_person:create_person,userid:userid,createdate:createdate,submitdate:submitdate,publishdate:publishdate,state:state,clickbtn:clickwhat,imgurl:imgurl},function(result){
+										$.dialog.notice({icon:'succeed', content:"操作成功!", time:2});
+										$('#showtable').removeClass("showornot");
+										$('#showedit').addClass("showornot");
+										$('#escompilate').flexOptions({newp: 1}).flexReload();
+									});
+								}
+							});
+						}
+					}
+				);
+			}
+		});
+});
+function createSWFUpload(){
+	var upload1 = new SWFUpload({
+		//提交路径
+		//upload_url:"<?php echo $uploadpath;?>/uploadFile/research/<?php echo $mainsite;?>",
+		upload_url:"",
+		//向后台传递额外的参数
+		//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+		//上传文件的名称
+		file_post_name: "file",
+		
+		file_size_limit : "1048576",	// 100MB  longjunhao 20140905 修改为1024MB=1GB
+		file_types : "*.*",
+		file_types_description : "文件",
+		file_upload_limit : "10",
+		file_queue_limit : "0",
+
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnAdd1",
+		button_width: 72,
+		button_height: 28,
+		
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel1",
+			startButtonId : "btnStart1",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data){
+				var stats = upload1.getStats();
+				stats.successful_uploads--;
+				upload1.setStats(stats);
+				getsubstr(data);
+				$('#loadfile a').attr('title','点击下载附件');
+				var NY_img = '<img style="cursor:pointer;" class="NI_img" onclick="NY_delfile(this);" src="<?php echo $tplPath;?>/public/flexigrid/css/images/cross.png" alt="删除附件" title="删除附件" />';
+				$('#loadfile div').hover(
+					function() {
+						$('.NI_img').remove();
+						$(this).find('a').after(NY_img);
+					},
+					function() {
+						$('.NI_img').remove();
+					}
+				);
+			}
+		},
+		
+		// Debug 设置
+		debug: false
+	});
+	$("#btnCancel1").click(function(){cancelQueue(upload1);});
+	$("#btnStart1").click(function(){
+		$.post($.appClient.generateUrl({ESIdentify:'getUploadURL'},'x'),  function(data){
+			upload1.setUploadURL(data);
+			startQueue(upload1);
+		});
+	});
+};
+var exg = /\/(\w*[^x00-xff]*)*;$/;
+var filepath;
+function getsubstr(data){
+
+// 	var titlesave = dstdata.addressMark;
+// 	var titleshow = dstdata.fileName;
+// alert(data);
+	
+	var dstdata = eval("("+data+")");
+	var titleshow = dstdata.filename;
+	var fileId = dstdata.fileId;
+	var fullpath = fileId+"."+dstdata.type+'|'+titleshow+';';
+	var html = '<div><a fileId="'+fileId+'" fullpath="'+fullpath+'" href="#">'+titleshow+'</a></div>';
+	$(".loadfile").append(html);
+}
+
+$("#fujian a").die().live('click',function(){
+	var fileId = $(this).attr("fileId");
+	// longjunhao 20140805 修复bug 383 附件不能下载
+	$.ajax({
+		url: $.appClient.generateUrl({ESFormStart : 'downloadFile',fileId:fileId},'x'),
+		success: function(url){
+			window.location=url;
+		}
+	});
+// 	var downFile = $.appClient.generateUrl({ESFormStart : 'downloadOpinionFile',fileId:fileId},'x');
+// 	$.dialog.notice({content: '<a href="'+downFile+'">下载导出数据</a>',icon: 'succeed'});
+});
+function myclose(){
+	downloaddia.close();
+}
+//删除附件 倪阳添加
+function NY_delfile(obj) {
+	$(obj).closest('div').hide();
+	var filepath = $(obj).prev('a').attr('path');
+	var Qurl = $.appClient.generateUrl({ESCompilation:'delFile',filepath:encodeURI(filepath)},'x');
+
+	$.ajax({
+		url: Qurl,
+		async:false,
+		success: function(info) {
+			if(info.code == '200') {
+				$(obj).closest('div').remove();
+			} else {
+				$(obj).closest('div').show();
+			}
+		}
+	});
+
+}
+</script>
+

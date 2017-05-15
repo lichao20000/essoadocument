@@ -1,0 +1,85 @@
+<?php if(isset($header)) echo $header; ?>
+<link href="<?php echo $tplPath?>/css/app_department.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath?>/css/easyui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath . '/js/jquery.easyui.min.js' ?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath . '/js/department.js' ?>"></script>
+<div class="content">
+  <div class="topTab">
+    <div class="but1" style="margin-left:220px;width:70px;" id="save_members">保存</div>
+    <div class="topTabPage">
+      <div class="but3Box margin0">
+        <div class="but3"  style="width:35px;"></div>
+        <div class="but3_icon"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content1000 floatLeft">
+  <?php echo $this->render('sidebar', array('editable' => $editable, 'appadmin' => $appadmin, 'menuitem' => 'members')) ?>
+  <div class="margin10 floatLeft">
+    <div class="openCC" style="width:660px;" id="department_members">
+      <div class="openText">
+        <div class="openTextL" style="width:200px;padding-top:30px" id="department_company">
+          <div class="groupList">
+            <ul id="org_tree">
+            </ul>
+          </div>
+        </div>
+        <div class="openTextLArrow"><a><img src="<?php echo $tplPath ?>/images/next_1.png" width="16" height="16" alt="显示" /></a></div>
+        <div class="openTextL" style="width:180px;" id="department_selectbox">
+          <span style="padding:10px 5px 0px 5px; display:block; width:100%;">待选列表
+          <a href="javascript:void(0)" class="color369 btn_select_people" style="margin-left:60px">全选人员</a>
+          </span>
+          <div class="openTextLList" style="width:165px; height:230px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="chooseGroup">
+            </table>
+          </div>
+        </div>
+        <div class="openTextLArrow" id="department_ope">
+          <a href="javascript:void(0)"><img src="<?php echo $tplPath ?>/images/next_1.png" width="16" height="16" alt="加入选择" title="加入选择" /></a>
+          <a href="javascript:void(0)"><img src="<?php echo $tplPath ?>/images/previous_1.png" width="16" height="16" alt="取消选择" title="取消选择" /></a>
+        </div>
+        <div class="openTextL" style="width:180px;" id="department_selected">
+          <form action="" method="post" id="form_selected">
+            <span style="padding:10px 5px 0px 5px; display:block; width:70%;">已选列表</span>
+            <div class="openTextLList" style="width:165px; height:230px;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" class="chooseGroup">
+<?php
+foreach ($members as $row):
+  if ($row->role == AppGroupAbstract::ROLE_ORG) {
+    $id = 'm[o_' . $row->org_id . ']';
+    if ($row->object->orgNameDisplay == '本部'){
+			$name = $row->object->orgName;
+		} else {
+			$name = $row->object->orgNameDisplay;
+		}
+    $email = $row->object->parentOrgName;
+  } else {
+    $id = 'm[p_' . $row->member_id . ']';
+    $name = $row->object->empName;
+    $email = $row->object->emailAddress;
+  }
+?>
+                <tr>
+                  <td>
+                    <input type="checkbox"' name="<?php echo $id ?>" class="marginRight5" style="vertical-align:middle">
+                      <label><?php echo $name ?> <span class="color999">(<?php echo $email?>)</span></label>
+                    </td>
+                </tr>
+<?php endforeach ?>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function() {
+  var el = $('#department_members');
+  if (el.length) {
+    App.Department.initialize(el, '<?php echo url($this->getUrl('members_tree')) ?>', '<?php echo url($this->getUrl('members_people')) ?>');
+  }
+});
+</script>

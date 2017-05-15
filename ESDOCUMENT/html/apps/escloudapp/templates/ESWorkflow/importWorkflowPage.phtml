@@ -1,0 +1,9 @@
+<div id='importWorkflowDiv'>
+	<form id='importWorkflow' enctype='multipart/form-data' method='post'>
+		<div style='padding:7px 0 10px 10px;margin:2px;width:380px;height:25px;'>
+	        <div style='margin-bottom:12px'><div style='width:130px;height:20px;line-height:20px;float:left;'>选择工作流模版文件：</div><input type='file' style='width:250px;height:19px;' name='workflowFile' /></div>
+		</div>
+		<input type='hidden' name='userId' value='<?php echo $data[0];?>'/>
+		<input type='hidden' name='remoteAddr' value='<?php echo $data[1];?>'/>
+	</form>
+</div>

@@ -1,0 +1,8 @@
+﻿appid = essoaapp
+apptoken = wwwwww
+name = 数字档案馆
+description = 数字档案馆应用
+version = 1.0
+tag = 专业应用
+is_public = 1
+icon = escloudapp.png

@@ -1,0 +1,17 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="<?php echo $tplPath?>/ESExtraKeyword/css/index.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"全文索引外挂词管理", content:"#extraKeyword"});
+});
+</script>
+<div id="extraKeyword">
+	<table id="extraKeywordGrid"></table>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESExtraKeyword/js/index.js"></script>

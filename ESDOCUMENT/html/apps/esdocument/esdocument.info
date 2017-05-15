@@ -1,0 +1,8 @@
+﻿appid = esdocument
+apptoken = wwwwww
+name = 文档控制管理
+description = 文档控制管理应用
+version = 1.0
+tag = 专业应用
+is_public = 1
+icon = esdocument.png

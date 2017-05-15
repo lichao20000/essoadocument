@@ -1,0 +1,49 @@
+<?php
+class ProxyEssoaadminEscloud_userRegistrationws extends AgentProxyAbstract {
+	const SERVICE_NAME = "escloud_userRegistrationws";
+	
+	/**
+	 * 添加组织机构
+	 */
+	public function addOrEdit($params) {
+		return $this->post ( self::SERVICE_NAME, "addOrEdit", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 获取注册机构列表
+	 */
+	public function getList($params) {
+		return $this->post ( self::SERVICE_NAME, "getList", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 根据id获取一个注册机构
+	 */
+	public function getById($id){
+		$urlParam=array('getById',$id);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * 启用用户
+	 */
+	public function enableUsers($params){
+		return $this->post ( self::SERVICE_NAME, "enableUsers", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 禁用用户
+	 */
+	public function disableUsers($params){
+		return $this->post ( self::SERVICE_NAME, "disableUsers", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 删除用户
+	 */
+	public function deleteUsers($params){
+		return $this->post ( self::SERVICE_NAME, "deleteUsers", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 用户密码重置
+	 */
+	public function resetUsersPassword($params){
+		return $this->post ( self::SERVICE_NAME, "resetUsersPassword", $params, "application/json;charset=UTF-8" );
+	}
+}

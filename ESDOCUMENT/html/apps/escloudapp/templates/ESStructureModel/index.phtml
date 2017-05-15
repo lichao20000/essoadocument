@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link href="<?php echo $tplPath?>/ESStructureModel/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESStructureModel/js/template.js"></script>
+
+<link href="<?php echo $tplPath?>/public/autovalidate/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/autovalidate/validate.js"></script>
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'结构模版定义'));?>
+<div id="ESSystemIndex">
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<div id='table' class='init-style'>
+	<table id='structureModel-table'></table>
+</div>
+</div>
+

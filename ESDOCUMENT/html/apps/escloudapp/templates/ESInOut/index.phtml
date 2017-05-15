@@ -1,0 +1,72 @@
+<link href="<?php echo $tplPath?>/ESInOut/css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath ?>/public/ztree/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESInOut/js/ESInOut.js"></script>
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"出入库管理", content:".esmain"});
+	$(".esleft").css("height",esleftH);//设置左侧菜单
+});
+</script>
+<div class='esmain'>
+
+	<div id="esleft" class="esleft">
+		<ul>
+			<li><a href="javascript:void(0)">入库</a></li>
+			<li><a href="javascript:void(0)">出库</a></li>
+			<li><a href="javascript:void(0)">销毁</a></li>
+		</ul>
+	
+	</div>
+  <div class="esright">
+    <table id="flexme1"></table>  
+	</div>
+</div>
+
+<script type="text/javascript">
+
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".esleft").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".esmain").offset().top;
+var esleftH=winH-eslefttop-1;
+var height=winH-eslefttop-115;
+window.onresize=function()
+{
+	var winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".esleft").width()-5;
+	}
+	var winH=$(window).height();
+	var height=winH-eslefttop-115;
+	$(".flexigrid").css({width:width});	
+}
+
+var state="";
+var status = "入库";
+$(".esleft li").die().live('click',function(){
+	str=false;
+	isfileter=0;
+	$('.esleft li').removeClass('turn');
+	$(this).addClass('turn');
+	state = $(this).text();
+	status = $(this).text(); // global var #modify# author:fangjixiang,date:20121205
+	var url=$.appClient.generateUrl({ESInOut:'get_json'},'x');
+	$("#flexme1").flexOptions({newp:1,url:url,query:state}).flexReload();
+});
+
+
+</script>
+
+
+

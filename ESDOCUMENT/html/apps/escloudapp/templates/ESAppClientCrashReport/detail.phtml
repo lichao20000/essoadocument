@@ -1,0 +1,78 @@
+<!-- yanghuiqiang 20140522 异常详细窗口-->
+
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="detail" method="post" enctype="multipart/form-data">
+			<table id="table_detail" style="height: 200px;">
+				<tr>
+					<td><input type="hidden" name="id" id="id"
+						value="<?php echo $crashReport->id;?>"
+						style="width: 380px; height: 0px;" /></td>
+				</tr>
+				<tr>
+					<td>用户ID：</td>
+					<td><input type="text" name="userid" id="userid" readOnly=true
+						value="<?php echo $crashReport->userId;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>异常信息：</td>
+					<td><textarea name="crashReport" id="crashReport" readOnly=true
+							style="width: 380px; height: 200px;"><?php echo $crashReport->crashReport;?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>设备信息：</td>
+					<td><textarea name="deviceInfos" id="deviceInfos" readOnly=true
+							style="width: 380px; height: 40px;"><?php echo $crashReport->deviceInfos;?></textarea>
+					</td>
+				</tr>
+								<tr>
+					<td>版本信息：</td>
+					<td><input type="text" name="versionInfos" id="versionInfos" readOnly=true
+						value="<?php echo $crashReport->versionInfos;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>报告时间：</td>
+					<td><input type="text" name="time" id="time" readOnly=true
+						value="<?php echo gmdate("Y-m-d H:i:s", ($crashReport->time / 1000) + 8*3600);?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>是否已处理：</td>
+					<td><input type="text" name="solved" id="solved" readOnly=true
+						value="<?php echo $crashReport->solved == 1? "是":"否";?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>处理时间：</td>
+					<td><input type="text" name="solvedTime" id="solvedTime" readOnly=true
+						value="<?php echo $crashReport->solvedTime == "" ? "" : gmdate("Y-m-d H:i:s", ($crashReport->solvedTime / 1000) + 8*3600);?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>处理描述：</td>
+					<td><textarea name="solvedDescribtion" id="solvedDescribtion" readOnly=true
+							style="width: 380px; height: 100px;"><?php echo $crashReport->solvedDescribtion;?></textarea>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#table_detail input:text').attr("readOnly", true); 
+	$('#table_detail textarea').attr("readOnly", true);
+});
+</script>
+

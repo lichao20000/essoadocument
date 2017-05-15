@@ -1,0 +1,76 @@
+<form id="addwarehouse" action=""	method="post">
+<div class="estransfer">
+<ul>
+<li><span>库房编号</span><input type="text" name="code" value=""></li>
+<li><span>负责人</span><input type="text" name="manager" value=""></li>
+<li><span>所属机构</span><input type="text" id="position" class ="selectInput" name="position" value="" readonly="readonly"/><input type="hidden" id="orgId"  name="orgId" value=""/></li>
+<li><span>面积</span><input type="text" name="area" value=""></li>
+<li><span>消防设备</span><input type="text" name="fireequipment" value=""></li>
+<li><span>空调</span><input type="text"  name="aircondition"  value=""></li>
+<li><span>监控设备</span><input type="text" name="monitorequipment" value=""></li>
+<li><span>加湿/去湿器</span><input type="text" name="equipment" value=""></li>
+<li><span>排架数量</span><input type="text" name="framenumber" value="" title="排架数量最大值是100"></li>
+<li><span>列</span><input type="text" name="col" value="" title="列最大值是100"></li>
+<li><span>层</span><input type="text" name="layer" value="" title="层最大值是10"></li>
+<li><span>每格宽度(CM)</span><input type="text" name="gridwidth" value=""></li>
+<li style="width:520px"><span>库房描述</span><textarea name="description" style="width:425px;height:50px;float:left"></textarea></li>
+</ul>
+</div>
+</form>
+<script type="text/javascript">
+$(function(){
+	$("#position[class='selectInput']").selectInput({
+	    url: $.appClient.generateUrl({ESOrgAndUser: "getOrgAllListTree"},'x'),
+	    chkStyle: "radio",
+	    treatNodes: treatNodes,
+	    onCheck: checkOrg,
+	    width: 300,
+	    height: 300
+	});
+
+	function treatNodes(zNodes) {
+		  var arrays = $("#position").val() != null ? $("#position").val().split(',') : new Array();
+	    for (var i = 0; i < zNodes.length; i++) {
+	    	  if (zNodes[i].id != 'org') {
+		            if ($.inArray(zNodes[i].name, arrays) == -1) {
+		                zNodes[i].checked = false;
+		            } else {
+		                zNodes[i].checked = true;
+		            }
+		        }else{
+		        	zNodes[i].nocheck="true";
+			    }
+	        if (zNodes[i].id == 0 || zNodes[i].code == '') {
+	            zNodes[i].nocheck = true;
+	        }
+	    }
+	}
+	function checkOrg(event, treeId, treeNode) {
+	    $("#orgId").val(treeNode.id);
+	    $("#position").val(treeNode.name);
+	}
+});
+var codeResult='';
+$("#addwarehouse input[name='code']").bind('blur',function(){
+	var code = $(this).val();
+	if(code==''){
+		$.dialog.notice({icon:'warning',content:'库房编号必须输入，请输入',title:'操作提示',time:3});
+		return false;
+	}else{
+		var url = $.appClient.generateUrl({ESStoreroom : 'validatewareCode'}, 'x');
+    	$.post(url,{code:code},function(data){
+        	//liqiubo 20140603 修改if的逻辑，修复逻辑走的不正确的问题
+    		if(data=='true'){
+    			codeResult=true;
+    		}else{
+    			codeResult=false;
+    			$.dialog.notice({icon:'warning',content:'库房编号是唯一的，请重新输入',title:'操作提示',time:3});
+	    		return false;
+        	}
+    	});
+	}
+});
+function valiCode(){
+	return codeResult;
+}
+</script>

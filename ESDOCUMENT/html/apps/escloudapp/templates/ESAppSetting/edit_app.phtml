@@ -1,0 +1,56 @@
+<!-- wangbo 20140325-->
+<form id="editApp" action=""	method="post">
+<div class="estransfer" >
+<ul>
+ 
+<li><span>应用名称<font color="red" size="3">*</font></span><input type="text" name="appName"   title="例如:flyingsoft"     value="<?php echo $data[1];?>"><input name="id"  type="hidden"  value="<?php echo $data[0];?>"  ></li>
+<li><span>应用中文名称<font color="red" size="3">*</font></span><input type="text" name="appNameCn"     value="<?php echo $data[2];?>"></li>
+<li><span>应用口令<font color="red" size="3">*</font></span><input type="text" name="appToken"  title="例如:wwwwww"   value="<?php echo $data[3];?>"></li>
+<li  ><span>备注</span><textarea name="remark" style="width:158px;height:50px;float:left"  ><?php echo $data[4];?></textarea></li>
+</ul>
+</div>
+</form>
+<script type="text/javascript">
+ var appNameZZ =/^[A-Za-z]+$/;
+ var appTokenZZ =/^[A-Za-z]+$/;
+ //验证appName
+ $("#editApp input[name='appName']").bind('blur',function(){
+		var appName = $(this).val();
+		appName=appName.replace(/[ ]/g,"");
+		if(appName==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(appNameZZ.test(appName)==false){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+ //验证appNameCn
+ $("#editApp input[name='appNameCn']").bind('blur',function(){
+		var appNameCn = $(this).val();
+		appNameCn=appNameCn.replace(/[ ]/g,"");
+		if(appNameCn==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+	//验证appToken
+ $("#editApp input[name='appToken']").bind('blur',function(){
+		var appToken = $(this).val();
+		appToken=appToken.replace(/[ ]/g,"");
+		if(appToken==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		if(appTokenZZ.test(appToken)==false){
+			$(this).addClass("warnning");
+			return false;
+		}
+		$(this).removeClass("warnning");
+	});
+
+</script>
+ 

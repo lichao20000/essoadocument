@@ -1,0 +1,112 @@
+<?php
+/**
+ * 规定规范
+ * @author xiewenda
+ *
+ */
+class ProxyEsdocumentRegulation extends AgentProxyAbstract {
+	const SERVICE_NAME = "regulation";
+	public function getCount() {
+		$urlParam = array (
+				'count' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	public function getCountByCondition($param) {
+		$urlParam = array (
+				'getCountByCondition' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function getCountBySearch($param) {
+		$urlParam = array (
+				'getCountBySearch' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function findRegulationList($condition) {
+		$urlParam = array (
+				'list' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $condition, "application/json;charset=UTF-8" );
+	}
+	public function add($data) {
+		$urlParam = array (
+				'add' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+	public function edit($data) {
+		$urlParam = array (
+				'update' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+	public function del($ids) {
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'delete',
+				 $userId,
+					$ip
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, "application/json;charset=UTF-8" );
+	}
+	public function getRegulationById($id) {
+		return $this->get ( self::SERVICE_NAME, "getRegulationById/" . $id );
+	}
+	public function getRegulationByCondition($param) {
+		$urlParam = array (
+				'getRegulationByCondition' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function getServiceIP() {
+		$urlParam = array (
+				'getServiceIP'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url );
+	}
+	public function download() {
+		$urlParam = array (
+				'download' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url );
+	}
+	public function getRegulationQuery($param) {
+		$urlParam = array (
+				'getRegulationQuery' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	
+	public function deleteFile($param) {
+		$urlParam = array (
+				'deleteFile' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 验证编号唯一性
+	 * @param string $regulationNo
+	 */
+	public function uniqueNo($regulationNo) {
+		$urlParam = array (
+				'uniqueNo'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $regulationNo, 'text/plain;charset=UTF-8' );
+	}
+}

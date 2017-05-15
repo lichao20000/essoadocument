@@ -1,0 +1,402 @@
+<style type="text/css">
+/* 得到字段的界面 */
+.modelTags {
+	width: 790px;
+	height: auto;
+	float: left;
+}
+
+.modelTags .subnav {
+	width: 100%;
+	height: 30px;
+	float: left;
+	padding-left: 10px;
+	margin-left: 0;
+	margin-bottom: 0;
+	border-bottom: 5px solid #41b3e5;
+}
+
+.modelTags .subnav li {
+	line-height: 30px;
+	color: #fff;
+	float: left;
+	padding: 0 10px;
+	margin-right: 5px;
+	background: rgb(74, 139, 194);
+	cursor: pointer;
+	border-radius: 5px 5px 0 0;
+}
+
+.modelTags .subnav li:hover {
+	background: #41b3e5;
+}
+
+.showModelTags {
+	width: 800px;
+	float: left;
+	padding-left: 0;
+}
+</style>
+<div id="modelTags" class="modelTags">
+	<!-- 标签切换 -->
+	<ul id="subnav" class="subnav">
+		<?php if($modelType == "file"){ ?>
+		<li id='fileTags' style="background: #41b3e5;"><span
+			class='img-fileTags' id="img-fileTags">案卷级</span></li>
+		<?php }?>
+		<li id='innerFileTags'><span class='img-innerFileTags'
+			id="img-innerFileTags">卷内级</span></li>
+	</ul>
+</div>
+<div class='showModelTags' id='showModelTags'></div>
+<script type="text/javascript">
+var type ='<?php echo  $modelType?>';
+var modelId = <?php echo  $modelId?>;
+var $_tdObj,$_metadata,metadata_dialog; // 元数据列,元数据,选择元数据窗口
+_tagTable = {
+		total: false, // 用于保存接口日志总条数,该参数只在第一次得到
+		init: function (){
+			
+			document.getElementById('showModelTags').innerHTML = "<table id='modelTag-table'></table>";
+			
+			var col_ = url_ = title_ = button_ = type_ = false;
+			button_ = [{name: '添加', bclass: 'add', tooltip: '添加', onpress: _TagOpens.addData},
+			           {name: '删除', bclass: 'delete', tooltip: '删除', onpress: _TagOpens.deleteData},
+			           {name: '保存', bclass: 'save', tooltip: '保存', onpress: _TagOpens.saveData},
+			           {name: '导出', bclass: 'export', tooltip:'导入',onpress:_TagOpens.exportTags},
+			           {name: '导入', bclass: 'import', tooltip:'导入',onpress:_TagOpens.importTags}]
+			col_ = [
+					{display : '<input type="checkbox" id="sinputBAll">', name:'cbox', width:40, align:'center'},
+					{display : '字段名',	name : 'ESIDENTIFIER',editable : true,	width : 100,align : 'center'},
+					{display : '元数据',	name : 'METADATA',width : 130,align : 'center'},
+					{display : '类型',name : 'ESTYPE',width : 80,align : 'center', editable:true, dropdown:['文本类型','数值类型','日期类型','浮点类型','时间类型','布尔类型']},
+					{display : '是否为必填项',name : 'ESISNULL', width : 70, align : 'center', editable : true, dropdown : ['是','否']},
+					{display : '是否为系统字段',name : 'ESISEDIT', width : 70, align : 'center', editable : true, dropdown : ['是','否']},
+					{display : '字段长度', name : 'ESLENGTH', editable : true, width:80, validate:/^\+?[1-9][0-9]{0,4}$/i ,  validateMsg:"必须为数字",align :'center'},
+					{display : '小数点位数', name : 'ESDOTLENGTH', editable : true, width : 80, validate:/^\d+$/i, validateMsg:"必须为不大于字段长度的数字",align :'center'},
+					{display : '描述', name : 'ESDESCRIPTION', editable : true, width : 600, align : 'left'}
+		    	];
+			url_ = $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+			$("#modelTag-table").flexigrid({
+				url: url_,
+				editable:true,
+				dataType: 'json',
+				colModel : col_,
+				buttons : button_,
+				onSuccess:_dealData.changeEditable,
+				onCellChange:_dealData.onCellChange,
+				usepager: true,
+				useRp: true,
+				rp: 20,
+				width:800,
+				height:300,
+				nomes: '没有数据',
+				pagetext: '第',
+				outof: '页 /共',
+				pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+			});
+			
+		}
+	};
+
+$("#sinputBAll").die().live('click',function(){
+	if($(this).attr("checked")){
+		$(".sinputItem").attr("checked",true)
+	}else{
+		$(".sinputItem").attr("checked",false)
+	}
+});
+_dealData={
+		 changeEditable:function(){
+			 //文本、数值、日期、时间 类型字段不能修改小数点位数
+			 var trObj = $('#modelTag-table').find('tr');
+			 trObj.each(function (){
+				    var eslength=$(this).find('td[colname="ESLENGTH"]').text(); //字段长度
+					var estype = $(this).find('td[colname="ESTYPE"]').text();
+					$(this).find('td[colname="ESDOTLENGTH"]').attr('editable',false);
+					$(this).find('td[colname="ESLENGTH"]').attr('editable',false);
+					if(estype=='浮点类型'){
+						$(this).find('td[colname="ESLENGTH"]').attr('maxNumber',15);
+						$(this).find('td[colname="ESDOTLENGTH"]').attr('maxNumber',eslength-1);//浮点数 小数点位数不能超过字段长度
+						$(this).find('td[colname="ESLENGTH"]').attr('editable',true);
+						$(this).find('td[colname="ESDOTLENGTH"]').attr('editable',true);
+					}else if (estype=='数值类型'){
+						$(this).find('td[colname="ESLENGTH"]').attr('maxNumber',9);
+						$(this).find('td[colname="ESLENGTH"]').attr('editable',true);
+					}else if (estype=='文本类型'){
+						$(this).find('td[colname="ESLENGTH"]').attr('maxNumber',4000);
+						$(this).find('td[colname="ESLENGTH"]').attr('editable',true);
+					}
+		
+				});
+		},
+		onCellChange:function(obj){
+			if(obj.attr('colname')=='ESTYPE'){//字段类型为 文本、数值、日期、时间时 小数点位数不可编辑
+				var tr=obj.closest("tr");
+				var estype =obj.text();
+				tr.find('td[colname="ESDOTLENGTH"]').attr('editable',false);
+				tr.find('td[colname="ESLENGTH"]').attr('editable',false);
+				tr.find('td[colname="ESDOTLENGTH"] div').html(0);//如果字段类型改变 且不是浮点型 小数点位数设置为0
+				if(estype=='浮点类型'){
+					tr.find('td[colname="ESLENGTH"]').attr('maxNumber',15);
+					tr.find('td[colname="ESDOTLENGTH"]').attr('maxNumber',14);
+					tr.find('td[colname="ESLENGTH"]').attr('editable',true);
+					tr.find('td[colname="ESDOTLENGTH"]').attr('editable',true);
+					tr.find('td[colname="ESDOTLENGTH"] div').html(0);//如果字段类型改变 且不是浮点型 小数点位数设置为0
+					tr.find('td[colname="ESLENGTH"] div').html(15);//如果字段类型改变 且不是浮点型 小数点位数设置为0
+				}else if (estype=='数值类型'){
+					tr.find('td[colname="ESLENGTH"]').attr('editable',true);
+					tr.find('td[colname="ESLENGTH"] div').text('9');
+					tr.find('td[colname="ESLENGTH"]').attr('maxNumber',9);
+				}else if (estype=='文本类型'){
+					tr.find('td[colname="ESLENGTH"]').attr('editable',true);
+					tr.find('td[colname="ESLENGTH"] div').text("20");
+					tr.find('td[colname="ESLENGTH"]').attr('maxNumber',4000);
+				}else if (estype=='时间类型'){
+					tr.find('td[colname="ESLENGTH"] div').text("8");
+				}else if (estype=='日期类型'){
+					tr.find('td[colname="ESLENGTH"] div').text("10");
+			     }else if (estype=='布尔类型'){
+					tr.find('td[colname="ESLENGTH"] div').text("5");
+				}
+				
+		   }else if(obj.attr('colname')=='ESLENGTH'){
+			   var tr=obj.closest("tr");
+			   var eslength=tr.find('td[colname="ESLENGTH"] div').text();
+			   tr.find('td[colname="ESDOTLENGTH"]').attr('maxNumber',eslength-1);//浮点数 小数点位数不能超过字段长度
+			}
+			
+		}
+		
+}
+_TagOpens={
+		addData:function (){
+			$("#modelTag-table").flexExtendData([{
+				"ID" : '0',
+				"cell" : {
+					'cbox' : '<input type="checkbox" name="sinputB" value="-1" />', // 新建著录项为-1，JAVA后台根据-1判断
+					"ESIDENTIFIER" : "",
+					"METADATA" : null,
+					"ESTYPE" : '文本类型',
+					"ESISNULL" : '否',
+					"ESISEDIT" : '否',
+					"ESLENGTH" : '20',
+					"ESDOTLENGTH" : 0,
+					"ESISSYSTEM" : '否',
+					"ESDESCRIPTION" : null
+			}
+		}]);
+			
+		},
+		deleteData:function(){
+			var cObjs = $("input[name='sinputB']:checked");
+			if(cObjs.length == 0){
+				$.dialog.notice({content:'未选择任何数据！',icon:'warning',time:3});
+			}else{
+				var ids = "";
+				cObjs.each(function(){
+					ids = ids + $(this).val() + ",";
+				});
+				ids = ids.substring(0,ids.length-1);
+				$.dialog({
+					title:'提醒',
+					content:'确认删除所选数据吗？',
+					cancel:true,
+					cancelVal:'取消',
+					okVal:'确定',
+					ok:function(){
+						$.ajax({
+							url:$.appClient.generateUrl({ESStructureModel: 'deleteTags'},'x'),
+							type:'post',
+							dataType:'json',
+							data:{ids:ids,modelType:type,modelId:modelId},
+							success:function(delMsg){
+								if(delMsg.success == 'true'){
+									$.dialog.notice({content:"删除成功！",icon:"succeed",time:3});						
+									$("#modelTag-table").flexReload();
+								}else{
+									$.dialog.notice({content:"删除失败！",icon:"warning",time:3});						
+								}
+							}
+						});
+					}
+				});
+			}
+		},
+		saveData:function(){
+			var saveTrObj = $('#modelTag-table tr[datastate="new"],#modelTag-table tr[datastate="modify"]');
+			if(!saveTrObj.length){
+				$.dialog({
+					title:'',
+					content:'请添加新数据',
+					icon:'warning',
+					time:2
+				});
+				return;
+			}
+			
+			var datas = []; // [{},...]
+			saveTrObj.each(function (){
+				var data = {};
+				//id ESIDENTIFIER METADATA ESTYPE ESISNULL ESLENGTH ESDOTLENGTH ESISSYSTEM ESDESCRIPTION
+					data.ID = $(this).find('td[colname="cbox"] input').val();
+					data.ESIDENTIFIER = $(this).find('td[colname="ESIDENTIFIER"]').text();
+					data.METADATA = $(this).find('td[colname="METADATA"]').text();
+					data.ESTYPE = $(this).find('td[colname="ESTYPE"]').text();
+					data.ESISNULL = $(this).find('td[colname="ESISNULL"]').text();
+					data.ESISEDIT = $(this).find('td[colname="ESISEDIT"]').text();
+					data.ESLENGTH = $(this).find('td[colname="ESLENGTH"]').text();
+					data.ESDOTLENGTH = $(this).find('td[colname="ESDOTLENGTH"]').text();
+					data.ESISSYSTEM = $(this).find('td[colname="ESISSYSTEM"]').text();
+					data.ESDESCRIPTION = $(this).find('td[colname="ESDESCRIPTION"]').text();
+					datas.push(data);
+			});
+			
+			
+			$.post(
+				$.appClient.generateUrl({ESStructureModel:'saveTagForModel'},'x'),
+				{modelId:modelId, datas:datas,type:type},
+				function (result){
+					if(result.SUCCESS=='true'){
+						var url =  $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+						$('#modelTag-table').flexOptions({url:url}).flexReload();
+							$.dialog.notice({
+							content:result.MESSAGE,
+							icon:'succeed',
+							time:2
+						});
+					}else{
+						var url =  $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+						$('#modelTag-table').flexOptions({url:url}).flexReload();
+						$.dialog.notice({
+							content:result.MESSAGE,
+							icon:'error',
+							time:2
+						});
+					}
+				},
+				'json'
+			);
+		},
+		importTags:function(){
+			$.ajax({
+				url:$.appClient.generateUrl({ESStructureModel: 'importTagsBefore'},'x'),
+				data:{type:type,id:modelId},
+				success:function(icont){
+					$.dialog({
+						id:'importTagsDialog',
+						title:"导入字段",
+						content:icont,
+						okVal:"导入",
+						cancel:true,
+						cancelVal:"取消",
+						ok:function(){
+							if(!$("#importTagsFile").val()){
+								$.dialog.notice({content:'请选择文件！',icon:'warning',time:3});
+								return false;
+							}
+							$.ajax({
+								url:$.appClient.generateUrl({ESStructureModel: 'getImportTagsUrl'},'x'),
+								success:function(importTagRestUrl){
+									$('#importTagsForm').ajaxSubmit({
+										url:importTagRestUrl,
+										dataType:"text",
+										success:function(data){
+											if(data=="success"){
+												$.dialog.notice({content:'导入成功！',icon:'succeed',time:3});
+											}else{
+												$.dialog({
+													title:'提示',
+													content:'以下字段未成功导入：</br>'+data,
+													cancel:true,
+													cancelVal:'关闭'
+												});
+											}
+											art.dialog.list['importTagsDialog'].close();
+											$("#modelTag-table").flexReload();
+										},
+										error:function(){
+											$.dialog.notice({content:'导入失败！',icon:'error',time:3});
+										}
+									});
+								}
+							});
+							return false;
+						}
+					});
+				}
+			});
+		},
+		exportTags:function(){
+			var idString = "";
+			var cObjs = $("input[name='sinputB']:checked");
+			if(cObjs.length != 0){
+				var ids = "";
+				cObjs.each(function(){
+					ids = ids + $(this).val() + ",";
+				});
+				idString = ids.substring(0,ids.length-1);
+			}
+			$.ajax({
+				url:$.appClient.generateUrl({ESStructureModel: 'exportTags',type:type,id:modelId,idString:idString},'x'),
+				dataType:'json',
+				success:function(er){
+					if(er.success == "true"){
+						var downloadUrl = $.appClient.generateUrl({ESStructureModel:'download',url:er.url},'x');
+						$.dialog.notice({content:'<a href="'+downloadUrl+'">请点击下载文件</a>',icon:'success'});
+					}else{
+						$.dialog.notice({content:"下载失败，请重试！",icon:"error",time:3});
+					}
+				}
+			});
+		}
+	}
+
+//20140627 wanghongchen 绑定点击方法，防止页面点击事件不起作用
+$('#metadata_tbl tr').live('click dblclick',function (){
+	$(this).find('td:eq(0) input').attr('checked','checked');
+	$_metadata = $(this).find('td:eq(2)').text();
+	if(event.type == 'dblclick'){
+		metadata_Call_back();
+		metadata_dialog.close();
+	}
+});
+
+	//元数据选择回调函数
+	function metadata_Call_back ()
+	{
+		$($_tdObj).find('div').html($_metadata);
+		$($_tdObj).attr('class','editing'); // 加上被编辑过红标签
+		$($_tdObj).closest('tr').attr('datastate','modify'); // 设置该行为修改状态
+	}
+
+	$('#documentTags').click(function(){
+		type = 'document';
+		$("#subnav li").each(function(){
+			$(this).css("background","");
+		});
+		$(this).css("background","#41b3e5");
+		var url =  $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+		$('#modelTag-table').flexOptions({url:url}).flexReload();
+	});
+	/**wanghongchen 20140722 解决标签切换丢失背景问题 bug 2**/
+	$('#innerFileTags').click(function(){
+		type = 'innerFile';
+		$("#subnav li").each(function(){
+			$(this).css("background","#4A8BC2");
+		});
+		$(this).css("background","#41b3e5");
+		var url =  $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+		$('#modelTag-table').flexOptions({url:url}).flexReload();
+	});
+	$('#fileTags').click(function(){
+		type = 'file';
+		$("#subnav li").each(function(){
+			$(this).css("background","#4A8BC2");
+		});
+		$(this).css("background","#41b3e5");
+		var url =  $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+		$('#modelTag-table').flexOptions({url:url}).flexReload();
+	});
+	_tagTable.init();
+</script>

@@ -1,0 +1,92 @@
+@charset "utf-8";
+a,
+input{outline:none;}
+input::-ms-clear{display:none;} 
+
+a{text-decoration:none;}
+
+body,
+input,
+select,
+textarea,
+button{font-size:12px; font-family:Microsoft YaHei, "微软雅黑", sans-serif;}
+
+html,
+body{width:100%; height:100%; min-width:1000px; min-height:550px; overflow:hidden;}
+
+/* body{background:url(../images/body_background.png); background-size:100% 100%; background-repeat:repeat;} */
+
+.header{height:64px; margin:0 100px; position:relative; z-index:99;width: 96%;margin-left: 2%;}
+.header .clothe{margin:0 4px; height:100%;}
+.header .undies{background:url(../images/header_undies.png) repeat-x top; position:relative; height:100%;}
+.header .undies .logo{height:70%; position:absolute; left:20px; top:4px;width:100px;}
+.header .undies .logo img{height:100%;}
+.header .undies .toolbar{position:absolute; right:0; top:0; height:100%;}
+.header .undies .toolbar .help{font-size:14px; font-weight:bold; color:#fff; background:url(../images/icon_question.png) no-repeat right 50%; padding-right:18px; margin-right:20px; margin-top:18px; display:inline-block;}
+.header .undies .toolbar .help:hover{text-decoration:underline;}
+.header .cap{position:absolute; width:4px; height:100%; top:0; background:url(../images/header_cap.png) no-repeat;}
+.header .cap.left{left:0; background-position:0 0;}
+.header .cap.right{right:0; background-position:-4px 0;}
+
+/*头部样式*/
+.left-box{float:left; margin-left:140px;}
+.left-box .top-menu{float:left;width:69px;height:60px;position:relative;z-index:999;}
+.left-box .goHomeContainer {height:60px;width:60px;float:left;background:url(../images/header_line.png) right repeat-y;cursor:pointer;z-index:10000;}
+.left-box .goHomeContainer .goHomeLogo{height:60px;width:60px;background:url(../images/goHomeLogo.png) center no-repeat;cursor:pointer;z-index:10000;}
+
+.left-box .top-menu span{display:block;width:67px; height:60px;background:url(../images/header_menu_ico.png) center no-repeat;cursor:pointer;}
+.left-box .top-menu span.on{background-color:#5d5f75;}
+.left-box .top-menu .list ul{padding-left:0px;margin-top:0px;}
+/* guolanrui 20141013 将height改为auto  bug:1335 */
+/* rongying 20150430 将当前订购的服务菜单设为竖排显示 */
+/*.left-box .top-menu .list{display:none;width:500px;height:auto;background-color:#5d5f75;position:absolute;left:0;top:60px;z-index:10000;}*/
+.left-box .top-menu .list{display:none;height:auto;background-color:#5d5f75;position:absolute;left:67px;top:0;z-index:10000;}
+/* rongying 20150430 将min-width宽度有116px修改为126px */
+.left-box .top-menu .list li{min-width:126px;width:auto;height:60px;float:left;list-style:none;}
+.left-box .top-menu .list li a{display:block;padding-left:50px;padding-left:50px;padding-right:10px;height:60px;font-weight:bold;line-height:60px;font-size:14px;background-image:url(../images/header_menu_ico2.png);background-repeat:no-repeat; color:#fff;}
+/* rongying 20150430 添加背景颜色，鼠标移到服务上改变背景颜色 */
+.left-box .top-menu .list li a:hover{color:#fff;background-color:#64667c;}
+.left-box .top-menu .list li a.btn-1{background-position:20px 0;}
+.left-box .top-menu .list li a.btn-2{background-position:20px -60px;}
+.left-box .top-menu .list li a.btn-3{background-position:20px -120px;}
+.left-box .top-menu .list li a.btn-4{background-position:20px -60px;}
+.left-box .top-menu .list li a.btn-5{background-position:20px 0px;}
+.left-box .top-menu .list li a.btn-6{background-position:20px 0px;}
+
+.right-box{float:right;}
+.right-box .date{float:left;line-height:60px;font-size:14px;font-weight:bold;padding-left:40px; margin-right:20px;background:url(../images/date_time_ico.png) no-repeat; color:#fff;}
+.right-box .date span{padding:0 10px;}
+.right-box .time{float:left;line-height:60px;font-size:14px;font-weight:bold;padding-left:40px;background:url(../images/date_time_ico.png) 0 -46px no-repeat; color:#fff;}
+.right-box .search-box{float:left;height:60px;padding:0 15px 0 15px;}
+.right-box .search-box .search-input{width:222px;height:31px;background:#0b2847;opacity: 0.8;margin:14px 0 0;color:#fff;border-radius:5px;}
+.right-box .search-box input{background:none;border:0;}
+.right-box .search-box .text{color: #fff;padding:0 10px; height:31px; line-height:31px;float:left;width:160px;}
+.right-box .search-box .btn{float:right;width:40px;height:31px;background:url(../images/search_btn.png) center no-repeat;}
+.right-box .msgLogoa {float:left;height:60px;width:90px;cursor:pointer;background:url(../images/messageLogo.png) center no-repeat;}
+.right-box .msgLogoa .logoutTextClass{color:#fff;font-weight: bold;margin-top: 22px;float:right;}
+.right-box .loginoutSectionClass {float:left;height:60px;width:90px;cursor:pointer;}
+.right-box .loginoutSectionClass .loginOutClass{float:left;height:60px;width:40px;background:url(../images/logoOutLogo.png) center no-repeat;cursor:pointer;}
+.right-box .loginoutSectionClass .logoutTextClass{color:#fff;font-weight: bold;margin-top: 22px;}
+#escontent{
+	margin-top:10px;
+}
+/* rongying 20150430 当前登录系统的样式 */
+.left-box #appname{
+	position:absolute;
+	left:267px;
+	padding-left:50px;
+	color:#fff;
+	width:76px;
+	height:60px;
+	font-weight:bold;
+	line-height:60px;
+	font-size:14px;
+	background-image:url(../images/header_menu_ico2.png);
+	background-repeat:no-repeat;
+}
+.left-box div.btn-1{background-position:20px 0;}
+.left-box div.btn-2{background-position:20px -60px;}
+.left-box div.btn-3{background-position:20px -120px;}
+.left-box div.btn-4{background-position:20px -60px}
+.left-box div.btn-5{background-position:20px 0;}
+.left-box div.btn-6{background-position:20px 0;}

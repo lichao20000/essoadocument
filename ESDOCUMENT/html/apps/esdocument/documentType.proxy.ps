@@ -1,0 +1,108 @@
+<?php
+
+/**
+ * 文件类型代码,文件专业代码
+ * @author xuekun
+ *
+ */
+class ProxyEsdocumentDocumentType extends AgentProxyAbstract {
+	const SERVICE_NAME = "documentType";
+	
+	/**
+	 *
+	 * xuekun
+	 *
+	 * @param unknown $params        	
+	 */
+	public function addData($params) {
+		$urlParam = array (
+				'add' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 *
+	 * xuekun
+	 *
+	 * @param
+	 *        	unknown ids
+	 */
+	public function deleteData($ids) {
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'delete',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 *
+	 * xuekun
+	 *
+	 * @param
+	 *        	unknown params
+	 * @return return_type
+	 */
+	public function updateData($params) {
+		$urlParam = array (
+				'update' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 分页获取 文档收集范围 信息列表
+	 * xuekun
+	 *
+	 * @param unknown $params        	
+	 * @return return_type
+	 */
+	public function getDataList($page, $rp, $params) {
+		$urlParam = array (
+				'list',
+				$page,
+				$rp 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 *
+	 * @param unknown $params        	
+	 */
+	public function getCount($params) {
+		$urlParam = array (
+				'count' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	public function getData($id) {
+		$urlParam = array (
+				'get',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 验证文件类型代码唯一性
+	 * @param $param
+	 */
+	public function uniqueTypeNo($params) {
+		$urlParam = array (
+				'uniqueTypeNo'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+}

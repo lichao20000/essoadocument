@@ -1,0 +1,45 @@
+<!-- modify at 2013-10-30 by niyang -->
+<div style="height:300px; width:373px; overflow: auto; margin-top:10px; margin-left:25px;">
+	<ul id="fication" class="ztree"></ul>
+</div>
+
+<script type="text/javascript">
+//树节点设置
+var setting = {
+	view: {
+		dblClickExpand: false,
+		showLine: false,
+		selectedMulti: false
+	},
+	edit:{
+		enable:true
+	},
+	data: {
+		simpleData: {
+			enable: true
+		}
+	},
+	async:{
+		enable:true,
+		url:$.appClient.generateUrl({ESArchiveOrganization:'getnode'},'x'),
+		autoParam:["id"]
+	},
+	callback: {
+		onClick: clickNode
+	},
+	check: {
+		enable:true,
+		chkStyle:'checkbox',
+		//chkboxType: { "Y": "ps", "N": "ps" }
+		chkboxType: { "Y": " ", "N": " " }
+	}
+};
+function clickNode(event,treeId,treeNode){
+	var treeObj = $.fn.zTree.getZTreeObj(treeId);
+	treeObj.checkNode(treeNode, null, true);
+}
+var zNodes = <?php echo $zNodes; ?>;
+$(document).ready(function() {
+	$.fn.zTree.init($("#fication"), setting, zNodes);
+});
+</script>

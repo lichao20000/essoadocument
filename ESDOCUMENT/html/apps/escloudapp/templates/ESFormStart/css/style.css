@@ -1,0 +1,21 @@
+
+.formStart_main {
+	width:96%;
+	margin-left:2%;
+}
+
+.formStart_main .formStart_tree{
+	width:220px;
+	height:100%;
+	float:left;
+	overflow: auto;
+	margin-right:10px;
+	background-color:#133959;
+	border-radius:5px;
+}
+
+.formStart_main .formStart_grid{
+	width:100%;
+}
+
+.opens{ width:16px; height:16px; display:inline-block; background:url(../img/editor.gif) no-repeat no-repeat; cursor:pointer;}

@@ -1,0 +1,310 @@
+<?php
+/*
+ * 库房服务
+* 张吉日木图
+*/
+class ProxyEscloudappEscloud_repositoryws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_repositoryws";
+	//通过机构id读取数据
+	public function getListById($postData)
+	{
+		$url = "getRepositoryListByOrganid";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	//查找编辑的内容
+	public function getrepositoryById($id)
+	{
+		$urlParam = array('getRepositoryById',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	//添加一个库房addwarehouse
+	public function addwarehouse($userId,$params)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveRepository',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 批量添加库房结构的节点
+	 * @author yuanzhonghua
+	 * @data 20130513
+	 */
+	public function saveRepositoryStructureBatch($userId,$params){
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveRepositoryStructureBatch',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	//编辑一个库房editwarehouse
+	public function editwarehouse($userId,$params)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('updateRepository',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	//删除库房deletestoreroomlist
+	public function deletestoreroomlist($userId,$params)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteBatchRepository',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 查询库房总数
+	 * @author ldm
+	 */
+	public function countall(){
+		$urlParam = array('countAll');
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/*  ---------------------------库房结构---------------------------------------*/
+	/**
+	 * 根据isparentid来查询数据
+	 * @author ldm
+	 */
+	public function gettree($houid,$id){
+		$urlParam = array('getRepositoryStructureByParentId',$houid,$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 根据parentid来添加数据
+	 * @author ldm
+	 */
+	public function addstructure($userId,$params)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveRepositoryStructure',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 根据id进行查询
+	 * @author ldm
+	 */
+	public function showone($id){
+		$urlParam = array('getRepositoryStructureById',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 库房结构编辑保存
+	 * @author ldm
+	 */
+	public function editstructure($userId,$param){
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('updateRepositoryStructure',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$param,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 根据id进行删除
+	 * @author ldm
+	 */
+	public function delstructure($postData){
+		$url = 'deleteRepositoryStructure';
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	/*  ---------------------------库房监控---------------------------------------*/
+	/**
+	 * 库房监控页面显示信息
+	 * @author ldm
+	 */
+	public function monitor_list($houid,$start,$limit){
+		$urlParam = array('getRepositoryMonitorList',$houid,$start,$limit);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 库房监控图像信息
+	 * @author ldm
+	 */
+	public function img_list($houid){
+		$urlParam = array('getRepositoryMonitorList',$houid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 库房监控图像信息，过滤信息
+	 * @author longjunhao 20140919
+	 */
+	public function img_list_filter($houid, $sqlstr){
+		$urlParam = array('getRepositoryMonitorListForFilter',$houid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$sqlstr,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 库房监控总数
+	 * @author ldm
+	 */
+	public function count_monitor($houid){
+		$urlParam = array('monitorCountAll',$houid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * 库房监控数据添加
+	 * @author ldm
+	 */
+	public function addmonitor($userId,$param)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveRepositoryMonitor',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$param,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 库房监控删除
+	 * @author ldm
+	 */
+	public function delmonitor($userId,$param){
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteBatchRepositoryMonitor',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$param,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 库房监控筛选
+	 * @author ldm
+	 */
+	public function filmonitor($start,$limit,$houseid,$param){
+		$urlParam = array('getMonitorList',$start,$limit,$houseid);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$param,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 库房监控筛选总数
+	 * @author ldm
+	 */
+	public function filmonitor_count($param){
+		$urlParam = array('monitorCountAllByCondition');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$param,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 根据机构获取库房结构 
+	 */
+	public function getRepositoryList()
+	{
+		$urlParam = array('getRepositoryList');
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * @author teemoLiu
+	 * 根据机构获取库房结构
+	 */
+	public function getRepositoryListImg()
+	{
+		$urlParam = array('getRepositoryListImg');
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	public function getRepositoryListImgByParentId($parentId){
+		$urlParam = array('getRepositoryListImgByParentId',$parentId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * @author yzh
+	 * 验证库房编号的唯一性
+	 * @param  $code
+	 */
+	public function validateCode($param){
+		$urlParam = array('checkCode');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$param,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 通过排架号的ID返回层跟列。用来拼装前端的货架
+	 * @author liuhezeng 20140716
+	 * @param parentId 排架号的ID，
+	 * @return 库房层跟列表
+	 */
+	public function getRepositoryListForColAndLayer($parentId){
+		$urlParam = array('getRepositoryListForColAndLayer',$parentId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 通过BOXPATH获取到当前的里面的条目数据，并显示到grid表中
+	 * @author liuhezeng 20140716
+	 * @param boxPath 盒的Path格式如esp_$N_box_$boxId,其中$N跟$boxId为动态参数。
+	 * @return 当前盒里面所有的条目数据
+	 */
+	public function getBoxContentsByBoxPath($boxPath){
+		$urlParam = array('getBoxContentsByBoxPath',$boxPath);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	public function getFields($boxPath){
+		$urlParam = array('getColumnModel',$boxPath);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * @author liuhezeng
+	 * 获取数据
+	 * @param string $path 节点路径
+	 * @param int $start 每页显示数据的起始位置
+	 * @param int $limit 每页显示的条数
+	 * @param string $uid 用户ID
+	 * @return mixed
+	 */
+	public function getDataList($boxPath,$start,$rp,$userId,$list)
+	{
+		$urlParam=array('getDataList',$boxPath,$start,$rp,$userId);
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 库房监控数据编辑
+	 * @author longjunhao 20140809
+	 */
+	public function editmonitor($param,$userId,$ip)
+	{
+		$urlParam=array('updateRepositoryMonitor',$userId,$ip);
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$param,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 判断格子的剩余宽度能否上架
+	 * @author longjunhao 20140827
+	 */
+	public function checkRepositorypathThickness($postData){
+		$url = 'checkRepositorypathThickness';
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 更新格子的剩余宽度
+	 * @author longjunhao 20140827
+	 */
+	public function updateRepositorypathThickness($postData){
+		$url = 'updateRepositorypathThickness';
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	public function setUserIdFor3DStore($userId){
+		$url = 'setUserIdFor3DStore';
+		return $this->post(self::SERVICE_NAME, $url,$userId,"application/json;charset=UTF-8");
+	}
+}

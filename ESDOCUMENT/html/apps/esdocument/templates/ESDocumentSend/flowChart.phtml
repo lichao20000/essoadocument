@@ -1,0 +1,69 @@
+<div class="flowChart" style="width: 800px; height: 400px;">
+	<input type="hidden" id="C_sendId" value="<?php echo $sendId; ?>" /> <input
+		type="hidden" id="C_nodeType" value="<?php echo $nodeType; ?>" />
+	<table id="sendMatrix"></table>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	initSendMatrix();
+	
+	//初始化流程矩阵列表
+	function initSendMatrix(){
+		var sendId=$("#C_sendId").val();
+		var nodeType=$("#C_nodeType").val();
+		$("#sendMatrix").flexigrid({
+			url: $.appClient.generateUrl({ESDocumentSend: 'getSendMatrix',sendId:sendId,type:nodeType},'x'),
+			dataType: 'json',
+			colModel : [
+				{display: '序号', name : 'num', width : 20, align: 'center'}, 
+				{display: '接收状态', name : 'status', width : 80, align: 'center'},				
+				{display: '（部门/用户）名称', name : 'partName', width : 200, align: 'left'},
+				{display: '（部门/用户）标识', name : 'part_code', width : 120, align: 'left'},
+				{display: '文控人员', name : 'user_id', width : 200, align: 'left'},
+				{display: '份数', name : 'copies', width : 60, align: 'right'},
+				{display: '接收人', name : 'receiver', width : 120, align: 'left'},
+				{display: '接收人签名', name : 'sign', width : 120, align: 'center'},
+				{display: '手机', name : 'mobile', width : 120, align: 'left'},
+				{display: '回复', name : 'reply_content', width : 200, align: 'left'},
+				{display: '签名文件', name : 'fileName', width : 120, align: 'left'},
+				{display: '接收时间', name : 'receivetime', width : 120, align: 'center'}
+			],
+			usepager: true,
+			title: '&nbsp;',
+			nomsg:"没有数据",
+			useRp: true,
+			width: 800,
+			height: 328,
+			showTableToggleBtn: true,
+			pagetext: '第',
+			itemtext: '页',
+			outof: '页 /共',
+			pagestat:' 显示 {from} 到 {to}条 / 共{total} 条',
+			procmsg:'正在加载数据，请稍候...'
+		});
+	}
+	
+	$(".loadSign").die().live("click",function(){
+		var filePath=$(this).attr("filePath");
+		if(filePath!="" && filePath!=null){
+			var fileUrl = decodeURIComponent(filePath);
+			var downFile=$.appClient.generateUrl({ESRegulations : 'download'},'x');
+			var fileName=fileUrl.substr(fileUrl.lastIndexOf("/")+1);
+			$.post(downFile,{filePath:fileUrl,fileName:fileName},function(url){
+				if(url){
+					window.open(url,"_parent");
+				}
+			});			
+		}else{
+			$.dialog.notice({icon:'error',content:'导出失败',title:'消息',time:2});
+			return false;
+		}
+	});
+
+	$(window).resize(function() {
+		$(".flowChart .bDiv").css("height","337");
+		$(".flowChart").css("height","400");
+	});
+});
+</script>

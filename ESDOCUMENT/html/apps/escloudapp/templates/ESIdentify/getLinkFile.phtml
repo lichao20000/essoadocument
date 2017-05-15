@@ -1,0 +1,21 @@
+<table id='linklist'></table>
+<script>
+$("#linklist").flexigrid({
+	url:$.appClient.generateUrl({ESIdentify:'getLinkFile',type:'<?php echo $param['type'];?>',path:'<?php echo $param['path'];?>'}, 'x'),
+	dataType: 'json',
+	colModel : [
+		{display: '序号', name : 'num', width : 20, align: 'center'}, 
+		{display: '操作', name : 'operate', width : 60, align: 'left'},
+		<?php echo $column ?>
+	],
+	usepager: true,
+	useRp: true,
+	onDoubleClick:modify,
+	query:'<?php echo $crossNum;?>',
+	qtype:'<?php echo serialize($columnList)?>',
+	width:800,
+	height: 350
+});
+
+
+</script>

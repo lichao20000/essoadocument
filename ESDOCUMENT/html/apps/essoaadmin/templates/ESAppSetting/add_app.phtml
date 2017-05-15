@@ -1,0 +1,131 @@
+<!-- wangbo 20140325-->
+<form id="addapp" action=""	method="post" >
+<div class="estransfer"  >
+<ul>
+<li><span>应用名称<font color="red" size="3">*</font></span><input type="text" name="appName"   value=""><input name="id"  type="hidden"  value="-1"  ></li>
+<li><span>应用中文名称<font color="red" size="3">*</font></span><input type="text" name="appNameCn"     value=""></li>
+<li><span>应用口令<font color="red" size="3">*</font></span><input type="text" name="appToken" verify="special/150/1/0"  value=""></li>
+<li><span>是否支持SAAS<font color="red" size="3">*</font></span><select id="saasSupport" name="saasSupport"><option value='支持'>支持</option><option value='不支持'>不支持</option></select></li>
+<li ><span>备注</span><textarea name="remark" style="width:158px;height:50px;float:left" verify="description/200/0/0"></textarea></li>
+</ul>
+</div>
+</form>
+<script type="text/javascript">
+ var appNameZZ =/^[A-Za-z_]+$/;
+ var appNameCnZZ =/^([\u4e00-\u9fa5]|[a-zA-Z0-9]|[^|\\'?."><;])+$/;
+//gengqianfeng 20141010 修改口令验证正则
+// var appTokenZZ =/^([a-zA-Z0-9]|[^|?.><;\\'"])+$/;
+ //验证appName
+ $("#addapp input[name='appName']").bind('blur',function(){
+		var appName = $(this).val();
+		appName=appName.replace(/[ ]/g,"");
+		if(appName==''){
+			$(this).addClass("warnning");
+			//gengqianfeng 20140917 应用名称格式限制提示
+			$(this).attr("title","此项不能为空");
+			return false;
+		}
+		if(appNameZZ.test(appName)==false){
+			$(this).addClass("warnning");
+			//gengqianfeng 20140915 应用名称格式限制提示
+			$(this).attr("title","只能输入英文大小写字符或下划线");
+			return false;
+		}
+		//gengqianfeng 20140915 应用名称长度限制
+	 	if(execLen(appName,50)==false){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","数据长度最大为50个字符");
+	 		return false;
+	 	}
+	 	//判断是否重复
+	 	var url = $.appClient.generateUrl({ESAppSetting : 'judgeAppName'}, 'x');
+	 	$.post(url, {id : '-1',appName:appName}, function(res) {
+	 		if(!res){
+	 			$("#addapp input[name='appName']").addClass("warnning");
+	 			$("#addapp input[name='appName']").attr("title","应用名称不允许重复!");
+	 		}
+	 	},'json');
+	 	$(this).attr("title","");
+		$(this).removeClass("warnning");
+	});
+ //验证appNameCn
+ $("#addapp input[name='appNameCn']").bind('blur',function(){
+		var appNameCn = $(this).val();
+		appNameCn=appNameCn.replace(/[ ]/g,"");
+		if(appNameCn==''){
+			$(this).addClass("warnning");
+			//gengqianfeng 20140917 应用中文名称格式限制提示
+			$(this).attr("title","此项不能为空");
+			return false;
+		}
+		//gengqianfeng 20141016  应用中文名称格式限制提示
+		if(appNameCnZZ.test(appNameCn)==false){
+			$(this).addClass("warnning");
+			$(this).attr("title",'该输入项不允许包含'+"|\\'?.\"><;"+'等特殊字符');
+			return false;
+		}
+		//gengqianfeng 20140915 应用中文名称长度限制
+	 	if(execLen(appNameCn,150)==false){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","数据长度最大为150个字符(75个汉字)");
+	 		return false;
+	 	}
+	 	var url = $.appClient.generateUrl({ESAppSetting : 'judgeAppNameCn'}, 'x');
+	 	$.post(url, {id : '-1',appNameCn:encodeURI(appNameCn)}, function(res) {
+	 		if(!res){
+	 			$("#addapp input[name='appNameCn']").addClass("warnning");
+	 			$("#addapp input[name='appNameCn']").attr("title","应用中文名称不允许重复!");
+	 		}
+	 	},'json');
+	 	$(this).attr("title","");
+		$(this).removeClass("warnning");
+	});
+	//验证appToken
+//  $("#addapp input[name='appToken']").bind('blur',function(){
+// 		var appToken = $(this).val();
+// 		appToken=appToken.replace(/[ ]/g,"");
+// 		if(appToken==''){
+// 			$(this).addClass("warnning");
+// 			//gengqianfeng 20140917 应用口令格式限制提示
+// 			$(this).attr("title","此项不能为空");
+// 			return false;
+// 		}
+// 		//gengqianfeng 20140926 取消口令格式验证
+// 		if(appTokenZZ.test(appToken)==false){
+// 			$(this).addClass("warnning");
+// 			//gengqianfeng 20141015  更改应用口令格式限制提示
+// 			$(this).attr("title","该输入项不允许包含"+"|\\\'?.\"><;"+"等特殊字符");
+// 			return false;
+// 		}
+// 		//gengqianfeng 20140915 应用口令长度限制
+// 	 	if(execLen(appToken,150)==false){
+// 	 		$(this).addClass("warnning");
+// 	 		$(this).attr("title","数据长度最大为150个字符");
+// 	 		return false;
+// 	 	}
+// 		$(this).removeClass("warnning");
+// 	});
+	//备注remark
+//  	$("#addapp textarea[name='remark']").bind('blur',function(){
+// 		var remark = $(this).val();
+// 		remark=remark.replace(/[ ]/g,"");
+// 	 	//gengqianfeng 20141015 备注长度限制
+// 	 	if(execLen(remark,200)==false){
+// 	 		$(this).addClass("warnning");
+// 	 		$(this).attr("title","备注长度不能超过200个字符(100个汉字)");
+// 	 		return false;
+// 	 	}
+// 		$(this).removeClass("warnning");
+// 	});
+ //gengqianfeng 20140915 长度验证
+ function execLen(value,len){
+	 if(value!=''){
+     	var strlength =value.replace(/[^\x00-\xff]/g,'aa').length; //字符长度 一个汉字两个字符
+     	if(strlength > len ){
+     		var charLen = (len%2==0)?(len/2):((len-1)/2);
+     		return false;
+     	}  
+     }
+ }
+</script>
+ 

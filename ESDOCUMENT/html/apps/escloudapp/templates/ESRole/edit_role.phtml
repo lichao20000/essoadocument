@@ -1,0 +1,67 @@
+<!-- wangbo 20140425-->
+<form id="editRole" action=""	method="post">
+<div class="estransfer">
+<ul>
+<li><span>角色标识<font color="red" size="3">*</font></span><input  type="text" name="roleCode"  verify="english/20/1/0"   title="例如:flyingsoft"    value= "<?php echo $roleCode;?>"><input type="hidden" id="roleId" name="roleId"    value= "<?php echo $roleId;?>"  > </li>
+<li><span>角色名称<font color="red" size="3">*</font></span><input type="text" name="roleName"   verify="text/100/1/0"   value= "<?php echo htmlspecialchars($roleName);?>"></li>
+<!-- xiewenda 20141011 修改给角色描述 -->
+<li style="width:600px"><span>角色描述</span><textarea name="roleRemark"   verify="text/200/1/0" style="width:445px;height:50px;float:left"  ><?php echo htmlspecialchars($roleRemark);?></textarea></li>
+</ul>
+</div>
+</form>
+ <script type="text/javascript">
+ var id=$("#editRole input[name='roleId']").val();
+ $("#editRole input[name='roleCode']").bind('blur',function(){
+ 	var roleCode = $(this).val();
+ 	roleCode=roleCode.replace(/[ ]/g,"");
+	var flag=false;
+	if(roleCode!=""){
+	$.ajax({ 
+        type : "post", 
+        url : $.appClient.generateUrl({ESRole : 'judgeIfExistsRoleCode'},'x'), 
+        data : {id:id,rolecode:roleCode}, 
+        async : false, 
+        success : function(data){ 
+        	if(data=='true') {
+        		flag=true;
+        		$("#editRole input[name='roleCode']").addClass("warnning");
+	     		$("#editRole input[name='roleCode']").attr("title","用户标识为["+$("#editRole input[name='roleCode']").val()+"]的角色已存在");
+        	}else{
+        		$("#editRole input[name='roleCode']").removeClass("warnning");
+        		flag=false;
+        	}
+          } 
+        }); 
+	}
+    if(flag){
+    	return false;
+      }
+ });
+ $("#editRole input[name='roleName']").bind('blur',function(){
+	 	var roleName = $(this).val();
+	 	roleName=roleName.replace(/[ ]/g,"");
+	 	var flag=false;
+		if(roleName!=""){
+		$.ajax({ 
+	        type : "post", 
+	        url : $.appClient.generateUrl({ESRole : 'judgeIfExistsRoleName'},'x'), 
+	        data : {id:id,rolename:encodeURI(roleName)}, 
+	        async : false, 
+	        success : function(data){ 
+	        	if(data=='true') {
+	        		flag=true;
+	        		$("#editRole input[name='roleName']").addClass("warnning");
+		     		$("#editRole input[name='roleName']").attr("title","用户名称为["+roleName+"]的角色已存在");
+	        	}else{
+	        		$("#editRole input[name='roleName']").removeClass("warnning");
+	        		flag=false;
+	        	}
+	          } 
+	        }); 
+		}
+	    if(flag){
+	    	return false;
+	      }
+	 });
+ </script>
+ 

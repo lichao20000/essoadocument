@@ -1,0 +1,97 @@
+<?php
+class ProxyEscloudappEscloud_structureModelws extends AgentProxyAbstract
+{
+	/**
+	 * shimiao 20140428 对日志管理做了一些处理
+	 * @var unknown_type
+	 */
+	const SERVICE_NAME = "escloud_structureModelws";
+	/**
+	 * 保存结构模版
+	 * @param unknown_type $map
+	 */
+	public function saveModel($map){
+		$url = "saveModel";
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	
+	public function getModelData($map){
+		$url = "getModelData";
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	public function getTagForModel($map){
+		$url = "getTagForModel";
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	public function saveTagsForModel($map){
+		$url = "saveTagsForModel";
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	public function getModelByTreeNode($map){
+		$url = "getModelByTreeNode";
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 删除模版
+	 */
+	public function deleteModel($params){
+		return $this->post(self::SERVICE_NAME,'deleteModel',$params,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 导出模版
+	 */
+	public function exportModel($params){
+		return $this->post(self::SERVICE_NAME,'exportModel',$params,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 导出tag
+	 */
+	public function exportTags($params){
+		return $this->post(self::SERVICE_NAME,'exportTags',$params,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 删除tag
+	 */
+	public function deleteTags($params){
+		return $this->post(self::SERVICE_NAME,'deleteTags',$params,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取rest服务地址
+	 */
+	public function getRestUrl($url){
+		return $this->getUri(self::SERVICE_NAME, $url);
+	}
+	
+	/** xiaoxiong 20140729 获取分类列表 **/
+	public function getArchiveTypeSetList($map){
+		$url = "getArchiveTypeSetList";
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140729 保存档案分类 **/
+	public function saveArchiveType($map){
+		$url = "saveArchiveType";
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140729 删除档案分类 **/
+	public function dropArchiveType($map){
+		$url = "dropArchiveType";
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140729 获取档案分类 **/
+	public function getArchiveTypes(){
+		$url = "getArchiveTypes";
+		return $this->post(self::SERVICE_NAME,$url,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140729 判断档案分类是否已存在 **/
+	public function isHased($map){
+		$url = "isHased";
+		return $this->post(self::SERVICE_NAME,$url,$map,"application/json;charset=UTF-8");
+	}
+}
+?>

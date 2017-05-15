@@ -1,0 +1,14 @@
+#extraKeyword{
+	width: 96%;
+	margin-left:2%;
+}
+
+.estransfer{width:300px;overflow-y:auto;overflow-x:hidden;height:40px;}
+.estransfer ul{width: 300px;text-align:center;}
+.estransfer ul li{width:270px;float:left;}
+.estransfer span{width:60px;height:26px;line-height:26px;text-align:left;float:left;}
+.estransfer ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.estransfer .esbottom{width:100%;float:left;}
+.estransfer button{width:60px;height:30px;cursor:pointer}
+
+.warnning{border:solid 2px #f00;}

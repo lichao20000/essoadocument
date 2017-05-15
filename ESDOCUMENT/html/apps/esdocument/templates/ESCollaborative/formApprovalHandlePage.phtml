@@ -1,0 +1,190 @@
+<style type="text/css">
+.button {
+	cursor: pointer;
+	padding: 5px;
+	background-color: #6F6E81;
+	color: #FFF;
+	border: 0px none;
+	outline: 0px none;
+}
+
+#nextStepOwer li {
+	float: left;
+	background-color: white;
+	height: 20px;
+	line-height: 20px;
+	width: 100%;
+	margin-top: 0px;
+	margin-left: 0px;
+	padding-left: 3px;
+}
+
+#nextStepOwer li:hover {
+	background: #5599ff;
+	color: #fff;
+}
+
+#nextStepOwer li span {
+	height: 20px;
+	line-height: 20px;
+}
+
+#nextStepOwer li .delPart:hover {
+	background: #5599ff
+		url(<?php echo $tplPath?>/public/flexigrid/css/images/close.png)
+		no-repeat right;
+	cursor: pointer;
+	margin-right: 3px;
+}
+</style>
+<form id="formApprovalHandleForm" action="" method="post" tplPath="<?php echo $tplPath?>">
+	<div class="formStartHanderForm">
+		<ul>
+			<li style="margin-top:0px;display: <?php echo $data[0];?>">
+				<span>选择决策<font color="red" size="3">*</font></span>
+				<?php echo $data[1];?>
+			</li>
+			<li id="selectNextApprovalUsers" style="display: <?php echo $data[0];?>">
+				<span>选择处理部门<font color="red" size="3">*</font></span>
+				<div class="selectOwner"
+					style="width: 250px; border: 0px; float: left; margin-left: 5px;">
+					<div id="nextStepOwer" readonly="true" name=""
+						style="width: 243px; height: 60px; border: 1px solid #aaa; background: #fff; float: left; margin-top: 2px; overflow-x: hidden; overflow-y: auto; text-align: left;"></div>
+					<div
+						style="float: left; width: 243px; height: 30px; margin-top: 5px;">
+						<span class="button addPart" style="padding-right:22px; background:#6F6E81 url(<?php echo $tplPath?>/public/flexigrid/css/images/add.png) no-repeat right; width:30px; height:20px; line-height: 20px;" >&nbsp;添加</span>
+					</div>
+				</div>
+			</li>
+			<li style="display: none;">
+				<div id="nextStepOwners" class="nextStepOwners" currentUserId="">
+				</div>
+			</li>
+			<li style="margin-bottom:10px;">
+			    	<table width="100%" style="border:1px solid #CCCCCC;" bgcolor="#F2F5F8" cellspacing="0" cellpadding="5">
+					    <tr>
+					    	<td width="310">
+					    		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+								    <tr>
+								    	<td style="float:left">
+								    		可选常见意见（单击下列短语即可用）
+								    	</td>
+								    </tr>
+								    <tr>
+								    	<td style="margin-top:5px;margin-left:10px;width:288px;border:1px solid #CCCCCC;padding-left:9px;background-color:#FFF;float:left">
+											<a style="margin-right:9px;" onclick="JavaScript:collaborativeHandle.addInitMsg('同意');">同意</a>
+								    		<a style="margin-right:9px;" onclick="JavaScript:collaborativeHandle.addInitMsg('不同意');">不同意</a>
+								    		<a style="margin-right:9px;" onclick="JavaScript:collaborativeHandle.addInitMsg('已阅');">已阅</a>
+								    		<a style="margin-right:9px;" onclick="JavaScript:collaborativeHandle.addInitMsg('请办理');">请办理</a>
+								    		<a style="margin-right:9px;" onclick="JavaScript:collaborativeHandle.addInitMsg('请签约');">请签约</a>
+								    		<a style="margin-right:10px;" onclick="JavaScript:collaborativeHandle.addInitMsg('请阅示');">请阅示</a>
+										</td>
+									</tr>
+								    	<td>
+											<span>提交意见<font color="red" size="3">*</font></span>
+											<textarea name="msgTextArea" id="msgTextArea" style='width:358px;height:60px;' onkeyup="collaborativeHandle.changeCurrFieldStyle(this)" value=''/>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span>上传的附件</span>
+							</td>
+					    </tr>
+						<tr>
+							<td style="border:1px dashed #CCCCCC;">
+								<table width="100%" border="0" cellspacing="1" cellpadding="2">
+									<tr>
+										<td>
+											<div style="height: 100px;overflow:auto;" >
+										  		<table id="handleWfFileDataTable" filePaths="" fileNames="" width="100%" border="0" cellspacing="0" cellpadding="5" align="left">
+												</table>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</td>
+					    </tr>
+					</table>
+		    	</li>
+		</ul>
+	</div>
+</form>
+<script>
+$(function(){
+	var id=$("input[type='radio']:checked").attr("id");
+	var len="actionRadio".length;
+	if(id!=null){
+		$("#formStartPage").attr("actionId",id.substr(len));		
+		showUsers();
+	}
+	
+	function showUsers(){
+		$.ajax({
+			type:'POST',
+			url:$.appClient.generateUrl({ESCollaborative : 'isLastStep'},'x'), 
+			data:{flowId:$('#formStartPage').attr('flowId'),actionId:$('#formStartPage').attr('actionId')},   		  
+		  	success :function(res){
+	        	var json = eval('(' + res + ')');
+				var isLastStep = json.isLastStep;
+				$('#formStartPage').attr('isLastStep', isLastStep) ;
+				if(isLastStep == 'true'){
+					document.getElementById('selectNextApprovalUsers').style.display = 'none' ;
+				} else {
+					document.getElementById('selectNextApprovalUsers').style.display = '' ;
+				}
+			}
+		});
+	}
+
+	//删除部门事件
+	$("#nextStepOwer li delPart").die().live("click",function(){
+		if($("#nextStepOwer li").length>1){
+			$(this).parent("li").remove();
+		}else{
+			$.dialog.notice({
+				content : '至少要保留一个部门',
+				time : 3,
+				icon : "warning"
+			});
+		}	
+	});
+
+	//添加部门事件
+	$("#formApprovalHandleForm .addPart").die().live("click",function(){
+		$.ajax({
+			type : 'POST',
+			url : $.appClient.generateUrl({
+				ESDocumentTransfer : 'userDefinedPart'
+			}, 'x'),		
+			data:{stepId:$("#nextStepOwer").attr("name")},	
+			success : function(data) {
+				$.dialog({
+					id : 'userDefinedPartDialog',
+					title : '添加下一步处理部门',
+					modal : true, // 蒙层（弹出会影响页面大小）
+					fixed : false,
+					stack : true,
+					resize : false,
+					lock : true,
+					opacity : 0.1,
+					padding : '0px',
+					width : 750,
+					height : 350,
+					content : data,
+					okVal : '确定',
+					ok : true,
+					cancelVal : '关闭',
+					cancel : true,
+					ok : function() {
+						art.dialog.list['userDefinedPartDialog'].close();
+					}
+				});
+			},
+			cache : false
+		});
+	});
+});
+</script>

@@ -1,0 +1,97 @@
+li,ul{list-style-type:none;}
+a{ text-decoration:none;}
+img{ border:0;}
+.fb{background:red}
+.image-block{color:#999;display:inline-block;line-height:20px;margin-bottom:0px;margin-left:0px;margin-right:6px;margin-top:0px;outline-color:invert;outline-style:none;outline-width:medium;overflow:hidden;position:relative;text-align:left;text-decoration:none;word-wrap:break-word;float:left;}
+.image-block .image{background-attachment:scroll;background-clip:border-box;background-color:transparent;background-image:url(../img/toolbar-icons.gif);background-origin:padding-box;background-position-x:0;background-position-y:-21px;background-repeat:no-repeat;background-size:auto;color:#999;display:inline-block;height:20px;line-height:20px;margin-left:2px;overflow:hidden;text-align:left;vertical-align:middle;width:16px;word-wrap:break-word;width:20px;}
+.image-block:hover{ color:red; background-position:-61px -21px;}
+.image-block input{top:-5px;right:-5px;font-size:16px;position:absolute;cursor:pointer;outline-width:medium;outline-style:none;outline-color:invert;}
+.root-window{ width:96%;margin-left:2%; overflow:auto; background:#EDEDEF url(../img/arena-free-me-bg.gif) repeat-x}
+.arena-free-me{ width:700px;  min-height:600px; margin:0 auto; padding:20px 120px; overflow:auto;}
+.arena-free-me .say-me{ width:700px; height:auto; overflow:hidden; float:left;}
+.arena-free-me .say-me .head{ width:700px; height:30px; float:left;margin-bottom:12px;}
+.arena-free-me .say-me .head h2{ width:200px; line-height:30px; font-weight:normal; font-size:15px; float:left; font-family:΢���ź�,����,����,airal; color:black;}
+.arena-free-me .say-me .cont{ width:684px;color:black; min-height:36px; height:auto; line-height:24px; font-size:14px; font-family:΢���ź�,����,����,airal; float:left; padding:3px 6px 22px; border:1px solid #ccc; border-radius:3px; box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2) inset; word-wrap:break-word;}
+.arena-free-me .say-me .cont:hover{ border:1px solid #133959;}
+.arena-free-me .say-me .cont:focus{ border:1px solid #133959; }
+.arena-free-me .say-me .toolbar{ width:700px; height:30px; float:left; margin-top:5px; position:relative;}
+.arena-free-me .say-me .toolbar a.insert-face,
+.arena-free-me .say-me .toolbar a.insert-image,
+.arena-free-me .say-me .toolbar a.insert-tag,
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-button a.insert-face,
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-button a.insert-image,
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-button a.insert-tag{ height:20px; line-height:20px; float:left; padding:0 5px 0 20px; color:#aaa; background:url(../img/toolbar-icons.gif) no-repeat;}
+.arena-free-me .say-me .toolbar a.insert-face,
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-button a.insert-face{ background-position:0 0;}
+.arena-free-me .say-me .toolbar a.insert-face:hover,
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-button a.insert-face:hover{ color:red; background-position:-61px 0;}
+.arena-free-me .say-me .toolbar a.insert-image{ background-position:0 -20px;}
+.arena-free-me .say-me .toolbar a.insert-image:hover{ color:red; background-position:-61px -20px;}
+.arena-free-me .say-me .toolbar a.insert-tag{background-position:0 -40px;}
+.arena-free-me .say-me .toolbar a.insert-tag:hover{ color:red; background-position:-61px -40px;}
+.arena-free-me .say-me .toolbar a.submit-say,
+.arena-free-me .say-me .toolbar a.clear-say{ width:50px; height:24px; line-height:24px; text-align:center; color:#fff; float:right; margin-right:10px;}
+.arena-free-me .say-me .toolbar a.submit-say{ background:#C91617;}
+.arena-free-me .say-me .toolbar a.submit-say:hover{ font-weight:bold;}
+.arena-free-me .say-me .toolbar a.clear-say{ background:#777;}
+.arena-free-me .say-me .toolbar a.clear-say:hover{ font-weight:bold;}
+.arena-free-me .say-me .toolbar .notice-write-text{ width:100px; height:22px; line-height:22px; text-align:center; color:#666; position:absolute; top:-28px; right:5px;}
+.arena-free-me .arena-toolbar{ width:700px; height:26px; float:left; border-bottom:2px solid #999; position:relative;}
+.arena-free-me .arena-toolbar ul{ width:700px; height:28px; float:left; position:absolute;}
+.arena-free-me .arena-toolbar ul li{ float:left;margin-top:-12px;}
+.arena-free-me .arena-toolbar ul li.first{ width:20px; height:26px;}
+.arena-free-me .arena-toolbar ul li a{ height:24px; line-height:24px; color:#39d; font-weight:bold; float:left; border-bottom:2px solid #999; border-top:2px solid #fff; padding:0 15px;}
+.arena-free-me .arena-toolbar ul li a:hover, .arena-free-me .arena-toolbar ul li a.loading{ border-width:2px 1px; border-style:solid; border-color:#999 #999 #fff #999; border-radius:3px 3px 0 0;}
+.arena-free-me .arena-main{ width:700px; height:auto; overflow:hidden; float:left; margin-top:20px;}
+.arena-free-me .arena-main .messages{ width:660px; height:auto; overflow:hidden; float:left;}
+.arena-free-me .arena-main .messages .face{ width:48px; height:48px; float:left; border:1px solid #ddd; }
+.arena-free-me .arena-main .messages .face a{ width:46px; height:46px; float:left; overflow:hidden; border:1px solid #fff;}
+.arena-free-me .arena-main .messages .message-box{ width:585px; height:auto; overflow:hidden; float:right; padding-left:15px;margin-bottom:20px; background:url(../img/toolbar-icons.gif) no-repeat -274px 5px;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox{ width:595px; height:auto; overflow:hiden; float:left; margin-bottom:10px; background:#ddd;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .title{ width:580px; height:24px; line-height:24px; font-size:13px; font-weight:bold; text-indent:5px; color:#000; overflow:hidden; float:left;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .text{ word-wrap:break-word;width:570px; height:auto; line-height:22px; font-size:13px; color:#333; overflow:hidden; float:left; padding:0 5px;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .info{ width:580px; height:30px; overflow:hidden; float:left;line-height:30px;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .info a{ line-height:20px; color:#39d; float:right; margin:5px 5px 0 0; border-radius:5px;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .info span{ line-height:20px; color:#39d; float:right; margin:5px 5px 0 0; border-radius:5px;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .info a:hover{ color:#00f;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .info u{ float:left; margin-right:5px; line-height:30px; text-decoration:none; color:#555;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .info i{ float:left; margin-left:15px; line-height:30px; font-style:normal; color:#39d;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .replys{ width:540px; height:auto; overflow:hidden; float:left;padding-left: 10px;margin-left:10px;margin-top:5px; _display:inline; background:#f9f9f9;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .replys .re-title{ width:540px; height:24px;  line-height:24px; font-size:13px; font-weight:normal; text-indent:5px; color:#555; overflow:hidden; float:left;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .replys .re-text{ width:530px; height:auto; line-height:22px; font-size:13px; color:#555; overflow:hidden; float:left; padding:0 5px;word-wrap:break-word}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .replys .re-info{ width:540px; height:30px; overflow:hidden; float:left;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .replys .re-info i{ line-height:30px; color:#666; font-style:normal; float:right; margin-right:10px;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .replys .re-info span{ line-height:20px; color:#39d; float:right; margin:5px 5px 0 0; border-radius:5px;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .replys .re-info u{ line-height:30px; color:#666; text-decoration:none; float:right; margin-right:10px;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .replys .re-info a{ line-height:20px; color:#39d; float:right; margin:5px 5px 0 0; border-radius:5px; _display:inline;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .replys .re-info a:hover{ color:#00f;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg{ width:580px; height:auto; overflow:hidden; float:left; margin-left:10px; padding-top:10px; background:url(../img/reply-icon.gif) no-repeat right 0; _display:inline;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box{ width:580px; height:auto; overflow:hidden; float:left; background:#fff;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-content{ color:black;width:570px; min-height:36px; height:auto; line-height:24px; font-size:14px; font-family:΢���ź�,����,����,airal; float:left; margin:5px; padding:2px 4px 22px; border:1px solid #ccc; word-wrap:break-word; _display:inline;overflow-y: scroll;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-content:hover,
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-content:focus{ border:1px solid #FF5A5A;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-button{ width:600px; height:30px; float:left; margin-left:5px; _display:inline; position:relative;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-button a.reply-submit-button{ width:50px; height:20px; line-height:20px; text-align:center; color:#fff; float:right; background:#FF5A5A;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-button a.reply-submit-button:hover{ background:#f00;}
+.arena-free-me .arena-main .messages .message-box .messageContainerBox .reply-box-bg .reply-box .reply-box-button .notice-write-text{ width:100px; height:22px; line-height:22px; text-align:center; color:#666; position:absolute; top:-28px; right:5px;}
+.top-bg{ width:940px; height:5px; margin:20px auto 0; background:url(../img/top-bg.gif);}
+.center-bg{ background:url(../img/center-bg.gif);}
+.bottom-bg{ width:940px; height:5px; margin:0 auto; background:url(../img/bottom-bg.gif) no-repeat 0 -5px;}
+/*-------�����б���ʽstart----------*/
+#imageList{width:420px;z-index:300;position:absolute;border:1px solid #dfdfdf;display:none;background:#fff;padding-bottom:5px;}
+#imageList .tooolbar{width:420px;background:rgb(248, 250, 252);height:30px;position:absolute;}
+#imageList .tooolbar .common{font-family:Arial, Helvetica, sans-serif;color:#535353;font-size:12px; line-height:30px;height:30px;margin-left:5px;float:left}
+#imageList .tooolbar .close{margin-top:5px;width:20px;heigth:20px;line-height:20px;cursor:pointer;float:right;margin-right:5px;background:  url(../img/del.png) no-repeat;}
+#imageList .tooolbar .close:hover{background:url(../img/del.png)no-repeat 0 -50px; }
+#imageList li{width:24px;heigth:24px;float:left;cursor:pointer;margin-left:2px;margin-right:2px;margin-top:5px;}
+#imageList .layer_arrow{background:url(../img/layer_arrow.png) no-repeat;margin-left:45px;margin-top:-11px;width:16px;height:11px;postion:absolute;background-attachment:scroll;overflow:hidden}
+/*-------�����б���ʽend----------*/
+/*-------���ض�����ť��ʽstart----------*/
+#backtop{width:42px;height:42px;background-attachment:scroll;cursor:pointer;background:url(../img/ico-back-top.png);z-index:200;right: 20px; bottom: 30px; position: fixed;display:none; _position:absolute; _bottom:auto; _top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0))); _margin-bottom:30px;}
+#backtop:hover{background:url(../img/ico-back-top.png)-51px 0 no-repeat}
+/*-------���ض�����ť��ʽend----------*/
+/*-------�鿴ͼƬ��ʽstart-------*/
+.imgzoom{cursor:url(/apps/escloudapp/templates/ESDiscuss/img/cursor_zoom.cur), pointer;}
+.imgminify{cursor:url(/apps/escloudapp/templates/ESDiscuss/img/cursor_minify.cur), pointer;}
+/*-------�鿴ͼƬ��ʽend-------*/
+.offline{filter: Alpha(opacity=10);-moz-opacity:.1;opacity:0.1;}

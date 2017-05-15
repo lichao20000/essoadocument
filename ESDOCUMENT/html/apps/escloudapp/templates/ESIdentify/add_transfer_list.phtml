@@ -1,0 +1,171 @@
+<style type='text/css'>
+</style>
+<form id='NewTransferData'>
+	<div class='estransfer' style='height:auto; overflow:hidden;'>
+		<ul>
+			<li>
+				<span>移交人</span>
+				<input type='text' name='username' readonly='readonly' value='<?php echo $personal;?>' />
+				<input type='hidden'  name='userid'  value='<?php echo $userid;?>' readonly/>
+			</li>
+			<li>
+				<span>移交日期</span>
+				<input type='text' id='times' readonly='readonly' class='Wdate' name='transferTimes' value='<?php echo date('Y-m-d');?>' />
+			</li>
+			<li>
+			<span>移交部门</span>
+				<input type='text' name='orgname'  id ='transferDepartment' readonly='readonly' value='<?php echo $transferOrg;?>' />
+				<input type='hidden'  name='orgid' id ='orgcode' value='<?php echo $deptCode;?>' readonly/>
+				<a style="display:none;" onclick="$('#transferDepartment,#orgcode').val('');return false;" href="#" title="清空"><img src="/apps/escloudapp/templates/public/flexigrid/css/images/cross.png" border="0" style="position: absolute;margin-left: -20px;margin-top: 4px;"></a>
+			</li>
+			<li>
+			<span>文件种类</span>
+				<select name="DocumentType" onmouseover="getDocumentTypeList();">
+					
+				</select>	
+			</li>			
+			<li>
+			<span>档案类型</span>
+				<input type='hidden' name='type' />
+				<input type='text' id='autotype' readonly='readonly' />
+			</li>
+			<li>
+				<span>移交数量</span>
+				<input type='text' name='numbers' readonly='readonly' style='background:#ddd' />
+			</li>
+			<li>
+				<span><?php echo $startName;?></span>
+				<?php echo $startVal;?>
+			</li>
+			<li>
+				<span><?php echo $endName;?></span>
+				<?php echo $endVal;?>
+			</li>
+			<li style='width:100%'>
+				<span>备注</span>
+				<textarea name='remark'></textarea>
+			</li>
+		</ul>
+	</div>
+</form>
+<!-- 
+<select name='type'>
+	<option value='document'>文书档案</option>
+	<option value='contract'>合同档案</option>
+	<option value='project'>工程档案</option>
+	<option value='accounting'>会计档案</option>
+	<option value='purchase'>采购档案</option>
+	<option value='technical'>科技档案</option>
+	<option value='carrierfiles'>多种载体档案</option>
+	<option value='personal'>员工档案</option>
+	<option value='auditfiles'>审计档案</option>
+</select>
+-->
+<div class="escatagory" id='catagory'>
+<ul id="fication" class="ztree"></ul>
+</div>
+<script type='text/javascript'>
+var tempName=archiveName;
+var position=tempName.search(/\[/);
+if(position!=-1){
+	tempName=tempName.slice(0,position);
+}
+$('#autotype').val(tempName);
+
+if(archiveType === 'accounting'){
+	$('#accountingYear').live('click', function (){WdatePicker({isShowClear:false,dateFmt:'yyyy'});});
+}else{
+	$('#starttime,#endtime').live('click', function (){WdatePicker({dateFmt:'yyyy-MM-dd'});});
+}
+
+$('#NewTransferData input[name="type"]').val(archiveType);
+//获取移交部门列表
+var setting = {
+					view: {
+						dblClickExpand: false,
+						showLine: false
+					},
+					data: {
+						simpleData: {
+							enable: true
+						}
+					},
+					async: {
+						enable: true,
+						dataType: 'json',
+						url: $.appClient.generateUrl({ESArchiveLending:'getSubOrgList'},'x'),
+						autoParam: ["id"]
+					},
+					callback: {
+						onClick : nodeClick
+					}
+				};
+		$(document).ready(function(){
+			$.getJSON(
+				$.appClient.generateUrl({ESArchiveLending : "initOrg",flag:true}, 'x'),
+				function(zNodes) {
+					$.fn.zTree.init($("#fication"), setting, zNodes);
+				}
+			);
+
+		});
+		function nodeClick(event, treeId, node){
+			
+			$("#transferDepartment").val(node.name);
+			$("#orgcode").val(node.id);
+		};
+
+		$("#transferDepartment").focus(function(){
+				var offset=$(this).offset();
+				$('#catagory').show().offset({top:offset.top+24,left:offset.left});
+				$("body").bind("mousedown", clickBodyDown);
+				
+		}).hover(
+			function() {
+				if($(this).val() != '') {
+					$(this).next().next().hover(
+						function() {
+							$(this).show();
+						},
+						function() {
+							$(this).hide();
+						}
+					).show();
+				}
+			},
+			function() {
+				$(this).next().next().hide();
+			}
+		);
+function getDocumentTypeList(obj) {
+	if($('select[name="DocumentType"]').children('option').length == 0) {
+		/*$.get($.appClient.generateUrl({ESIdentify:'getDocumentTypeList',path:nodePath},'x'),function(data) {
+			if(data.status == 200) {
+				var html = '<option title="可以为空" value=""></option>';
+				for(var i=0; i < data.data.length; i++) {
+					html += '<option title="'+data.data[i]+'" value="'+data.data[i]+'">'+data.data[i].substr(0,10)+'</option>';
+				}
+				$('select[name="DocumentType"]').append(html);
+			}
+		});*/
+
+		$.ajax({
+			url: $.appClient.generateUrl({ESIdentify:'getDocumentTypeList',path:nodePath},'x'),
+			type: 'GET',
+			dataType: 'JSON',
+			async: false,
+			success: function(data) {
+				if(data.status == 200) {
+					var html = '<option title="可以为空" value=""></option>';
+					for(var i=0; i < data.data.length; i++) {
+						html += '<option title="'+data.data[i]+'" value="'+data.data[i]+'">'+data.data[i].substr(0,10)+'</option>';
+					}
+					$('select[name="DocumentType"]').append(html);
+				} else {
+					$('select[name="DocumentType"]').append('<option value=""></option><option value="" disabled>没有查询到文件种类</option>');
+				}
+			}
+		});
+	}
+}
+</script>

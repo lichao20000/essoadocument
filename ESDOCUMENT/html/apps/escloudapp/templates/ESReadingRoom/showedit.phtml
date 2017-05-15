@@ -1,0 +1,34 @@
+<div class="file" style="">
+			<textarea disabled='disabled' id="oneditor" class="oneditor" name="myeditor"><?php echo $content;?></textarea>
+</div>
+<script type="text/javascript">
+var editor ;  
+if(!CKEDITOR.instances.oneditor){  //判定content2是否存在  
+     editor= CKEDITOR.replace("oneditor",{
+		toolbar:[    				],
+		height : '300', // 编辑器高度
+		width:'800',
+		CheckBrowser : true, // 是否在显示编辑器前检查浏览器兼容性,默认为true
+		resize_enabled : true,
+		removePlugins:'elementspath' //移除底部路径显示栏
+	});
+ 	$('#cke_top_oneditor').css("display","none");
+}else{
+       addCkeditor("oneditor");  
+}
+function addCkeditor(id){  
+    var editor2 = CKEDITOR.instances[id];  
+    if(editor2) editor2.destroy(true);//销毁编辑器 content2,然后新增一个  
+        editor = CKEDITOR.replace(id,{
+    		toolbar:[
+    				],
+    		height : '300', // 编辑器高度
+    		width:'800',
+    		CheckBrowser : true, // 是否在显示编辑器前检查浏览器兼容性,默认为true
+    		resize_enabled : true,
+    		removePlugins:'elementspath'
+    		
+    	});  
+        $('.cke_top').html("编研内容");
+}
+</script>

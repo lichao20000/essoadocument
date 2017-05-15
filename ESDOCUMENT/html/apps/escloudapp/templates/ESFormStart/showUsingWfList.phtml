@@ -1,0 +1,10 @@
+<div id='selectUsingWfPanel'>
+	<?php
+		echo '<select id=\'searchUsingWfSelect\'>';
+		foreach ($data as $key)
+			{
+					echo '<option value="'.$key->formid.'" >'.$key->workflowname.'</option>';
+			}
+		echo '</select>';
+	?>
+</div>

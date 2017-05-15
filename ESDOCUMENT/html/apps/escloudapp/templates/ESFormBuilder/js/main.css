@@ -1,0 +1,84 @@
+/* jiang add 20091118 form field style */
+.floatLeft {
+	float: left;
+	padding: 0 0 0 25px;
+}
+.allowFloat {
+	clear: none !important;
+}
+.stopFloat {
+	clear: both !important;
+}
+
+/* end */
+.typeBoolTrue {
+	color:green;
+}
+.typeBoolFalse {
+	color:red;
+}
+.typeObject {
+	color: blue;
+	font-style: italic;
+}
+.resizeLayer {
+	background:red;
+	text-align:center;
+	font:bold 10px arial;
+	overflow:hidden;
+}
+.component {
+	-moz-border-radius:3px;
+	height: 16px;
+	width: 63px;/* 69px;*/
+	border: solid #CEE3F6 1px;
+	text-align:center;
+	color:black;
+	font:normal 12px arial;
+	background: #FFFFFF  repeat-x scroll center bottom;
+	overflow:hidden;
+	display:block;
+	cursor:pointer;
+}
+#FormBuilderComponentSelector .component {
+	margin: 5px;
+	float: left;
+}
+#FormBuilderComponentSelector .component.over {
+	border-color:navy;
+}
+/*jiang modify20091127*/
+#FormBuilderComponentSelector .component.selected {
+	border-color:#00bb33;
+}
+
+.selectedElementParent *, .selectedElementParent {
+	background:#ccf;
+}
+.selectedElement *, .selectedElement {
+	background:#ffc;
+}
+
+.formbuilder_icon-reset { background-image:url(icons/asterisk_orange.png) !important; }
+.icon-help { background-image:url(icons/help.png) !important; }
+.icon-time { background-image:url(icons/time.png) !important; }
+.icon-delete { background-image:url(icons/delete.png) !important; }
+.icon-add { background-image:url(icons/add.png) !important; }
+
+.formbuilder_icon-el { background-image:url(icons/application.png) !important; }
+.icon-deleteEl { background-image:url(icons/application_delete.png) !important; }
+.icon-addEl { background-image:url(icons/application_add.png) !important; }
+.icon-dupEl { background-image:url(icons/application_double.png) !important; }
+.icon-editEl { background-image:url(icons/application_edit.png) !important; }
+
+.formbuilder_icon-undo { background-image:url(icons/arrow_undo.png) !important; }
+.formbuilder_icon-update { background-image:url(icons/arrow_refresh.png) !important; }
+.icon-resize { background-image:url(icons/arrow_inout.png) !important; }
+.formbuilder_save {background-image:url(icons/save.gif) !important;}
+.formbuilder_book_link {background-image: url(icons/book_link.png) !important;}
+.formbuilder_cross {background-image:url(icons/cross.gif) !important;}
+
+
+
+
+/* vim600: set foldenable foldmethod=marker foldmarker={,} foldlevel=1 : */

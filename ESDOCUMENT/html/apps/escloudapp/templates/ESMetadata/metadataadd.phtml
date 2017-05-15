@@ -1,0 +1,365 @@
+<style type="text/css">
+#basic .isearch{width:186px;height:20px;}
+</style>
+
+<div style="width:650px;height:340px;">
+  <div style="border-bottom:5px solid #133959;">
+    <ul class="subnav">
+      <li class="back"><a href="javascript:show();">基本信息</a></li>
+      <li><a href="javascript:hidden();">属性</a></li>
+    </ul>
+    <div class="clear"></div>
+  </div>
+  <div id="basic" style="margin-left:9px;height:340px;">
+ <div class="clear"></div>
+  <input type="button" id="subsave" value="保存" />
+  <form id="subadd" action="">
+  <div style="padding-left: 20px;">
+  <table>
+    <tr> 
+      <td class="st"><span>名称</span></td>
+      <td class="sts"><input  type="text" name="name" verify="metaTitle/256/1/0" value="<?php echo isset($list[0]['estitle'])?$list[0]['estitle']:"";?>" ></td>
+      <td class="st"><span >类型</span></td>
+      <td class="sts">
+      <select class="isearch" name="type">
+      <!-- guolanrui 20140812 将元数据类型显示成中文 BUG：723  -->
+	      <option <?php $type = isset($list[0]['estype'])?$list[0]['estype']:"";if ($type=="TEXT")echo 'selected="selected"';?> value="TEXT">文本</option>
+	      <option <?php if ($type=="NUMBER")echo 'selected="selected"';?> value="NUMBER">数值</option>
+	      <option <?php if ($type=="DATE")echo 'selected="selected"';?> value="DATE">日期</option>
+	      <option <?php if ($type=="FLOAT")echo 'selected="selected"';?> value="FLOAT">浮点</option>
+	      <option <?php if ($type=="TIME")echo 'selected="selected"';?> value="TIME">时间</option>
+	      <option <?php if ($type=="BOOL")echo 'selected="selected"';?> value="BOOL">布尔</option>
+      </select></td>
+    </tr>    
+    <tr >
+      <td class="st"><span>唯一标识</span></td>
+      <!-- xiaoxiong 20140819 在编辑时，唯一标示是不允许修改的 -->
+      <td class="sts"><input  type="text" name="identfy" verify="metaIdentify/128/1/0" <?php echo isset($list[0]['esidentifier'])?"readonly":"";?> value="<?php echo isset($list[0]['esidentifier'])?$list[0]['esidentifier']:"";?>" ></td>
+      <td class="st"></td>
+      <td class="sts"></td>
+    </tr>
+    <!-- guolanrui 20140811 去掉原来的档案类型BUG：692 -->
+    <tr>
+      <td class="st"><span>描述</span></td>
+      <td colspan="3" ><textarea id="discribe" verify="metaDescription/512/0/0" name="discribe"><?php echo isset($list[0]['esdescription'])?$list[0]['esdescription']:"";?></textarea></td>
+    </tr>
+  </table>
+  </div>
+  <input type="hidden" name="id" value="<?php echo isset($list[0]['id'])?$list[0]['id']:"";?>" />
+  <input type="hidden" name="idnamespace" value="<?php echo isset($list[0]['idNamespace'])?$list[0]['idNamespace']:"";?>" />
+  </form>
+  </div>
+  <!-- 属性div -->
+  <script>
+	var metaid=$("input[name='id']").val();
+	//var uri3=$.appClient.generateUrl({ESMetadata:'rules_json',id:id});
+  </script>
+  <div id="attribute" style="display:none;">
+  <table id="attributetable">
+		
+</table>
+<script type="text/javascript">
+    operate = "<?php echo $operate;?>";
+    addid = 0;
+    $('#subadd').autovalidate();
+	function show()
+	  {
+			$(".subnav li:eq(1)").removeClass("back");
+		    $(".subnav li:eq(0)").addClass("back");
+		  	document.getElementById("basic").style.display = "block";
+		  	document.getElementById("attribute").style.display = "none";  
+	  }
+	  function hidden()
+	  {
+		  	$(".subnav li:eq(0)").removeClass("back");
+		  	$(".subnav li:eq(1)").addClass("back");
+		  	document.getElementById("basic").style.display = "none";
+		  	document.getElementById("attribute").style.display = "block"; 
+		  	$('#attributetable').flexOptions({newp: 1}).flexReload(); 
+	   }
+	   
+
+	  $("#subsave").click(
+			function(){
+				/** guolanrui 20140814 添加对特殊符号的正则验证，不允许输入特殊符号 BUG:684 **/
+				var form=$('#subadd');
+				if (!form.validate()) {
+					return false;
+				}
+				/** guolanrui 20140902 添加对元数据名称是否已存在的验证BUG：864 **/
+				var metaId = $("#subadd input[name=id]").val();
+				var mataname = "<?php echo $metaname;?>";
+				var unMataname = $("#subadd input[name=name]").val();
+				
+				var unn = "<?php echo $unique;?>";
+				var unique = $("#subadd input[name=identfy]").val();
+				//guolanrui 将名称与唯一标示是否重复一起校验，节省请求次数
+				var url = $.appClient.generateUrl({ESMetadata:'checkMetaIsUnique'},'x');
+				$.get(url,{namespaceid:1,unique:unique,unMataname:unMataname,metaId:metaId},function(result){
+					var esTitleIsExists = result.esTitleIsExists;
+					var esIdentifierIsExists = result.esIdentifierIsExists;
+// 					alert(esTitleIsExists +'     '+esIdentifierIsExists);
+					if(!esTitleIsExists && !esIdentifierIsExists){
+						doornot();
+					}else{
+						if(esTitleIsExists){
+							$.dialog.notice({icon:'warning',content:'元数据名称重复',time:3});
+							return;
+						}
+						if(esIdentifierIsExists){
+							$.dialog.notice({icon:'warning',content:'元数据唯一标识重复',time:3});
+							return;
+						}	
+					}	
+				},'json');
+
+			 }
+		);
+		function doornot(){
+			var namespaceid = $("#extra input[name=namespaceid]").val();
+			var form=$('#subadd');
+			var datas=form.serializeArray(),dleng = datas.length,data = {};
+				data.docClass = [];
+				for(var i=0; i<dleng; i++)
+				{
+					var docClass = datas[i]['name'];
+					if(docClass.indexOf(',') !== -1){
+						var dc = datas[i]['value'];
+							if(!dc){
+								continue;
+							}
+							dc.replace(/#/g, '');
+							dc.replace(/,/g, '');
+							
+							data.docClass.push(docClass.split(',')[1]+'#'+dc);
+							continue;
+					}
+					
+					data[datas[i]['name']] = datas[i]['value'];
+				}
+
+				data.docClass = data.docClass.join(',');
+					
+		    var url = "<?php echo $esaction->generateUrl(Array('ESMetadata'=>'addsub'),'x');?>";
+		   
+		    
+			$.ajax({
+				url:url,
+				type: "POST",
+				data:{
+					namespaceid:1,
+					param:data
+				},
+				dataType:"json",
+				error:function(){
+					$.dialog.notice({icon:'error',content:'服务器连接失败',time:3});
+				},
+				success:function(datas){
+					if(datas!=null){
+						if(operate=="add"){
+							addid = datas.id;
+						}
+						if(operate=="edit"){
+							addid=0;
+						}
+// 						alert(addid);
+						/** guolanrui 20140812 添加完元数据后重新给uri3赋值，否则添加属性的时候无法刷出数据 **/
+						uri3 = $.appClient.generateUrl({ESMetadata:'rules_json',id:addid});
+						$('#flexme2').flexOptions().flexReload();
+						if(addid>0)$('#attributetable').flexOptions({url: uri3}).flexReload();
+						$.dialog.notice({icon:'succeed',content:'操作成功',time:3});
+					}else{
+						$.dialog.notice({icon:'error',content:'添加失败，请重试',time:3});
+					}
+				}
+			});
+			
+		}
+		$("#attributetable").flexigrid({
+			url: uri3,
+			dataType: 'json',
+			colModel : [
+				{display: '<input type="checkbox" name="ids3" />', name : 'id3', width : 40, align: 'center'},
+				{display: '操作', name : 'c3', width : 80, sortable : true, align: 'center'},
+				{display: '属性值', name : 'c4', width : 100, sortable : true, align: 'center'},
+				{display: '代码值', name : 'c5', width : 100, sortable : true, align: 'center',hide:true},
+				{display: '描述', name : 'c6', width : 100, sortable : true, align: 'center'}
+				],
+			buttons : [
+				{name: '添加', bclass: 'add',onpress: attributeadd},
+				{name: '删除', bclass: 'delete',onpress:delattr}
+				],
+//			searchitems : [
+//				{display: 'ISO', name : 'iso'},
+//				{display: 'Name', name : 'name', isdefault: true}
+//				],
+			sortname: "c3",
+			sortorder: "asc",
+			usepager: true,
+			title: '元数据属性',
+			useRp: true,
+			rp: 10,
+			rpOptions:[10,20,30],
+			procmsg:"正在加载，请稍等",
+			nomsg:"没有数据",
+			showTableToggleBtn: true,
+			pagetext: '第',
+			outof: '页 /共',
+			width: 650,
+			height: 197,
+			pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+			});
+		function attributeadd()
+		{
+			if(operate=="add"&&addid==0){
+				$.dialog.notice({icon:'warning',content:'您还未添加基本信息',time:2});
+				return;
+			}
+			var url = $.appClient.generateUrl({ESMetadata:'attributeadd'},'x');
+			$.ajax({
+			    url:url,
+			    success:function(data){
+			    	diaa=$.dialog({
+			    		id:'name5',
+				    	title:'添加属性',
+			    		width: 500,
+			    	    height: 150,
+			    	   	fixed:true,
+			    	    resize: false,
+				    	content:data,
+				    	padding:0,
+				    	ok:true,
+						okVal:'确定',
+						cancel:true,
+						cancelVal:'取消',
+						init : function() {
+							$('#attrform').autovalidate();
+						},
+						ok:function(){
+
+							if(operate=="add"){
+								var form=$('#attrform');
+								if (!form.validate()) {
+									return false;
+								}
+								/** guolanrui 20140814 添加对特殊符号的正则验证，不允许输入特殊符号 BUG:684 **/
+								//TODO
+								
+								var data=form.serialize();
+								$.ajax({
+									url:$.appClient.generateUrl({ESMetadata:'addattr'},'x'),
+									type: "POST",
+									data:{
+										metaid:addid,
+										param:data
+									},
+									dataType:"json",
+									error:function(){
+										$.dialog.notice({icon:'error',content:'添加失败，请重试',time:3});
+									},
+									success:function(datas){
+										if(datas==true){
+											
+//											$('#attributetable').flexOptions({newp: 1}).flexReload();
+											$('#attributetable').flexOptions().flexReload();
+											$.dialog.notice({icon:'succeed',content:'操作成功',time:3});
+											diaa.close();
+											/** guolanrui 20140812 修改原来添加元数据后为其添加一条属性值保存后直接将元数据添加窗口关闭了的BUG：704 **/
+//											diac.close();
+										}else{
+											$.dialog.notice({icon:'error',content:'添加失败，请重试',time:3});
+										}
+										
+									}
+								});
+							}
+							if(operate=="edit"){
+
+								var form=$('#attrform');
+								if (!form.validate()) {
+									return false;
+								}
+								/** guolanrui 20140814 添加对特殊符号的正则验证，不允许输入特殊符号 BUG:684 **/
+								//TODO
+								
+								var data=form.serialize();
+								var id = metaid;
+								$.ajax({
+									url:$.appClient.generateUrl({ESMetadata:'addattr'},'x'),
+									type: "POST",
+									data:{
+										metaid:id,
+										param:data
+									},
+									dataType:"json",
+									error:function(){
+										$.dialog.notice({icon:'error',content:'保存失败，请重试',time:3});
+									},
+									success:function(datas){
+										if(datas==true){
+//											$('#attributetable').flexOptions({newp: 1}).flexReload();
+//											$('#attributetable').flexOptions({url: uri3}).flexReload();
+											$('#attributetable').flexOptions().flexReload();
+											$.dialog.notice({icon:'succeed',content:'操作成功',time:3});
+											diaa.close();
+											//diac.close();
+										}else{
+											$.dialog.notice({icon:'error',content:'保存失败，请重试',time:3});
+										}
+										
+									}
+								});
+							}
+						}
+						
+				    });
+			    	
+				    },
+				    cache:false
+			});	
+		}
+		function delattr(){
+			var id='';
+			var checkboxObj=$("input[name='id3']:checked");
+			if(checkboxObj.length =='0' || checkboxObj.length==='undefined')
+			{
+				
+				$.dialog.notice({content:'请选择要删除的数据',time:3,icon:"warning"});
+				return false;
+			}else{
+				//遍历选中的数据
+				checkboxObj.each(function(i){
+					id+=$(this).val()+',';
+					});
+				}
+			//alert(id);
+			
+			if(id=='' || id==='undefined' || id==0)
+			{
+				return false;
+			}		
+			$.dialog({
+					content:'确定要删除吗?',
+					ok:true,
+					okVal:'确定',
+					cancel:true,
+					cancelVal:'取消',
+					ok:function(){
+						var url=$.appClient.generateUrl({ESMetadata:'delattr'},'x');
+						
+						$.get(url,{id:id},function(data){
+							if(data==1){
+								$("input[name='ids3']").attr("checked",false);
+								$.dialog.notice({icon:'succeed',content:'数据删除成功',time:3,title:'3秒后自动关闭'});
+								$('#attributetable').flexOptions({newp: 1}).flexReload();
+							}
+							});
+						
+					}
+				});
+			
+		}
+</script>
+</div>
+  
+</div>

@@ -1,0 +1,312 @@
+<?php
+class AppDesktop extends AppPackageAbstract
+{
+  public function urls()
+  {
+    return array(
+      'default' => 'default',
+      'layout' => 'layout',
+      'setting' => 'setting',
+      'recovery' => 'recovery',
+    );
+  }
+
+  protected function getDefaultLayout($layoutName) {
+    $mysql = $this->getProxy('mysql');
+    $sql = 'SELECT data FROM `default_layout` WHERE `machine_name` = "' . $layoutName . '"';
+    $result = $mysql->fetchField($sql);
+    if ($result) {
+      return unserialize($result);
+    }
+    return '';
+  }
+
+  public function getView(){
+    return $this;
+  }
+
+  public function render($tpl,  $args = array()){
+    global $user;
+
+    if(!isset($user->appcanvasstatus_desktop)) {
+      $user->appcanvasstatus_desktop = $this->invoke('setting', 'getDefaultAppCanvasStatus' ,'desktop');
+    }
+    $args['appcanvasstatus_desktop'] = $user->appcanvasstatus_desktop;
+
+    return parent::getView()->render($tpl, $args);
+  }
+
+  protected function getLayout()
+  {
+    $userId = $this->getContext()->getUser()->getId();
+    $mysql = $this->getProxy('mysql');
+    $sql = 'SELECT data FROM `layouts` WHERE `uid` = "' . $userId . '"';
+    $result = $mysql->fetchField($sql);
+    if ($result) {
+      $data = unserialize($result);
+    } else {
+      //$isLeader = $this->getContext()->getUser()->checkRole('vip');
+      $isLeader = $GLOBALS['user']->isLeader == 'true';
+      $layoutName  = $isLeader ? 'leader_space' : 'my_space';
+      $data = $this->getDefaultLayout($layoutName);
+    }
+    if (is_array($data)) {
+      return $data;
+    } else {
+      return array();
+    }
+  }
+
+  public function url_layout(){
+    //@todo 获取app列表、以及对应view列表
+    $apps = $this->getAppList();
+    $appConfigList = $this->getConfigViews();
+    //过滤apps
+    $applist = array();
+    foreach ($apps as $appid => $info) {
+      if(isset($appConfigList[$appid])){
+        $app = AopApp::getInstance($info);
+        $row = array(
+          'name' => $info['name'],
+          'views' => array(),
+        );
+        foreach ($app->views($this->getInstanceId()) as $viewid => $view) {
+          if(in_array($viewid, $appConfigList[$appid])){
+            if($viewid=='jingfen'){  //经分系统过滤
+              if($GLOBALS['user']->isLeader == 1){
+                $row['views'][$viewid] = $view['title'];
+              }
+            } else {
+              $row['views'][$viewid] = $view['title'];
+            }
+          }
+        }
+
+        if ($row['views']) {
+          $applist[$appid] = $row;
+        }
+      }
+    }
+    unset($apps);
+    $layout = $this->getLayout();
+    $isLeader = false;
+    $title = $isLeader ? '领导专区' : '我的空间';
+
+    $postUrl = $this->getUrl('setting', 1);
+    $layoutProxy = $this->getProxy('layout');
+    $layoutHtml = $layoutProxy->generateHtml($layout, $applist, $postUrl, 'desktop');
+
+    $args = array(
+      'applist' => $applist,
+      'layout' => $layout,
+      'title' => $title,
+      'layoutHtml' => $layoutHtml,
+    );
+    return $this->getView()->render('layout', $args);
+  }
+
+  protected function setLayout(array $data)
+  {
+    $userId = $this->getContext()->getUser()->getId();
+    $mysql = $this->getProxy('mysql');
+    $sql = 'select uid from layouts where uid = "' . $userId . '"';
+    $result = $mysql->fetchField($sql);
+    $data = serialize($data);
+    if ($result) {
+      $sql = 'update layouts set data =\'' . $data . '\' where uid = "' . $userId . '" ';
+    } else {
+      $sql = "insert into layouts (`uid`, `data`) values ('" . $userId . "', '" . $data . "')";
+    }
+    $mysql->execute($sql);
+  }
+
+  public function url_default()
+  {
+    //@todo 修改应用中心显示方式、修改订购、特殊处理desktop的instanceId
+    $apps = $this->getAppList();
+
+
+    $layout = $this->getLayout();
+
+    $instanceId = $this->getInstanceId();
+
+    $args = array(
+      'apps' => $apps,
+      'layout' => $layout,
+      'instanceId' => $instanceId,
+    );
+    return $this->getView()->render('default', $args);
+  }
+
+  public function url_setting() {
+    $data = $this->getContext()->getRequest()->getPost('data');
+    $layoutProxy = $this->getProxy('layout');
+    $result = $layoutProxy->filterData($data);
+    $result = true;
+    if ($result) {
+      $this->setLayout(json_decode($data));
+    }
+    echo json_encode(array('redirect_url'=>$this->getUrl('default' ,true)));
+    exit;
+  }
+
+  public function hook_install($catalogId, $productId) {
+    parent::hook_install($catalogId, $productId);
+
+    $mysql = $this->getProxy('mysql');
+    $sql = <<<SQL
+CREATE TABLE IF NOT EXISTS `default_layout` (
+  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) CHARACTER SET utf8 NOT NULL,
+  `machine_name` varchar(64) CHARACTER SET utf8 NOT NULL,
+  `data` text CHARACTER SET utf8,
+  PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
+SQL;
+    $result = $mysql->execute($sql);
+    if (strtolower($result) !== 'success') {
+      return false;
+    }
+
+    $sql = <<<SQL
+CREATE TABLE IF NOT EXISTS `layouts` (
+  `uid` varchar(64) CHARACTER SET utf8 NOT NULL,
+  `data` text CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`uid`)
+) DEFAULT CHARSET=utf8;
+SQL;
+    $result = $mysql->execute($sql);
+    if (strtolower($result) !== 'success') {
+      return false;
+    }
+    //初始化数据
+    $sql = "INSERT INTO `default_layout` (`name`, `machine_name`, `data`) VALUES ('我的空间', 'my_space', 'a:0:{}');";
+    $mysql->execute($sql);
+    $sql = "INSERT INTO `default_layout` (`name`, `machine_name`, `data`) VALUES ('领导专区', 'leader_space', 'a:0:{}');";
+    $mysql->execute($sql);
+
+    return true;
+  }
+
+  public function hook_uninstall($catalogId, $productId) {
+    parent::hook_uninstall($catalogId, $productId);
+    $mysql = $this->getProxy('mysql');
+    $default_layout_sql = "DROP TABLE IF EXISTS `default_layout`;";
+    $layout_sql = "DROP TABLE IF EXISTS `layouts`;";
+    $result1 = $mysql->execute($default_layout_sql);
+    $result2 = $mysql->execute($layout_sql);
+    if (!$result1 || !$result2) {
+      return false;
+    }
+    return true;
+  }
+
+  public function hook_update($catalogId, $productId, $version) {
+    //@todo;
+    parent::hook_update($catalogId, $productId, $version);
+  }
+
+  private function previewMe($myname, $uname, $realname) {
+  	$mysql = $this->getProxy('mysql');
+  	$sql = "select id from preview_list where preview_uname='$uname' and my_uname = '$myname'";
+  	$id = $mysql->fetchField($sql);
+  	if ($id > 0) {
+  		$sql = "update preview_list set last_vistit_time = '".time()."' where id='$id'";
+  	} else {
+  		$sql = "insert into preview_list ('my_uname', 'preview_uname', 'preview_realname','last_vistit_time') value('$myname', '$uname','$realname', '".time()."')";
+  	}
+  	$result = $mysql->execute($sql);
+  	if (strtolower($result) == 'success') {
+  		return true;
+  	}
+  	return false;
+
+  }
+
+  /**
+   * 获取浏览用户列表信息
+   * @param unknown_type $myname
+   * @param unknown_type $page
+   * @param unknown_type $perPage
+   */
+  private function getPreviewList($myname, $page = 1, $perPage = 10) {
+  	//return array('list' => array(), 'count' => 0);
+  	//@todo 待测试
+  	$mysql = $this->getProxy('mysql');
+  	$start = ($page - 1) * $perPage;
+  	$sql = "select * from preview_list where my_uname='".$myname."' order by last_vistit_time desc limit $start, $perPage";
+  	$previewList = $mysql->fetchAll($sql);
+  	//print_r($previewList);exit;
+  	foreach ($previewList as $key => $value) {
+  		//$previewList[$key]->image_src = $this->invoke('sns', 'get_pic', $previewList[$key]->preview_uname, 'middle');
+  		$previewList[$key]->image_src = '';
+  	}
+
+  	$sql = "select count(id) as total from preview_list where my_uname='".$myname."'";
+  	$previewCount = $mysql->fetchField($sql);
+  	return array('list' => $previewList, 'count' => $previewCount);
+  }
+
+  public function views()
+  {
+    $result = array(
+      'perfportal' => array(
+        'title' => '专业门户',
+        'callback' => 'perfportal',
+      ),
+      'platformlogin' => array(
+        'title' => '高管述职平台登录',
+        'callback' => 'platformlogin',
+      ),
+    );
+    if($GLOBALS['user']->isLeader == 1 || $GLOBALS['user']->id == 'eipadmin'){
+      $result['jingfen'] = array(
+        'title' => '经分系统',
+        'callback' => 'jingfen',
+      );
+    }
+    return $result;
+  }
+
+  public function view_jingfen()
+  {
+    return $this->getView()->render('jingfen');
+  }
+
+  public function view_perfportal()
+  {
+    $list = $this->invoke('department', 'getInstances');
+    return $this->getView()->render('view_perfportal', array(
+      'list' => $list,
+    ));
+  }
+
+  public function view_platformlogin()
+  {
+    return $this->getView()->render('view_platformlogin');
+  }
+
+  /**
+   * 获取我的空间可以显示出来的视图
+   */
+  private function getConfigViews() {
+    $configProxy = $this->getProxy('config');
+    $list = $configProxy->searchConfig('views');
+    if ($list=='') {
+      return array();
+    }
+    return unserialize($list);
+  }
+
+  public function url_recovery() {
+    $uid = $this->getContext()->getUser()->getId();
+    $sql = "delete from layouts where uid='$uid'";
+    $mysql = $this->getProxy('mysql');
+    $result = $mysql->execute($sql);
+    if (strtolower($result) == 'success'){
+      echo 'ok';
+    } else {
+      echo 'error';
+    }
+  }
+}

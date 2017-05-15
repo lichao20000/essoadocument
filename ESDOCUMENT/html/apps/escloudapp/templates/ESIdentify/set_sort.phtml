@@ -1,0 +1,182 @@
+	<div id='userRole'>
+  <div id='' class='useLis'>
+    <div class='searchRole'>
+      <input type='text' id='one' class='searchusername' value='' onKeyUp="show(this.value,'left');"/>
+	  <input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+	</div>
+    <ul id='listRole1' class='userList'>
+
+<?php 
+	$strColumn='';
+	$columnArrayId = array();
+	if(count($columnArray)>0){
+		foreach($columnArray as $val){
+			$columnArrayId[] = $val->tagid;
+		}
+		foreach($searchField as $value){
+			if(!in_array($value->name,$columnArrayId)){
+				echo '<li id="'.$value->name.'" name='.$value->display.' value='.$value->name.'>'.$value->display.'</li>';
+			}
+		}
+	}else {
+		foreach($searchField as $value){
+			echo '<li id="'.$value->name.'" name='.$value->display.' value='.$value->name.'>'.$value->display.'</li>';
+		}
+	}
+?>
+	</ul>
+  </div>
+	<div id='esbutton' class='selBut'>  
+		<span id="estop1" class="estop" title='置顶'></span>
+		<span id="esup1" class="esup" title='上移'></span>
+		<span id="esleft1" class="esleft" title='左移'></span>
+		<span id="sortasc1" class="A-Z" title='升序'></span>
+		<span id="sortdesc1" class="Z-A" title='降序'></span>
+<!-- 		<span id="esright" class="esright" title='右移'></span> -->
+		<span id="esdown1" class="esdown" title='下移'></span>
+		<span id="esbottom1" class="esbottom endspan" title='置底'></span>
+	</div>
+	<div class='useLis'>
+		<div class='searchRole'>
+			<input type='text' id='two' class='searchusername'  value='' onKeyUp="show(this.value,'right');"/>
+			<input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+		</div>
+		<ul id='useRole1' class='userList referenceValues'>
+		<?php 
+			foreach($columnArray as $val){
+				foreach($searchField as $value){
+					if($val->tagid == $value->name){
+						echo '<li id="'.$value->name.'" name="'.$value->display.'" value="'.$value->name.'">'.$value->display.'|'.$val->AscOrDesc.'</li>';
+					}
+				}
+			}
+		?>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+(function(){
+	$('#userRole li').die().live('click',function(){
+		$('#userRole li').removeClass('esselected');
+		$(this).addClass('esselected');
+	});
+	var str = /(\|ASC|\|DESC)+/;
+	//左移
+	$("#esleft1").die().live('click',function(){
+		var html = $("#useRole1 .esselected").html();
+// 		alert(html);
+		var newhtml = html.replace(str,"");
+// 		alert(newhtml);
+		$('#useRole1 .esselected').html(newhtml);
+		$('#useRole1 .esselected').appendTo('#listRole1');
+	});
+	//升序
+	$("#sortasc1").die().live('click',function(){
+		var asc = $('#listRole1 .esselected').html();
+		asc+='|ASC';
+		$('#listRole1 .esselected').html(asc);
+		$('#listRole1 .esselected').appendTo('#useRole1');
+	
+	// 	$("#customRole").html("");
+	// 	$("#customsaveRole").html("");
+		
+	// 	var targid = $('#userRole .esselected').attr("id");
+	// 	var cname = $('#userRole .esselected').attr("cname");
+	// 	var right = custom[cname].right;
+	// 	var rword = right.split(',');
+	// 	for(var i=0;i<rword.length;i++){
+	// 		if(rword[i]!=""){
+	// 			$("#customsaveRole").append('<li>'+rword[i]+'</li>');
+	// 		}
+	// 	}
+		
+	});
+	//降序
+	$("#sortdesc1").die().live('click',function(){
+		var desc = $('#listRole1 .esselected').html();
+		desc+='|DESC';
+		$('#listRole1 .esselected').html(desc);
+		$('#listRole1 .esselected').appendTo('#useRole1');
+	
+	// 	$("#customRole").html("");
+	// 	$("#customsaveRole").html("");
+	// 	var targid = $('#userRole .esselected').attr("id");
+	// 	var cname = $('#userRole .esselected').attr("cname");
+	// 	var right = custom[cname].right;
+	// 	var rword = right.split(',');
+	// 	for(var i=0;i<rword.length;i++){
+	// 		if(rword[i]!=""){
+	// 			$("#customsaveRole").append('<li>'+rword[i]+'</li>');
+	// 		}
+	// 	}
+	});
+	//置顶
+	$("#estop1").die().live('click',function(){
+		if($("#useRole1 .esselected").html()==$('#useRole1 li:eq(0)').html()){
+			return;
+		}
+		$('#useRole1 li:eq(0)').before($("#useRole1 .esselected"));
+	});
+	//置底
+	$("#esbottom1").die().live('click',function(){
+		if($("#useRole1 .esselected").html()==$('#useRole1 li:last').html()){
+			return;
+		}
+		$('#useRole1 li:last').after($("#useRole1 .esselected"));
+	});
+	//上移
+	$("#esup1").die().live('click',function(){
+		var index=$('#useRole1 .esselected').index()-1;
+		//guolanrui 20141014 添加index的判断，避免在IE8下选择最上的字段上移时字段消失BUG：1352
+		if(index>-1){
+			$('#useRole1 li:eq('+index+')').before($("#useRole1 .esselected"));
+		}
+	});
+	//下移
+	$("#esdown1").die().live('click',function(){
+		var index=$('#useRole1 .esselected').index()+1;
+		$('#useRole1 li:eq('+index+')').after($("#useRole1 .esselected"));
+	});
+	//左双击
+	$('#listRole1 li').die().live('dblclick',function (){
+		var ext = $(this).html();
+		ext+='|ASC';
+		$(this).html(ext);
+		$('#useRole1').append($(this));
+	});
+	//右双击
+	$('#useRole1 li').die().live('dblclick',function (){
+		var html = $("#useRole1 .esselected").html();
+		var newhtml = html.replace(str,"");
+		$('#useRole1 .esselected').html(newhtml);
+		$('#useRole1 .esselected').appendTo('#listRole1');
+// 		var ext = $(this).html();
+// 		ext+='|ASC';
+// 		$(this).html(ext);
+// 		$('#useRole').append($(this));
+	});
+	
+})();
+//gengqianfeng 20140913 添加排序筛选发放
+//筛选
+function show(value,position)
+{
+	if($.trim(value)==''){
+		$('#listRole1 li').show();
+		$('#useRole1 li').show();
+		return;
+	}else{
+		if(position=='left'){
+			$('#listRole1 li').hide();
+			$('#listRole1 li:contains('+value+')').show();
+			
+		}else if(position=='right'){
+			$('#useRole1 li').hide();
+			$('#useRole1 li:contains('+value+')').show();
+			
+		}else{
+			return;
+		}
+	}
+}
+</script>

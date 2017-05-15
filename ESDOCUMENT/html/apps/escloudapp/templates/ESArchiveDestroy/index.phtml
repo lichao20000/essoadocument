@@ -1,0 +1,25 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESArchiveDestroy/css/index.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/viewfile.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/formStartHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/formApprovalHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/collaborativeHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/newIndex.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/addAttachData.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<div id="ESSystemIndex" class = "ESSystemIndex">
+	<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+	<div id='leftDiv' class='leftDiv'>
+		<div class='ztree' id='statusTree'></div>
+	</div>
+	<div id = "destroyListGridView">
+		<div id='rightDiv' class='rightDiv'></div>
+	</div>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESArchiveDestroy/js/index.js"></script>

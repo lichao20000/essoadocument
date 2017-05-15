@@ -1,0 +1,89 @@
+<table>
+	<tr>
+		<td>
+			<div id='filetreebox'
+				style='width: 200px; height: 375px; overflow: auto;'>
+				<ul id='filetree' class='ztree'></ul>
+				<input type="hidden" id="folderid" value="" />
+			</div>
+		</td>
+		<td>
+			<div id='filelistbox'
+				style='height: 380px; overflow: auto; clear: both;'>
+				<table id='filelist'></table>
+			</div>
+		</td>
+	</tr>
+</table>
+<script type="text/javascript">
+$(document).ready(function(){
+	var url = $.appClient.generateUrl({ESEFile:'access'},'x');
+	var setting = {
+			async: {
+				enable: true,
+				dataType: 'json',
+				url: url,
+				autoParam: ["id=param"]
+			},	
+			view: {
+				showLine: false,
+				dblClickExpand: false,
+				fontCss :{"color":"#000"}
+			},
+			data: {
+				key: {
+					name: 'estitle'
+					//children: 'isPid'
+				},
+				simpleData: {
+					enable: true,
+					idKey: 'id',
+					pIdKey: 'parentid',
+					rootPId: 0
+				}
+			},
+			callback: {
+				beforeClick: beforeClick,
+				onClick : nodeClick
+			}
+		};
+		$.fn.zTree.init($("#filetree"), setting);
+		var efileTree = $.fn.zTree.getZTreeObj("filetree");
+		function beforeClick(treeId, node) {
+			if (node.isParent) {
+				efileTree.expandNode(node);
+			}
+		};
+		function nodeClick(event, treeId, node){
+			$("#folderid").val(node.id);
+			var query={};
+			query['folderid'] = node.id;
+			$("#filelist").flexOptions({url: $.appClient.generateUrl({ESEFile:'getFileListForNoLink'},'x'),query:query}).flexReload();
+		};
+	$("#filelist").flexigrid({
+		url: $.appClient.generateUrl({ESEFile:'getFileListForNoLink'},'x'),
+		query:{'folderid':0},
+		dataType: 'json',
+		editable: true,
+		colModel : [
+			{display: '<input type="checkbox" id="fileSelectAll">', name : 'ids', width : 40, align: 'center'},
+	        {display: '文件类型',name: 'estype',align: 'left',editable: true,width: 60 },
+	        {display: '文件名称',name: 'estitle',align: 'left', width: 60 },
+	        {display: '文件版本',name: 'fileVersion',align: 'center',editable: true,width: 60 },
+	        {display: '创建时间',name: 'createTime',align: 'center',width: 60},
+	        {display: '原文路径', name: 'ywlj',width: 100,align: 'left'},
+	        {display: '文件校验', name: 'esmd5',width: 100, align: 'left', hide: true},
+	        {display: '文件大小',name: 'essize',width: 60,align: 'right'}
+		],
+		usepager: true,
+		rp: 50,
+		useRp: true,
+		width: 800,
+		height:305
+	});
+	$("#fileSelectAll").die("click").live("click", function(){
+		$("#filelist").find("input[name='id']").attr("checked", this.checked);
+	});
+
+});
+</script>

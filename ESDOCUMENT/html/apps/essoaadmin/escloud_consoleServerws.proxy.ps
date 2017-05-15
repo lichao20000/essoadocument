@@ -1,0 +1,95 @@
+<?php
+/*
+ *控制台服务管理
+* @author wangbo 20140325
+*/
+class ProxyEssoaadminEscloud_consoleServerws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "consoleServer";
+	 /**
+	 * 获取总记录数
+	 * 
+	 */
+	public function getCountAll($wb)
+	{
+		$url = "getCount";
+		return $this->post(self::SERVICE_NAME,$url,$wb,"application/json;charset=UTF-8");
+	}
+	public function getAppCountAll($wb)
+	{
+		$url = "getAppCount";
+		return $this->post(self::SERVICE_NAME,$url,$wb,"application/json;charset=UTF-8");
+	}
+	/**
+	* 获取所有文件存储设备信息
+	*/
+	public function getAllConsoleServer($canshu)
+	{
+		$url = "getDataList";
+		return $this->post(self::SERVICE_NAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 获取左侧的应用树
+	 */
+	public function getAllApp($canshu)
+	{
+		$url = "getAppList";
+		return $this->post(self::SERVICE_NAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+
+	public function getAllAppName()
+	{
+		$url = "getAppNameList";
+		return $this->post(self::SERVICE_NAME, $url,"application/json;charset=UTF-8");
+	}
+	public function delApp($canshu)
+	{
+		$url = "delApp";
+		return $this->post(self::SERVICE_NAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	
+	public function addConsoleServer($data){
+	    $url = "saveData";
+		return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	public function addApp($data){
+		$url = "saveApp";
+		return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	
+	public function deleteConsoleServerList($data){
+	    $url = "delData";
+		return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	
+	public function startConsoleServerList($data){
+	      $url = "setEnabled";
+		  return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	
+	public function stopConsoleServerList($data){
+	      $url = "setDisabled";
+		  return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	//验证新增serviceName是否已存在
+	public function ValidateServiceName($serviceName){
+	      $url = "ValidateServiceName";
+		  return $this->post(self::SERVICE_NAME, $url,$serviceName,"application/json;charset=UTF-8");
+	}
+	public function getNoDelApps($ids){
+		return $this->get(self::SERVICE_NAME, 'getNoDelApps/'.$ids);
+	}
+	public function judgeAppName($appName,$id){
+		$urlparam=array($appName,$id);
+		array_unshift($urlparam, 'judgeAppName');
+		$url=implode('/', $urlparam);
+		return $this->get(self::SERVICE_NAME, $url);
+    }
+	public function judgeAppNameCn($appNameCn,$id){
+		$urlparam=array($appNameCn,$id);
+		array_unshift($urlparam, 'judgeAppNameCn');
+		$url=implode('/', $urlparam);
+		return $this->get(self::SERVICE_NAME, $url);
+    }
+	 
+}

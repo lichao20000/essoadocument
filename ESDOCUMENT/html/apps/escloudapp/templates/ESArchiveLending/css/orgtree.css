@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+.ztree li span.button.folder_ico_open{margin-right:2px; background-position:-110px -16px;vertical-align:top; *vertical-align:middle}
+.ztree li span.button.folder_ico_close{margin-right:2px; background-position:-110px 0;vertical-align:top; *vertical-align:middle}
+.ztree li span.button.folder_ico_docu{margin-right:2px; background-position:-110px 0;vertical-align:top; *vertical-align:middle}
+.subnav{width:270px;padding:15px;height:14px;}
+.subnav a{display:block;height:24px;text-decoration:none;font-weight:bold;color:black}
+.subnav li{float:left;width:80px;line-height:24px;text-align:center;margin-left:5px;}
+.subnav a:hover{background-color: red;color:white;text-decoration:none;font-weight:bold;color:black}
+  

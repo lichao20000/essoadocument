@@ -1,0 +1,40 @@
+@CHARSET "UTF-8";
+/*
+a img {border: 0 none;}
+a{text-decoration:none;}
+.topss{font-size:13px;color:#333333;padding-top:10px;padding-bottom:10px;border-bottom:1px solid #DDDDDD;}
+.topss .select{margin-left:230px;}
+.topss .select label{margin-right:30px;}
+.main{width:980px;margin:0 auto;border-left:1px solid #DDDDDD;border-right:1px solid #DDDDDD;}
+.clear{clear:both;}
+.main .main_top{border-bottom:1px solid #DDDDDD;}
+.main .main_top .search{margin-left:20px;padding-top:10px;padding-bottom:10px;}
+.main .main_top .search  .button{cursor:pointer;}
+.main .content .result,.main .content .result1{text-align:center;height:135px;text-align:left;margin-left:20px;margin-top:10px;}
+.main .content .result .img,.main .content .result1 .img{border:1px solid #DDDDDD;width:170px;height:120px;padding:5px;float:left;position:relative;overflow:hidden;}
+.main .content .result img,.main .content .result1 img{width:170px;height:120px;}
+.main .content .result a img,.main .content .result1 a img{vertical-align: middle;}
+.main .content .result .re_content,.main .content .result1 .re_content{position:relative; margin-top:10px;width:750px;float:left;}
+.result .re_content .re_title，.result1 .re_content .re_title{font-size:16px;font-weight:bold;color:#006699;margin-left:5px;}
+.result .re_content .re_title span,.result1 .re_content .re_title span{font-size:16px;}
+.result .re_content .re_time,.result1 .re_content .re_time{font-size:13px;color:#999999;margin-top:10px;margin-left:15px;}
+.result .re_content .re_intro,.result1 .re_content .re_intro{font-size:13px;color:#666666;margin-top:10px;margin-left:15px;}
+.es_add{width:22px;height:22px;background:url('../img/add.gif') no-repeat;}
+.es_del{width:22px;height:22px;background:url('../img/del.gif') no-repeat;}
+*/
+.esmain{min-width:960px;width:100%;overflow:hidden;}
+.esmain .esleft{line-height:29px;border-right:1px solid #DEDEDE;width:180px;float:left;border-left: 1px solid #ccc;}
+.esmain .esleft ul{list-style-type:none;}
+.esmain .esleft ul li{display:block;width:176px;}
+.esmain .esleft .turn{border-left: 5px solid #DD4B39;color:red;background-color:#EEEEEE;}
+.esmain .esleft .turn .k{padding-left:39px;}
+.esmain .esleft a{width:132px;display:block;padding-left:44px;font-size:13px;color: #222222;}
+.esmain .esleft a:hover{background-color:#EEEEEE;}
+.esleft ul li{border-left: 5px solid white;}
+.esmain .esright{_width:83%;_min-width:50%; _float:right}
+a img {border: 0 none;}
+a{text-decoration:none;}
+.clear{clear:both;}
+
+/* 查看 fangjixiang */
+.reaing{ width:16px; height:16px; border:0; background:url(../../public/img/details.gif) no-repeat; cursor:pointer;}

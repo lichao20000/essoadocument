@@ -1,0 +1,290 @@
+<?php
+/**
+ * 规定规范
+ * @author xiewenda
+ *
+ */
+class ProxyEsdocumentStatistic extends AgentProxyAbstract {
+	const SERVICE_NAME = "statistic";
+	public function getCount() {
+		$urlParam = array (
+				'count' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	public function getStatisticByCondition($param) {
+		$urlParam = array (
+				'list' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	public function add($data) {
+		$urlParam = array (
+				'add' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+	public function edit($data) {
+		$urlParam = array (
+				'update' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8" );
+	}
+	public function del($ids) {
+		$urlParam = array (
+				'delete' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, "application/json;charset=UTF-8" );
+	}
+	public function getStatisticById($id) {
+		return $this->get ( self::SERVICE_NAME, "getStatisticById/" . $id );
+	}
+	public function saveTitle($param) {
+		$urlParam = array (
+				'saveTitle'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+	}
+	
+	public function saveTreeNodes($param)
+	{	
+		$urlParam = array('saveTreeNodes');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author xiewenda
+	 * 获取方案数据(统计方案第三步)
+	 * @param int $id 方案的ID
+	 * @return mixed
+	 */
+	public function getStatisticShowData($id)
+	{
+		$urlParam = array('getStatisticShowData',$id);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	
+	public function delStatisticAndItems($id)
+	{  	$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('delStatisticAndItems',$id,$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	public function getStatisticItemsBySid($sid)
+	{	$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('getStatisticItemsBySid',$sid,$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	public function batchDelete($ids)
+	{	$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('batchDelete',$ids,$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	
+	public function saveColTitleAndColCount($param)
+	{
+		$urlParam = array('saveColTitleAndColCount');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	public function delColumnByColNo($param)
+	{
+		$urlParam = array('delColumnByColNo');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	public function deleteCheckColumn($param)
+	{
+		$urlParam = array('deleteCheckColumn');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	public function getStatisticItemById($id)
+	{
+		$urlParam = array('getStatisticItemById',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	public function getFieldListByTreeIdAndTreeType($treeId,$treeType)
+	{
+		$urlParam = array('getFieldListByTreeIdAndTreeType',$treeId,$treeType);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url);
+	}
+	public function getTreeNodeByTreeIdAndTreeType($treeId,$treeType)
+	{
+		$urlParam = array('getTreeNodeByTreeIdAndTreeType',$treeId,$treeType);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url);
+	}
+	
+	public function saveStatisticItemRules($param)
+	{
+		$urlParam = array('saveStatisticItemRules');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	public function saveOptions($param)
+	{
+		$urlParam = array('saveOptions');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	public function updateOption($param)
+	{
+		$urlParam = array('updateOption');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	
+	public function exeStatistic($param)
+	{
+		$urlParam = array('exeStatistic');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	public function justRuleExists($param)
+	{
+		$urlParam = array('justRuleExists');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	public function addColItems($param)
+	{
+		$urlParam = array('addColItems');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	//gengqianfeng 分组统计代码 start
+	
+	public function exeGroupStatistic($param){
+		$urlParam = array('exeGroupStatistic');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 获取分组下拉选项列表
+	 * @param unknown $stageId
+	 */
+	public function getGroupOptions($stageId){
+		$urlParam = array('getGroupOptions',$stageId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * 获取统计规则分组对象
+	 * @param unknown $statistics_id
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getStatisticsGroups($statistics_id){
+		$urlParam = array('getStatisticsGroups',$statistics_id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * 保存分组统计节点id
+	 * @param unknown $group
+	 */
+	public function saveGroupStageId($group){
+		$urlParam = array('saveGroupStageId');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$group,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 保存分组对象
+	 * @param unknown $group
+	 */
+	public function saveGroup($group){
+		$urlParam = array('saveGroup');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$group,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 获取统计字段
+	 * @param unknown $field
+	 */
+	public function getStatisticsFields($field){
+		$urlParam = array('getStatisticsFields');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$field,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 保存统计字段
+	 * @param unknown $field
+	 */
+	public function saveFields($field){
+		$urlParam = array('saveFields');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$field,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 获取统计字段编辑列表
+	 * @param unknown $field
+	 */
+	public function getStatisticsEditFields($field){
+		$urlParam = array('getStatisticsEditFields');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$field,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 修改统计字段统计规则
+	 * @param unknown $itemId
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function updateStatisticsFieldCount($itemCount){
+		$urlParam = array('updateStatisticsFieldCount');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$itemCount,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 分组统计完成
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function groupOver($over){
+		$urlParam = array('groupOver');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$over,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 改变收集范围清除数据
+	 * @param unknown $id
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function delStatisticAndGroup($id){
+		$urlParam = array('delStatisticAndGroup',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	//gengqianfeng 分组统计代码 end
+}

@@ -1,0 +1,107 @@
+@CHARSET "UTF-8";
+/*
+ * index页面样式表
+ * @author fangjixiang
+ * @DATE 20120907
+ */
+body,html{marign:0; padding:0; overflow:hidden;}
+h2,p{ margin:0; padding:0;  font-weight:normal;}
+input,select,textarea{ padding:0; margin:0;}
+
+
+/*目录权限、数据权限、编辑规则按钮*/
+.menus,.dirs,.datas,.edits,.lends{ width:16px; height:16px; border:none; padding:0; cursor:pointer;}
+.menus{display: inline-block;width: 16px; height: 16px; background:url(../../public/img/details.gif) no-repeat;}
+.dirs{ display: inline-block;width: 16px; height: 16px;background:url(../../public/img/flod.png) no-repeat;}
+.datas{display: inline-block;width: 16px; height: 16px; background:url(../../public/img/data.png) no-repeat;}
+.lends{display: inline-block;width: 16px; height: 16px; background:url(../../public/img/edit.jpg) no-repeat;}
+.edits{display: inline-block;width: 16px; height: 16px;background:url(../../public/img/edit.jpg) no-repeat;}
+
+/*添加角色*/
+.addrole{ width:322px; height:auto; overflow:hidden; overflow:hidden; float:left; margin:0 20px 20px 20px; _display:inline;}
+.addrole .input{ width:322px; height:40px; float:left;}
+.addrole .input h2{ width:80px; line-height:22px; height:20px; float:left;}
+.addrole .input .input,.addrole .input .select-item{ width:238px; line-height:22px; height:22px; float:left;}
+.addrole .input .select-item label{ width:60px; float:left;}
+.addrole .input .select-item input,.addrole .input .select-item span{ vertical-align:middle;}
+
+.addrole .textarea{ width:322px; height:auto; overflow:hidden; float:left;}
+.addrole .textarea h2{ width:80px; line-height:22px; height:20px; float:left;}
+.addrole .textarea textarea{ width:238px; line-height:22px; height:40px; float:left; resize:none;}
+.addrole .mb{ margin-bottom:10px;}
+.addrole .prompt_message{ width:322px; height:24px; line-height:24px; text-align:center; color:red; float:left;}
+.addrole .font{ font-size:13px; font-family:微软雅黑,黑体,宋体,arial; border:1px solid red;}
+.addrole .border-gray{ border:1px solid gray;}
+
+
+
+/* 目录权限 */
+.public{ width:350px; height:auto; float:left; overflow:hidden;}
+.public h2{ width:350px; height:24px; line-height:24px; text-indent:25px; float:left; border-bottom:1px solid #ccc; background:#f9f9f9 url(../../public/img/mess.png) no-repeat 5px 4px;}
+.public .other{ width:350px; height:34px; float:left; margin-top:10px; border-bottom:1px solid #ccc;}
+.public .other span{ width:80px; line-height:24px; text-align:right; float:left; margin-left:0px;}/** xiaoxiong 20140504 添加margin-left样式，使其界面显示正常 **/
+.public .other input{ width:250px; height:18px; line-height:18px; float:left;}
+.public .other select{ width:250px; height:22px; line-height:22px; float:left; border:1px solid #ccc;}
+.public .other select option{ margin-top:4px}
+
+.public .tree{ width:350px; height:355px; float:left; overflow-y:scroll;}
+.public .tree .loading{ width:16px; height:16px; float:left; margin:50px 157px; overflow:hidden; background:url(../../public/img/ajax-loader-s.gif); _display:inline;}
+
+/* 数据权限表格 */
+.datatbl{ width:580px; height:450px; float:left; overflow:auto;}
+.mask-child{ width:150px; height:450px; float:left; overflow:hidden;}
+
+/* 新建数据权限规则 */
+.rule-public{ width:650px; height:auto; float:left; overflow:hidden;}
+.rule-public h2{ width:650px; height:24px; line-height:24px; text-indent:25px; float:left; border-bottom:1px solid #ccc; background:#f9f9f9 url(../../public/img/mess.png) no-repeat 5px 4px;}
+
+.rule-public .condition-free{ width: 650px; height:214px; float:left;  padding-left:20px; border-bottom:1px solid #f0f0f0;}
+.rule-public .condition{ width:630px; height: 168px; float:left; overflow-y:auto; overflow-x: hidden;}
+
+
+.rule-public .condition-free ul{ width: 610px; float:left; margin-left:0px; margin-right:0px; margin-top:9px; margin-bottom:0px; overflow-x: hidden;}
+.rule-public .condition-free ul li{ height:24px; line-height:24px; float:left; margin-right:10px; overflow:hidden; width: 45px; /* margin-left: 10px; */}
+.rule-public .condition-free ul li.long{ width: 150px;}
+.rule-public .condition-free ul li.long select{ width: 150px; height:20px;}
+.rule-public .condition-free ul li.long select, .rule-public .condition ul li.long input, .rule-public .condition ul li.short select{ float:left; margin-top:2px; border:1px solid #587AB0; font-size:13px; font-family:arial;}
+.rule-public .condition-free ul li.long input{ width: 148px; height:18px; overflow:hidden;}
+.rule-public .condition-free ul li.short{ width: 65px;}
+.rule-public .condition-free ul li.short select{ width: 65px; height:20px;}
+.rule-public .condition-free ul li.clear{ margin:0;}
+
+.rule-public .condition ul li a{ width:20px; height:20px; float:left; margin-top:2px;}
+.rule-public .condition ul li a.add{ background:url(../../public/img/add.png) no-repeat center center;}
+.rule-public .condition ul li a.del{ background:url(../../public/img/del.gif) no-repeat center center;}
+.rule-public .condition ul li a.add:hover{ background:#ccc url(../../public/img/add.png) no-repeat center center;}
+.rule-public .condition ul li a.del:hover{ background:#ccc url(../../public/img/del.gif) no-repeat center center;}
+
+.rule-public .rights{ width:680px; height:40px; float:left; padding-left:20px; padding-top:10px;}
+.rule-public .rights label{ float:left; margin-right:10px;}
+.rule-public .rights label.btn{ color:red; margin-left:10px; _display:inline;}
+.rule-public .rights label input{ float:left; margin-right:5px;}
+.rule-public .rights label span{ float:left;}
+
+.folder-prompt{ width:325px; line-height:100px; text-align:center; color:red;}
+.data-prompt{ width:520px; height:440px; line-height:100px; text-align:center; color:red; border-left:1px solid #ccc;}
+
+/* 归档单位 */
+.rule-public .setting-unit{ width:700px; height:30px; float:left; border-bottom:1px solid #e5e5e5;}
+.rule-public .setting-unit input{ width:200px; height:20px; line-height:20px; font-family:微软雅黑,黑体,宋体,airal; float:left; border:1px solid #587AB0; padding:0 0 0 3px; margin:4px 5px 0 5px !important; _display:inline;}
+.rule-public .setting-unit a{ line-height:22px; text-decoration:none; color:#fff; float:left; padding:0 5px; margin:4px 0; background:#587AB0; _display:inline;}
+.rule-public .setting-unit a:hover{ background:#587AB0; color:#000;}
+
+.company-list-tree{ width:300px; height:345px; float:left; overflow:auto;}
+.company-list-tree .wait-loading{ width:16px; height:16px; float:left; margin:20px 137px; overflow:hidden; background:url(../../public/img/ajax-loader-s.gif); _display:inline;}
+
+.rule-public .unit-list{ width: 700px; height:93px; font-family:微软雅黑,黑体,宋体,airal; float:left; border-bottom:1px solid #e5e5e5; overflow:hidden;}
+.rule-public .unit-list p{ width: 100%; height:20px; line-height:20px; text-indent:5px; float:left;}
+.rule-public .unit-list div{ width: 695px; height:73px; line-height:24px; font-size:14px; color:#33a; text-indent:2em; float:left; padding-left:5px; overflow-y:auto;}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	input,textarea{ margin-left:0 !important;}
+}
+
+.roles-div{ float:left; width:100%; height:auto; overflow:hidden;}
+.roles-div .roles-search-box{ width:240px; height:19px; float:left; margin:2px; background:#f5f5f5; border:1px solid #aaa;}
+.roles-div .roles-search-box .roles-search-input{ width:215px; height:19px; line-height:19px; font-family:微软雅黑,黑体,宋体,airal; font-size:13px; float:left; padding:0 2px; border:0; background:#f5f5f5;}
+.roles-div .roles-search-box .roles-search-button{ width:19px; height:19px; float:right; border:0; background:#f5f5f5 url(../img/search.gif) no-repeat center center;}

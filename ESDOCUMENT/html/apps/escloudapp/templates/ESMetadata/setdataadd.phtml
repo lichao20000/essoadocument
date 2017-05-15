@@ -1,0 +1,74 @@
+<form id="form_add" action="">
+<div style="width:500px;height:300px;text-algin:left;">
+<p style="margin-top: -20px;">条目概览</p>
+  <div>
+  <input type="button" id="save" value="保存">
+  <table>
+    <tr style="float: left;width:300px;margin-top:5px;">
+      <td style="width:60px;"><p style="width:60px;">作者：</p></td>
+      <td style="width:150px;"><input type="text" name="author" value="<?php echo isset($list[0]['escreator'])?$list[0]['escreator']:"";?>" style="width:150px;height:16px;" /></td>
+      <td style="width:60px;"><p style="width:60px;">名称：</p></td>
+      <td style="width:150px;"><input type="text" name="name" value="<?php echo isset($list[0]['estitle'])?$list[0]['estitle']:"";?>" style="width:150px;height:16px;" /></td>
+    </tr>
+    <tr style="float: left;width:300px;margin-top:5px;">
+      <td style="width:60px;"><p style="width:60px;">编号：</p></td>
+      <td style="width:150px;" ><input type="text" name="num" value="<?php echo isset($list[0]['esidentifier'])?$list[0]['esidentifier']:"";?>" style="width:150px;height:16px;" /></td>
+    </tr>
+    <tr style="float: left;width:300px;margin-top:5px;">
+      <td style="width:60px;"><p style="width:60px;">日期：</p></td>
+      <td style="width:150px;"><input type="text" name="date" value="<?php echo isset($list[0]['esdate'])?$list[0]['esdate']:"";?>" style="width:150px;height:16px;" /></td>
+      <td style="width:60px;"><p style="width:60px;">版本：</p></td>
+      <td style="width:150px;"><input type="text" name="version" value="<?php echo isset($list[0]['esversion'])?$list[0]['esversion']:"";?>" style="width:150px;height:16px;"></td>
+    </tr>
+    <tr style="float: left;width:300px;margin-top:5px;">
+      <td style="width:60px;"><p style="width:60px;">文件位置：</p></td>
+      <td style="width:364px;" ><input type="text" name="site" value="<?php echo isset($list[0]['esuri'])?$list[0]['esuri']:"";?>" style="width:364px;height:16px;"></td>
+    </tr>
+    <tr style="float: left;width:300px;margin-top:5px;">
+      <td style="width:60px;"><p style="width:60px;">描述：</p></td>
+      <td style="width:364px;" ><textarea cols="45" rows="5" name="describe" style="width:363px;"><?php echo isset($list[0]['esdescription'])?$list[0]['esdescription']:"";?></textarea></td>
+    </tr>
+  </table>
+  </div>
+  <input type="hidden" name="id" value="<?php echo isset($list[0]['id'])?$list[0]['id']:"";?>" />
+</div>
+</form>
+<script type="text/javascript">
+$("#save").click(
+		function(){
+			
+		    url = "<?php echo $esaction->generateUrl(Array('ESMetadata'=>'do_add'));?>";
+		    //alert(url);
+			var form=$('#form_add');
+			var data=form.serialize();
+			//alert(form.html());
+			
+			$.ajax({
+				url:url,
+				type: "POST",
+				data:{
+					param:data
+				},
+				dataType:"json",
+				error:function(){
+					alert("添加失败，请重试");
+				},
+				success:function(datas){
+					//alert(datas);
+					
+					if(datas==1){
+						$('#flexme1').flexOptions({newp: 1}).flexReload();
+						$.dialog.notice({icon:'succeed',content:'操作成功'+datas,time:3});
+						//$.dialog.get('name1').close();
+						
+					}else{
+						$.dialog.notice({icon:'error',content:'添加失败，请重试',time:3});
+					}
+					
+				}
+			});
+			
+		 }
+	);
+
+</script>

@@ -1,0 +1,25 @@
+<form id="editRole" action=""	method="post">
+<div class="estransfer">
+<ul>
+<li><span>角色标识<font color="red" size="3">*</font></span><input  type="text" name="roleId"  verify="english/20/1/0" value= "<?php echo $roleId;?>"><input type="hidden" id="roleId" name="id"  value= "<?php echo $id;?>"> </li>
+<li><span>角色名称<font color="red" size="3">*</font></span><input type="text" name="roleName"   verify="text/100/1/0"   value= "<?php echo $roleName;?>"></li>
+<li style="width:600px"><span>角色描述</span><textarea name="roleRemark"  verify="text/200/0/0" style="width:445px;height:50px;float:left"  ><?php echo $roleRemark;?></textarea></li>
+
+<li><span>借阅件数:<font color="red" size="3">*</font></span><input type="text"   id='lendCount' name="lendCount" value= "<?php echo $lendCount;?>"/><input type="hidden"   id='lendId' name="lendId" value= "<?php echo $lendId;?>"/></li>
+<li><span>借阅天数：<font color="red" size="3">*</font></span><input type="text"   id='lendDays' name="lendDays" value= "<?php echo $lendDays;?>"/></li>
+</ul>
+</div>
+</form>
+<div id="relend" style="width: 600; margin-top: 25px;">
+	<table id="relendsGrid"></table>
+</div>
+<script type="text/javascript">
+$(function(){
+	 $('.estransfer input:lt(3)').each(function(){
+			$(this).attr("readonly",true);
+		});
+	$('.estransfer textarea').attr("readonly",true);
+
+});
+</script>
+ 

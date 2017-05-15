@@ -1,0 +1,139 @@
+<div class='flowsheet_paper adv_btn'>
+	<div class='buttons' id='flowsheet'>
+		<div class="afree"></div>
+		<?php
+			/*
+			echo '<pre>';
+			print_r($data);
+			echo '</pre>';
+			die;
+			//*/
+			
+			/*
+			 * process = -1 未提交
+			 * process = 0 审批中
+			 * process = 1 完成
+			 * process = 2 退回
+			 * 
+			 */
+			if($id['taskId']){ // 空为已办已发唯一标记
+				if($data->process == '2'){
+					echo '<div class="button"><div><span class="modify" id="publish_modifySubmit">修改</span></div></div>';
+				}else{
+					echo '<div class="button"><div><span class="agree" id="publish_agree">同意</span></div></div>';
+					echo '<div class="button"><div><span class="back" id="publish_back">退回</span></div></div>';
+				}
+			}
+			
+		?>
+		
+		
+		<div class="button"><div><span class='process' id='publish_flowsheet'>流程图</span></div></div>
+		<input type='hidden' id='boardId' value='<?php echo $data->boardId;?>' />
+		<input type='hidden' id='topicId' value='<?php echo $data->topicId;?>' />
+		<input type='hidden' id='boardType' value='<?php echo $data->boardType;?>' />
+		<input type='hidden' id='status' value='<?php echo $data->status;?>' />
+		<input type='hidden' id='taskId' value='<?php echo $id['taskId'];?>' />
+		<input type='hidden' id='workId' value='<?php echo $id['workId'];?>' />
+	</div>
+	<div class='flowsheet_full'>
+		<h2 class='title'><?php echo $data->title;?></h2>
+		<p class='info'>发布人：<?php echo $data->authorName;?>&nbsp;&nbsp;发布时间：<?php echo $data->createTime;?>&nbsp;&nbsp;浏览次数：<?php echo $data->browseTimes;?>次</p>
+		<div class='summary'>
+			<span>摘要：</span>
+			<p><?php echo $data->itemsText[0]->summary;?></p>
+		</div>
+		<div class='mains'><?php echo $data->itemsText[0]->text;?></div>
+		
+		<?php
+		
+			if($id['boardType'] == '21'){
+				$mb = 1024*1024;
+				
+				echo '<div class="files_box">';
+				//print_r($data->itemsFile); die;
+				foreach ($data->itemsFile as $files)
+				{
+					$fsize = $files->fileSize;
+					
+					$type = explode('.', $files->addressMark);
+					if($type[1] == 'docx' || $type[1]=='doc'){
+						$ext = 'doc';
+					}else if($type[1] == 'xlsx' || $type[1]=='xls'){
+						$ext = 'xls';
+					}else if($type[1] == 'pptx' || $type[1]=='ppt'){
+						$ext = 'ppt';
+					}else if($type[1] == 'zip' || $type[1]=='rar'){
+						$ext = 'zip';
+					}else if($type[1] == 'txt'){
+						$ext = 'txt';
+					}else{
+						$ext = 'default';
+					}
+					
+					echo '<div class="es_files"><h2>文件名：<a href="javascript:void(0)" class="dl" mainSite="'.$data->provice.'" id="'.$files->id.'" mark="'.$files->addressMark.'">'. $files->fileName .'</a><img height="18px" src='.$tplPath.'/ESDefault/img/'.$ext.'.gif /></h2><p>文件大小：<span>'. $fsize .'</span></p></div>';
+				}
+				echo '</div>';
+				
+			}else if($id['boardType'] == '22'){
+
+				foreach ($data->itemsFile as $line=>$pic)
+				{
+					$src = str_replace('_thumb', '', $pic->address);
+					$info = getimagesize(substr($src, 1));// Array ( [0] => 478 [1] => 480 [2] => 2 [3] => width="478" height="480" [bits] => 8 [channels] => 3 [mime] => image/jpeg )
+					$msg = $pic->fileName.'|'.$data->createTime;
+					$width = $info[0] <= 748 ? null : 748;
+					echo '<div class="task_image_list"><img src="'.$src.'" width="'.$width.'" alt="'.$msg.'" title="'.$msg.'" /><div><h2>'. ($pic->fileName).'</h2><span>第'.($line+1).'张/共'.(count($data->itemsFile)).'张&nbsp;&nbsp;&nbsp;</span></div></div>';
+				}
+				
+			}
+		?>
+		
+		<div class='only_space'></div>
+		<div class='flowsheet_form'>
+			<?php
+			
+				//在有审批意见时候执行
+				if(count($data->opinion)){
+					foreach ($data->opinion as $list)
+					{
+						$date = explode(' ', $list->opinion_time); // 2012-12-12 12:12:12
+						$date = $date[0]; // 2012-12-12
+						echo '<ul>';
+						echo '<li class="field_name reset_height">'.$list->opinion_user_name.'的意见<br />'.$date.'</li>';
+						echo '<li class="long_field_value reset_height"><textarea readonly="readonly" class="opinions_textarea">'.$list->opinion_desc.'</textarea></li>';
+						echo '</ul>';
+						
+					}
+					
+				}
+			
+				if($data->process != '2' && $id['taskId']){
+					echo '<ul>';
+					echo '<li class="field_name reset_height">请输入您的意见</li>';
+					echo '<li class="long_field_value reset_height"><textarea id="writer_textarea" class="opinions_textarea red_prompt"></textarea></li>';
+					echo '</ul>';
+				}
+				
+			?>
+			
+		</div>
+		<div class='only_space'></div>
+	</div>
+</div>
+<script type='text/javascript'>
+var isComplete="<?php echo $data->iscomplete;?>";
+if(isComplete==1){
+	var endImg = "<?php echo $tplPath;?>/ESCollaborative/img/publish_complete.gif";
+}
+// 销毁审批流程按钮
+$('#flowsheet span').live('mouseover',function (){
+	$(this).parent().parent().addClass('extbutton');
+	$(this).parent().addClass('div');
+});
+$('#flowsheet span').live('mouseout',function (){
+	$(this).parent().parent().removeClass('extbutton');
+	$(this).parent().removeClass('div');
+});
+
+</script>

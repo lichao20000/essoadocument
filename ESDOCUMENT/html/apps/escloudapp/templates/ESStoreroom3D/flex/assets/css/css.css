@@ -1,0 +1,157 @@
+/*** xiaoxiong 20111010 CSS file ***/
+/*** 修改整个3D库房的默认字体大小为12号 ***/
+Application{
+	fontSize : 12px ;
+}
+/*** 修改鼠标经过的提示信息字体的默认大小为12号 ***/
+ToolTip {
+	fontSize: 12;
+}
+/*** 修改 TitleWindow 组件的默认样式 start ***/
+TitleWindow{
+	titleStyleName: "TitleWindowTitleStyle";  
+	border-color:#B5CDED;   
+	border-alpha:0.9;   
+	border-thickness-top:0;/* 边框的粗细 */   
+	border-thickness-bottom:6;/* 边框的粗细 */ 
+	border-thickness-left:6;   
+	border-thickness-right:6;   
+	rounded-bottom-corners:false;   
+	corner-radius:3;   
+	header-colors:#99BBE8,#BBD1EF;   
+	headerHeight:24;
+	fontSize : 12px ;
+	color : #000000 ;
+	backgroundColor : #ffffff ;
+	fontWeight: bold;
+	dropShadowEnabled : false ;
+	horizontalAlign : center ;
+	paddingBottom : 0 ;
+	paddingLeft : 0 ;
+	paddingRight : 0 ;
+	paddingTop : 0 ;
+}
+.TitleWindowTitleStyle{
+	fontSize : 12;
+	color : #15428B ;
+	letterSpacing : 1;
+	border-color:#B5CDED;   
+	border-alpha:0.9;   
+	border-thickness-top:1;/* 边框的粗细 */   
+	border-thickness-bottom:1;/* 边框的粗细 */
+	border-thickness-left:1;   
+	border-thickness-right:1;  
+} 
+/*** 修改 TitleWindow 组件的默认样式 end ***/
+/*** 3D库房管理首页右下角“档案馆/库列表”样式 ***/
+.wareHouseListPanelCss{
+	titleStyleName: "TitleWindowTitleStyle";  
+	border-color:#B5CDED;   
+	border-alpha:0.9;   
+	border-thickness-top:0;/* 边框的粗细 */   
+	border-thickness-bottom:6;/* 边框的粗细 */ 
+	border-thickness-left:6;   
+	border-thickness-right:6;   
+	rounded-bottom-corners:false;   
+	corner-radius:3;   
+	header-colors:#99BBE8,#BBD1EF;   
+	headerHeight:24;
+	fontSize : 12px ;
+	color : #000000 ;
+	backgroundColor : #ffffff ;
+	fontWeight: bold;
+	dropShadowEnabled : false ;
+	horizontalAlign : center ;
+}
+/*** 档案盒内条目信息 样式 ***/
+.BookBoxTitleWindowCss{
+	titleStyleName: "TitleWindowTitleStyle";  
+	border-color:#B5CDED;   
+	border-alpha:0.9;   
+	border-thickness-top:0;/* 边框的粗细 */   
+	border-thickness-bottom:6;/* 边框的粗细 */ 
+	border-thickness-left:6;   
+	border-thickness-right:6;   
+	rounded-bottom-corners:false;   
+	corner-radius:3;   
+	header-colors:#99BBE8,#BBD1EF;   
+	headerHeight:24;
+	fontSize : 12px ;
+	color : #000000 ;
+	backgroundColor : #ffffff ;
+	fontWeight: bold;
+	dropShadowEnabled : false ;
+	horizontalAlign : center ;
+	paddingBottom : 0 ;
+	paddingLeft : 0 ;
+	paddingRight : 0 ;
+	paddingTop : 2 ;
+}
+.NotVerticalMiddleTitleWindowCss{ 
+	titleStyleName: "TitleWindowTitleStyle";  
+	border-color:#B5CDED;   
+	border-alpha:0.9;   
+	border-thickness-top:0;/* 边框的粗细 */   
+	border-thickness-bottom:1;/* 边框的粗细 */ 
+	border-thickness-left:1;   
+	border-thickness-right:1;   
+	rounded-bottom-corners:false;   
+	corner-radius:3;   
+	header-colors:#99BBE8,#BBD1EF;   
+	headerHeight:24;
+	fontSize : 12px ;
+	color : #000000 ;
+	backgroundColor : #ffffff ;
+	fontWeight: bold;
+	dropShadowEnabled : false ;
+	horizontal-align:center;
+} 
+/*** 修改 Alert 组件的默认样式 start ***/
+Alert {
+	titleStyleName: "alertTitle";
+	messageStyleName: "alertMessage";
+	buttonStyleName: "alertButton";
+	backgroundColor : #F2F2F2 ; 
+	border-alpha:1;   
+	border-thickness-top:1;/* 边框的粗细 */   
+	border-thickness-bottom:1;/* 边框的粗细 */ 
+	border-thickness-left:1;   
+	border-thickness-right:1;   
+	rounded-bottom-corners:false;   
+	corner-radius:5;   
+	border-color:#D5D5D5; 
+	header-colors:#99BBE8,#BBD1EF;  
+	headerHeight:26;
+	verticalScrollPolicy:"off";
+	horizontalScrollPolicy:"off";
+}
+.alertTitle {
+	fontSize : 13;
+	color : #15428B ;
+	letterSpacing : 1;
+	border-color:#D5D5D5;   
+	border-alpha:1;   
+	border-thickness-top:1;/* 边框的粗细 */   
+	border-thickness-bottom:1;/* 边框的粗细 */
+	border-thickness-left:1;   
+	border-thickness-right:1;  
+}
+.alertMessage {
+	letterSpacing: 0;
+	fontSize: 13;
+	color: #333333;
+	fontWeight: bold;
+}
+.alertButton {
+	letterSpacing: 0;
+	fontSize: 12;
+	color: #333333;
+}
+/*** 修改 Alert 组件的默认样式 end ***/
+/*** MiniTool 按钮的样式 ***/
+.MiniToolButtonCss{
+	paddingBottom : 0 ;
+	paddingLeft : 0 ;
+	paddingRight : 0 ;
+	paddingTop : 0 ;
+}

@@ -1,0 +1,202 @@
+<style type="text/css">
+<!--
+.ldmback {
+	float: right;
+	height: 28px;
+	color: #fff;
+	line-height: 28px;
+	padding: 0 5px 0px 5px;
+	padding-left: 28px;
+	_border-top-color: tomato;
+	_border-left-color: tomato;
+	_filter: chroma(color =         tomato);
+	background-position-x: 5px;
+	_border-top-color: tomato;
+	cursor: pointer;
+	background:
+		url(<?php echo $tplPath;?>/public/flexigrid/css/images/table_refresh.png)
+		no-repeat 5px;
+	background-color: #6f6e81;
+}
+
+.ldmback:HOVER {
+	background-color: #133959;
+}
+
+.path1 {
+	fheight: 28px;
+	line-height: 28px;
+	padding: 0 5px 0px 5px;
+	float: left;
+	font-size: 15px;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+-->
+</style>
+<div class="filemain">
+	<div class="ldmtop">
+		<div class="submit">
+
+			<span class="ldmback" id="back" style="">上一层</span>
+
+		</div>
+		<div class="path1">电子文件中心\</div>
+		<div class="clear"></div>
+	</div>
+	<div class="mycontent">
+		<?php 
+		$list=isset($list)?$list:"";
+		if($list==""){
+			?>
+		<span>没有文件</span> <input type="hidden" name="parentid"
+			value="<?php echo isset($val['parentid'])?$val['parentid']:"0";?>" />
+		<?php
+		}
+		else {
+
+			foreach ($list as $k=>$val){
+				?>
+		<?php if(($k)%4===0||$k===0){ ?>
+		<div class="line">
+			<?php }?>
+			<div class="list" id="<?php echo $val->id;?>">
+				<div class="photo">
+					<a href="javascript:void(0)"><img
+						src="<?php echo $tplPath;?>/ESEFile/img/files.png" /> </a>
+				</div>
+				<div class="re_title">
+					<span><?php echo $val->estitle;?> </span>
+				</div>
+				<div class="re_time">
+					<span>电子文件共</span><a href="javascript:void(0)"><?php echo $val->hookingNum+$val->notHookNum;?>
+					</a><span>个</span>
+				</div>
+				<div class="re_intro">
+					<span>未挂接</span><a href="javascript:void(0)"><?php echo $val->notHookNum;?>
+					</a><span>个</span>
+				</div>
+				<input type="hidden" name="havesub"
+					value="<?php if($val->isParent==1){echo "true";}else{echo "false";}?>" />
+				<input type="hidden" name="parentid"
+					value="<?php echo $val->parentid;?>" /> <input type="hidden"
+					class="esfilepath" name="esfilepath"
+					value="<?php echo $val->espath;?>" />
+			</div>
+			<?php if(($k+1)%4===0||count($list)===$k){ ?>
+		</div>
+		<?php
+				}
+			}
+		}
+		?>
+	</div>
+	<div class="clear"></div>
+
+</div>
+<script type="text/javascript">
+
+var path=$(".path1").html();
+//点击进入
+$(".mycontent .list").die().live('click dblclick',function(event){
+	if(event.type=='click'){
+		$(".mycontent img").removeClass("selected");
+		$(this).find("img").eq(0).addClass("selected");
+	}else{
+		ssfilepath = $(this).find(".esfilepath").val();
+		var id=$(this).attr("id");
+		var havesub = $(this).find("input[name='havesub']").val();
+		path+=$(this).find(".re_title").text()+"\\";
+		if(havesub=="false"){
+			$(".mycontent").html("");
+			var html = '<div class="list">';
+				html +='<input type="hidden" name="parentid" value="'+id+'" />';
+				html +='</div>';
+			$(".mycontent").html(html);
+			$(".path1").html(path);
+				return;
+		}
+		
+		
+		var src='<?php echo $tplPath?>/ESEFile/img/three.gif';
+		var url = $.appClient.generateUrl({ESEFile:'access'},'x');
+		$.ajax({
+			url:url,
+			type:"POST",
+			cache:false,
+			dataType:"json",
+			data:{
+				param:id
+				},
+			error:function(){
+				alert("系统错误");
+			},
+			success:function(datas){
+				var length = datas.length;
+				$(".mycontent").html("");
+				var html='';
+				for(var i=0;i<length;i++){
+					if(i===0||i%4===0){
+						html+='<div class="line">';
+						}
+					html+='<div class="list" id="'+datas[i].id+'">';
+					html+='<div class="photo"><a href="javascript:void(0)"><img src="<?php echo $tplPath?>/ESEFile/img/files.png" /></a></div>';
+					html+='<div class="re_title"><span>'+datas[i].estitle+'</span></div>';
+					html+='<div class="re_time"><span>电子文件共</span><a href="javascript:void(0);"><span>'+(Number(datas[i].hookingNum)+Number(datas[i].notHookNum))+'</span></a>个</div>';					
+					html+='<div class="re_intro"><span>未挂接</span><a href="javascript:void(0);">'+datas[i].notHookNum+'</a>个</div>';
+					html+='<input type="hidden" name="havesub" value="'+datas[i].isParent+'" />';
+					html+='<input type="hidden" name="parentid" value="'+datas[i].parentid+'" />';
+					html+='<input type="hidden" name="esfilepath" class="esfilepath" value="'+datas[i].espath+'"/>';
+					html+='</div>';
+					if((i+1)%4===0||(length-1)===i){
+	                    html+='</div>';
+			            }
+				}
+				$(".mycontent").append(html);
+				$(".path1").html(path);
+			}
+		});
+		
+	}
+});
+var ext=/^[^\'\"\=\{\}\[\]\\\/\<\>\n\r\*\?\|!,.。：]*$/;
+var exg = /\\(\w*[^x00-xff]*)*\\?$/;
+//后退
+$('#back').die().live('click',function(){
+	var pid = $("input[name='parentid']").val();
+		if(pid==""||pid=="0"){
+			$.dialog.notice({icon:'warning',content:'已经到顶层了',time:3});
+			return;
+		}
+		path = path.replace(exg,"");
+		path+="\\";
+		$(".path1").html(path);
+		var url = $.appClient.generateUrl({ESEFile:'getup'},'x');
+		$.post(url,{param:pid},function(datas){
+				var list = eval("("+datas+")");
+				var length = list.length;
+				$(".mycontent").html("");
+				var html='';
+				for(var i=0;i<length;i++){
+					if(i==0||i%4==0){
+					html+='<div class="line">';
+					}
+					html+='<div class="list" id="'+list[i].id+'">';
+					html+='<div class="photo"><a href="javascript:void(0)"><img src="<?php echo $tplPath?>/ESEFile/img/files.png" /></a></div>';
+					html+='<div class="re_title"><span>'+list[i].estitle+'</span></div>';
+					html+='<div class="re_time"><span>电子文件共</span><a href="javascript:void(0);"><span>'+(Number(list[i].hookingNum)+Number(list[i].notHookNum))+'</span></a>个</div>';					
+					html+='<div class="re_intro"><span>未挂接</span><a href="javascript:void(0);" >'+list[i].notHookNum+'</a>个</div>';
+					html+='<input type="hidden" name="havesub" value="'+list[i].isParent+'" />';
+					html+='<input type="hidden" name="parentid" value="'+list[i].parentid+'" />';
+					html+='<input type="hidden" name="esfilepath" class="esfilepath" value="'+list[i].espath+'"/>';
+					html+='</div>';
+					if((i+1)%4==0||(length-1)==i){
+			         html+='</div>';
+					}
+				}
+				$(".mycontent").append(html);
+			
+		});
+	
+});
+</script>

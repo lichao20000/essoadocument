@@ -1,0 +1,77 @@
+<!-- yanghuiqiang 20140522 意见反馈详细窗口-->
+
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="detail" method="post" enctype="multipart/form-data">
+			<table id="table_detail" style="height: 200px;">
+				<tr>
+					<td><input type="hidden" name="id" id="id"
+						value="<?php echo $feedback->id;?>"
+						style="width: 380px; height: 0px;" /></td>
+				</tr>
+				<tr>
+					<td>反馈内容：</td>
+					<td><textarea name="content" id="content"
+							style="width: 380px; height: 100px;"><?php echo $feedback->content;?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>联系方式：</td>
+					<td><input type="text" name="contact" id="contact"
+						value="<?php echo $feedback->contact;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>用户ID：</td>
+					<td><input type="text" name="userid" id="userid"
+						value="<?php echo $feedback->userId;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>设备信息：</td>
+					<td><textarea name="deviceInfos" id="deviceInfos"
+							style="width: 380px; height: 40px;"><?php echo $feedback->deviceInfos;?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>提交时间：</td>
+					<td><input type="text" name="submitTime" id="submitTime"
+						value="<?php echo gmdate("Y-m-d H:i:s", ($feedback->submitTime / 1000) + 8*3600);?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>是否回复：</td>
+					<td><input type="text" name="isreply" id="isreply"
+						value="<?php echo ($feedback->reply==1?'是':'否');?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>回复内容：</td>
+					<td><textarea name="replyContent" id="replyContent" 
+							readOnly="<?php echo ($feedback->reply==1?'true':'false');?>"
+							style="width: 380px; height: 100px;"><?php echo ($feedback->replyContent);?></textarea></td>
+				</tr>
+				<tr>
+					<td>回复时间：</td>
+					<td><input type="text" name="replyTime" id="replyTime" readonly="false"
+						value="<?php echo ($feedback->replyTime == 0 ? "" : gmdate("Y-m-d H:i:s", ($feedback->replyTime / 1000) + 8*3600));?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#table_detail input:text').attr("readOnly", true); 
+	$('#table_detail textarea').attr("readOnly", true);
+});
+</script>
+

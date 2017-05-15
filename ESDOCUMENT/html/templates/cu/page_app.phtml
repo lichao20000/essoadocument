@@ -1,0 +1,37 @@
+<?php
+array_unshift($tagsList , '常用业务应用');
+?>
+<div class="appCenterBox" style="display:none">
+  <input type="hidden" id="applist_value" value="<?php echo $this->plain(json_encode($list)) ?>">
+  <div class="appCenter">
+    <div class="appCenterL" id="appslicerbutton">
+
+<?php foreach ($tagsList as $key => $tag): ?>
+      <p class="appCenterLOff"><a href="javascript:void(0)" rel="k<?php echo $key ?>"><?php echo $this->plain($tag) ?></a></p>
+<?php endforeach ?>
+      <P class="appCenterLOff" style="border-bottom:0px;"><a href="<?php echo url('app/center')?>">应用管理</a></P>
+    </div>
+    <div class="appCenterR" >
+      <div class="appCenterRPage">
+            <div class="appCenterRClose"><a href="#"><span>关闭</span></a></div>
+      <div id="usualAPPDisplay_opt" style="width:120px;"><a href="<?php echo url('setting/0/appshow')?>" class="fontWeight100 underline" style="color:#fff;">设置常用业务应用</a>
+        </div>
+        <div class="appCenterRSearch">
+          <label for="appsearch"></label>
+          <input type="text" id="appsearch" style="border:0px;background:none;color:#fff;height:29px;line-height:29px;float:left;width:180px" value="搜索应用名称" />
+          <div class="appCenterRSearchImg"><a href="javascript:void(0)" id="appsearchbutton"><img src="<?php echo $tplPath?>/images/appCentetSearch.gif" width="16" height="16" alt="搜索" align="absmiddle"/></a></div>
+        </div>
+      </div>
+
+      <div id="appslider" style="float:left;height:175px;display:block">
+        <ul style="float:left;height:175px">
+          <li class="appCenterRIcons" style="height:180px">
+          </li>
+        </ul>
+      </div>
+      <div class="appCenterRPage1 padding0" id="appsliderpage">
+
+      </div>
+    </div>
+  </div>
+</div>

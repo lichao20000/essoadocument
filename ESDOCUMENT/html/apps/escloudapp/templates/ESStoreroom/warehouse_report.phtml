@@ -1,0 +1,59 @@
+<script>
+$(function(){
+	$("#myreport").flexigrid({
+		  url: $.appClient.generateUrl({ESStoreroom :'report_json',houid:selectid,ogid:oganid}, 'x'),
+		  dataType: 'json',
+		  colModel : [
+				{display: '操作', name : 'c3', width : 100, sortable : true, align: 'center'},
+				{display: '库房编号', name : 'c4', width : 300, sortable : true, align: 'center'},
+				{display: '报表名称', name : 'c5', width : 300, sortable : true, align: 'center'},
+				{display: '数据更新时间', name : 'c6', width : 250, sortable : true, align: 'center'}
+				],
+		  buttons : [
+				{name: '导入报表', bclass: 'import_report',onpress:report}
+				],
+			sortname: "c3",
+			sortorder: "asc",
+			usepager: true,
+			title: '库房报表',
+			useRp: true,
+			rp: 20,
+			nomsg:"没有数据",
+			showTableToggleBtn: true,
+			pagetext: '第',
+			outof: '页 /共',
+			width: 'auto',
+			height: 'auto',
+			pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+		});	
+
+
+	/*
+		@author zhangyanxin
+		导入报表
+	*/
+    function report(){
+	$.ajax({
+		url:"<?php echo $esaction->generateUrl(Array('ESStoreroom'=>'import_report'),'x');?>",
+	    success:function(data){
+	    	$.dialog({
+		    	title:'导入报表',
+	    	   	fixed:false,
+	    	    resize: false,
+	    	    okVal:'保存',
+			    ok:true,
+			    cancelVal: '取消',
+			    cancel: true,
+		    	content:data
+		    });
+	    	
+		    },
+		    cache:false
+		});
+	}	
+    sizeChanged($("#extrareport"),$("#myreport"));
+});
+</script>
+<div id="extrareport">
+	<table id="myreport"></table> 
+</div>

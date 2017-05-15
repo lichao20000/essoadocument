@@ -1,0 +1,13 @@
+<div class="estransfer">
+	<ul>
+		<li><span>移交人</span><input type="text" id='person' /></li>
+		<li><span>移交日期</span><input type="text" value="<?php echo date("Y-m-d") ?>" id='times' /></li>
+		<li><span>移交部门</span><input type="text" id='unit'/></li>
+		<li><span>档案类型</span><input type="text" id='type' /></li>
+		<li><span>移交数量(卷)</span><input type="text" id='numbers' /></li>
+		<li><span>移交数量(件)</span><input type="text" id='files' /></li>
+		<li><span>移交开始日期</span><input type="text" id='starttime' onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" /></li>
+		<li><span>移交结束日期</span><input type="text" id='endtime' onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" /></li>
+		<li style="width:100%"><span>备注</span><textarea id='remark' style="width:430px;height:50px;float:left"></textarea></li>
+	</ul>
+</div>

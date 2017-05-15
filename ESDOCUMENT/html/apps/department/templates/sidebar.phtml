@@ -1,0 +1,39 @@
+<div class="left">
+  <ul style=" background:none;">
+    <li><a href="<?php echo url($this->getUrl(''));?>">返回站点页面</a></li>
+<?php if ($editable): ?>
+<?php if ($menuitem == 'settings'): ?>
+    <li class="leftOn bold">站点设置</li>
+<?php else: ?>
+    <li><a href="<?php echo url($this->getUrl('settings'));?>">站点设置</a></li>
+<?php endif ?>
+<?php if ($menuitem == 'members'): ?>
+    <li class="leftOn bold">成员管理</li>
+<?php else: ?>
+    <li><a href="<?php echo url($this->getUrl('members'));?>">成员管理</a></li>
+<?php endif ?>
+<?php if ($menuitem == 'layout'): ?>
+    <li class="leftOn bold">布局管理</li>
+<?php else: ?>
+    <li><a href="<?php echo url($this->getUrl('layout')) ?>">布局管理</a></li>
+<?php endif ?>
+<?php endif ?>
+<?php if ($editable || $appadmin): ?>
+<?php if ($menuitem == 'apps'): ?>
+    <li class="leftOn bold">应用管理</li>
+<?php else: ?>
+    <li><a href="<?php echo url($this->getUrl('apps')) ?>">应用管理</a>
+<?php endif ?>
+<?php if ($menuitem == 'quicklinks'): ?>
+    <li class="leftOn bold">图片链接</li>
+<?php else: ?>
+    <li><a href="<?php echo url($this->getUrl('quicklinks') . '?type=image') ?>">图片链接</a></li>
+<?php endif ?>
+<?php if ($menuitem == 'textlinks'): ?>
+    <li class="leftOn bold">文字链接</li>
+<?php else: ?>
+    <li><a href="<?php echo url($this->getUrl('quicklinks') . '?type=text') ?>">文字链接</a></li>
+<?php endif ?>
+<?php endif ?>
+  </ul>
+</div>

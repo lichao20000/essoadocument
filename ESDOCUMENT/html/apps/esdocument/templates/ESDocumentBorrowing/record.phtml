@@ -1,0 +1,31 @@
+<style type="text/css">
+	#tbd{border-right:1px solid #ccc;}
+	.ztree li span{
+	color:#444;
+}
+</style>
+<div id="esmenu1" class="esleft1" style="width: 180px;">
+				
+			</div>
+<table id="tb">
+	<tr>
+		<td id="tbd">
+			<div class="estree" >
+				<div class="eshead1" style="width: 220px;">
+					<input type="button" onclick="createFileTree(1);" value="按阶段" style="margin-left: 10px;"/>&nbsp;&nbsp;
+					<input type="button" onclick="createFileTree(2);" value="按部门"/>&nbsp;&nbsp;
+					<input type="button" onclick="createFileTree(3);" value="按装置" />
+				</div>
+				<ul id="filetree" class="ztree" style="width: 220px;overflow:auto; height:380px;"></ul>
+				<input type="hidden" id="treenodeid" value="0" />
+				<input type="hidden" id="treeCode" value="" />
+				<input type="hidden" id="treeType" value="1" />
+			</div>
+		</td>
+		<td>
+			<div id="borrowlistbox" style="width:600px;height:380px;">
+				
+			</div>
+		</td>
+	</tr>
+</table>

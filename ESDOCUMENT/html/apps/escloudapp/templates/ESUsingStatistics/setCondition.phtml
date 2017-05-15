@@ -1,0 +1,469 @@
+<form id="addPlan">
+<fieldSet style="border-bottom: #aaa 1px solid;">
+<span style="font-size: 13px;line-height:20px;top: 5px;font-weight: bolder; ">统计方案名称:</span>
+<input value="<?php if(isset($name)) echo $name ?>" type="text" name="name" style="width:250px;height:20px;line-height:20px;">
+</fieldSet>
+<fieldSet>
+<div class='staticTable'>
+	<table>
+	<tr><th>输出项</th><th>输出排序</th><th>排序</th><th>计数</th><th>合计</th><th>均值</th><th>最大值</th><th>最小值</th></tr>
+	<?php if($type=='form'){?>
+	<tr>
+		<td><input type="checkbox" name="code" value="CODE" class='fieldsForNew' >借阅单编号</td>
+		<td><input type="text" name="sortNum" class="sortNum" maxlength='1' readOnly=''></td>
+		<td>
+		<select name="sortRule" >
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+		<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="reader" value="READER" class='fieldsForNew' >借阅人</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+		<td><input type="checkbox" name="rule" value="count_number" >计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="dept" value="DEPT" class='fieldsForNew'>单位</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+		<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+		
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="tel" value="TEL" class='fieldsForNew'>电话</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number" >计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="email" value="EMAIL" class='fieldsForNew'>邮箱</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="use_purpose" value="USE_PURPOSE" class='fieldsForNew'>利用目的</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><span style="white-space:nowrap;"><input type="checkbox" name="valid_date" value="VALID_DATE" class='fieldsForNew'>催还提前天数</span></td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+		<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre">均值</td>
+		<td><input type="checkbox" name="max" value="count_max">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="regsiter" value="REGISTER" class='fieldsForNew'>登记人</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="register_date" value="REGIST_DATE" class='fieldsForNew'>登记日期</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<!-- 此字段修改时需通知后台  -->
+		<td><input type="checkbox" name="status" value="STATUS" class='fieldsForNew'>状态</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+			<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="indefity" value="IDENTITY" class='fieldsForNew'>身份证</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<!-- 此字段修改时需通知后台  -->
+		<td><input type="checkbox" name="innerFileCount" value="INNERFILECOUNT" class='fieldsForNew'>件数</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+		<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre">均值</td>
+		<td><input type="checkbox" name="max" value="count_max">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min">最小值</td>
+	</tr>
+	<tr>
+		<!-- 此字段修改时需通知后台  -->
+		<td><input type="checkbox" name="fileCount" value="FILECOUNT" class='fieldsForNew'>卷数</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+		<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre">均值</td>
+		<td><input type="checkbox" name="max" value="count_max">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min">最小值</td>
+	</tr>
+	<tr>
+		<!-- 此字段修改时需通知后台  -->
+		<td><input type="checkbox" name="DESCRIPTION" value="DESCRIPTION" class='fieldsForNew'>备注</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<?php }else{?>
+	<tr>
+		<!-- 此字段修改时需通知后台  -->
+		<!-- 
+		<option value='ARCHIVE_CODE'>档号</option>
+				<option value='TITLE'>题名</option>
+				<option value='archive_type'>借阅类型</option>
+				<option value='DESCRIPTION'>备注</option>
+				<option value='STATUS'>状态</option>
+				<option value='PATH'>PATH</option>
+				<option value='DATE'>发生日期</option>
+				<option value='RETURN_DATE'>归还日期</option>
+				<option value='FILECOUNT'>卷数</option>
+				<option value='INNERFILECOUNT'>件数</option> -->
+		<td><input type="checkbox" name="ARCHIVE_CODE" value="ARCHIVE_CODE" class='fieldsForNew'>档号</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="TITLE" value="TITLE" class='fieldsForNew'>题名</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="archive_type" value="archive_type" class='fieldsForNew'>借阅类型</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="DESCRIPTION" value="DESCRIPTION" class='fieldsForNew'>备注</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="STATUS" value="STATUS" class='fieldsForNew'>状态</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="PATH" value="PATH" class='fieldsForNew'>PATH</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="DATE" value="DATE" class='fieldsForNew'>发生日期</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="RETURN_DATE" value="RETURN_DATE" class='fieldsForNew'>归还日期</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="FILECOUNT" value="FILECOUNT" class='fieldsForNew'>卷数</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" >合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre" >均值</td>
+		<td><input type="checkbox" name="max" value="count_max">最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" >最小值</td>
+	</tr>
+	<tr>
+		<td><input type="checkbox" name="INNERFILECOUNT" value="INNERFILECOUNT" class='fieldsForNew'>件数</td>
+			<td><input type="text" name="sortNum" class="sortNum" maxlength='2' readOnly=''></td>
+		<td>
+		<select name="sortRule">
+			<option value="desc">降序</option>
+			<option value="asc">升序</option>
+		</select>
+		</td>
+				<td><input type="checkbox" name="rule" value="count_number">计数</td>
+		<td><input type="checkbox" name="sum" value="count_sum" >合计</td>
+		<td><input type="checkbox" name="pre" value="count_pre">均值</td>
+		<td><input type="checkbox" name="max" value="count_max" >最大值</td>
+		<td><input type="checkbox" name="min" value="count_min" >最小值</td>
+	</tr>
+	<?php }?>
+	<?php 
+	 if(isset($data)){
+	     for($i =0 ;$i<count($data);$i++){
+			//showColModel.push({display:formFiled[i].field,name:'d'+formFiled[i].id,width:80,sortable : true, align: 'center',metadata:'d'+formFiled[i].id});
+					echo '<tr><td><span style="white-space:nowrap;"><input type="checkbox" name="c'.$data[$i]['id'].'" value="c'.$data[$i]['id'].'"  class="fieldsForNew">'.$data[$i]['field'].'</span></td><td><input type="text" name="sortNum" class="sortNum" maxlength="2" readOnly=""></td>';
+					echo '<td><select name="sortRule"><option value="desc">降序</option><option value="asc">升序</option></select></td>';
+					echo '<td><input type="checkbox" name="rule" value="count_number">计数</td>';
+					if($data[$i]['type'] == 'NUMBER' || $data[$i]['type'] == 'FLOAT'){
+						echo '<td><input type="checkbox" name="sum" value="count_sum">合计</td>';
+						echo '<td><input type="checkbox" name="pre" value="count_pre">均值</td>';
+						echo '<td><input type="checkbox" name="max" value="count_max">最大值</td>';
+						echo '<td><input type="checkbox" name="min" value="count_min">最小值</td></tr>';
+					}else{
+						echo '<td><input type="checkbox" name="sum" value="count_sum" disabled="true">合计</td>';
+						echo '<td><input type="checkbox" name="pre" value="count_pre" disabled="true">均值</td>';
+						echo '<td><input type="checkbox" name="max" value="count_max" disabled="true">最大值</td>';
+						echo '<td><input type="checkbox" name="min" value="count_min" disabled="true">最小值</td></tr>';
+					}
+		}
+	}
+	
+	?>
+	</table>
+</div>
+</fieldSet>
+</form>
+<script type="text/javascript">
+count_for_sort =0; 
+<?php if(isset($result)) {  ?>
+var result = <?php echo $result ?>;
+var list = result.item;
+var len = list.length;
+for(var i=0; i<len; i++) {
+	var flag = list[i]['term'];
+	var item = $('input[value="'+flag+'"]');
+	var parent = item.closest('tr');
+	item.attr('_id',list[i]['id']);
+	if(list[i]['is_output'] === 'true') {
+		item.attr('checked',true);
+	}
+	if(count_for_sort<list[i]['outputSort']){
+		count_for_sort = list[i]['outputSort'];
+	}
+	$('input[name="sortNum"]',parent).val(list[i]['outputSort']=='0' ? '' : list[i]['outputSort']);
+	$('select[name="sortRule"]',parent).children('option[value="'+list[i]['sort']+'"]').attr('selected',true);
+	var longs = list[i]['count_number'];
+	for(var j=0;j<longs.split('|').length;j++){
+		var v = longs.split('|')[j];
+		if(v.split(':')[1] === 'true'){
+			$('input[name="'+v.split(':')[0]+'"]',parent).attr('checked',true);
+		}
+	}
+	//if(list[i]['count_number'] === 'true') {
+		//$('input[name="rule"]',parent).attr('checked',true);
+	//}
+}
+<?php } ?>
+/**    liuhezeng 20140930   添加选择统计条件之后是否勾选列输出的逻辑   **/
+$("document").ready(function(){ 
+	$("input[type='checkbox']").click(function(){
+
+		var tmpCheck = $(this).parent().parent().find("td:eq(0)").find("input");
+		if(null == $(this).attr("class") || $(this).attr("class") == "undefined"){
+			tmpCheck.prop('checked',true);
+		}
+		var isChecked = false;
+	    $(this).parent().parent().find("td:gt(0)").find("input").each(function(){
+				if($(this).attr("checked")){
+					isChecked = true;
+				}
+		});
+		if(isChecked){
+			tmpCheck.prop('checked',true);
+		}else{
+			tmpCheck.prop('checked',false);
+		}
+	});
+});
+
+</script>

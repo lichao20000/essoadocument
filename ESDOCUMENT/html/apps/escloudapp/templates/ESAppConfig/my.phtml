@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<title>系统认证设置</title> 
+<style type="text/css"> 
+body { font-size:14px; font-family:"宋体"} 
+ol li { margin:8px} 
+#con { font-size:12px; width:400px; margin:0 auto} 
+#tags { height:23px; width:200px; margin:0; padding:0; margin-left:10px} 
+#tags li { float:left; margin-right:1px; background:url(images/tagleft.gif) no-repeat left bottom; height:23px; list-style-type:none} 
+#tags li a { text-decoration:none; float:left; background:url(images/tagright.gif) no-repeat right bottom; height:23px; padding:0px 10px; line-height:23px; color:#999} 
+#tags li.emptyTag { width:4px; background:none} 
+#tags li.selectTag { background-position: left top; position:relative; height:25px; margin-bottom:-2px} 
+#tags li.selectTag a { background-position: right top; color:#000; height:25px; line-height:25px;} 
+#tagContent { padding:1px; background-color:#fff; border:1px solid #aecbd4;} 
+.tagContent { background:url(images/bg.gif) repeat-x; height:150px; padding:10px; color:#474747; width:576px; display:none} 
+#tagContent div.selectTag{ display:block} 
+
+</style> 
+</head> 
+<body> 
+<div id="con"> 
+<ul id="tags"> 
+<li><a href="javascript:void(0)" onclick="selectTag('tagContent0',this)">默认配置</a></li> 
+<li class="selectTag"><a href="javascript:void(0)" onclick="selectTag('tagContent1',this)">CAS</a></li> 
+<li><a href="javascript:void(0)" onclick="selectTag('tagContent2',this)">openSSO</a></li> 
+</ul> 
+<div id="tagContent"> 
+<div id="tagContent0" class="tagContent"><ul id="config">
+<li><span><font color="black" size="3">启用:   </font></span><input type="checkbox" /></li></ul></div> 
+<div id="tagContent1" class="tagContent selectTag">
+<ul id="config2">
+<li><span><font color="black" size="3">启用:   </font></span><input type="checkbox" /></li>
+<li><span><font color="black" size="3">登录路径:&nbsp;&nbsp;&nbsp;&nbsp;</font></span><input type="text" style="width:200px;"></input></li>
+<li><span><font color="black" size="3">注销路径:&nbsp;&nbsp;&nbsp;&nbsp;</font></span><input type="text" style="width:200px;"></input> </li>
+<li><span><font color="black" size="3">验证路径:&nbsp;&nbsp;&nbsp;&nbsp;</font></span><input type="text" style="width:200px;"></input></li>
+<li><span><font color="black" size="3">验证返回路径:</font></span><input type="text" style="width:200px;"></input> </li>
+</ul></div> 
+<div id="tagContent2" class="tagContent"><ul id="config3">
+<li><span><font color="black" size="3">启用:   </font></span><input type="checkbox" /></li>
+<li><span><font color="black" size="3">登录路径:&nbsp;&nbsp;&nbsp;&nbsp;</font></span><input type="text" style="width:200px;"></input> </li>
+<li><span><font color="black" size="3">注销路径:&nbsp;&nbsp;&nbsp;&nbsp;</font></span><input type="text" style="width:200px;"></input> </li>
+</ul>
+</div> 
+</div> 
+</div> 
+<script type="text/javascript"> 
+function selectTag(showContent,selfObj){ 
+// 操作标签 
+var tag = document.getElementById("tags").getElementsByTagName("li"); 
+var taglength = tag.length; 
+for(i=0; i<taglength; i++){ 
+tag[i].className = ""; 
+} 
+selfObj.parentNode.className = "selectTag"; 
+// 操作内容 
+for(i=0; j=document.getElementById("tagContent"+i); i++){ 
+j.style.display = "none"; 
+} 
+document.getElementById(showContent).style.display = "block"; 
+
+} 
+</script> 
+</body> 
+</html> 

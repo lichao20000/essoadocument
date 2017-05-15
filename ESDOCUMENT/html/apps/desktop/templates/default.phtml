@@ -1,0 +1,62 @@
+<script type="text/javascript">
+var menuitem = 'my_space';
+var appAreaStatus = <?php echo $appcanvasstatus_desktop?>;
+</script>
+<link href="<?php echo $tplPath?>/css/default_template.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $tplPath?>/css/app_desktop.css" rel="stylesheet" type="text/css" />
+<div class="content940">
+  <div id="desktop" class="appDesktop">
+<?php foreach ($layout as $i => $column): ?>
+    <div class="column appDesktop<?php if (($i+1)%2 == 0) {  echo 'R';}else{echo 'L';}?> c<?php echo $i;?>">
+<?php
+foreach ($column as $block):
+  if (!isset($apps[$block[1]])) {
+    continue;
+  }
+  $appInstance = AopApp::getInstance($apps[$block[1]]);
+?>
+      <div class="block" style="margin:5px 0">
+        <div class="cnt">
+        <?php
+
+          echo $appInstance->draw($block[2], array('instance_id' => $instanceId));
+        ?>
+        </div>
+      </div>
+<?php endforeach ?>
+    </div>
+<?php endforeach;?>
+</div>
+</div>
+
+
+<div class="QQbox" id="divQQbox" style="top:100px">
+	<div class="OnlineBtn"><a href="<?php echo url($this->getUrl('layout'), true);?>">进入管理页面</a></div>
+</div>
+<script type="text/javascript">
+<!--
+lastScrollY = 0;
+function FloatScroll() {
+    var diffY;
+    if (document.documentElement && document.documentElement.scrollTop){
+    	diffY = document.documentElement.scrollTop;
+	}
+    else if (document.body){
+    	diffY = document.body.scrollTop;
+	}
+    else{}
+    percent = .1 * (diffY - lastScrollY);
+    if (percent > 0){
+		percent = Math.ceil(percent);
+	}
+    else{
+		percent = Math.floor(percent);
+	}
+    document.getElementById("divQQbox").style.top = parseInt(document.getElementById("divQQbox").style.top) + percent + "px";
+    lastScrollY = lastScrollY + percent;
+}
+
+window.setInterval("FloatScroll()",1);
+//-->
+</script>
+<?php echo $this->render('footer') ?>

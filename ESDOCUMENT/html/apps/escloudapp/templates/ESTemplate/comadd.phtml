@@ -1,0 +1,23 @@
+<style type="text/css">
+<!--
+td{margin-top:10px;}
+-->
+</style>
+<div style="">
+  <form id="comadd">
+    <table>
+      <tr>
+        <td>被替换值：</td>
+        <td><input type="text" name="unrep" value="<?php echo isset($list->tagPrepropvalue)?$list->tagPrepropvalue:"";?>" style="height:18px;width:150px;"/></td>
+      </tr>
+      <tr>
+        <td>替换值：</td>
+        <td><input type="text" name="rep" value="<?php echo isset($list->tagPropvalue)?$list->tagPropvalue:"";?>" style="height:18px;width:150px;"/></td>
+      </tr>
+      <tr>
+        <td>描述：</td>
+        <td><input type="text" name="descri" value="<?php echo isset($list->tagDescription)?$list->tagDescription:"";?>" style="height:18px;width:150px;"/></td>
+      </tr>
+    </table>
+    </form>
+</div>

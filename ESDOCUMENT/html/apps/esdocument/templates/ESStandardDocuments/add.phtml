@@ -1,0 +1,20 @@
+<!-- xiewenda -->
+<form id="addStandardDocument" action="" method="post">
+<div class="estransfer">
+<ul>
+<li><span>编号<font color="red" size="3">*</font></span><input  type="text" name="no"  verify="desc/20/1/0"  value=""></li>
+<li><span>中文名称<font color="red" size="3">*</font></span><input type="text" name="chineseName"   verify="china/100/1/0"  value=""></li>
+<li style="width:600px"><span>文件描述</span><textarea name="description"   verify="text/100/0/0" style="width:445px;height:50px;float:left"></textarea></li>
+<li style="width:600px"><span>所属规定<font color="red" size="3">*</font></span>
+<input type="text" style="width:445px" name="regulation_name" title="提示：单击弹出规定列表" verify="text/100/1/0" readonly="readonly"  value="">
+<input type="hidden" name="regulation_id" value="" />
+</li>
+<li><span>附件<font color="red" size="3">*</font></span><input type="button" id="fileUp" value='附件上传' class='fileUpButton' style="height:25px"/>
+</li>
+</ul>
+</div>
+<div id="loadfile" style="margin-left:150px"></div>
+</form>
+
+ 
+ 

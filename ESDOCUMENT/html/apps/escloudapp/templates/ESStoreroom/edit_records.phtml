@@ -1,0 +1,56 @@
+<style type="text/css">
+<!--
+#myrecords table input{width:182px;height:20px;}
+-->
+</style>
+<form id="myrecords">
+	<input type="hidden" name="id" value="<?php echo $data[0]?>"/>
+<table style="width:300px;height:200px;border-collapse:collapse;margin-left:25px;padding-bottom:5px;">
+   <tr>
+     <td>记录日期</td>
+     <td><input type="text" verify="text/20/1/0" name="date" readonly="readonly"  value="<?php echo $data[1]?>"/></td>
+  </tr>
+     <tr>
+     <td>时间</td>
+     <td><input type="text" verify="text/20/1/0" name="time" readonly="readonly"  value="<?php echo $data[2]?>"/></td>
+  </tr>
+    <tr>
+     <td>温度</td>
+     <td><input type="text" name="temperature"  value="<?php echo $data[3]?>"/></td>
+  </tr>
+    <tr>
+     <td>湿度</td>
+     <td><input type="text" name="humidity"  value="<?php echo $data[4]?>"/></td>
+  </tr>
+</table>
+</form>
+<script type="text/javascript">
+$(function(){
+	$("input[name='date']").click(function(){
+		WdatePicker({
+			dateFmt:"yyyy-MM-dd",
+			realDateFmt:"yyyy-MM-dd",
+			maxDate:'%y-%M-%d'
+			});
+		});
+
+	$("input[name='time']").click(function(){
+		WdatePicker({
+			dateFmt:'H:mm:ss',
+			maxDate:'%H:%m:%s'
+			});
+		});
+	
+	//longjunhao 20140915 add 修复bug 527
+	$("input[name='date']").blur(function(){
+		if ($('#myrecords').validate()) {
+			$(this).removeClass('invalid-text');
+		}
+	});
+	$("input[name='time']").blur(function(){
+		if ($('#myrecords').validate()) {
+			$(this).removeClass('invalid-text');
+		}
+	});
+});
+</script>

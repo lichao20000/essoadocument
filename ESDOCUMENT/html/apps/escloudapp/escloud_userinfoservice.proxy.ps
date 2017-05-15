@@ -1,0 +1,76 @@
+<?php
+/**
+ *
+ *
+ * @author yanghuiqiang
+ *
+ */
+class ProxyEscloudappEscloud_userinfoservice extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_userinfoservice";
+
+	/**
+	 * 获取所有的用户信息
+	 * 
+	 */
+	public function getAllUserInfo()
+	{
+		$urlParam = array('getAllUserInfo');
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 删除用户信息
+	 * 
+	 */
+	public function deleteUserInfo($ids)
+	{
+		$urlParam = array('deleteUserInfo');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $ids, 'application/json;charset=UTF-8');
+	}
+
+	
+	/**
+	 * 获取用户信息
+	 * 
+	 */
+	public function getUserInfo($id)
+	{
+		$urlParam = array('getUserInfo',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 更新用户信息
+	 * 
+	 */
+	public function updateUserInfo($userinfo)
+	{
+		$urlParam = array('updateUserInfo');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $userinfo, 'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 添加用户信息
+	 * 
+	 */
+	public function addUserInfo($userinfo)
+	{
+		$urlParam = array('addUserInfo');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $userinfo, 'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 获取总记录数
+	 * 
+	 */
+	public function getCountAll()
+	{
+		return $this->get(self::SERVICE_NAME, "countAll");
+	}
+}

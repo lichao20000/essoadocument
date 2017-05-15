@@ -1,0 +1,108 @@
+<div id='noAuthUsersDiv'  style="border:none;width:640px;">
+	<table id="noAuthUsersGrid" style="border:none"></table>  
+</div>
+<script>
+$(document).ready(function(){
+	$("#noAuthUsersGrid").flexigrid({
+		url : $.appClient.generateUrl({ESUserInstanceAuth:'getNoAuthUsers',saasid:<?php echo $saasid?>}, 'x'),
+		dataType : 'json',
+		colModel : [ {
+			display : '',
+			name : 'serialNum',
+			width : 30,
+			align : 'center'
+		}, {
+			display : '<input id="noAuthUsersIds" type="checkbox"/>',
+			name : 'ids',
+			width : 30,
+			align : 'center'
+		}, {
+			name : 'ID',
+			metadata : 'ID',
+			align : 'center',
+			hide : true
+		}, {
+			display : '用户名',
+			name : 'USERID',
+			metadata : 'USERID',
+			width : 160,
+			align : 'left'
+		}, {
+			display : '姓名',
+			name : 'FULLNAME',
+			width : 160,
+			sortable : true,
+			align : 'left'
+		}, {
+			display : '手机',
+			name : 'MOBTEL',
+			metadata : 'MOBTEL',
+			width : 130,
+			sortable : true,
+			align : 'left'
+		}, {
+			display : '状态',
+			name : 'USERSTATUS',
+			metadata : 'USERSTATUS',
+			width : 30,
+			sortable : true,
+			align : 'left'
+		}],
+		buttons : [],
+		singleSelect : true,
+		usepager : true,
+		useRp : true,
+		rp : 20,
+		nomsg : "没有数据",
+		showTableToggleBtn : false,
+		pagetext : '第',
+		outof : '页 /共',
+		width : 'auto',
+		height : 'auto',
+		pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	
+	function sizeChanged(table){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var h = 400;
+		var flex = $("#"+table).closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    bDiv.height(h - headflootHeight);
+	    flex.height(h);
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	$('#noAuthUsersDiv div[class="tDiv2"]').append('<span class="gridpanleTitle"></span><div class="find-dialog"><input id="noAuthUsersQuery" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="noAuthUsersQuery" value="请输入关键字" /><span id="noAuthUsersQueryButton"></span></div>');
+	sizeChanged('noAuthUsersGrid');
+
+	$(document).keydown(function(event){
+		if(event.keyCode == 13 && document.activeElement.id == 'noAuthUsersQuery'){
+			noAuthUsersQuery();
+		}
+	});
+
+	$('#noAuthUsersQueryButton').click(function(){
+		noAuthUsersQuery();
+	});
+	
+	function noAuthUsersQuery(){
+		var keyword = $.trim($('#noAuthUsersQuery').val());
+		if(keyword == '' || keyword=='请输入关键字') {
+			keyword = '';
+		}
+		$("#noAuthUsersGrid").flexOptions({query:keyword}).flexReload();
+		return false;
+	}
+
+	//全选
+	$("#noAuthUsersIds").die().live('click',function(){
+		$("input[name='noAuthUsercbx']").attr('checked',$(this).is(':checked'));
+	});
+});
+</script>

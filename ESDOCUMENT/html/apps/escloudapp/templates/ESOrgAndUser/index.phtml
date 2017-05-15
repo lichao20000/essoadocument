@@ -1,0 +1,77 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link href="<?php echo $tplPath?>/ESOrgAndUser/css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESOrgAndUser/js/ESOrgAndUser.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESOrgAndUser/js/orgListTree.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESOrgAndUser/js/button.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/highcharts.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/modules/exporting.js"></script>
+<!-- gengqianfeng 20140913 用户添加验证js和css引用 -->
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/autovalidate/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/autovalidate/validate.js"></script>
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"机构用户管理", content:"#esmenu,#esone,#eslist"});
+	function sizeChanged(){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var h = $(window).height() - $("#eslist").position().top;
+		var flex = $("#userGrid").closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    bDiv.height(h - headflootHeight);
+		flex.height(h);
+		$("#orgListTree").height(h-70);//wanghongchen 20140612
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	sizeChanged();
+	$('div[class="tDiv2"]').append('<div class="find-dialog"><input id="userKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="userKeyWord" value="请输入关键字" /><span onclick="getUserQuery()"></span></div>');
+});
+</script>
+<div class='esmain'>
+	<div id="escontent">
+		<div id="esmenu" class="escenter">
+			<div class="flexigrid" style="padding-bottom:4px;border-bottom: 1px solid #ccc;">
+				<div class="tDiv0">
+					<div class="tDiv1">
+						<div class="fbutton">
+							<div>
+								<span style="padding-left: 20px" onclick="addOrg()"
+									class="addOrg">增加</span>
+							</div>
+						</div>
+						<div class="fbutton">
+							<div>
+								<span style="padding-left: 20px" onclick="editOrg()"
+									class="editOrg">编辑</span>
+							</div>
+						</div>
+						<div class="fbutton">
+							<div>
+								<span style="padding-left: 20px" onclick="delOrg()"
+									class="deleteOrg">删除</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<ul id="orgListTree" class="ztree"></ul>
+		</div>
+		<div id="esone" class="esright">
+			<div id="eslist">
+				<table id="userGrid"></table>
+			</div>
+		</div>
+	</div>
+</div>

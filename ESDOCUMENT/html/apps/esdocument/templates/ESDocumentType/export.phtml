@@ -1,0 +1,76 @@
+<div id="reportstyle">
+	<form name="esreport" method="post" action='' id="esreport" style="width: 600px">
+		<span class="tabs">导出文件格式选择</span>
+		<hr width="100%">
+		<span class='tabs'>
+			<input type='radio' class="cbx" name='export_formats' value="formats_Excel" checked='checked' id='formats_Excel'>
+			<label for="formats_Excel" style="padding: 0px; display: inline;">Excel</label>
+			<input type='radio' class="cbx" name='export_formats' value="formats_xml" id='formats_xml'>
+			<label for="formats_xml" style="padding: 0px; display: inline;">Xml</label> 
+			<input type='radio' class="cbx" name='export_formats' id='formats_dbf' value='formats_dbf'>
+			<label for="formats_dbf" style="padding: 0px; display: inline;">Dbf</label>
+		</span>
+	</form>
+	<br>
+	<?php if($_GET['display']=="block"){?>
+	<span class="tabs">导出数据筛选</span>
+	<span style="margin-left:100px;">
+	<input type='checkbox' class="cbx" name='export_all' id='export_all' >
+	<label for="export_all" style="padding: 0px; display: inline;"><span style="color: red">导出全部数据</span></label>
+	</span>
+	<hr width="100%" style="width: 600px;">
+	<div id='filterContents' style='padding:20px;'>
+		<p class='contbox'>
+			<span class='w140 w14090 hei30'>字段名</span>
+			<span class='w90 w14090 hei30'>比较符</span>
+			<span class='w140 w14090 hei30'>字段值</span>
+			<span class='w90 w14090 hei30'>关系符</span>
+			<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">添加行</span>
+			<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">删除行</span>
+		</p>
+		<div id='contents'>
+			<?php for($fly=1;$fly<6;$fly++){ ?>
+			<p class='contbox creatediv'  style="overflow:hidden;">
+				<select name="esfields" class='w140 w14090 hei20 filedname'>
+					<option value=''>请选择</option>
+					<option value='typeName'>文件类型名称</option>
+					<option value='typeNo'>文件类型代码</option>
+				</select>
+				<select name="comparison" class='w90 w14090 hei20 comparison'>
+					<option value="equal">等于</option>
+					<option value="greaterThan">大于</option>
+					<option value="lessThan">小于</option>
+					<option value="notEqual">不等于</option>
+					<option value="greaterEqual">大于等于</option>
+					<option value="lessEqual">小于等于</option>
+					<option value="like" selected>包含</option>
+					<option value="notLike">不包含</option>
+				</select>
+				<input type='text' class='w140 w14090 hei20 filedvalue'  name="esfieldvalue"  />
+				<select id='' class='w14090 w90 hei20 relationship' name="relation">
+					<option value="AND" selected="selected">并且</option>
+					<option value="OR">或者</option>
+				</select>
+				<a class='newfilter'></a><a class='delfilter'></a>
+			</p>
+			<?php }?>
+		</div>
+	</div>
+	<?php } ?>
+</div>
+
+<!-- lujixiang 20150326 设置导出全部数据   -->
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$("#export_all").bind("click", function() {
+
+			if($(this).is(':checked')){
+				$("#filterContents").css("display", "none") ;
+			}else{
+				$("#filterContents").css("display", "inline") ;
+			}
+			
+		});
+	});
+</script>

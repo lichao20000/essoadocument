@@ -1,0 +1,50 @@
+	<div id='userRole'>
+  <div id='' class='useLis'>
+    <div class='searchRole'>
+      <input type='text' id='one' class='searchusername' value='' onKeyUp="show(this.value,'left');"/>
+	  <input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+	</div>
+    <ul id='listRole' class='userList'>
+
+<?php 
+	$strColumn='';
+	if(count($columnArray)>0){
+		foreach($searchField as $value){
+			if(!in_array($value->name,$columnArray)){
+				echo '<li><input type="hidden" name='.$value->display.' value='.$value->name.'>'.$value->display.'</li>';
+			}
+		}
+	}else {
+		foreach($searchField as $value){
+			echo '<li><input type="hidden" name='.$value->display.' value='.$value->name.'>'.$value->display.'</li>';
+		}
+	}
+?>
+	</ul>
+  </div>
+	<div id='esbutton' class='selBut'>  
+		<span id="estop" class="estop" title='置顶'></span>
+		<span id="esup" class="esup" title='上移'></span>
+		<span id="esleft" class="esleft" title='左移'></span>
+		<span id="esright" class="esright" title='右移'></span>
+		<span id="esdown" class="esdown" title='下移'></span>
+		<span id="esbottom" class="esbottom endspan" title='置底'></span>
+	</div>
+	<div class='useLis'>
+		<div class='searchRole'>
+			<input type='text' id='two' class='searchusername'  value='' onKeyUp="show(this.value,'right');"/>
+			<input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+		</div>
+		<ul id='useRole' class='userList referenceValues'>
+		<?php 
+			foreach($columnArray as $val){
+				foreach($searchField as $value){
+					if($val==$value->name){
+						echo '<li><input type="hidden" name='.$value->display.' value='.$value->name.'>'.$value->display.'</li>';
+					}
+				}
+			}
+		?>
+		</ul>
+	</div>
+</div>

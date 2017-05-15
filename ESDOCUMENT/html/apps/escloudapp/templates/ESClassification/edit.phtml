@@ -1,0 +1,48 @@
+<form id="editform" action=""	method="post">
+<div class="estransfer">
+<ul>
+<li><span>分类号：</span><input type="text" name="classnum" verify="text/20/1/0" value="<?php echo isset($list->classCode)?htmlspecialchars($list->classCode):"";?>"></li>
+<li><span>归档范围：</span><input type="text" name="range" verify="text/255/0/0" value="<?php echo isset($list->fillingRange)?htmlspecialchars($list->fillingRange):"";?>"></li>
+<li><span>分类名称：</span><input type="text" name="classify" verify="text/255/1/0" value="<?php echo isset($list->className)?htmlspecialchars($list->className):"";?>"></li>
+<li><span>保管期限：</span>
+<select id ="timelimit" name="timelimit" style="height:22px;width:165px;">
+<script type="text/javascript">
+// 20140820 薛坤   此处保管期限数据动态获取和元数据中的保管期限属性值
+	(function() { 
+		 $.post($.appClient.generateUrl({ESClassification:'getTimelimit'},'x'),
+				 {estitle:'保管期限'},
+				 function(datas){
+					     $.each(datas,function(n,data){
+						     if(data!=null){
+							 var select='<?php echo $list->custodyTerm ?>'==data.esidentifier ?'selected="selected"':''; 
+						     $("#timelimit").append("<option value='"+data.esidentifier+"' "+select+"  >"+data.estitle+"</option>");
+						     }
+						 });
+			        },'json');
+		})(jQuery) 
+</script>
+</select></li>
+<li><span>档案分类：</span>
+<select id="type" name="type" title="非根节点的档案分类与父节点保持一致" style="height:22px;width:165px;" <?php echo $list->idParent==0? '':'disabled="disabled"' ?>>
+<script type="text/javascript">
+// 20140821 薛坤   修改为动态获取
+	(function() { 
+		 $.post($.appClient.generateUrl({ESClassification:'getArchiveTypes'},'x'),
+				 function(datas){
+					     $.each(datas,function(n,data){
+						     if(data!=null){
+						      var select='<?php echo $list->archiveType ?>'==data.SKUNumber ?'selected="selected"':''; 
+						      $("#type").append("<option value='"+data.SKUNumber+"'  "+select+" >"+data.className+"</option>");
+						     }
+						 });
+			        },'json');
+		})(jQuery) 
+</script>
+</select>
+</li>
+</ul>
+</div>
+<input type="hidden" name="parent" value="<?php echo isset($list->idParent)?$list->idParent:"";?>" />
+</form>
+<script type="text/javascript">
+ </script>

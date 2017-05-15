@@ -1,0 +1,18 @@
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.setting.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<div id="testMyUserInfo">
+
+</div>
+<script>
+(function(){
+	$.post( $.settingClient.generateUrl({ESMyUserInfo : 'getMyUserInfo'}, 'message')
+			, function(res){
+		var json = eval("("+res+")");
+
+		
+// 		alert(json.userid);
+// 		alert(json.password);
+// 		alert(json.displayName);
+	});
+})();
+
+</script>

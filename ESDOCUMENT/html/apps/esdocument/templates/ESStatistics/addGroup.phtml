@@ -1,0 +1,187 @@
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/ESStatistics/js/jumpwindow.js"></script>
+<style type="text/css">
+.listGroup {
+	width: 800px;
+	height: 364px;
+}
+
+.ztree li a span {
+	color: #444;
+}
+</style>
+<div id="mylist">
+	<div class="select">
+		<ul>
+			<li class="selected">基本信息设置</li>
+			<li>分组节点设置</li>
+			<li>分组字段设置</li>
+			<li>统计字段设置</li>
+			<li>布局设置</li>
+		</ul>
+		<div class="clear"></div>
+		<div class="extra"></div>
+	</div>
+	<div class="mycontent">
+		<div class="listGroup" id="groupStep1">
+			<form id="form_add" class="liscon1">
+				<span>统计方案名称：</span> <input type="text" name="title"
+					verify="desc/30/1/0" value="<?php if(isset($name)){echo $name;}?>" />
+				<input type="hidden" id="hidden" name="id"
+					value="<?php if(isset($id)){echo $id;}?>" />
+			</form>
+		</div>
+		<div class="listGroup" id="groupStep2" style='display: none;'>
+			<div style="float: left; width: 100%; height: 100%; overflow: auto;">
+				<ul id="archives" class="ztree"></ul>
+				<input type="hidden" id="stageId" name="stageId" value="" />
+			</div>
+		</div>
+		<div class="listGroup"
+			style="display: none; overflow-x: hidden; overflow-y: auto;"
+			id="groupStep3">
+			<div
+				style="float: left; width: 100%; height: 360px; margin-top: 20px;">
+						<?php include (dirname(__FILE__)."/groupFields.phtml")?>
+					</div>
+			<div style="float: left; width: 100%;">
+						<?php include (dirname(__FILE__)."/groupFilter.phtml")?>
+				</div>
+		</div>
+		<div class="listGroup"
+			style="display: none; overflow-x: hidden; overflow-y: auto;"
+			id="groupStep4">
+			<div
+				style="float: left; width: 100%; height: 360px; margin-top: 20px;">
+						<?php include (dirname(__FILE__)."/statisticsFields.phtml")?>
+			</div>
+			<div style="float: left; width: 100%;">
+						<?php include (dirname(__FILE__)."/statisticsFilter.phtml")?>
+			</div>
+		</div>
+		<div class="listGroup" style="display: none;" id="groupStep5">
+			<?php include (dirname(__FILE__)."/groupShow.phtml")?>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var settingHolding = {
+			view: {
+				dblClickExpand: true,
+				showLine: true
+			},
+			check: {
+				enable: false
+			},		
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				onClick: onClick
+			}
+	};
+	
+	function onClick(e,treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("archives");	
+			var oldStageId=	$("#stageId").val();	
+			if(oldStageId=="0"){
+				$("#stageId").val(treeNode.id);
+				loadGroupOptions(treeNode.id);	
+			}else{
+				$.dialog({
+			 		content:'确定要改变统计节点吗?',
+					ok:true,
+					okVal:'确定',
+					cancel:true,
+					cancelVal:'取消',
+					ok:function(){
+						var id=$("#hidden").val();
+						var url=$.appClient.generateUrl({ESStatistics:'delStatisticAndGroup'},'x');
+						$.post(url,{id:id},function(msg){
+							if(msg=="true"){
+								$("#stageId").val(treeNode.id);
+								loadGroupOptions(treeNode.id);	
+							}else if(msg=="false"){
+								$.dialog.notice({width: 150,content: "改变统计节点异常！", icon: 'warning',time: 3});
+								return false;
+							}else {
+								$.dialog.notice({width: 150,content: msg, icon: 'error',time: 3});
+								return false;
+							}
+						});
+					}
+			 	});
+			}					
+	};
+
+	$.getJSON($.appClient.generateUrl({ESStatistics : "getTree",id:-1,treeType:1}, 'x'), function(zNodes) {
+	 	var stageZTree=$.fn.zTree.init($("#archives"), settingHolding, zNodes);
+	 	var stageId=$("#stageId").val();
+	 	var root= stageZTree.getNodeByParam("id",0);		
+		stageZTree.selectNode(root);
+		$("#stageId").val(root.id);		
+	});
+	
+	// 添加行
+	$('.newfilter').die().live('click', function() {
+		var t = $(this).parent().clone().insertAfter($(this).parent());
+		t.each(function(){
+			$(this).find('input').val('').attr("readonly",false);
+			$(this).find('span').remove();
+		});
+	});
+
+	//删除行
+	$('.delfilter').die().live('click', function() {
+		if ($(this).closest("div").find("p").length > 5) {
+			$(this).closest('p').remove();
+		} else {
+			var tds = $(this).closest('p');
+			tds.find('input').val('');
+			var select = tds.find('select');
+			$(select[0]).val("");
+			$(select[1]).val("like");
+			$(select[2]).val("AND");
+		}
+	});
+
+	loadGroupOptions(0,"");
+	
+	//加载分组字段或分组条件下拉数据
+	function loadGroupOptions(stageId){			
+		var url=$.appClient.generateUrl({ESStatistics:'getGroupOptions'},'x');
+		$.post(url,{stageId:stageId},function(data){
+			var json=eval("("+data+")");
+			if(!jQuery.isEmptyObject(json)){
+				loadFieldLi(json);
+				loadFieldOption(json);				
+			}
+		});
+	}
+
+	function loadFieldLi(json){
+		var li="";
+		for(var i=0;i<json.length;i++){
+			li=li+"<li><span code='"+json[i].code+"'>"+json[i].name+"</span></li>";
+		}
+		$("#g_fieldList").html(li);
+		$("#s_fieldList").html(li);
+	}
+
+	function loadFieldOption(json){
+		var str="<option value=''>请选择</option>";
+		for(var i=0;i<json.length;i++){
+			str+="<option value='"+json[i].code+"'>"+json[i].name+"</option>";
+		}
+		$("#groupContents .filedname").each(function(i){
+			$(this).html("<option value=''>请选择</option>");
+		});
+		$("#statisticsContents .filedname").each(function(i){
+			$(this).html(str);
+		});
+	}
+});
+</script>

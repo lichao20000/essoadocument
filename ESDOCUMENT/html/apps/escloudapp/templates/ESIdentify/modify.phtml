@@ -1,0 +1,811 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/foldertree.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link href="<?php echo $tplPath;?>/public/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+<style>
+	.ztree li a span{
+		color:#444;
+	}
+</style>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/catagory.js"></script>
+<div id = "modifyPath" modifyPath="<?php echo $path?>"></div>
+<div style="width:560px;height:500px;overflow-y:auto; overflow-x:hidden;position:relative;">
+<form id="form_update" action="" method="post">
+<input type="hidden" name="submit" value="update">
+<input type="hidden" id="isGenerate" isGenerate="">
+<div class="estransfer" style="height:auto;">
+<ul>
+<?php foreach ($formData as $value){
+	if(isset($value['value'])){//liqiubo 20140910 将特殊字符替换为特定编码，修复bug 215
+		$newVal = $value['value'];
+		$newVal = str_replace("'", "&#39;", $newVal);
+		$newVal = str_replace("\"", "&#34;", $newVal);
+		$newVal = str_replace("<", "&#60;", $newVal);
+		$newVal = str_replace(">", "&#62;", $newVal);
+		$value['value']= $newVal;
+	}
+	
+	if($value['isnull']==1)
+	{
+		if(array_key_exists('options', $value)){
+			/** xiaoxiong 20140825 将下载框组件修改为可编辑组件 **/
+			$selectAllStr = '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><div class="editSelect">' ;
+			$selectStr = '' ;
+			$inputStr = '' ;
+			if(!array_key_exists('isLimitUse', $value)){
+				if($value['isCombinfield']){
+					if($value['isComputeField']){
+						$selectStr = '<select id="'.$value['name'].'_select" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupFieldEdit(this);setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupFieldEdit(this);" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" verify="'.$value['verify'].'" value="'.$value['value'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}else{
+						$selectStr = '<select id="'.$value['name'].'_select" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupFieldEdit(this)" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupFieldEdit(this);" verify="'.$value['verify'].'" value="'.$value['value'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}
+				}else{
+					if($value['isComputeField']){
+						$selectStr = '<select id="'.$value['name'].'_select" isCombinfield="'.$value['isCombinfield'].'" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" verify="'.$value['verify'].'" value="'.$value['value'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}else{
+						$selectStr = '<select id="'.$value['name'].'_select" isCombinfield="'.$value['isCombinfield'].'"  onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" verify="'.$value['verify'].'" value="'.$value['value'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}
+				}
+			}else{
+				$selectStr = '<select id="'.$value['name'].'_select" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;">';
+				$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" verify="'.$value['verify'].'" value="'.$value['value'].'">' ;
+			}
+			$selectStr =  $selectStr.'<option value="">--请选择--</option>';
+			foreach ($value['options'] as $key=>$val)
+			{
+				if($value['value']==$val){
+					$selectStr =  $selectStr.'<option value="'.$val.'" selected>'.$key.'</option>';
+				}else{
+					$selectStr =  $selectStr.'<option value="'.$val.'">'.$key.'</option>';
+				}
+			}
+			$selectStr =  $selectStr.'</select>';
+			$selectStr = $selectStr.'</select>';
+			$selectAllStr = $selectAllStr.'<div class="selectInputSpan">'.$inputStr.'</div>' ;
+			$selectAllStr = $selectAllStr.'<div class="selectSpan">'.$selectStr.'</div></div></li>' ;
+			echo $selectAllStr;
+		}else{
+			if($value['isreadonly']){
+				if($value['length']>=50){
+					if($value['isComputeField']){
+						if($value['length']>=100){
+							echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textarea type="text" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;">'.$value['value'].'</textarea></li>';
+						}else {
+							echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+						}
+					}else{
+						if($value['length']>=100){
+							echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textarea type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;">'.$value['value'].'</textarea></li>';
+						}else{
+							echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+						}
+					}
+				}else{
+					if($value['isComputeField']){
+						echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" readonly  metadata="'.$value['metadata'].'" value="'.$value['value'].'" style="background:#eee;"></li>';
+					}else{
+						echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" readonly  value="'.$value['value'].'" style="background:#eee;"></li>';
+					}
+				}
+			}else{
+				if($value['length']>=50){
+					if($value['isCombinfield']){
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textarea type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textArea type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}
+						}else{
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textarea type="text" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textarea type="text" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}
+						}
+					}else{
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textarea type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textarea type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}
+						}else{
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textarea type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><textarea type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}
+						}
+					}
+				   }else{
+					if($value['isCombinfield']){
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}
+						}else{
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'"  verify="'.$value['verify'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'"  verify="'.$value['verify'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'"  verify="'.$value['verify'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'"  verify="'.$value['verify'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}
+						}
+					}else{
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}
+						}else{
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')"  verify="'.$value['verify'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')"  verify="'.$value['verify'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" name="'.$value['name'].'"  verify="'.$value['verify'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'"  verify="'.$value['verify'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}else{
+		if(array_key_exists('options', $value)&& !$value['isreadonly']){//liqiubo 20140910 修复bug 218
+			/** xiaoxiong 20140825 将下载框组件修改为可编辑组件 **/
+			$selectAllStr = '<li><span>'.$value['lable'].'</span><div class="editSelect">' ;
+			$selectStr = '' ;
+			$inputStr = '' ;
+			if(!array_key_exists('isLimitUse', $value)){
+				if($value['isCombinfield']){
+					if($value['isComputeField']){
+						$selectStr = '<select id="'.$value['name'].'_select" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupFieldEdit(this);setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupFieldEdit(this);" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" verify="'.$value['verify'].'" value="'.$value['value'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}else{
+						$selectStr = '<select id="'.$value['name'].'_select" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;groupFieldEdit(this)" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" onkeyup="groupFieldEdit(this);" verify="'.$value['verify'].'" value="'.$value['value'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}
+				}else{
+					if($value['isComputeField']){
+						$selectStr = '<select id="'.$value['name'].'_select" isCombinfield="'.$value['isCombinfield'].'" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" verify="'.$value['verify'].'" value="'.$value['value'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}else{
+						$selectStr = '<select id="'.$value['name'].'_select" isCombinfield="'.$value['isCombinfield'].'"  onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">';
+						$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" verify="'.$value['verify'].'" value="'.$value['value'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'">' ;
+					}
+				}
+			}else{
+				$selectStr = '<select id="'.$value['name'].'_select" onchange="javascript:document.getElementsByName(\''.$value['name'].'\')[0].value=this.value;">';
+				$inputStr = '<input type="text" name="'.$value['name'].'" class="selectInput" verify="'.$value['verify'].'" value="'.$value['value'].'">' ;
+			}
+			$selectStr =  $selectStr.'<option value="">--请选择--</option>';
+			foreach ($value['options'] as $key=>$val)
+			{
+				if($value['value']==$val){
+					$selectStr =  $selectStr.'<option value="'.$val.'" selected>'.$key.'</option>';
+				}else{
+					$selectStr =  $selectStr.'<option value="'.$val.'">'.$key.'</option>';
+				}
+			}
+			$selectStr =  $selectStr.'</select>';
+			$selectStr = $selectStr.'</select>';
+			$selectAllStr = $selectAllStr.'<div class="selectInputSpan">'.$inputStr.'</div>' ;
+			$selectAllStr = $selectAllStr.'<div class="selectSpan">'.$selectStr.'</div></div></li>' ;
+			echo $selectAllStr;
+		}else{
+			if($value['isreadonly']){
+				if($value['length']>=50){
+					if($value['isComputeField']){
+						if($value['length']>=100){
+						echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;">'.$value['value'].'</textarea></li>';
+						}else{
+						echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+						}
+					}else{
+						if($value['length']>=100){
+						echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;">'.$value['value'].'</textarea></li>';
+						}else{
+						echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+						}
+					}
+				}else{
+					if($value['isComputeField']){
+						echo '<li><span>'.$value['lable'].'</span><input type="text" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" readonly  value="'.$value['value'].'" style="background:#eee;"></li>';
+					}else{
+						echo '<li><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" readonly  value="'.$value['value'].'" style="background:#eee;"></li>';
+					}
+				}
+			}else{
+				if($value['length']>=50){
+					if($value['isCombinfield']){
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}else{
+								if($value['type']=='TIME'){
+									//class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})"
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+										echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+										echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}
+						}else{
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}
+						}
+					}else{
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}
+						}else{
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" isCombinfield="'.$value['isCombinfield'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" isCombinfield="'.$value['isCombinfield'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" isCombinfield="'.$value['isCombinfield'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+								}else{
+									if($value['length']>=100){
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><textarea type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px">'.$value['value'].'</textarea></li>';
+									}else{
+									echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+									}
+								}
+							}
+						}
+					}
+				}else{
+					if($value['isCombinfield']){
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'</span><input type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" isCombinfield="'.$value['isCombinfield'].'" name="'.$value['name'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'</span><input type="text" onkeyup="groupFieldEdit(this)" onchange="addZeroEdit(this,1,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}
+						}else{
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'</span><input type="text" onkeyup="groupFieldEdit(this)" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'"></li>';
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'</span><input type="text" onkeyup="groupFieldEdit(this)" name="'.$value['name'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'" value="'.$value['value'].'"></li>';
+								}
+							}
+						}
+					}else{
+						if($value['isZeroRule']){
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'</span><input type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].');setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].');" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'</span><input type="text" onchange="addZeroEdit(this,0,'.$value['zeroLength'].')" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldKey="'.$value['combinfieldKey'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}
+						}else{
+							if($value['isComputeField']){
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" combinfieldKey="'.$value['combinfieldKey'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldVal="'.$value['combinfieldVal'].'" isCombinfield="'.$value['isCombinfield'].'" verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" onchange="setComputeFieldRuleValEdit(this,'.$value['structureId'].','.$value['busiModelId'].')" combinfieldKey="'.$value['combinfieldKey'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldVal="'.$value['combinfieldVal'].'" isCombinfield="'.$value['isCombinfield'].'" verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}else{
+								if($value['type']=='TIME'){
+									echo '<li><span>'.$value['lable'].'</span><input type="text" class="Wdate" onClick="WdatePicker({dateFmt:\'HH:mm:ss\'})" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" combinfieldKey="'.$value['combinfieldKey'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}else{
+									echo '<li><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" isCombinfield="'.$value['isCombinfield'].'" combinfieldKey="'.$value['combinfieldKey'].'" computeFieldKey="'.$value['computeFieldKey'].'" computeFieldVal="'.$value['computeFieldVal'].'" combinfieldVal="'.$value['combinfieldVal'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+		
+	
+}?>
+
+</ul>
+</div>
+</form>
+<div id="crossNum">
+<?php 
+if(!empty($crossNum['value'])){
+	$temp=explode(';', $crossNum['value']);
+	if(is_array($temp)){
+		$lable='<fieldSet style="width:525px;margin:0px auto;"><legend>关联数据</legend><div style="margin-left:60px;">';
+		$display=array();
+		$arr=array();
+		foreach($temp as $val){
+			$sys=preg_match('/^\[([a-zA-Z]{0,})\](.*?)/', $val,$match);
+			if($sys){
+				switch (strtoupper($match[1])) {
+					case 'OA':
+						array_push($display,'文书档案');
+						$arr['文书档案']=$match[1];
+						break ;
+					case 'ECM':
+						array_push($display,'合同档案');
+						$arr['合同档案']=$match[1];
+						break ;
+					case 'PMS':
+						array_push($display,'工程档案');
+						$arr['工程档案']=$match[1];
+						break;
+					case 'PUR':
+						array_push($display,'采购档案');
+						$arr['采购档案']=$match[1];
+						break;
+					default:
+						array_push($display,'会计档案');
+						$arr['会计档案']=$match[1];
+						break;
+				}
+			}
+		}
+		foreach(array_unique($display) as $value){
+			if(is_array($arr[$value])){
+				$arr[$value]=implode(',', array_unique($arr[$value]));
+			}
+			$lable.='<span args='.$arr[$value].' style="margin-left:30px;margin-bottom:10px;float:left;font-size:13px;display:block"><a href=javascript:getLinkFile("'.$arr[$value].'","'.$crossNum['value'].'")>'.$value.'</a></span>';
+		}
+		echo $lable.'</div></fieldSet>';
+	}
+}?>
+</div>
+<div class="esbottom" >
+<table id="efiletable"></table>
+</div>
+</div>
+<div class="escatagory" id='catagory'>
+<ul id="fication" class="ztree"></ul>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("input[metadata='ClassificationCode']").focus(function(){
+				var offset=$(this).offset();
+// 				$(this).attr("readonly",true);
+				//gengqianfeng 20141014 系统字段是不允许编辑，下拉框也不显示
+				if(!$(this).attr("readonly")){
+					$('#catagory').show().offset({top:offset.top+24,left:offset.left});
+				}
+				$("body").bind("mousedown", clickBodyDown);
+	});
+	var obj=$("input[verify^='date']");
+	//liqiubo 20140910 修复bug 218 如果当前日期字段是系统字段，则不能输入
+	if(!obj.attr('readonly')){
+		obj.addClass('Wdate');
+		//obj.css('background','#eee');
+		obj.click(function(){
+			WdatePicker();
+		});	
+	}
+	
+	//xiewenda 20140909 修改页面显示问题
+	$("#form_update >.estransfer >ul >li >span").each(function(){
+		var sp=this.innerText;
+		var  ip= $(this).next('input');		  		   
+		$(this).css("line-height","20px");
+		$(this).css("height","40px");
+     });
+	var isGenerate =  '<?php echo $isGenerate?>';
+	$("#isGenerate").attr("isGenerate","<?php echo $isGenerate?>");
+	var colModelMlist='';
+	if('false'==isGenerate){//liqiubo 20140903 加入案卷判断，是案卷则不显示电子文件信息
+	//if(archiveType=='accounting'){
+	//	colModelMlist=[
+		//	{display: '序号', name : 'num', width : 20, align: 'center'},
+			//{display: '<input type="checkbox" id="linkFileSelectAll">', name : 'ids', width : 20, align: 'center'},
+		//	{display: '文件类别', name: 'essType', align:'center',editable:true,width:60},
+		//	{display: '创建时间', name: 'createTime', align:'center',width : 124},
+		//	{display: '附件单据号', name: 'attachRecordId',align:'center', width : 124},
+		//	{display: '源系统', name: 'systemcode', align:'center',width : 124},
+		//	{display: '原文路径', name: 'ywlj', width : 300,align:'left'},
+		//	{display: '文件校验', name: 'esmd5',width:220,align:'left',hide:true},
+		//	{display: '文件大小', name: 'essize',width:60,align:'center'},
+		//	{display: '所属部门', name: 'dept', editable:true,width:100,align:'left'}
+	//	];
+	//}else{
+		colModelMlist=[
+			{display: '序号', name : 'num', width : 20, align: 'center'},
+			{display: '<input type="checkbox" id="linkFileSelectAll">', name : 'ids', width : 20, align: 'center'},
+			{display: '文件类别', name: 'essType', align:'center',editable:true,width:60},
+			{display: '附件类型', name: 'esFileType', align:'center',width:60},
+			{display: '创建时间', name: 'createTime', align:'center',width : 124},
+			{display: '原文路径', name: 'ywlj', width : 300,align:'left'},
+			{display: '文件校验', name: 'esmd5',width:220,align:'left',hide:true},
+			{display: '文件大小', name: 'essize',width:60,align:'center'}
+		];
+	//}
+	$("#efiletable").flexigrid({
+		url: $.appClient.generateUrl({ESIdentify:'getLinkFiles', path:'<?php echo $path?>'}, 'x'),
+		dataType: 'json',
+		editable: true,
+		colModel :colModelMlist,
+		buttons : [
+		<?php 
+			/** xiaoxiong 20140805 添加权限控制 **/
+			if(!$boxfile){
+				//guolanrui 20140927 在按钮中添加tooltip属性，用于提示！
+				echo "{name: '添加', disable:".($itemEdit=='false'?'true':'false').",tooltip:'".($itemEdit=='false'?'您没有数据编辑权限，此功能不可用！':'添加')."', bclass: 'add".($itemEdit=='false'?' not-allowed':'')."', onpress: checkScanPolicy4AddFile},";
+				echo "{name: '删除', disable:".($itemEdit=='false'?'true':'false').",tooltip:'".($itemEdit=='false'?'您没有数据编辑权限，此功能不可用！':'删除')."', bclass: 'delete".($itemEdit=='false'?' not-allowed':'')."', onpress: delFile},";
+				echo "{name: '保存', disable:".($itemEdit=='false'?'true':'false').",tooltip:'".($itemEdit=='false'?'您没有数据编辑权限，此功能不可用！':'保存')."', bclass: 'save".($itemEdit=='false'?' not-allowed':'')."', onpress: saveFile},";
+				echo "{name: '上传', disable:".($itemEdit=='false'?'true':'false').",tooltip:'".($itemEdit=='false'?'您没有数据编辑权限，此功能不可用！':'上传')."', bclass: 'fileup".($itemEdit=='false'?' not-allowed':'')."', onpress: checkScanPolicy4UploadFile},";
+				echo "{name: '浏览原文', disable:".($fileread=='false'?'true':'false').",tooltip:'".($fileread=='false'?'您没有原文浏览权限，此功能不可用！':'浏览原文')."', bclass: 'viewfile".($fileread=='false'?' not-allowed':'')."', onpress: viewFile}";
+			}else{
+				echo "{name: '浏览原文', disable:".($fileread=='false'?'true':'false').",tooltip:'".($fileread=='false'?'您没有原文浏览权限，此功能不可用！':'浏览原文')."', bclass: 'viewfile".($fileread=='false'?' not-allowed':'')."', onpress: viewFile}";
+			}
+		?>
+		],
+		
+		title: '电子文件列表',
+		useRp: true,
+		width: 540,
+		onSuccess:_initInput,
+		height: 200
+	});
+	}
+	$("#linkFileSelectAll").die("click").live("click", function(){
+		$("#efiletable").find("input[name='id']").attr("checked", this.checked);
+	});
+	
+});
+//查看关联文件
+function getLinkFile(type,crossNum)
+{
+	//获取所有参见号
+	var param={path:file_Path,type:type,crossNum:crossNum};
+	var url=$.appClient.generateUrl({ESIdentify:'getLinkFileTpl'}, 'x');
+	$.ajax({
+	    url:url,
+	    type:'post',
+	    data:param,
+	    success:function(data){
+	    	$.dialog({
+	    		id: 'artLinkPanel',
+		    	title:'关联文件',
+		    	width: '800px',
+	    	   	fixed:false,
+	    	   	padding:'0px',
+	    	    resize: false,
+	    	    okVal:'保存',
+			    ok:true,
+			    cancelVal: '取消',
+			    cancel: true,
+		    	content:data,
+		    	ok:function()
+		    	{
+		    	}
+		    });
+	    	
+		    },
+		    cache:false
+	});
+}
+
+//补零规则
+function addZeroEdit(inputObject,isGroup,length){
+	if(length==0 || inputObject.value.length>=length){
+		return;
+	}else{
+		var zeroStr = "";
+		var zeroLen = length - inputObject.value.length;
+		for(var i=0;i<zeroLen; i++){
+			zeroStr = zeroStr+"0";
+		}
+		inputObject.value = zeroStr+inputObject.value;
+	}
+	if(isGroup==1){
+		groupFieldEdit(inputObject);
+	}
+}
+//组合字段
+function groupFieldEdit(inputThisObject){
+	//先拿到所有要分组的Key的值
+	//然后循环这些值，通过这个Key  去相应的INPUT上获取规则
+	//拿到规则后，循环规则
+	//是C开头的，按照|拆分，然后比对替换值
+	//最后拼接，赋值
+	var combinfieldKey = inputThisObject.getAttribute("combinfieldKey");
+	if(combinfieldKey=="no"){
+		return;
+	}else{
+		if(combinfieldKey.length>2){
+			combinfieldKey=combinfieldKey.substring(1,combinfieldKey.length-1);
+			var combinfieldKeys = combinfieldKey.split(",");
+			for(var i=0;i<combinfieldKeys.length;i++){
+				if(document.getElementsByName($.trim(combinfieldKeys[i]))[0]){
+					//最后要把拼好的值给combinfieldKeys[i]
+					var combinfieldVal = document.getElementsByName($.trim(combinfieldKeys[i]))[0].getAttribute("combinfieldVal");
+					if(combinfieldVal.length>2){
+						combinfieldVal = combinfieldVal.substring(1,combinfieldVal.length-1);
+						var combinfieldVals = combinfieldVal.split(",");
+						var finalVal = "";//最终给赋值的那个值
+						for(var j=0;j<combinfieldVals.length;j++){
+							if($.trim(combinfieldVals[j]).substring(0,1)=="C"){
+								var needVal = $.trim(combinfieldVals[j]).split("|");
+								var txtVal = '';
+								if(document.getElementsByName(needVal[0])[0]){
+									txtVal = document.getElementsByName(needVal[0])[0].value;
+								}
+								for(var z=0;z<needVal.length;z++){
+									if(z>0){
+										var replaceVal = needVal[z].split("_");
+										if(txtVal==replaceVal[0]){
+											txtVal = replaceVal[1];
+										}
+									}
+								}
+								finalVal = finalVal+txtVal;
+							}else{
+								//直接拼接
+								finalVal = finalVal + $.trim(combinfieldVals[j]);
+							}
+						}
+						//xiewenda 如果等于"" 把其值设置为"";
+						if(finalVal!=""){
+							document.getElementsByName($.trim(combinfieldKeys[i]))[0].value=finalVal;
+						}else{
+							document.getElementsByName($.trim(combinfieldKeys[i]))[0].value="";
+							}
+					}
+				}
+			}
+		}else{
+			return;
+		}
+	}	
+	
+}
+//字段值规则
+function setComputeFieldRuleValEdit(thisObject,strId,busiId){
+	var computeFieldVal = thisObject.getAttribute("computeFieldVal");
+	var computeFieldVals = computeFieldVal.split(",");
+	var jsonVal = "{";
+	for(var i=0;i<computeFieldVals.length;i++){
+		/** xiaoxiong 20140821 添加组件是否存在判断 **/
+		if(typeof document.getElementsByName("C"+computeFieldVals[i])[0] == 'undefined'){
+			continue ;
+		}
+		//为哪些字段服务，在这拼接好一个json串，传到后台去，然后处理,每循环一次，就是处理一个字段值规则
+		if(i>0){
+			jsonVal += ",";	
+		}
+		jsonVal = jsonVal + "\""+computeFieldVals[i] + "\":[";
+		var computeFieldKey = document.getElementsByName("C"+computeFieldVals[i])[0].getAttribute("computeFieldKey");
+		var computeFieldKeys = computeFieldKey.split(",");
+		for(var j=0;j<computeFieldKeys.length;j++){
+			if(j>0){
+				jsonVal += ",";
+			}
+			jsonVal = jsonVal + "{\"" + computeFieldKeys[j]+"\":\""+document.getElementsByName("C"+computeFieldKeys[j])[0].value+"\"}";
+		}
+		jsonVal += "]";
+	}
+	if(jsonVal == "{"){
+		return ;
+	}
+	jsonVal += "}";
+	//发送JS请求，去获取值取
+	var url=$.appClient.generateUrl({ESIdentify:'getComputeFieldRuleVal'},'x');
+	$.ajax({  
+        type : "POST",  
+         url : url,  
+         data : {strId:strId,busiId:busiId,jsonVal:jsonVal,treeNodeId:'<?php echo $treeNodeId;?>',path:$('#modifyPath').attr('modifyPath')},  
+         dataType:"json",
+         async : false,  
+         success : function(jsonObject){  
+        	 if(jsonObject){
+        		 for(var z=0;z<jsonObject.length;z++){
+     				var oneJsonObject = jsonObject[z];
+     				/** xiaoxiong 20140821 添加组件是否存在判断 **/
+     				if(typeof document.getElementsByName("C"+oneJsonObject.fieldKey)[0] == 'undefined'){
+     					continue ;
+     				}
+     				document.getElementsByName("C"+oneJsonObject.fieldKey)[0].value=oneJsonObject.fieldVal;
+     				//key值如果也是组合字段规则中的一员的话，也要触发组合字段规则
+     				var isCombinfield = document.getElementsByName("C"+oneJsonObject.fieldKey)[0].getAttribute("isCombinfield");
+     				if(1==isCombinfield){
+     					groupFieldEdit(document.getElementsByName("C"+oneJsonObject.fieldKey)[0]);
+     				}
+     			}
+     		} 
+         }  
+    });
+	
+//	$.post(url,{strId:strId,busiId:busiId,jsonVal:jsonVal},function(result){
+//		if(result){
+//			var jsonObject = eval("("+result+")");
+//			for(var z=0;z<jsonObject.length;z++){
+//				var oneJsonObject = jsonObject[z];
+				/** xiaoxiong 20140821 添加组件是否存在判断 **/
+//				if(typeof document.getElementsByName("C"+oneJsonObject.fieldKey)[0] == 'undefined'){
+//					continue ;
+//				}
+//				document.getElementsByName("C"+oneJsonObject.fieldKey)[0].value=oneJsonObject.fieldVal;
+				//key值如果也是组合字段规则中的一员的话，也要触发组合字段规则
+//				var isCombinfield = document.getElementsByName("C"+oneJsonObject.fieldKey)[0].getAttribute("isCombinfield");
+//				if(1==isCombinfield){
+//					groupFieldEdit(document.getElementsByName("C"+oneJsonObject.fieldKey)[0]);
+//				}
+//			}
+//		}
+//	});
+}
+</script>

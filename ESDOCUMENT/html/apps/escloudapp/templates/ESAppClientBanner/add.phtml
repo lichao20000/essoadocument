@@ -1,0 +1,225 @@
+<!-- yanghuiqiang 20140526 Banner详细窗口-->
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="addBannerForm" method="post" enctype="multipart/form-data">
+			<table id="table_detail" style="height: 200px;">
+				<tr>
+					<td><input type="hidden" name="operator" id="operator"
+						value="<?php echo $userId;?>"
+						style="width: 380px; height: 0px;" /></td>
+						<td><input type="hidden" name="imageFileId" id="imageFileId"
+						value=""
+						style="width: 380px; height: 0px;" /></td>
+				</tr>
+				<tr>
+					<td>显示顺序：</td>
+					<td><input type="text" name="order" id="order"
+						value=""
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>是否启用：</td>
+					<td><select id="state" name = "state" style="width: 385px; height: 25px;">  
+						<option value ="1">是</option>  
+  						<option value ="0" selected=selected>否</option>  
+					</select></td>
+				</tr>
+				<tr>
+					<td>图片：</td>
+					<td><input type="button" name="imageFile" id="imageFile" value="添加图片文件"/>提示：请添加长宽比为12:5的图片</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><div id="imageFileInfo" class="imageFileInfo"></div></td>
+				</tr>
+				<tr>
+					<td>标题：</td>
+					<td><input type="text" name="title" id="title"
+						value=""
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>数据：</td>
+					<td><textarea name="data" id="data" readOnly="true"
+							style="width: 380px; height: 100px;"></textarea>
+					</td>
+					
+				</tr>
+				<tr>
+				<td></td>
+				<td><button name="addPublish" id="addPublish">添加文章</button></td>
+				</tr>
+				<tr>
+					<td>备注：</td>
+					<td><textarea name="describtion" id="describtion"
+							style="width: 380px; height: 100px;"></textarea>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	//$('#table_detail input:text').attr("readOnly", true); 
+	//$('#table_detail textarea').attr("readOnly", true);
+	$('#addPublish').click(function(){
+		url = "<?php echo $esaction->generateUrl(Array('ESAppClientPublish'=>'publish'),'x');?>";
+		$.ajax({
+		    url:url,
+		    success:function(data){
+		    	dia1 = $.dialog({
+			    	title:'添加文章',
+			    	width: '500px',
+		    	   	fixed:true,
+		    	    resize: false,
+		    	    padding:0,
+			    	content:data,
+				    cancelVal: '关闭',
+				    okVal:'确认添加',
+			    	ok:function()
+			    	{ 
+			    		getPublishId();
+					},cancel:function()
+					{
+
+					}
+			    });
+		    },
+		    cache:false
+		});
+		return false;
+	});
+
+	function getPublishId() {
+		var selectedId = '';
+		var checkboxlength = $('#publish input:checked').length;
+		if(checkboxlength<=0){
+			return;
+		}
+		
+		$("#publish input:checked").each(
+				function(i) {
+					selectedId += $('#publish input:checked:eq(' + i+ ')').val()+ ',';
+				}
+		);
+		selectedId = selectedId.substring(0,selectedId.length-1);
+		//alert(selectedId);
+		url = "<?php echo $esaction->generateUrl(Array('ESAppClientPublish'=>'getPublishTopicById'),'x');?>";
+		$.ajax({
+		    url:url,
+		    data:{
+				id:selectedId
+			},
+			type: "POST",
+		    success:function(data){
+		    	//alert(data);
+		    	$('#data').val(data);
+		    },
+		    cache:false
+		});
+	}
+
+	$("#imageFile").click(function(){
+		$.dialog({
+			title:'上传文件',
+		    fixed:true,
+		    resize: false,
+		    padding:'0px 0px',
+			content:"<div class='fieldset flash' id='fsUploadProgress'></div>",
+			cancelVal: '关闭',
+			cancel: function (){
+				//$('#UploadAnnexBox').hide();
+			},
+			button: [
+	    		{id:'btnAdd', name: '添加文件'},
+	            {id:'btnCancel', name: '删除文件', disabled: true},
+	            {id:'btnStart', name: '开始上传', disabled: true, callback: function(){return false;}}
+			],
+			init:createSWFUpload
+		});	    	
+	});
+
+	function createSWFUpload(){
+
+		var addhtml = '';
+		var fileLimit="102400";
+		var fileType="*.png;*.jpg;*.jpeg;*.bmp;";
+		
+		var upload = new SWFUpload({
+			//提交路径
+			upload_url: "",
+			//向后台传递额外的参数
+			//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+			//上传文件的名称
+			file_post_name: "file.jpg",
+			file_size_limit : fileLimit,	// 100MB
+			file_types : fileType,
+			file_types_description : "文件类型",
+			file_upload_limit : "1",
+			file_queue_limit : "0",
+
+			// 事件处理
+			swfupload_loaded_handler : swfuploadLoaded,
+			file_dialog_start_handler : fileDialogStart,
+			file_queued_handler : fileQueued,
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_start_handler : uploadStart,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+
+			// 按钮的处理
+			button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+			button_placeholder_id : "btnAdd",
+			button_width: 72,
+			button_height: 28,
+			// Flash文件地址设置
+			flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+			custom_settings : {
+				progressTarget : "fsUploadProgress",
+				cancelButtonId : "btnCancel",
+				startButtonId : "btnStart",
+				// 上传成功的回调函数
+				uploadSuccess : function(file, data){
+					
+					var data = $.parseJSON(data);
+					if(data.success == 'false'){ return false;}
+					$.ajax({
+						url: $.appClient.generateUrl({ESAppClientBanner:'getBannerUrl'},'x'),
+						data: { mark:  data.fileId+'.'+data.type , index:'true'},
+						type: 'POST',
+						async: false, 
+						success: function(url){
+							var filename = file.name;
+							$('#imageFileId').val(data.fileId);
+							$('#imageFileInfo').text(filename);
+							$('#imageFileInfo').append('</br><img style="width:291px;height:120px;" src="'+ url +'" alt="'+filename +'" title="'+ filename +'" />');
+						}
+					});
+
+				}
+			}
+		});
+		$("#btnCancel").click(function(){cancelQueue(upload);});
+		$("#btnStart").click(function(){
+				$.post($.appClient.generateUrl({ESIdentify:'getUploadURL'},'x'),  function(data){
+					upload.setUploadURL(data);
+					startQueue(upload);
+				});
+		});
+
+	};
+});
+
+</script>
+

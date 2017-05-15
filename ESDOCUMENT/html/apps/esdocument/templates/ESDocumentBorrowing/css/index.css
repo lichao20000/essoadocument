@@ -1,0 +1,83 @@
+@CHARSET "UTF-8";
+  .clear:after{content:',';height:0px;visibility:hidden;display:block;clear:both;}
+.contentDiv{width:580px;height:220px;}
+.leftTv{width:80px;height:23px;line-height:23px;}
+.rightTv{width:118px;height:23px;margin-left:10px;text-align:left;line-height:23px;}
+.contentDiv ul,li{list-style:none;}
+.contentDiv ul{float:left;margin-top:7px;}
+.contentDiv ul li{float:left;}
+.contentDiv ul li input{width:180px;height:19px;line-height:19px;}
+#selectSty{_height:25px;_font-size:13px;}
+#btnIn{position:relative;}/*width:184px;*/
+#btnIn span{width:40px;}
+#editborrowPersonbtn{position:absolute;right:2px;top:3px;_margin-top:2px;}
+#btn{position:absolute;right:2px;top:3px;_margin-top:2px;cursor:pointer;}
+.bottom{margin-top:10px;}
+html,body,div,span,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,address,big,cite,code,del,em,font,img,ins,small,strong,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend
+	{
+	margin: 0;
+	padding: 0;
+}
+#eslist{margin:0px;}
+textarea{ resize:none;}
+input,textarea{ outline:0;}
+select{ _font-size:12px;}
+html,body{overflow:hidden;}
+a{
+	text-decoration : none ;
+}
+ol,ul {
+	list-style: none;
+}
+
+.esmain {
+	width: 96%;
+	
+	margin-left:2%;
+	
+}
+
+.esmain .eshead {
+	width: 220px;
+	height: 50px;
+	line-height: 50px;
+	padding-left:30px;
+	border-bottom: 1px solid #ccc;
+}
+.esmain .esleft {
+	background: #fff;
+	width:220px;
+	float:left;
+	overflow: auto;
+	/* border-left: 1px solid #ccc; */
+	background-color:#133959;
+	margin-right:10px;
+	border-radius: 5px;
+	padding-top:12px;
+}
+.orderUsingPath{width:450px; float: left;}
+.orderUsingForm{width:450px; float: left;}
+/* 筛选功能通用样式 */
+.h2{ width:100%;  line-height:25px; text-indent:25px; color:#555; border-bottom:1px solid #f3f3f3; float:left; margin:5px 0; background:#f9f9f9 url(../../public/img/mess.png) no-repeat 5px 5px;}
+#addrolefree{ width:600px; height:auto; overflow:hidden; float:left;}
+#contents{ width:630px; height:auto; overflow:auto; marign-left:5px; _dispaly:inline;}
+.contbox{ width:610px; height:30px; float:left; margin-left:5px; _display:inline;}
+.contbox input{ height:20px; padding:0; border:1px solid #ccc;}
+.contbox input:hover{border:1px solid #5599ff; }
+.w14090{ font-size:13px; color:#555; float:left; margin-right:10px; display:block;}
+.hei30{ line-height:30px;}
+.w140{ width:130px; padding-left:2px;}
+.w90{ width:70px;}
+.hei20{ height:20px; line-height:20px; margin-top:4px; border:1px solid #aaa;}
+.newfilter,.delfilter{margin-left:17px;margin-right:20px; width:22px;height:22px; line-height:22px; text-indent:22px; color:#555; float:left; margin-top:3px;cursor:pointer;}
+.newfilter{ background:url(../../public/img/add.png) no-repeat 4px 4px;}
+.delfilter{ background:url(../../public/img/del.gif) no-repeat 4px 4px;}
+.newfilter:hover,.delfilter:hover{ width:22px; line-height:22px; text-indent:22px;}
+textarea.invalid-text,input.invalid-text,select.invalid-text{border:2px #DD0000 solid;}
+.wf_delete {
+	background: url("../images/chart_organisation_delete.png") no-repeat center left;
+}
+.trNotSelected{
+	background-color: red;
+}
+.showbtn{display: inline-block;cursor:pointer; width:16px; height:16px; background:url(../../public/img/show.png) no-repeat;}

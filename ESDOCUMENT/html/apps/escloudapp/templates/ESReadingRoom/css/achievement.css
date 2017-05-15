@@ -1,0 +1,22 @@
+a img {border: 0 none;}
+a{text-decoration:none;}
+.estopss{border-bottom:1px solid #999999;padding-top:10px;padding-bottom:10px;}
+.estopss .submit{width:1024px;margin:0 auto;text-align:left;}
+.estopss .submit input{width:86px;height:36px;background:url("../img/approve.gif");border:0 none;cursor:pointer;}
+.esmain{position:relative;width:1024px;min-width:980px;overflow:hidden;margin:0 auto;font-family:Arial;font-size:14px;font-weight:bold;color:#333333;}
+.esmain .ldmleft{text-align:center;float:left;}
+.esmain .ldmleft .img{width:600px;height:600px;}
+.esmain .ldmleft .bg{background:#CCCCCC;width:600px;height:600px;padding:20px;}
+.esmain .ldmright{width:320px;float:left;}
+.esmain .ldmright .right_top{margin-top:10px;}
+
+.esmain .ldmright .right_top .title,.right_center .title{font-size:14px;border-bottom:1px solid #999999;padding-bottom:3px;padding-left:10px;}
+.esmain .ldmright .right_top .intro div{margin-left:15px;margin-top:7px;}
+.esmain .ldmright .right_top .intro .extra{margin-left:10px;}
+.esmain .ldmright .right_top .intro label{font-size:13px;font-weight:normal;color:#999999;}
+.esmain .ldmright .right_top .intro span{font-size:13px;font-weight:normal;color:#333333;}
+.esmain .right_center .title{margin-top:10px;}
+.esmain .right_center .word_img img{width:60px;height:60px;}
+.esmain .right_center .intro span{font-size:13px;font-weight:normal;font-style:normal;color:#333333;}
+.esmain .right_center .intro .total{width:65px;margin-left:10px;float:left;margin-top:5px;overflow:hidden;}
+.esmain .clear{clear:both;}

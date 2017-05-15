@@ -1,0 +1,16 @@
+﻿appid = setting
+
+apptoken = wwwwww
+
+name = 个人设置
+
+description = 用户的个人使用设置，包括门户布局样式、好友管理、隐私设置、提醒设置等。
+
+tag = 其他应用
+
+version = 1.0
+
+
+icon = setting.gif
+is_public = 1
+

@@ -1,0 +1,239 @@
+@charset "utf-8";
+/* CSS Document */
+a img {
+	border: 0 none;
+}
+
+a {
+	text-decoration: none;
+}
+
+.clear {
+	clear: both;
+}
+
+.topss {
+	border-bottom: 1px solid #999999;
+}
+
+.topss .submit {
+	width: 1024px;
+	margin: 0 auto;
+	text-align: left;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+.topss .submit input {
+	font-size: 13px;
+	width: auto;
+	height: 30px;
+	width: 80px;
+	background: #E4E4E4;
+	border: 1px solid #CCCCCC;
+	cursor: pointer;
+}
+
+.main {
+	border: 1px solid #DDDDDD;
+	border-top: 0 none;
+	position: relative;
+	width: 1024px;
+	min-width: 980px;
+	overflow: hidden;
+	margin: 0 auto;
+	font-family: Arial;
+	font-size: 14px;
+	color: #333333;
+}
+
+.main {
+	
+}
+
+.main .myparam table {
+	width: 980px;
+	height: auto;
+}
+
+.main .myparam table td {
+	padding: 10px;
+}
+
+.main .myparam input,.main .myparam textarea {
+	width: 100%;
+	height: 100%;
+}
+
+.main .myparam input {
+	height: 20px;
+}
+
+.main .myparam .t1 {
+	width: 100px;
+	text-align: right;
+}
+
+.mian .myparam .t2 {
+	width: 200px;
+	text-align: left;
+}
+
+.detail {
+	height: 50px;
+	border-bottom: 1px solid #999999;
+	padding-top: 3px;
+}
+
+.detail .check,.detail .state,.detail .content1,.detail .receivedate {
+	float: left;
+}
+
+.detail .state {
+	width: 56px;
+	height: 46px;
+	border: 1px solid #797979;
+}
+
+.detail .state .date1 span {
+	font-size: 12px;
+	color: #333333;
+}
+
+.detail .state .date1 {
+	background: #CCCCCC;
+	margin-top: 5px;
+	padding-left: 5px;
+}
+
+.detail .state .work {
+	font-size: 12px;
+	color: #FF9900;
+	padding-left: 5px;
+}
+
+.detail .content1 {
+	width: 350px;
+}
+
+.detail .content1 .title span {
+	font-size: 16px;
+	font-weight: bold;
+	color: #333333;
+}
+
+.detail .content1 .param {
+	margin-top: 10px;
+}
+
+.detail .content1 .param label {
+	font-size: 13px;
+	color: #999999;
+}
+
+.detail .content1 .param span {
+	font-size: 13px;
+	color: #333333;
+}
+
+.extra {
+	margin-left: 5px;
+}
+
+.detail .receivedate {
+	width: 165px;
+	margin-top: 15px;
+	margin-left: 20px;
+}
+
+.detail .receivedate label {
+	font-size: 13px;
+	font-weight: bold;
+	color: #333333;
+}
+
+.detail .receivedate span {
+	font-size: 13px;
+	color: #333333;
+}
+
+.detail .edit {
+	float: right;
+	margin-top: 15px;
+	margin-right: 20px;
+}
+
+.main .mytitle,.thing_title,.reply_title {
+	border-bottom: 1px solid #999999;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.main .mytitle,.thing_title,.accessory_title,.reply_title {
+	padding-left: 20px;
+}
+
+.main .mytitle span,.thing_title span,.accessory_title span,.reply_title span
+	{
+	font-size: 14px;
+	font-weight: bold;
+	color: #000000;
+}
+
+.detail {
+	margin-left: 20px;
+}
+
+.accessory {
+	padding-top: 10px;
+	border-bottom: 1px solid #999999;
+}
+
+.main .accessory .upfile {
+	cursor: pointer;
+	height: 30px;
+	opacity: 0;
+	width: 60px;
+	filter: alpha(opacity = 0);
+	z-index: 1;
+	position: absolute;
+}
+
+.main .accessory.up {
+	position: relative;
+	z-index: -1;
+	width: 56px;
+	height: 25px;
+	font-size: 11px;
+	margin: 0;
+	padding: 0;
+}
+
+.main .accessory .accessory_title {
+	float: left;
+	position: relative;
+}
+
+.main .accessory .upload {
+	float: right;
+	width: 60px;
+	margin-right: 100px;
+	overflow: hidden;
+}
+
+.reply_content {
+	padding-top: 10px;
+	margin-left: 20px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #999999;
+}
+
+.reply_content label {
+	font-size: 14px;
+	font-weight: bold;
+	color: #333333;
+}
+
+.reply_content span {
+	font-size: 13px;
+}

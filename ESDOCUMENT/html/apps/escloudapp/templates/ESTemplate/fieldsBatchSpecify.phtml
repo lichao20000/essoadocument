@@ -1,0 +1,320 @@
+<style type="text/css">
+.correBox{ width:910px; height:450px;}
+.SourceFiled{ width:200px; height:423px; float:left;overflow:auto;}
+.SourceFiled li{width:180px;text-align:center;}
+.asstitle{width:450px;float:left;margin-right: 5px;}
+.title{text-align:center;height:52px;line-height:25px; border-top:1px solid #f9f9f9;background:url(<?php echo $tplPath;?>/public/flexigrid/css/images/fhbg.gif) left bottom;}
+.SourceFiled li{width:200px; height:24px;line-height:24px;color:#555; text-indent:4px; cursor:pointer; z-index:2000;}
+.correBox .buttoncss1{border:0; padding:0;}
+
+
+.buttoncss1 {
+	padding-left: 5px;
+}
+
+.buttoncss1 div {
+	float: left;
+	margin-top: 5px;
+	margin-right: 5px;
+	border: 1px solid transparent;
+}
+
+.buttoncss1 span {
+	margin-right: 5px;
+}
+
+.buttoncss1 span.title1 {
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	padding: 0 5px 0px 20px;
+	margin-left: 5px;
+	border-right: 1px solid #ccc;
+	margin-top: 3px;
+}
+
+.buttoncss1 span.button1 {
+	float: left;
+	height: 28px;
+	color: #fff;
+	line-height: 28px;
+	padding: 0 5px 0px 5px;
+	padding-left: 28px;
+	_border-top-color: tomato;
+	_border-left-color: tomato;
+	_filter: chroma(color =       tomato);
+	background-position-x: 5px;
+	_border-top-color: tomato;
+	cursor: pointer;
+}
+
+
+.button1 {
+	background-color: #4a8bc2;
+}
+
+.buttoncss1 {
+	width: 100%;
+	height: 40px;
+	float: left;
+	padding: 0px;
+}
+#savecorrerules{
+	background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/save.png) no-repeat
+		5px;
+	background-color: #4a8bc2;
+}
+#resetrules{
+	background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/table_refresh.png) no-repeat
+		5px;
+	background-color: #4a8bc2;
+}
+#autocorrerules{
+background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/Grid_Zip_Import.png) no-repeat
+		5px;
+	background-color: #4a8bc2;
+}
+#deletetreenode{
+background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/close.png) no-repeat
+		5px;
+	background-color: #4a8bc2;
+}
+#cancelRelevance{
+background: url(<?php echo $tplPath;?>/public/flexigrid/css/images/close.png) no-repeat
+		5px;
+	background-color: #4a8bc2;
+}
+.buttoncss1 span#savecorrerules:HOVER {
+	background-color: #41b3e5;
+}
+.buttoncss1 span#resetrules:HOVER {
+	background-color: #41b3e5;
+}
+.buttoncss1 span#autocorrerules:HOVER {
+	background-color: #41b3e5;
+}
+.buttoncss1 span#cancelRelevance:HOVER {
+	background-color: #41b3e5;
+}
+
+</style>
+<div class='correBox'>
+	<div class='buttoncss1'>
+		<div><span class='button1' id='savecorrerules' style="margin-left:5px;">保存</span></div>
+		<div><span class='button1' id='autocorrerules'>自动对应</span></div>
+		<div><span class='button1' id='resetrules'>复位</span></div>
+	</div>
+	<div class="asstitle">
+		<table  id ="metadata" ></table>
+	</div>
+	<div class="myasstable">
+		<table id='assocrules'></table>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#metadata").flexigrid({
+		url: $.appClient.generateUrl({ESTemplate:'metadatafilter',structureId:structureID}),
+		dataType: 'json',
+		colModel : [
+			{display: '元数据名称', name : 'name', width : 120,  align: 'center'},
+			{display: '唯一标识', name : 'ident', width : 160,  align: 'center'},
+			{display: '类型', name : 'type', width : 80, align: 'center'},
+			],
+		usepager: true,
+		useRp: true,
+		rp:20,
+		onSuccess:delmetadata,
+		procmsg:"数据加载中,请稍后...",
+		nomsg:"没有数据",
+		pagetext: '第',
+		outof: '页 /共',
+		width: 450,
+		height: 450,
+		pagestat:'{from}到{to}条/共{total} 条'
+	});
+$("#assocrules").flexigrid({
+	url: $.appClient.generateUrl({ESTemplate : 'getAllTagListByStructureId', id:structureID}, 'x'),
+	colModel :[
+	    		{display : '元数据',	name : 'METADATA',width : 150,align : 'center'},
+	    		{display : '字段名',	name : 'ESIDENTIFIER',width :80,align : 'center'},
+	    		{display : '类型',name : 'ESTYPE',width : 60,align : 'center',  dropdown:['文本','数值','日期','浮点','时间','布尔']},
+	    		{display : '字段长度', name : 'ESLENGTH', width:80, align :'center'},
+	    		{display : '小数点位数', name : 'ESDOTLENGTH',  width : 80, align :'center'},
+	    	] ,
+	dataType: 'json',
+	width : 455,
+	onSuccess:delstru,
+	height : 481
+});
+function queryMetaTable(){
+
+	var keyWord = $('#queryMetaWord').val();
+	if(keyWord=='请输入关键字' ){
+		$("#metadata").flexOptions({url:$.appClient.generateUrl({ESArchiveUsingModel:'meta_json'},'x'),query:{keyWord:''},newp:1}).flexReload();
+		return false;
+	}
+	$("#metadata").flexOptions({url:$.appClient.generateUrl({ESArchiveUsingModel:'meta_json'},'x'),query:{keyWord:keyWord},newp:1}).flexReload();
+};
+	//源数据字段操作
+	var metadataid= "";//源字段
+    var metadataname = "";//源字段临时字段
+    var selecttd=null;
+	$('#metadata tr').die().live('click',function(event){
+		if(event.type=='click'){
+			metadataid = "";
+		    selecttd=$(this).find('td[colname="ident"]').eq(0);//find 不能加空格
+		    if(selecttd.find("span").eq(0).text()!=""){
+			metadataname=selecttd.text();
+			metadataid=selecttd.find("span").eq(0).attr("metadataid");
+		    }else{
+		    	selecttd.closest("tr").removeClass('trSelected');
+			  }
+		}
+		
+	});
+   //字段操作
+   //目标字段操作
+	$("#assocrules tr td:nth-child(1)").die().live('click dblclick',function(event){
+		if(event.type=='click'){
+			if(metadataid==""||metadataname=="")return;
+			selecttd.find("span").eq(0).text("");
+			if($(this).text()!=""){
+				var id=$(this).find("span").attr("metadataid");
+				var name=$(this).text();
+				//找到 该数据原来的节点
+				backtosource(id,name);
+			}
+			var targetspan=$(this).find("span").eq(0);
+			var span='<span tagid="'+targetspan.attr("tagid")+'" metadataid="'+metadataid+'" tempmetaid="'+targetspan.attr("tempmetaid")+'" tempmetaname="'+targetspan.attr("tempmetaname")+'" >'+metadataname+'</span>';
+			$(this).find('div').html(span);
+			metadataname="";
+			metadataid="";
+			selecttd.closest("tr").removeClass('trSelected')
+			selecttd=null;
+			$(this).addClass("editing");
+			var trstate = $(this).closest("tr");
+			trstate.attr("datastate","modify");
+		}else{
+			var id=$(this).find("span").attr("metadataid");
+			var name=$(this).text();
+			if(id!=''&&name!=''){
+			//找到 该数据原来的节点
+			backtosource(id,name);
+			var targetspan=$(this).find("span").eq(0);
+			var span='<span tagid="'+targetspan.attr("tagid")+'" metadataid="0" tempmetaid="'+targetspan.attr("tempmetaid")+'" tempmetaname="'+targetspan.attr("tempmetaname")+'" ></span>';
+			$(this).find('div').html(span);
+			var trstate = $(this).closest("tr");
+			$(this).removeClass("editing");
+			trstate.removeAttr("datastate");
+			if(targetspan.attr("tempmetaid")!=''&&targetspan.attr("tempmetaname")!=''){
+				$(this).addClass("editing");
+				trstate.attr("datastate","modify");
+		   }
+			}
+		}
+		
+	});
+	function backtosource(id,name){
+		$('#metadata tr').each(function(){
+			var identtd= $(this).find('td[colname="ident"]').eq(0);
+			if(identtd.find("span").eq(0).attr("metadataid")==id){
+				identtd.find("span").text(name);
+			}
+		});
+		
+	};
+	//保存
+	$("#savecorrerules").click(function(){
+		var mydata = new Array();
+		$('#assocrules tr[datastate="modify"]').each(function(i){
+			var metadatatd=	$(this).find("td[class='editing']:eq(0)");
+			var dataid=metadatatd.find("span").eq(0).attr("metadataid");
+			var tagid=metadatatd.find("span").eq(0).attr("tagid");
+			mydata.push({'id':tagid,'metadataid':dataid});
+		});
+		//保存到数据库
+		//bachUpdateTags
+		if(mydata.length!=0){
+		var url = $.appClient.generateUrl({ESTemplate:'bachUpdateTags'},'x');
+		$.post(url,{params:mydata},function(result){
+			if(result='true'){
+				$.dialog.notice({icon:"succeed",content:'保存成功',time:3});
+				//刷新列表
+				$("#metadata").flexOptions({newp : 1}).flexReload();
+				$("#assocrules").flexOptions({newp : 1}).flexReload();
+			}
+		},'json');
+		}else{
+			$.dialog.notice({icon:"error",content:'请指定元数据',time:3});
+			}
+	});
+	$("#resetrules").click(function(){
+		//$("#autocorrerules").flexReload();
+		//$('#metadata').flexReload();
+		$('#assocrules tr[datastate="modify"]').each(function(i){
+			var metadatatd=	$(this).find("td[class='editing']:eq(0)");
+			var metadataspan=metadatatd.find("span").eq(0);
+			var trstate = $(this).closest("tr");
+			var id=metadataspan.attr("metadataid");
+			var name=metadataspan.text();
+			var tempid=metadataspan.attr("tempmetaid");
+			var tempname=metadataspan.attr("tempmetaname");
+			backtosource(id,name);//回到元数据
+			metadataspan.attr("metadataid",tempid);
+			metadataspan.text(tempname);
+			metadatatd.removeClass("editing");
+			trstate.removeAttr("datastate");
+		});
+	});
+	$("#autocorrerules").click(function(){
+		//wanghongchen 20140902  自动对应时从后台取出所有元数据进行对应，解决只能对应当前页问题
+		$.ajax({
+			url:$.appClient.generateUrl({ESTemplate:'getAllMetadata'}),
+			type:'post',
+			dataType:'json',
+			data:{structureId:structureID},
+			success:function(rtdata){
+				$('#assocrules tr').each(function(i){
+					var strutd=$(this).find("td:eq(0)");
+					var strumetaid=strutd.attr("metadataid");
+					var strumetaname=strutd.text();
+					var targetspan=strutd.find("span").eq(0);
+					var struestitle=$(this).find("td:eq(1)").text();
+					var rtdataList = rtdata.dataList;
+					for(var i = 0; i < rtdata.length; i++){
+						var metaestitle=rtdata[i].estitle;
+					    var metaname=rtdata[i].esidentifier;
+					    var metaid=rtdata[i].id;
+						if(metaestitle==struestitle && strumetaname == ""){
+						   var span='<span tagid="'+targetspan.attr("tagid")+'" metadataid="'+metaid+'" tempmetaid="'+targetspan.attr("tempmetaid")+'" tempmetaname="'+targetspan.attr("tempmetaname")+'" >'+metaname+'</span>';
+						   strutd.find('div').html(span);
+						   strutd.addClass("editing");
+						   var trstate = strutd.closest("tr");
+						   trstate.attr("datastate","modify");
+						}
+					}
+				});
+				delmetadata();
+			}
+		});
+
+	});
+	function delmetadata(){
+		$('#assocrules tr').each(function(i){
+			var struestitle=$(this).find("td:eq(0)").text();
+			$('#metadata tr').each(function(index){
+				var metatd=$(this).find("td:eq(1)");
+			    var metaid=metatd.find("span").eq(0).attr("metadataid");
+				if(metatd.text()==struestitle&&metatd.text()!=""){
+				   metatd.find("span").eq(0).text("");
+				}
+			});
+		});
+		
+	}
+	function delstru(){
+	$('#metadata').flexReload();
+	}
+});
+</script>

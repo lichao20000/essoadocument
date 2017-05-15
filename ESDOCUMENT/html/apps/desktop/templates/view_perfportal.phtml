@@ -1,0 +1,19 @@
+<div class="indexTheme">
+  <div class="indexThemeTitle">
+    <h1>专业门户</h1>
+  </div>
+  <div class="questionList">
+    <p class="margin10 marginBottom10">
+<?php if ($list): ?>
+      <select name="subjects" id="subjects" class="floatLeft" style="width:220px;line-height:22px;" onchange="if (this.value) location.href='/department/' + this.value">
+        <option selected="selected" value="">请选择您要进入的专业门户</option>
+<?php foreach ($list as $instanceId => $title): ?>
+        <option value="<?php echo $instanceId ?>"><?php echo $this->plain($title) ?></option>
+<?php endforeach ?>
+      </select>
+<?php else: ?>
+      <span>没有可进入的专业门户</span>
+<?php endif ?>
+    </p>
+  </div>
+</div>

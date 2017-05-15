@@ -1,0 +1,39 @@
+@CHARSET "UTF-8";
+/*wangbo 20140325*/
+body,html{margin:0px;overflow:hidden;}
+input { margin:0; padding:0;}
+ol,ul{ margin:0; padding:0; list-style-type:none;}
+h2,p,form,table{ margin:0; padding:0; font-weight:normal;}
+#paper{ margin:0 auto;}
+
+#fileEquipGrid img{cursor:pointer;}
+a{
+	text-decoration : none ;
+}
+.estransfer{width:600px;overflow-y:auto;overflow-x:hidden}
+.estransfer ul{width: 600px;text-align:center;}
+.estransfer ul li{width:270px;margin-left:20px;float:left;margin-top:10px;}
+.estransfer span{width:100px;height:30px;line-height:30px;text-align:left;float:left;}
+.estransfer ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.estransfer ul li select{width:165px;height:25px;float:left;line-height:25px;}
+.estransfer .esbottom{width:100%;float:left;margin-top:20px;}
+.estransfer button{width:60px;height:30px;cursor:pointer}
+
+
+
+.esmain {width: 100%;}
+.esmain .eshead {width: 100%;height: 50px;line-height: 50px;border-bottom: 1px solid #ccc;}
+.esmain .esleft {background: #fff;width:150px;float:left;overflow: auto;}
+.esmain .esright {background: #fff;}
+
+
+ 
+.deleteAll{background:url(../img/deleteAll.png) no-repeat 2px center;}
+.warnning{border:solid 2px #f00;}
+
+.find-dialog{ width:203px; height:20px; border:1px solid #aaa; background:#fff; float: left; margin-top: 2px; line-height: 20px;position: absolute;right: 2px;}
+.find-dialog input{ width:180px; height:20px; line-height:20px; float:left; border:0; _line-height:23px; color: gray;}
+.find-dialog span{ width:20px; height:20px; float:left;  background:url(../img/search.gif) no-repeat center center; cursor:pointer;}
+.remark{width:300px; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.essContainer{width:96%;margin-left:2%;}

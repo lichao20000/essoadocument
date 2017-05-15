@@ -1,0 +1,40 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESTaskSchedul/css/taskshedul.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link href="<?php echo $tplPath;?>/public/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTaskSchedul/autovalidate/validate.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTaskSchedul/js/common.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTaskSchedul/js/taskshedul.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTaskSchedul/js/triggerServiceSetting.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESTaskSchedul/autovalidate/style.css" />
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'元数据管理'));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"任务调度管理", content:"#ESTaskSchedul"});
+	$("#estabs").esTabs("open", {title:"任务服务设置", content:"#triggerServiceSetting"});
+	$("#estabs").esTabs("select", "任务调度管理");
+});
+
+</script>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+
+<div id="ESTaskSchedul" class = "ESTaskSchedulContainer">
+  <table id="flexme2">
+  </table>
+</div>
+
+<div id="triggerServiceSetting" class = "triggerServiceSettingContaienr" >
+<table id="triggerServiceGrid">
+</table>
+</div>
+<script>
+setTimeout(function(){
+	$('#ESTaskSchedul .tDiv2').append('<div class="find-dialog"><input id="keyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="keyWord" value="请输入关键字" /><span onclick="keyWordQuery($(\'#keyWord\').val())"></span></div>');
+	$('#triggerServiceSetting .tDiv2').append('<div class="find-dialog"><input id="serviceKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="keyWord" value="请输入关键字" /><span onclick="serviceKeyWordQuery($(\'#serviceKeyWord\').val())"></span></div>');
+},100);
+</script>

@@ -1,0 +1,84 @@
+<style>
+<!--
+.changeuser{width:800px;}
+.changeuser .esleft{float:left;width:200px;height:370px;overflow:scroll;}
+
+-->
+</style>
+<div class="changeuser">
+<div class="esleft">
+<ul id="organtree" class="ztree"></ul>
+</div>
+<div class="esright">
+<table id="getuser"></table>
+</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	//左侧树
+	var setting = {
+				view: {
+					dblClickExpand: false,
+					showLine: false,
+					selectedMulti: false
+				},
+				edit:{
+					enable:true
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				async:{
+					enable:true,
+					url:$.appClient.generateUrl({ESCollaborative:'getnode'},'x'),
+					autoParam:["id"]
+				},
+				callback: {
+					onClick: clickNode
+				}
+			};
+	$.getJSON($.appClient.generateUrl({ESCollaborative : "tree"}, 'x'), function(zNodes) {
+		$.fn.zTree.init($("#organtree"), setting, zNodes);
+		
+	});
+	function clickNode(event,treeId,treeNode){
+			var treeid = treeNode.id;
+			var tableurl=$.appClient.generateUrl({ESCollaborative:'user_json',orgid:treeid},'x');
+			$("#getuser").flexOptions({newp:1,url:tableurl}).flexReload();
+	}
+	$("#getuser").flexigrid({
+		dataType: 'json',
+		colModel : [
+			{display: '请选择', name : 'id2', width : 40, align: 'center'},
+			{display: '用户名', name : 'c4', width : 60, sortable : true, align: 'center',hide:true},
+			{display: '姓名', name : 'c5', width : 100, sortable : true, align: 'center'},
+			{display: '电话', name : 'c6', width : 100, sortable : true, align: 'center'},
+			{display: '邮箱地址', name : 'c7', width : 150, sortable : true, align: 'center'},
+			{display: '办公电话', name : 'c8', width : 100, sortable : true, align: 'center'}
+			],
+		usepager: true,
+		title: '人员信息',
+		useRp: true,
+		rp: 20,
+		procmsg:"正在加载，请稍等",
+		nomsg:"没有数据",
+		resizable:false,
+		minColToggle:0,
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: 600,
+		height: 300,
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	$('#getuser tr').die().live('click',function(){
+	     $(':checkbox').attr('checked',false);
+	     $(this).find("input").attr('checked',true);
+
+	});
+
+});
+
+</script>

@@ -1,0 +1,123 @@
+<?php
+/**
+ * 业务系统设置
+ * @author yuanzhonghua
+ * @date   2013-05-22
+ *
+ */
+class ProxyEscloudappEscloud_receivews extends AgentProxyAbstract{
+	const SERVICE_NAME = "escloud_receivews";
+	/**
+	 * 业务系统设置列表的显示
+	 * @author yuanzhonghua
+	 * @date   2013-05-22
+	 */
+	public function getSysNodeListByMainsite($mainsite){
+		$str="-1";
+		$urlParam = array('getSysNodeListByMainsite',$mainsite,$str);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,'','application/json;charset=UTF-8');
+	}
+	/**
+	 * 业务系统设置项的添加及修改
+	 * @author yuanzhonghua
+	 * @date   2013-05-23
+	 */
+	public function addItems($params){
+		$urlParam = array('saveOrUpdateSysNode');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$params,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 单个删除业务系统列表的数据
+	 * @author yuanzhonghua
+	 * @date   2013-05-24
+	 */
+	public function del_items($id){
+		$urlParam = array('deleteSysNodeById',$id);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,'','application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 数据接口日志查询
+	 * @author fangjixiang
+	 * @date   2013-05-23
+	 */
+	public function getNativeLogArchive($start, $limit, $params)
+	{
+		$urlParam = array('getNativeLogArchive', $start, $limit);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$params,'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 根据用户省份简码查询业务系统
+	 * @author fangjixiang
+	 * @date 2013-05-28
+	 *
+	 */
+	
+	public function getSysNodeListAvailable($mainSite)
+	{
+		$urlParam = array('getSysNodeListAvailable', $mainSite);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 获取显示SIP文件内容
+	 * @author fangjixiang 20130621
+	 * @param param
+	 * @return
+	 */
+	public function showSIPXml( $params )
+	{
+		$urlParam = array('showSIPXml');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 获取显示电子文件上传信息内容
+	 * @author fangjixiang 20130621
+	 * @param param
+	 * @return
+	 */
+	
+	public function showUploadinfo( $params )
+	{
+		$urlParam = array('showUploadinfo');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 将本系统错误数据反馈给业务系统（其他错误已反馈给业务系统）
+	 * @author fangjixiang 20130621
+	 * @param param
+	 * @return
+	 */
+	
+	public function	feedbackExternalSys( $params )
+	{
+		$urlParam = array('feedbackExternalSys');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 错误数据处理后,导入本系统错误的数据
+	 * @author fangjixiang 20130621
+	 * @param param
+	 * @return
+	 */
+	
+	public function	importInternalData( $params )
+	{
+		$urlParam = array('importInternalData');
+		$url = implode('/', $urlParam);
+		//return $params;
+		return $this->post(self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8');
+	}
+}

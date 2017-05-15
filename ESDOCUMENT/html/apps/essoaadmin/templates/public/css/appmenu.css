@@ -1,0 +1,156 @@
+@CHARSET "UTF-8";
+.sidebar-scroll {
+    position: fixed; 
+    overflow-y: scroll;
+    height: 100%;
+    width: 246px;
+    z-index: 100;
+    background:url(../img/bar.png) no-repeat center right;
+    background-color: #133959;
+}
+
+#sidebar{
+	top:50px;
+}
+
+#menu {
+	min-height: 100%;
+}
+#menu ul,#menu li,#menu ul li a{
+	list-style-type:none;
+}
+
+#menu a {
+	color: #fff;
+	text-decoration: none;
+}
+#menu a:hover,#menu li:hover > a {
+	color: #FFF;
+	background-color:#215376;
+}
+#menu ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+#menu li {
+	margin: 0;
+	padding: 0;
+	width:240px;
+}
+#menu {
+	background: #133959;
+	float: left;
+	font-size: 1.5em;
+	min-height: 100%;
+	margin-left: 0px;
+	padding-left: 0px;
+}
+#menu li {
+	position: relative;
+	z-index: 1;
+}
+#menu li a {
+	display: block;
+	padding: 0.8em 1em;
+	white-space: nowrap;
+}
+#menu li ul {
+	overflow:auto; 
+	position: absolute;
+	display: none;
+	left: 100%;
+	top: 0px;
+	float: none;
+	width:170px;
+	background-color:#215376;
+}
+#menu li:hover ul {
+	display: block;
+}
+#menu li ul a {
+	position: relative;
+	font-size: 0.8em;
+	color:#93adbc;
+}
+
+#menu li ul a:hover:before {
+	display: block;
+	width: 1em;
+	height: 1em;
+	border: 1px solid #FFF;
+	position: absolute;
+	background-color:#fff;
+
+}
+#menu li ul[class = "subulSystemManage"]{
+		top:-355px;
+}
+
+#menu li ul[class = "subulPersonManage"],#menu li ul[class = "subulArcUse"]{
+		top:-40px;
+}
+
+#menu li ul[class = "subulArcCollecte"]{
+		top:-80px;
+}
+
+#menu li ul[class = "subulArcManage"]{
+		top:-130px;
+}
+
+#menu li ul[class = "subulArcCount"]{
+		top:-70px;
+}
+
+.subulSystemManage{
+	height:500px;
+}
+#menu li ul[class = "subulAPPManage"]{
+		top:-340px;
+}
+.subulAPPManage{
+	height:400px;
+}
+
+#sidebar ul li:hover ul li,
+#sidebar ul li a:hover ul li
+{
+	scrollbar-arrow-color: #aaa;
+	scrollbar-3dlight-color: #888;
+	scrollbar-highlight-color: #666;
+	scrollbar-face-color: #444;
+	scrollbar-shadow-color: #000;
+	scrollbar-darkshadow-color: #888;
+	scrollbar-track-color: #363636;
+}
+
+
+/* Landscape phone to portrait tablet */
+@media (max-width:979px) {
+    #sidebar {
+        background-color: #13405f !important;
+    }
+}
+
+.sidebar-closed > #sidebar > ul {
+    display: none;
+}
+
+.sidebar-closed #main-content {
+    margin-left: 0px;
+}
+
+.sidebar-closed #sidebar {
+    margin-left: -360px;
+}
+
+#sidebar {
+    z-index: 100;
+    background: #133959;
+}
+
+#sidebar.closed {
+    display: none;
+}
+

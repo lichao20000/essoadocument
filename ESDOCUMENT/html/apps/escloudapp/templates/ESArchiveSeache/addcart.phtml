@@ -1,0 +1,58 @@
+<div class="front_sck">
+	<img style="position:relative;top:7px;padding-left:10px;"alt="" src="<?php echo $tplPath?>/ESArchiveSeache/img/app.gif"  />
+	<img style="position:absolute; left:20px;top:-10px;" src="<?php echo $tplPath?>/ESArchiveSeache/img/triangle.gif" alt="" />
+	<img style="position:absolute;left:20px;top:-15px;" src="<?php echo $tplPath?>/ESArchiveSeache/img/square.gif" alt="" />
+	<span class="num"><?php if(isset($_SESSION['shopcar'])){ echo count($_SESSION['shopcar']);} else { echo 0;} ?></span>
+	<span style="line-height:30px;">去提交审批申请</span>
+	<img alt="" src="<?php echo $tplPath?>/ESArchiveSeache/img/u120_original.gif"  />
+</div>
+<div class="bot_content" style="display:none;">
+	<div class="cr1"><span style="position:relative;left:10px;">您所申请的档案</span></div>
+	
+	<div id="to">
+		<?php if(isset($_SESSION['shopcar'])){foreach($_SESSION['shopcar'] as $key=>$val){?>
+		<div id="d_<?php echo $val['id']?>" class="cr2">
+			<span><img src="<?php echo $tplPath?>/ESArchiveSeache/img/c2_file.gif" width="50" height="50" style="float:left" /></span>
+			<div style="height: 50px; line-height: 20px;padding-top: 5px;padding-right: 2px; ">
+				<span><a class="dl" href="#" title="<?php echo $val['name'];?>"><?php echo $val['name'];?></a><span style=" margin-left: 10px;"></span></span><a class="bl" href="javascript:delcar('<?php echo $val['id']?>');">删除</a></span>
+			</div>
+		</div>
+		<?php }} ?>
+	</div>
+	
+	<div class="cr3">
+		<div style="padding-top:20px;padding-right:30px;"><span>共计<em class="bottnum"><?php if(isset($_SESSION['shopcar'])){ echo count($_SESSION['shopcar']);} else { echo 0;} ?></em>份档案</span></div>
+		<div style="text-align:center;float:right;line-height:36px;background:url(<?php echo $tplPath?>/ESArchiveSeache/img/c3_bg.gif);height:38px;width:136px;">
+			<?php 
+			if(isset($_SESSION['shopcar'])){
+				if(count($_SESSION['shopcar']) == 0){
+					echo '<span class="submitapplication"><a id="cr3" href="javascript:void(0);">提交申请批准</a></span>';
+				} else {
+					echo '<span class="submitapplication"><a href="javascript:submitcar();">提交申请批准</a></span>';
+				}
+			} else {
+				echo '<span class="submitapplication"><a id="cr3" href="javascript:void(0);">提交申请批准</a></span>';
+			}
+			?>
+		</div>
+	</div>
+	
+</div>
+<div class="tog"></div>
+<script type="text/javascript">
+//显示档案车
+$(".front_sck").mouseover(function(){
+	$(this).css({background:"url('<?php echo $tplPath?>/ESArchiveSeache/img/application.gif')"});
+	$(".bot_content").css({display:"block"});
+});
+$(".bot_content").mouseover(function(){
+	$(".front_sck").css({background:"url('<?php echo $tplPath?>/ESArchiveSeache/img/or_bg.gif')"});
+	$(this).css({display:"block"});
+	$(".front_sck").css({background:"url('<?php echo $tplPath?>/ESArchiveSeache/img/application.gif')"});
+});
+$(".bot_content").mouseout(function(){
+	$(".front_sck").css({background:"url('<?php echo $tplPath?>/ESArchiveSeache/img/or_bg.gif')"});
+	$(this).css({display:"none"});
+});
+
+</script>

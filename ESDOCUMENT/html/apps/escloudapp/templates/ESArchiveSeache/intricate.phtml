@@ -1,0 +1,190 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath?>/ESArchiveSeache/css/index.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath?>/public/DatePicker/skin/WdatePicker.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/viewfile.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/formStartHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/addAttachData.js"></script>
+
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<div class='paper' id='ESPaper'>
+	<div class='so-paper'>
+		<div class='ic-so'>
+			<form id='intr_form' name='intr_form'>
+			<div class='head'>
+				<h3>档案类型</h3>
+				<!-- xiaoxiong 20140730 修改为动态获取 -->
+				<?php
+					$classContent="<div id='docClass' style='padding-top:8px;'>";
+					$classContent.="<span id='clearall'><i style='background:#41b3e5;color:white;'>不限</i></span>";
+					foreach ($archiveTypes as $list){
+						//liqiubo 20140916 加入长度判断，修复字段超长高级检索样式问题，修复bug 1146
+						$viewTitle = '';
+						if(strlen(trim($list->className))>18){//liqiubo 20140928 长度给到18，修复bug 1260
+							$viewTitle = mb_substr($list->className,0,5,'utf-8')."...";
+						}else{
+							$viewTitle = $list->className;
+						}
+						$classContent.="<span id='".$list->SKUNumber."'><i title=\"".$list->className."\">".$viewTitle."</i></span>";
+					}
+					$classContent.="</div>";
+					echo $classContent;
+				?>
+				<!-- <div id='docClass'>
+					<label for='clearall'><input type='radio' id='clearall' name='archiveClass' value='clearall' /><i>不限</i></label>
+					<label for='document'><input type='radio' id='document' name='archiveClass' value='document' /><i>文书档案</i></label>
+					<label for='accounting'><input type='radio' id='accounting' name='archiveClass' value='accounting' /><i>会计档案</i></label>
+					<label for='contract'><input type='radio' id='contract' name='archiveClass' value='contract' /><i>合同档案</i></label>
+					<label for='purchase'><input type='radio' id='purchase' name='archiveClass' value='purchase' /><i>采购档案</i></label>
+					<label for='project'><input type='radio' id='project' name='archiveClass' value='project' /><i>工程档案</i></label>
+					<label for='technical'><input type='radio' id='technical' name='archiveClass' value='technical' /><i>科技档案</i></label>
+					<label for='personal'><input type='radio' id='personal' name='archiveClass' value='personal' /><i>员工档案</i></label>
+					<label for='auditfiles'><input type='radio' id='auditfiles' name='archiveClass' value='auditfiles' /><i>审计档案</i></label>
+					<label for='carrierfiles'><input type='radio' id='carrierfiles' name='archiveClass' value='carrierfiles' /><i>多种载体档案</i></label>
+					<span class='clearall'>清空</span>
+				</div> -->
+			</div>
+			<div class='meta' id='meta' style='display:none;'>
+				<h3>著录项</h3>
+				<ul class='metadata' id='metadata'></ul>
+			</div>
+			<div class='yearrange'>
+				<h3>归档年度</h3>
+				<div style='padding-top:7px;'>
+					<input type='text' name='archiveYearStart' class='Wdate' onclick="WdatePicker({isShowClear:true,dateFmt:'yyyy'})" /><span>~</span><input type='text' name='archiveYearEnd' class='Wdate' onclick="WdatePicker({isShowClear:true,dateFmt:'yyyy'})" />
+				</div>
+			</div>
+			<div class='retentionperiod'>
+				<h3>保管期限</h3>
+				<?php
+					$PeriodContent="<div id='retentionPeriod' style='padding-top:10px;'>";
+					$num = 0;
+					foreach ($RetentionPeriodLst as $value) {
+						$PeriodContent.="<label for='Period_".$num."'><input type='checkbox' id='Period_".$num."' name='retentionPeriod' value='".$value."' /><i>".$value."</i></label>";
+						$num ++;
+					}
+					$PeriodContent.="</div>";
+					echo $PeriodContent;
+				?>
+			</div>
+		<!-- 	<div class='orgis'>
+				<h3>所属单位</h3>
+				<div class='cascade' id='cascade'><div class='cascadeTwo' id='cascadeTwo'>
+						<select name='province' id='province'>
+	             			<option style="color:gray; font-size:16px;" value='0'>请选择省分公司 </option>
+	       				</select>
+	        			<select name='city' id='city'>
+	            			<option style="color:gray; font-size:16px;" value='0'>请选择市分公司 </option>
+	        			</select>
+	        			<span id='district'><input readonly="readonly" type='text' class='orgInput' value=''/></span>
+	        			<ul style="max-height: 320px; height: auto; border: 1px solid #AAA; left: 418px; display:none; background: #FFF; width: 230px; position: absolute; z-index: 100; overflow: auto; " class="org-list ztree" id="org_tree"></ul>
+	        			<a title="删除行" href='javascript:;' class='del' style="position: relative; left: -35px; display: none;"></a>
+	        			<a title="添加行" href='javascript:;' class='add' style=" position: relative; left: -45px; _margin-top:-10px; display:none;"></a>
+	        		</div></div>
+			</div>
+			<div class='fileLev' id='fileLev' style='display:none;'>
+				<h3>案卷级</h3>
+				<input type='checkbox' name='fileLevel' value='按案卷级'/><i>按案卷级</i>
+			</div>
+			<div style="width:400px;height:30px;line-height:30x; padding-left:75px;float:left;">
+				<input type="button"  style="width:60px;height:25px;line-height:25px;border:1px solid #ccc;cursor: pointer;" id="searchBtn" value="确定">
+				<input type="reset"  style="margin-left:20px;width:60px;height:25px;line-height:25px;border:1px solid #ccc;cursor: pointer;" id="resetBtn" value="重置">
+			</div> -->
+			<div class='keyword'>
+				<h3>关键字</h3>
+				<div style="padding-top:10px;">
+				<input type='text' name='searchWord'  placeholder='多个关键字用空格分开' id='searchWord' value=''/>
+				<a href='javascript:;' class='searchall'>搜索</a>
+				<a href='javascript:_query.base();' class='base-so'>普通搜索</a>
+				</div>
+			</div>
+			<div class='clear'></div>
+			</form>
+		</div>
+		<div class='so-result' id='so_result'></div>
+	</div>
+	<div class='so-hd'>
+		<div class='so-car' id='car'>
+			<i>提交审批申请</i>
+			<span class='so-st'><?php echo count($SESSsenior);?></span>
+			<div class='product-list' id='product_list'>
+				<!--<h2 class='pl-null'>没有审批申请单!</h2>-->
+				<?php
+				if(count($SESSsenior)==0){
+					echo "<h2 class='pl-null'>没有申请数据!</h2>";//liqiubo 20141011修改显示的文字，修复bug 1270
+				}else{
+					$shop="<h2 class='pl-hd'><b>申请数据清单</b></h2>";//liqiubo 20140929 修改显示的文字，修复bug 1270
+					$shop.="<ul class='pl-ul'>";
+					foreach($SESSsenior as $v){
+						$shop.="<li id='".$v['id']."' class='thisli_".$v['delId']."'>";
+						$shop.="<span></span>";
+						$shop.="<div class='titlestyle'><a href='javascript:;'>".$v['name']."</a></div>";
+						$shop.="<div class='deletestyle'><a href='javascript:delFormArchivesCar(\"".$v['id']."\",\"".$v['delId']."\");'>删除</a></div>";
+						$shop.="</li>";
+					}
+	                $shop.="</ul>";
+					$shop.="<div class='pl-hr'><a onclick='javascript:clearAllApply();'>清空</a></div>";
+					$shop.="<div class='pl-sb'>";
+					$shop.="<a href='javascript:submitArchivesCar();'>提交审批</a>";
+					$shop.="</div>";
+					echo $shop;
+				}
+				?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type='text/javascript' src='<?php echo $tplPath;?>/ESArchiveSeache/js/index.js'></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.excheck.min.js"></script>
+<script type="text/javascript">
+
+$(function() {
+	//添加行
+	$('a.add').live('click',function() {
+		$(this).closest('div.cascadeTwo').clone().appendTo($(this).closest('div.cascade')).find('input').val('');
+		$('a.add,a.del').hide();
+	});
+	//删除行
+	$('a.del').live('click',function() {
+		if($(this).closest('div.cascade').children().length > 1) {
+			$(this).closest('div.cascadeTwo').remove();
+		}
+	});
+
+	$('div.cascadeTwo').live({
+		mouseover: function() {
+			$(this).find('a[class="add"],a[class="del"]').show();
+		},
+		mouseout: function() {
+			$(this).find('a[class="add"],a[class="del"]').hide();
+		}
+	});
+	//重置按钮
+$('#resetBtn').click(function(){
+	
+	$('#cascade div.cascadeTwo:gt(0)').remove();
+	$('#cascade input:hidden').remove();
+	$('#cascade select').removeAttr('disabled');
+	//清空所有的已选档案类型的状态
+	var spanEles=document.getElementById('docClass').childNodes;
+	for(var j=0;j<spanEles.length;j++){
+		spanEles[j].children[0].style.background='';
+		spanEles[j].children[0].style.color='';
+	}
+	//当前项标注为选中状态
+	$('#docClass span i').first().css({background:'#41b3e5',color:'white'});
+	clearConditon('clearall');
+});
+
+//当前用户所在省份标记为选中
+$('div.cascadeTwo:first').find('select[name="province"]').change();
+});
+
+</script>

@@ -1,0 +1,110 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<style>
+	.ztree li a span{
+		color:#444;
+	}
+</style>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/catagory.js"></script>
+<div class="estransfer">
+<form id="generate" action="" method="post">
+<input type="hidden" name="submit" value="add">
+<ul>
+<?php foreach ($formData as $value){
+	if($value['isnull']==1)
+	{
+		if(array_key_exists('options', $value)){
+			echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><select name="'.$value['name'].'" verify="'.$value['verify'].'">';
+			echo '<option value="">--请选择--</option>';
+			foreach ($value['options'] as $key=>$val)
+			{
+				if($value['value']==$val){
+					echo '<option value="'.$val.'" selected>'.$key.'</option>';
+				}else{
+					echo '<option value="'.$val.'">'.$key.'</option>';
+				}
+		
+			}
+			echo '</select></li>';
+		
+		}else{
+			if($value['isreadonly']){
+				if($value['length']>=300){
+					echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+				}else{
+					echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" readonly  value="'.$value['value'].'" style="background:#eee;"></li>';
+		
+				}
+			}else{
+				if($value['length']>=300){
+					echo '<li style="width:525px"><span>'.$value['lable'].' <font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+				}else{
+					echo '<li><span>'.$value['lable'].'<font color="red" size="3">*</font></span><input type="text" name="'.$value['name'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+						
+				}
+			}
+		}
+	}else{
+		if(array_key_exists('options', $value)){
+			echo '<li><span>'.$value['lable'].'</span><select name="'.$value['name'].'" verify="'.$value['verify'].'">';
+			echo '<option value="">--请选择--</option>';
+			foreach ($value['options'] as $key=>$val)
+			{
+				if($value['value']==$val){
+					echo '<option value="'.$val.'" selected>'.$key.'</option>';
+				}else{
+					echo '<option value="'.$val.'">'.$key.'</option>';
+				}
+		
+			}
+			echo '</select></li>';
+		
+		}else{
+			if($value['isreadonly']){
+				if($value['length']>=300){
+					echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" readonly style="width:430px;background:#eee;"></li>';
+				}else{
+					echo '<li><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" readonly  value="'.$value['value'].'" style="background:#eee;"></li>';
+		
+				}
+			}else{
+				if($value['length']>=300){
+					echo '<li style="width:525px"><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'" verify="'.$value['verify'].'" value="'.$value['value'].'" metadata="'.$value['metadata'].'" style="width:430px"></li>';
+				}else{
+					echo '<li><span>'.$value['lable'].'</span><input type="text" name="'.$value['name'].'"  verify="'.$value['verify'].'" metadata="'.$value['metadata'].'" value="'.$value['value'].'"></li>';
+						
+				}
+			}
+		}
+	}
+		
+	
+}?>
+</ul>
+</form>
+</div>
+<div class="escatagory" id='catagory'>
+<ul id="fication" class="ztree"></ul>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("input[metadata='ClassificationCode']").focus(function(){
+				var offset=$(this).offset();
+				$(this).attr("readonly",true);
+				$('#catagory').show().offset({top:offset.top+24,left:offset.left});
+				$("body").bind("mousedown", clickBodyDown);
+		});
+	var obj=$("input[verify^='date']");
+	obj.addClass('Wdate');
+	obj.click(function(){
+		WdatePicker();
+	});
+function hideCata() {
+	$("#catagory").fadeOut("fast");
+}
+function clickBodyDown(event) {
+	if (!(event.target.id == "catagory" || event.target.id == "fication" || $(event.target).parents("#catagory").length>0)) {
+		hideCata();
+	}
+}
+});
+</script>

@@ -1,0 +1,313 @@
+<?php
+/**
+ * 文件发放模块
+ * @author gengqianfeng
+ *
+ */
+class ProxyEsdocumentDocumentSend extends AgentProxyAbstract {
+	const SERVICE_NAME = "documentSend";
+	/**
+	 * 获取文件动态列
+	 *
+	 * @param unknown $stageId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findMoveCols($stageId) {
+		$urlParam = array (
+				"findMoveCols",
+				$stageId,
+				1 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取发放文件列表总条数
+	 *
+	 * @param unknown $pId        	
+	 * @param unknown $where        	
+	 */
+	public function getCount($pId, $where, $admin) {
+		$urlParam = array (
+				'count',
+				$pId,
+				$admin 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取发放文件列表
+	 *
+	 * @param unknown $page
+	 *        	第几页
+	 * @param unknown $pre
+	 *        	每页显示几条
+	 * @param unknown $pId
+	 *        	父级节点id
+	 * @param unknown $where
+	 *        	筛选条件
+	 */
+	public function findDocumentSendList($page, $pre, $pId, $where, $admin) {
+		$urlParam = array (
+				'list',
+				$page,
+				$pre,
+				$pId,
+				$admin 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $where ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取对应类型下流程列表
+	 *
+	 * @param unknown $pId        	
+	 */
+	public function getFlowList($pId) {
+		$urlParam = array (
+				'getFlowList',
+				$pId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 通过id获取发放记录数据
+	 *
+	 * @param unknown $id        	
+	 */
+	public function getDocumentSendById($id) {
+		$urlParam = array (
+				'getDocumentSendById',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取文件选择列表总条数
+	 *
+	 * @param unknown $code        	
+	 */
+	public function getFileCount($code, $stageId) {
+		$urlParam = array (
+				'getFileCount',
+				$code,
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取文件选择列表
+	 *
+	 * @param unknown $page
+	 *        	第几页
+	 * @param unknown $pre        	
+	 * @param unknown $code
+	 *        	收集范围分类代码
+	 */
+	public function findDocumentList($page, $pre, $code, $stageId) {
+		$urlParam = array (
+				'findDocumentList',
+				$page,
+				$pre,
+				$code,
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 通过id获取文件分类范围id
+	 *
+	 * @param unknown $ids        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getStageIdByIds($ids) {
+		$s = explode ( ',', $ids );
+		$urlParam = array (
+				'getStageIdByIds',
+				$s [0] 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 通过id获取选中文件列表总条数
+	 *
+	 * @param unknown $ids        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getCountById($ids) {
+		$urlParam = array (
+				"getCountById" 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, 'text/plain;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取选中文件列表
+	 *
+	 * @param unknown $page        	
+	 * @param unknown $pre        	
+	 * @param unknown $ids        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findDocumentListByIds($page, $pre, $ids) {
+		$urlParam = array (
+				'findDocumentListByIds',
+				$page,
+				$pre 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, 'text/plain;charset=UTF-8' );
+	}
+	
+	/**
+	 * 待发
+	 *
+	 * @param unknown $send        	
+	 */
+	public function momentumSend($send) {
+		$urlParam = array (
+				'momentumSend' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $send, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 发放
+	 *
+	 * @param unknown $send        	
+	 */
+	public function extendSend($send) {
+		$urlParam = array (
+				'extendSend' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $send, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 删除发放单
+	 *
+	 * @param unknown $ids        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function delSend($ids) {
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'delSend',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $ids ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取流程矩阵总条数
+	 *
+	 * @param unknown $send_id        	
+	 */
+	public function getMatrixCount($send_id, $nodeType) {
+		$urlParam = array (
+				'getMatrixCount',
+				$send_id,
+				$nodeType 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取流程矩阵列表
+	 *
+	 * @param unknown $send_id
+	 *        	发放单id
+	 * @param unknown $page
+	 *        	第几页
+	 * @param unknown $pre
+	 *        	每页显示多少条
+	 */
+	public function findSendMatrixList($send_id, $nodeType, $page, $pre) {
+		$urlParam = array (
+				'findSendMatrixList',
+				$send_id,
+				$nodeType,
+				$page,
+				$pre 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 待发状态下直接发放
+	 *
+	 * @param unknown $send        	
+	 */
+	public function pubSend($send) {
+		$urlParam = array (
+				'pubSend' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $send ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取发放单编号
+	 *
+	 * @param unknown $flowId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getSendNo($pId) {
+		$urlParam = array (
+				'getSendNo',
+				$pId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 更新发放单流程名称
+	 *
+	 * @param unknown $sendId        	
+	 * @param unknown $flowName        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function updateFlowNameBySendid($sendId, $flowName) {
+		$urlParam = array (
+				'updateFlowNameBySendid',
+				$sendId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $flowName, 'text/plain;charset=UTF-8' );
+	}
+	/**
+	 * 撤回发放单
+	 * @param unknown $param
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function callbackSend($param) {
+		$urlParam = array (
+				'callbackSend'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param,  'application/json;charset=UTF-8' );
+	}
+}

@@ -1,0 +1,85 @@
+<!-- wangbo 20140403-->
+<form id="addOrg" action=""	method="post">
+<div class="estransferorg">
+<ul>
+<li><span>机构名称<font color="red" size="3">*</font></span><input  type="text" name="orgname" verify="unspecial/150/1/0"  value="">
+<input type="hidden" name="id"    value="-1"  >
+<input type="hidden" name="appid"    value= "<?php echo $data[0];?>" >
+<input type="hidden" name="parentid"     value= "<?php echo $data[1];?>">
+<input type="hidden" name="idseq"    value= "<?php echo $data[2];?>">
+</li>
+<li><span>地址<font color="red" size="3">*</font></span><input type="text" name="address" verify="unspecial/150/1/0"  value=""></li>
+<li><span>库房坐标</span><input type="text" name="position" verify="unspecial/10/0/0" readonly="readonly" value=""></li>
+<!-- gengqianfeng 20140922 添加顺序长度限制 -->
+<li><span>顺序<font color="red" size="3">*</font></span><input type="text" name="orgsort" verify="number/50/1/0"  value=""></li>
+</ul>
+</div>
+</form>
+ <script type="text/javascript">
+ /*
+ var orgsortZZ =  /^[0-9]*$/;
+//gengqianfeng 20140915 机构名称特殊符号限制
+ var orgnameZZ= /^([\u4e00-\u9fa5]+|[a-zA-Z0-9]+)$/;
+ $("#editOrg input[name='orgname']").bind('blur',function(){
+ 	var orgname = $(this).val();
+ 	orgname=orgname.replace(/[ ]/g,"");
+ 	if(orgname==''){
+ 		$(this).addClass("warnning");
+ 		return false;
+ 	}
+ 	if(orgnameZZ.test(orgname)==false){
+ 		//gengqianfeng 20140915 机构名称特殊符号限制
+ 		$(this).addClass("warnning");
+ 		$(this).attr("title","机构名称不允许包含特殊字符");
+ 		return false;
+ 	}
+ 	//gengqianfeng 20140915 机构名称长度限制
+ 	if(execLen(orgname,150)==false){
+ 		$(this).addClass("warnning");
+ 		$(this).attr("title","机构名称长度不能超过150个字符");
+ 		return false;
+ 	}
+ 	$(this).removeClass("warnning");
+ });
+ $("#editOrg input[name='address']").bind('blur',function(){
+		var address = $(this).val();
+		address=address.replace(/[ ]/g,"");
+		if(address==''){
+			$(this).addClass("warnning");
+			return false;
+		}
+		//gengqianfeng 20140915 地址长度限制
+		if(execLen(address,150)==false){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","地址长度不能超过150个字符");
+	 		return false;
+	 	}
+		$(this).removeClass("warnning");
+	});
+ $("#editOrg input[name='orgsort']").bind('blur',function(){
+	 	var orgsort = $(this).val();
+	 	orgsort=orgsort.replace(/[ ]/g,"");
+	 	if(orgsort==''){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+	 	if(orgsortZZ.test(orgsort)==false){
+	 		$(this).addClass("warnning");
+	 		//gengqianfeng 20140915 排序提示
+	 		$(this).attr("title","排序数字");
+	 		return false;
+	 	}
+	 	$(this).removeClass("warnning");
+	 });
+//gengqianfeng 20140915 长度验证
+ function execLen(value,len){
+	 if(value!=''){
+     	var strlength =value.replace(/[^\x00-\xff]/g,'aa').length; //字符长度 一个汉字两个字符
+     	if(strlength > len ){
+     		var charLen = (len%2==0)?(len/2):((len-1)/2);
+     		return false;
+     	}  
+     }
+ } 
+ */
+</script>

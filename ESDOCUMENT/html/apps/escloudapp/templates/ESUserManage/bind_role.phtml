@@ -1,0 +1,35 @@
+<div class='public-set-auth'>
+	<?php if(!$batch){?>
+	<div class='user-information'>
+		<div><span>姓名：</span><input type='text' readonly='readonly' value='<?php echo $info->displayName; ?>' /></div>
+		<p></p>
+		<div><span>机构：</span><input type='text' readonly='readonly' value='<?php echo $info->deptEntry->orgName; ?>' /></div>
+		<div><span>邮箱：</span><input type='text' readonly='readonly' value='<?php echo $info->emailAddress; ?>' /></div>
+		<p></p>
+		<div><span>手机：</span><input type='text' readonly='readonly' value='<?php echo $info->mobTel; ?>' /></div>
+		<div><span>办公电话：</span><input type='text' readonly='readonly' value='<?php echo $info->officeTel; ?>' /></div>
+		<p></p>
+		<div><span>家庭电话：</span><input type='text' readonly='readonly' value='<?php echo $info->deptEntry->telephonenumber; ?>' /></div>
+	</div>
+	<?php }?>
+	<div class='title-search'>
+		<div class='search-role'>
+			<h2>系统角色</h2>
+			<input type='text' id='srole' />
+		</div>
+		<p></p>
+		<div class='search-role'>
+			<h2>已选角色</h2>
+			<input type='text' id='urole' />
+		</div>
+	</div>
+	<div class='user-role'>
+		<ul class='roles-list' id='system_role' onselectstart="return false"><?php echo $system_role;?></ul>
+		<div class='operation-button'>
+			<ul class='extends-spacing'></ul>
+			<a href='javascript:role.toleft()' class='toleft'></a>
+			<a href='javascript:role.toright()' class='toright'></a>
+		</div>
+		<ul class='roles-list' id='use_role' onselectstart="return false"><?php echo $use_role;?></ul>
+	</div>
+</div>

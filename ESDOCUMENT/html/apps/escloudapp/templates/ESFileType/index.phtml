@@ -1,0 +1,199 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESFileType/css/index.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<table id='datatbl'></table>
+<div class="esshowtree" id='catagory'>
+<ul id="fication" class="ztree"></ul>
+</div>
+<div id="extra" class="extra">
+<select id="extraretention" name="extraretention" class="extraretention">
+<?php foreach ($list as $k=>$val){?>
+<option value="<?php echo $val->ESIDENTIFIER;?>"><?php echo $val->ESIDENTIFIER;?></option>
+<?php } ?>
+</select>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFileType/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFileType/js/filter.js"></script>
+<script type="text/javascript">
+var userid = "<?php echo $userid;?>";
+var organ = "<?php echo $organ;?>";
+var archivetype="OA";//20130924   yzh   去除屏蔽的内容
+var mainsite = "<?php echo $userinfo->mainSite;?>";
+var orgid = "<?php echo $userinfo->shengid;?>";
+function changemolid(){
+	var obs = document.getElementById("select");
+	archivetype = obs.options[obs.selectedIndex].value;
+	var url=$.appClient.generateUrl({ESFileType:'getDefaultList'},'x');
+	$("#datatbl").flexOptions({newp:1,url:url,query:archivetype}).flexReload();
+	
+	/*var archive="";
+	if(archivetype=="OA"){
+		if(archivetype=="OA"){
+			var st = mainsite.toUpperCase();
+			if(orgid=='001000'){
+				archive = archivetype;
+			}else{
+				archive = st+archivetype;
+			}
+		}else{
+			archive = archivetype;
+		}
+		$("#datatbl").flexOptions({newp:1,url:url,query:archive}).flexReload();
+		$('.provinceselect').show();
+	}else{
+		$('.provinceselect').hide();
+		$("#datatbl").flexOptions({newp:1,url:url,query:archivetype}).flexReload();
+	}*/
+}
+
+/* 
+ * 
+ * modify @date 2013-06-04
+ * 动态生成仿select下拉列表框
+ */
+var createSelect = '<div id="Seledfiletype" class="Seledfiletype">';
+	createSelect += '<select id="select" onchange="changemolid()" class="selectype">';
+	createSelect += '<?php 
+		if($oaList){
+			foreach ($oaList as $key=>$val){
+				if ($key==0){
+					echo '<option selected="selected" value="'.$val->system.'">'.$val->sysName.'</option>';
+				}else{
+					echo '<option value="'.$val->system.'">'.$val->sysName.'</option>';
+				}
+			}
+		}else{
+			echo '<option></option>';//请到业务系统设置中添加数据
+		}
+		?>';
+	createSelect += '</select></div>';
+var msg='<div id="messageInfo">温馨提示：请到业务系统设置中添加系统类别</div>';
+
+	/*createSelect += '<option value="OA">OA</option>';
+	createSelect += '<option value="EAS">EAS</option>';
+	createSelect += '<option value="ECM">ECM</option>';
+	createSelect += '<option value="ERP">ERP</option>';
+	createSelect += '<option value="HFM">HFM</option>';
+	createSelect += '<option value="PMS">PMS</option>';
+	createSelect += '<option value="PUR">PUR</option>';
+	createSelect += '<option value="TMS">TMS</option>';*/
+	
+/*var secondSelect = '<div id="provinceselect"  class="provinceselect">';
+	secondSelect += '<select id="province" onchange="changemainsite()" class="province">';
+	secondSelect += '<?php foreach ($province as $val){
+		if ($userinfo->shengid=='001000'){
+			if($userinfo->shengid==$val->orgid){
+				echo '<option selected="selected" orgid="'.$val->orgid.'" value="'.$val->mainSite.'">'.$val->orgNameDisplay.'</option>';
+			}else{
+				echo '<option orgid="'.$val->orgid.'" value="'.$val->mainSite.'">'.$val->orgNameDisplay.'</option>';
+			}
+		}else{
+			if($userinfo->shengid==$val->orgid){
+				echo '<option orgid="'.$val->orgid.'" value="'.$val->mainSite.'">'.$val->orgNameDisplay.'</option>';
+			}
+		}
+	}
+		?>';
+	secondSelect += '</select></div>';
+
+
+	function changemainsite(){
+		var archive="";
+		var obs = document.getElementById("province");
+		mainsite = obs.options[obs.selectedIndex].value;
+		orgid = obs.options[obs.selectedIndex].getAttribute("orgid");
+		if(archivetype=="OA"){
+			var st = mainsite.toUpperCase();
+			if(orgid=='001000'){
+				archive = archivetype;
+			}else{
+				archive = st+archivetype;
+			}
+		}else{
+			archive = archivetype;
+		}
+		var url=$.appClient.generateUrl({ESFileType:'getDefaultList'},'x');
+		$("#datatbl").flexOptions({newp:1,url:url,query:archive}).flexReload();
+			
+	}*/
+
+function createSWFUpload(){
+
+	var upload = new SWFUpload({
+		//提交路径
+		//upload_url: 'http://10.13.125.22:8080/escloud/rest/escloud_recordtypews/importRecordtype',
+		upload_url: "<?php echo $ip;?>",
+		//向后台传递额外的参数
+		//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+		//上传文件的名称
+		file_post_name: "file.txt",
+		file_size_limit : 102400,	// 100MB
+		file_types : "*.xls;*.xlsx",
+		file_types_description : "文件类型",
+		file_upload_limit : "1",
+		file_queue_limit : "0",
+
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnAdd",
+		button_width: 72,
+		button_height: 28,
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel",
+			startButtonId : "btnStart",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data){
+
+				if(data === 'false'){
+
+					$.dialog({
+						title: file.name,
+						content: '导入失败！',
+						time: 2,
+						icon: 'error',
+						lock: false
+					});
+					return;
+				}
+
+				$.dialog.list.importPanel.close();
+				
+				$.dialog({
+					title: file.name,
+					content: '成功导入（'+ data +'）条数据！',
+					time: 2,
+					icon: 'succeed',
+					lock: false
+				});
+			}
+		}
+	});
+	$("#btnCancel").click(function(){cancelQueue(upload);});
+	$("#btnStart").click(function(){startQueue(upload);});
+};
+	
+</script>

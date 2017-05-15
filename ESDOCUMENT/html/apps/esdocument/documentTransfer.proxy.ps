@@ -1,0 +1,68 @@
+<?php
+/**
+ * 文件流转模块
+ * @author xuekun
+ *
+ */
+class ProxyEsdocumentDocumentTransfer extends AgentProxyAbstract {
+	const SERVICE_NAME = "documentTransfer";
+	/**
+	 * 文件流转流程启动前检查权限和数据状态
+	 *
+	 * @author xuekun 2015年2月9日 下午4:53:35
+	 * @param unknown $param        	
+	 * @return return_type
+	 */
+	public function checkTransfer($param) {
+		return $this->post ( self::SERVICE_NAME, 'checkTransfer', $param, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 获取流程集合的方法（根据表单权限去获取，为发起流程使用）
+	 *
+	 * @author xuekun 2015年2月10日 下午2:04:14
+	 * @param unknown $param        	
+	 * @return return_type
+	 */
+	public function getWfList($param) {
+		return $this->post ( self::SERVICE_NAME, "getWfList", $param, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 在显示表单发起界面前，获取表单相关信息 *
+	 */
+	public function showMyForm($postData) {
+		$url = "showMyForm";
+		return $this->post ( self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8" );
+	}
+	public function setTransferstaus($postData) {
+		$url = "setTransferstaus";
+		return $this->post ( self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 启动流程
+	 * 
+	 * @author xuekun 2015年2月28日 上午10:49:49
+	 * @param unknown $postData        	
+	 */
+	public function startTransferFlow($postData) {
+		$url = "startTransferFlow";
+		return $this->post ( self::SERVICE_NAME, $url, $postData, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 根据formId获取工作流信息
+	 * @author xuekun 2015年3月2日 上午11:12:08
+	 * @param unknown $param
+	 * @return return_type
+	 */
+	public function getWFModelByflowId($param) {
+		return $this->post ( self::SERVICE_NAME, 'getWFModelByflowId', $param, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 发起流程
+	 * @author xuekun 2015年3月2日 下午4:32:28
+	 * @param unknown $postData
+	 */
+	public function startWorkflow($postData){
+		$url = "startWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+}

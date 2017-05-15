@@ -1,0 +1,380 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="<?php echo $tplPath?>/ESEFile/css/index.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'电子文件中心'));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"电子文件中心", content:".main"});
+});
+</script>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<div class="main">
+<input type="hidden" name="parentid1" value='0' />
+<div class="ldmtop">
+<div class="submit">
+<input type="button" class="ldmback" id="back" style="" value="上一层" />
+<input type="button" id="addnew" value="新建" />
+
+</div>
+<div id="folderNav" class="path">电子文件中心\</div>
+<div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div class="mycontent">
+<?php 
+$list=isset($list)?$list:"";
+if($list==""){
+	?>
+	<input type="hidden" name="parentid" value="<?php echo isset($val['parentid'])?$val['parentid']:"0";?>" />
+	<?php
+}
+else {
+
+foreach ($list as $k=>$val){
+?>
+<div class="list" id="<?php echo $val->id;?>">
+<div class="photo"><a href="javascript:void(0)"><img title="<?php echo $val->estitle;?>" src="<?php echo $tplPath;?>/ESEFile/img/files.png" /></a></div>
+<div class="re_title"><span title="<?php echo $val->estitle;?>"><?php echo $val->esViewTitle; ?></span></div>
+<div><span class="editbtn" title="编辑" onclick="editFolderName(this,<?php echo $val->id;?>,'<?php echo $val->estitle;?>')" >&nbsp;</span></div>
+<div class="re_time"><span>电子文件共</span><a href="javascript:void(0)" onclick="openfile(<?php echo $val->id;?>)"><?php echo $val->hookingNum+$val->notHookNum;?></a><span>个</span></div>
+<div class="re_intro"><span>未挂接</span><a href="javascript:void(0)" onclick="nothook(<?php echo $val->id;?>)"><?php echo $val->notHookNum;?></a><span>个</span></div>
+<input type="hidden" name="havesub" value="<?php if($val->isParent==1){echo "true";}else{echo "false";}?>" />
+<input type="hidden" name="parentid" value="<?php echo $val->parentid;?>" />
+</div>
+<?php }
+}
+?>
+</div>
+<div class="clear"></div>
+
+</div>
+<div class="myfiletotal"><div class="filetotal"></div></div>
+<div class="myfilenothook"><div class="nothookfiletotal"></div></div>
+<script type="text/javascript">
+var $size = {
+		init : function (){
+			var width = $(window).width()*0.96;
+			var height = $(window).height()-110;	// 可见总高度 - 176为平台头部高度
+			var leftWidth = 230;
+			if(navigator.userAgent.indexOf("MSIE 6.0")>0){
+				
+				width = width-6;
+				
+			}else if(navigator.userAgent.indexOf("MSIE 8.0")>0){
+				width = width-4;
+				height = height-4;
+			}
+			
+			var rightWidth = width ;
+			var tblHeight = height -34;
+			
+			var size = {
+					leftWidth: leftWidth,
+					rightWidth : rightWidth,
+					height: height,
+					tblWidth : rightWidth,
+					tblHeight : tblHeight
+				};
+			return size;
+		}
+			
+	};
+$('.main').height($size.init().tblHeight);
+$('.main .mycontent').height($size.init().tblHeight-50);
+
+var folderPath=$("#folderNav").html();
+//点击进入
+$(".mycontent .list").die().live('click dblclick',function(event){
+	if(event.type=='click'){
+		$(".mycontent img").removeClass("selected");
+		$(this).find("img").eq(0).addClass("selected");
+	}else{
+		var id=$(this).attr("id");
+		var havesub = $(this).find("input[name='havesub']").val();
+		folderPath+=$(this).find(".re_title").text()+"\\";
+		//alert(path);return;
+// 		if(havesub=="false"){
+			//alert(1111);return;
+			$(".mycontent").html("");
+			/*var html = '<div class="list">';
+				html +='<input type="hidden" name="parentid" value="'+id+'" />';
+				html +='</div>';*/
+				$("input[name='parentid1']").val(id);	
+		//	$(".mycontent").html(html);
+			$("#folderNav").html(folderPath);
+// 				return;
+// 		}
+		
+		
+		var src='<?php echo $tplPath?>/ESEFile/img/three.gif';
+		var url = $.appClient.generateUrl({ESEFile:'access'},'x');
+		//alert(url);return;
+		$.ajax({
+			url:url,
+			type:"POST",
+			cache:false,
+			dataType:"json",
+			data:{
+				param:id
+				},
+			error:function(){
+				alert("系统错误");
+			},
+			success:function(datas){
+				var length = datas.length;
+				$(".mycontent").html("");
+				for(var i=0;i<length;i++){
+					var html='';
+					html='<div class="list" id="'+datas[i].id+'">';
+					html+='<div class="photo"><a href="javascript:void(0)"><img src="<?php echo $tplPath?>/ESEFile/img/files.png" /></a></div>';
+					html+='<div class="re_title"><span title="'+datas[i].estitle+'">'+datas[i].esViewTitle+'</span></div>';
+					html+='<div><span class="editbtn" title="编辑" onclick="editFolderName(this,'+datas[i].id+',\''+datas[i].estitle+'\')" >&nbsp;</span></div>';
+					html+='<div class="re_time"><span>电子文件共</span><a href="javascript:void(0);" onclick="openfile('+datas[i].id+')"><span>'+(Number(datas[i].hookingNum)+Number(datas[i].notHookNum))+'</span></a>个</div>';					
+					html+='<div class="re_intro"><span>未挂接</span><a href="javascript:void(0);" onclick="nothook('+datas[i].id+')">'+datas[i].notHookNum+'</a>个</div>';
+					html+='<input type="hidden" name="havesub" value="'+datas[i].isParent+'" />';
+					html+='<input type="hidden" name="parentid" value="'+datas[i].parentid+'" />';
+					html+='</div>';
+					$(".mycontent").append(html);
+				}
+				$("#folderNav").html(folderPath);
+			}
+		});
+		
+	}
+});
+//liqiubo 20140805 截取字符串，超长的用...显示
+function getfolderViewName( str ){ 
+	var sub_length = 12 ; 
+	var temp1 = str.replace(/[^\x00-\xff]/g,"**");//精髓 
+	var temp2 = temp1.substring(0,sub_length); 
+	//找出有多少个* 
+	var x_length = temp2.split("\*").length - 1 ; 
+	var hanzi_num = x_length /2 ; 
+	sub_length = sub_length - hanzi_num ;//实际需要sub的长度是总长度-汉字长度 
+	var res = str.substring(0,sub_length-1); 
+	if(sub_length < str.length ){ 
+	var end =res+"…" ; 
+	}else{ 
+	var end = res ; 
+	} 
+	return end ; 
+}
+
+
+var ext=/^[^\'\"\=\{\}\[\]\\\/\<\>\n\r\*\?\|!,.。:：]*$/;
+//新建文件夹
+$("#addnew").die().live('click',function(){
+	var parentid = $("input[name='parentid']").val();
+	if(parentid==null || parentid =='' || parentid == 'undefined' ){
+		parentid = $("input[name='parentid1']").val();
+	}
+	var html='';
+	html+='<form id="createnew">';
+	html+='<label style="float:left;">文件名：</label>';
+	html+='<input style="float:left;" type="text" name="create" value="" />';
+	html+='</form>';
+	$.dialog({
+    	title:'新建文件夹',
+		width: '100',
+	    height: '100',
+	   	fixed:true,
+	    resize: false,
+	    ok:true,
+	    cancelVal: '取消',
+	    cancel: true,
+    	content:html,
+    	ok:function()
+    	{
+        	var filename = $("#createnew input[name='create']").val();
+        	//alert(ext.test(filename));return;
+        	if(ext.test(filename)==false){
+        		$.dialog.notice({icon:"warning",content:"文件夹名称不能包含特殊符号",time:3});
+            	return false;
+            }
+        	if(filename==""){
+        		$.dialog.notice({icon:"warning",content:"文件夹名称不能为空",time:3});
+            	return false;
+            }
+            if(filename.length>15){
+            	$.dialog.notice({icon:"warning",content:"文件夹名称过长",time:3});
+            	return false;
+            }
+        	var totalname = '';
+        	$(".re_title").each(function(){
+            	totalname += $(this).text()+','
+            });
+        	if(totalname.indexOf(filename)!=-1){
+            	$.dialog.notice({icon:"warning",content:"文件夹名称有重复，请重新输入",time:3});
+            	return false;
+            }
+        	var fileViewName = '';
+        	fileViewName = getfolderViewName(filename);
+			var form=$('#createnew');
+			var data=form.serialize();
+			var url = $.appClient.generateUrl({ESEFile:'do_add'},'x');
+			
+			$.ajax({
+				url:url,
+				type:"POST",
+				dataType:"json",
+				data:{
+					data:data,
+					id:parentid,
+					esViewTitle:fileViewName
+					},
+				error:function(){
+					alert("系统错误");
+				},
+				success:function(datas){
+					var htm='<div class="list" id="'+datas.id+'">';
+					htm+='<div class="photo"><a href="javascript:void(0)"><img src="<?php echo $tplPath?>/ESEFile/img/files.png" /></a></div>';
+					htm+='<div class="re_title"><span title="'+datas.estitle+'">'+datas.esViewTitle+'</span></div>';
+					htm+='<div><span class="editbtn" title="编辑" onclick="editFolderName(this,'+datas.id+',\''+datas.estitle+'\')" >&nbsp;</span></div>';
+					htm+='<div class="re_time"><span>电子文件共</span><a href="javascript:void(0);" onclick="openfile('+datas.id+')"><span>'+(Number(datas.hookingNum)+Number(datas.notHookNum))+'</span></a>个</div>';					
+					htm+='<div class="re_intro"><span>未挂接</span><a href="javascript:void(0);" onclick="nothook('+datas.id+')">'+datas.notHookNum+'</a>个</div>';
+					htm+='<input type="hidden" name="havesub" value="false" />';
+					htm+='<input type="hidden" name="parentid" value="'+datas.parentid+'" />';
+					htm+='</div>';
+					$(".mycontent").append(htm);
+					$.dialog.notice({icon:'succeed',content:'创建成功',time:2});
+
+				}
+			});
+		 }
+    });
+});
+//var exg = /\/(\w*[^x00-xff]*)*\/?$/;
+var exg = /\\(\w*[^x00-xff]*)*\\?$/;
+//后退
+$('#back').die().live('click',function(){
+	var pid = $("input[name='parentid1']").val();
+		if(pid==""||pid=="0"){
+			$.dialog.notice({icon:'warning',content:'已经到顶层了',time:3});
+			return;
+		}
+		folderPath = folderPath.replace(exg,"");
+		folderPath+="\\";
+		$("#folderNav").html(folderPath);
+		var url = $.appClient.generateUrl({ESEFile:'getup'},'x');
+		$.post(url,{param:pid},function(datas){
+				var list = eval("("+datas+")");
+				var length = list.length;
+				$(".mycontent").html("");
+				for(var i=0;i<length;i++){
+					var html='';
+					html='<div class="list" id="'+list[i].id+'">';
+					html+='<div class="photo"><a href="javascript:void(0)"><img src="<?php echo $tplPath?>/ESEFile/img/files.png" /></a></div>';
+					html+='<div class="re_title"><span title="'+list[i].estitle+'">'+list[i].esViewTitle+'</span></div>';
+					html+='<div><span class="editbtn" title="编辑" onclick="editFolderName(this,'+list[i].id+',\''+list[i].estitle+'\')" >&nbsp;</span></div>';
+					html+='<div class="re_time"><span>电子文件共</span><a href="javascript:void(0);" onclick="openfile('+list[i].id+')"><span>'+(Number(list[i].hookingNum)+Number(list[i].notHookNum))+'</span></a>个</div>';					
+					html+='<div class="re_intro"><span>未挂接</span><a href="javascript:void(0);" onclick="nothook('+list[i].id+')">'+list[i].notHookNum+'</a>个</div>';
+					html+='<input type="hidden" name="havesub" value="'+list[i].isParent+'" />';
+					html+='<input type="hidden" name="parentid" value="'+list[i].parentid+'" />';
+					html+='</div>';
+					$(".mycontent").append(html);
+				$("input[name='parentid1']").val(list[i].parentid)
+				}
+				
+			
+		});
+	
+});
+//电子文件
+var floderid = "";
+
+function openfile(id){
+	floderid = id;
+	$('.filetotal').load($.appClient.generateUrl({ESEFile :'openmyfile'}, 'x'));
+	$("#estabs").esTabs("open", {title:"电子文件列表", content:".filetotal", canClose:true, activated:true});
+	//var tableurl = $.appClient.generateUrl({ESEFile:'total_json'},'x');
+	//$("#totalfile").flexOptions({newp:1,url:tableurl,query:4}).flexReload();
+	}
+function nothook(id){
+	floderid = id;
+	$('.nothookfiletotal').load($.appClient.generateUrl({ESEFile :'opennothook'}, 'x'));
+	$("#estabs").esTabs("open", {title:"未挂接文件列表", content:".nothookfiletotal", canClose:true, activated:true});
+}
+
+//liqiubo 20141011 修改文件夹名称
+function editFolderName(folderObj,folderId,oldFolderName){
+	//liqiubo 20141015 oldFolderName这个变量现在传来没有意义了，避免大幅度修改，就重新赋值了，修复bug 1154
+	oldFolderName = $(folderObj).closest('div[class="list"]').find('div[class="re_title"] span').attr("title");
+	var html='';
+	html+='<form id="editNew">';
+	html+='<label style="float:left;">文件名：</label>';
+	html+='<input style="float:left;" type="text" name="editFolderName" value="'+oldFolderName+'" />';
+	html+='</form>';
+	$.dialog({
+    	title:'修改文件夹名称',
+		width: '100',
+	    height: '100',
+	   	fixed:true,
+	    resize: false,
+	    ok:true,
+	    cancelVal: '取消',
+	    cancel: true,
+    	content:html,
+    	ok:function()
+    	{
+        	var filename = $("#editNew input[name='editFolderName']").val();
+        	if(ext.test(filename)==false){
+        		$.dialog.notice({icon:"warning",content:"文件夹名称不能包含特殊符号",time:3});
+            	return false;
+            }
+        	if(filename==""){
+        		$.dialog.notice({icon:"warning",content:"文件夹名称不能为空",time:3});
+            	return false;
+            }
+            if(filename.length>15){
+            	$.dialog.notice({icon:"warning",content:"文件夹名称过长",time:3});
+            	return false;
+            }
+        	var totalname = '';
+        	$(".re_title").each(function(){
+            	totalname += $(this).text()+','
+            });
+        	if(totalname.indexOf(filename)!=-1){
+            	$.dialog.notice({icon:"warning",content:"文件夹名称有重复，请重新输入",time:3});
+            	return false;
+            }
+        	var fileViewName = '';
+        	fileViewName = getfolderViewName(filename);
+			var form=$('#editNew');
+			var data=form.serialize();
+			var url2 = $.appClient.generateUrl({ESEFile:'do_edit'},'x');
+			
+			$.ajax({
+				url:url2,
+				type:"POST",
+				dataType:"json",
+				data:{
+					folderId:folderId,
+					filename:filename,
+					esViewTitle:fileViewName
+					},
+				success:function(datas){
+					if('true'==datas || true==datas){
+						$(folderObj).closest('div[class="list"]').find('div[class="re_title"] span').attr("title",filename);
+						$(folderObj).closest('div[class="list"]').find('div[class="re_title"] span').text(fileViewName);
+					}else{
+						$.dialog.notice({icon:"error",content:"修改失败",time:3});
+		            	return false;
+					}
+				}
+			});
+		 }
+    });
+	
+	
+}
+
+
+
+
+
+
+
+</script>

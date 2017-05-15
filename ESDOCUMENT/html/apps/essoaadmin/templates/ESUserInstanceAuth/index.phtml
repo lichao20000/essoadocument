@@ -1,0 +1,83 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+  <link href="<?php echo $tplPath?>/ESUserInstanceAuth/css/style.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo $tplPath?>/ESUserInstanceAuth/js/autovalidate/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+ <script type="text/javascript" src="<?php echo $tplPath;?>/ESUserInstanceAuth/js/common.js"></script>
+ <script type="text/javascript" src="<?php echo $tplPath;?>/ESUserInstanceAuth/js/autovalidate/validate.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/highcharts.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/modules/exporting.js"></script>
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"用户应用实例授权", content:"#esmenu,#esone,#eslist"});
+	function sizeChanged(table){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var h = $(window).height() - $("#userInstanceAuth").position().top-10;
+		var flex = $("#"+table).closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    bDiv.height(h - headflootHeight);
+	    flex.height(h);
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	$('#userInstanceAuthGridDiv div[class="tDiv2"]').append('<span class="gridpanleTitle">SAAS机构列表</span><div class="find-dialog"><input id="saasQuery" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="saasQuery" value="请输入关键字" /><span id="saasQueryButton"></span></div>');
+	sizeChanged('userInstanceAuthGrid');
+	$('#usersDiv div[class="tDiv2"]').append('<div class="find-dialog"><input id="usersQuery" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="usersQuery" value="请输入关键字" /><span id="usersQueryButton"></span></div>');
+	sizeChanged('users');
+
+	$(document).keydown(function(event){
+		if(event.keyCode == 13) {
+			if(document.activeElement.id == 'saasQuery'){
+				saasQuery();
+			} else if(document.activeElement.id == 'usersQuery'){
+				usersQuery();
+			}
+		}
+	});
+
+	$('#saasQueryButton').click(function(){
+		saasQuery();
+	});
+	function saasQuery(){
+		var keyword = $.trim($('#saasQuery').val());
+		if(keyword == '' || keyword=='请输入关键字') {
+			keyword = '';
+		}
+		$("#userInstanceAuthGrid").flexOptions({query:keyword}).flexReload();
+		return false;
+	}
+
+	$('#usersQueryButton').click(function(){
+		usersQuery();
+	});
+	function usersQuery(){
+		var keyword = $.trim($('#usersQuery').val());
+		if(keyword == '' || keyword=='请输入关键字') {
+			keyword = '';
+		}
+		$("#users").flexOptions({query:keyword}).flexReload();
+		return false;
+	}
+});
+</script>
+<div id='userInstanceAuth'  style="border:none;width:96%;margin-left:2%;">
+	<div id="userInstanceAuthGridDiv" style="width: 50%;float:left;">
+        <table id="userInstanceAuthGrid" style="border:none"></table>  
+	</div>
+	<div id="usersDiv" style="float:left;width: 50%;">
+        <table id="users" style="border:none"></table>  
+	</div>
+</div>
+

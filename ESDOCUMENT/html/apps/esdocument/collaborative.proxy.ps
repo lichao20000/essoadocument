@@ -1,0 +1,452 @@
+<?php
+/**
+ * 我的待办模块
+ * @author gengqianfeng
+ *
+ */
+class ProxyEsdocumentCollaborative extends AgentProxyAbstract {
+	const SERVICE_NAME = "collaborative";
+	const SERVICE_NAME_FLOW = "transferFlow";
+	const SERVICE_NAME_USER = 'userqueryservice';
+	const SERVICE_NAME_FILE = 'mainFileServer';
+	
+	/**
+	 * 根据流程状态获取待办列表总条数
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getCollaborativeDataCountByWFstatus($params) {
+		$urlParam = array (
+				'getCollaborativeDataCountByWFstatus' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 获取待办列表
+	 *
+	 * @param unknown $params        	
+	 */
+	public function getCollaborativeDataList($params) {
+		$urlParam = array (
+				'getCollaborativeDataList' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 通过id获取用户实体
+	 *
+	 * @param unknown $userId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getUserInfoById($userId) {
+		$urlParam = array (
+				'getUserInfoById',
+				$userId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME_USER, $url );
+	}
+	
+	/**
+	 * 删除待发、已发数据，已发只能删除自己发起的且已完成的流程数据
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function deleteUserformData($params) {
+		$urlParam = array (
+				'deleteUserformData' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取已办表单信息
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getHaveTodoWorkflow($params) {
+		$urlParam = array (
+				'getHaveTodoWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 渲染表单
+	 *
+	 * @param unknown $params        	
+	 */
+	public function getCollaborativeForm($params) {
+		$urlParam = array (
+				'getCollaborativeForm' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取已发页面
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getSavedWorkflow($params) {
+		$urlParam = array (
+				'getSavedWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取表单附件
+	 *
+	 * @param unknown $flowId        	
+	 * @param unknown $stepId        	
+	 * @param unknown $type        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getAppendixList($flowId, $stepId, $type) {
+		$urlParam = array (
+				'getAppendixList',
+				$flowId,
+				$stepId,
+				$type 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 添加附件数据
+	 *
+	 * @param unknown $datas        	
+	 * @param unknown $type        	
+	 */
+	public function addAttachFileData($params) {
+		$urlParam = array (
+				'addAttachFileData' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 删除附件数据
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function deleteAttachFileData($params) {
+		$urlParam = array (
+				'deleteAttachFileData' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取上传文件的url
+	 *
+	 * @param unknown $url        	
+	 */
+	public function getUploadUrl() {
+		$urlParam = array (
+				'getUploadUrl' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME_FILE, $url );
+	}
+	
+	/**
+	 * 获取文件下载路径
+	 *
+	 * @param unknown $id        	
+	 */
+	public function getFileDownLoadUrl($id) {
+		$urlParam = array (
+				'getFileDownLoadUrl',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME_FILE, $url );
+	}
+	
+	/**
+	 * 查看流程图
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function showWfGraph($params) {
+		$urlParam = array (
+				'showWfGraph' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 打印流程表单
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function workFlowPrint($params) {
+		$urlParam = array (
+				'workFlowPrint' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 根据工作流ID+步骤ID获取流程处理动作展现字符串
+	 *
+	 * @param unknown $postData        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getActions($postData) {
+		$urlParam = array (
+				'getActions' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $postData ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取步骤处理用户
+	 *
+	 * @param unknown $params        	
+	 */
+	public function getStepOwner($params) {
+		$urlParam = array (
+				'getStepOwner' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 发起流程
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function startSavedWorkflow($params) {
+		$urlParam = array (
+				'startSavedWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_FLOW, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 保存待发
+	 *
+	 * @param unknown $params        	
+	 */
+	public function saveOldWorkflow($params) {
+		$urlParam = array (
+				'saveOldWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_FLOW, $url, json_encode ( $params ), "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 判断当前步骤是否已经审批过
+	 *
+	 * @param unknown $params        	
+	 */
+	public function wfIsApprovaled($params) {
+		$urlParam = array (
+				'wfIsApprovaled' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 验证是否为最后一步
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function isLastStep($params) {
+		$urlParam = array (
+				'isLastStep' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_FLOW, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 提交审批
+	 */
+	public function commit_opinion($params) {
+		$urlParam = array (
+				'commit_opinion' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_FLOW, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 审批转发流程
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function wfForwardAction($params) {
+		$urlParam = array (
+				'wfForwardAction' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_FLOW, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 判断当前流程是否审批过
+	 */
+	public function isApprovalOver($params) {
+		$urlParam = array (
+				'isApprovalOver' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 流程审批
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function auditingWorkflow($params) {
+		$urlParam = array (
+				'auditingWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_FLOW, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 流程发启
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function startWorkflow($params) {
+		$urlParam = array (
+				'startWorkflow' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_FLOW, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 转发
+	 *
+	 * @param unknown $params        	
+	 */
+	public function excuteWfForward($params) {
+		$urlParam = array (
+				'excuteWfForward' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_FLOW, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 查询所有待办总数
+	 *
+	 * @param unknown $params        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function listWorkFlowAll($params) {
+		$urlParam = array (
+				'getCollaborativeDataCountByWFstatus' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取消息处理参数
+	 *
+	 * @param unknown $wfId        	
+	 * @param unknown $state        	
+	 * @param unknown $userId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getCollaborativeMsgByWfId($wfId, $state, $userId) {
+		$urlParam = array (
+				'getCollaborativeMsgByWfId',
+				$wfId,
+				$state,
+				$userId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 已阅
+	 */
+	public function WfNoticeAction($params) {
+		$urlParam = array (
+				'WfNoticeAction' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME_FLOW, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取审批意见列表
+	 *
+	 * @param unknown $wfId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getOpinionList($wfId) {
+		$urlParam = array (
+				'getOpinionList',
+				$wfId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 待办处理时间越期提醒
+	 */
+	public function flowOutOfAuditTime() {
+		$urlParam = array (
+				'flowOutOfAuditTime' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取电子文件字符串
+	 * 
+	 * @param unknown $docId        	
+	 */
+	public function getDocFiles($docId) {
+		$urlParam = array (
+				'getDocFiles',
+				$docId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+}

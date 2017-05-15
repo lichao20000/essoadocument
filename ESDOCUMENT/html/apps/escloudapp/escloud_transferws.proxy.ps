@@ -1,0 +1,44 @@
+<?php
+/*
+ * 移交清册
+ * 方吉祥
+ * 2012/10/12
+ */
+class ProxyEscloudappEscloud_transferws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_transferws";	//移交清册
+	
+	/**
+	 * @author fangjixiang
+	 * 获取清册列表左侧树
+	 */
+	public function getTransferTree()
+	{
+		$urlParam = array('getTransferTree');
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * @author fangjixiang
+	 * 根据移交日期分页显示清册列表
+	 */
+	public function getTransferList($businessid,$params,$pageNow,$pageSize)
+	{
+		$urlParam = array('getTransferList',$businessid,$params,$pageNow,$pageSize);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * @author fangjixiang
+	 * 保存清册列表
+	 */
+	public function SaveTransfer($params)
+	{
+		$urlParam = array('saveTransfer');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	}
+}

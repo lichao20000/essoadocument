@@ -1,0 +1,299 @@
+<div id = "srcollTest" style="left:220px;width:30px;height:400px;background:red;z-index:999;top:230px;position:absolute;display:none"></div>
+<table id = "flexme"></table>
+<script type="text/javascript">
+function remove(arr,objPropery,objValue) 
+{ 
+	return $.grep(arr, function(cur,i){ 
+	   return cur[objPropery]!=objValue; 
+	}); 
+} 
+var moreButtons=[
+                {name: '查看日志', bclass: 'note',tooltip:'查看勾选数据的操作日志',onpress:showLog},
+				 {name: '目录报表', bclass: 'report',tooltip:'根据选择的数据或者输入的条件打印目录报表',onpress:printReport},
+                 {name:'分组设置',bclass:"group",tooltip:'设置分组',onpress:set_group},
+                 {name:'排序设置',bclass:"sort",tooltip:'设置排序',onpress:set_sort},
+                 {name:'数据导入',bclass:"batchimport",tooltip:'数据导入',onpress:batchImport},
+                 {name:'数据导出',bclass:"batchexport",tooltip:'数据导出',onpress:batchExport},
+               //shiyangtao 添加组合字段按钮
+                 {name:'组合字段',bclass:"batchmodify",tooltip:'组合字段',onpress:checkcombinationFiled},
+                 {name:'批量删除',bclass:"batchdelete",tooltip:'批量删除',onpress:batchDelete},
+                 {name:'批量挂接',bclass:"batchhanging",tooltip:'批量挂接',onpress:batchHanging}
+				];
+var moreButton=[
+                 {name: '查看日志', bclass: 'note',tooltip:'查看勾选数据的操作日志',onpress:showLog},
+				 {name: '目录报表', bclass: 'report',tooltip:'根据选择的数据或者输入的条件打印目录报表',onpress:printReport},
+				 {name: '筛选', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:commomFilter},
+				 {name: '取消筛选', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:flexmeReset},
+                 {name:'分组设置',bclass:"group",tooltip:'设置分组',onpress:set_group},
+                 {name:'排序设置',bclass:"sort",tooltip:'设置排序',onpress:set_sort},
+                 {name:'批量修改',bclass:"batchmodify",tooltip:'批量修改',onpress:batchModify},
+                 {name:'数据导出',bclass:"batchexport",tooltip:'数据导出',onpress:batchExport},
+               //shiyangtao 添加组合字段按钮
+                 {name:'组合字段',bclass:"batchmodify",tooltip:'组合字段',onpress:checkcombinationFiled}
+                
+				];	
+if('<?php echo $isgroupNode;?>'=='1'){
+	moreButton=remove(moreButton,'name','分组设置');
+	moreButtons=remove(moreButtons,'name','分组设置');
+}		
+if(status==1){
+	//guolanrui 20140819 修改更多操作按钮的tooltip跟其中的按钮不一致的BUG：617
+	//gengqianfeng 20140910 补充更多操作提示字段
+	var more={name: '更多操作&nbsp;&nbsp;&nbsp;&nbsp;', bclass: 'more',tooltip:'包含查看日志、目录报表、分组设置、排序设置、数据导入、数据导出、组合字段、批量删除、批量挂接、不归档库',id:'do_more',more:moreButtons};
+	var button=[
+			{name: '添加', bclass: 'add',tooltip:'添加新的档案',onpress: addData},
+			{name: '删除', bclass: 'delete',tooltip:'删除所勾选的数据',onpress:delItems},
+			{name: '筛选', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:commomFilter},
+			{name: '取消筛选', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:flexmeReset},//liqiubo 20140519 加入筛选后的还原功能
+			{name: '文件移交', bclass: 'transfer',tooltip:'将选中的数据移交到下个业务',onpress:remove_file},
+			//{name: '移交清册', bclass: 'tranlist',tooltip:'查看已移交的文件',onpress:show_transfer_list},
+			{name: '上传原文', bclass: 'tranlist',tooltip:'上传电子文件',onpress:uploadFileByMenu},
+			{name:'批量修改',bclass:"batchmodify",tooltip:'批量修改',onpress:batchModify}
+			
+			];
+	//if(doc){
+	button.push(
+					{name: '不归档', bclass: 'cancel',tooltip:'将选中的数据移入不归档库',onpress:do_notfiling}
+					);
+		moreButtons.push(
+					{name: '不归档库', bclass: 'nofiling',tooltip:'查看不归档文件',onpress: notfiling}
+					);
+	//}
+	//if(archiveType=='accounting'){
+		//button.pop();
+		//button.push(
+			//		{name: '文件校验', bclass: 'paper',tooltip:'校验会计档案的数据',onpress:file_verification}
+				//	);
+	//}
+		button.push(more);
+
+}else if (status==2){
+		moreButton.push( 
+				//{name: '打印二维码', bclass: 'code',tooltip:'根据选择的数据或者输入的条件生成二维码',onpress:createCode}, 
+				{name:'批量生成档号 ',bclass:"batchmodify",tooltip:'根据输入的条件进行批量生成档号',onpress:batchCreateFileNum});
+		var button=[
+					{name: '退回', bclass: 'back',tooltip:'将选择的数据退回上一个业务',onpress:backToUp},
+					{name: '生成档号', bclass: 'code',tooltip:'生成选中数据的档号',onpress:createFileNum},
+					{name: '撤件', bclass: 'delcode',tooltip:'撤销选中数据的档号',onpress:delFileNum},
+					{name: '装盒', bclass: 'do_store',tooltip:'将选中的数据装盒',onpress:do_pack},
+					//{name: '移交清册', bclass: 'tranlist',tooltip:'查看已移交的文件',onpress:show_transfer_list},
+					{name: '上传原文', bclass: 'tranlist',tooltip:'上传电子文件',onpress:uploadFileByMenu},
+					{name: '移入档案库', bclass: 'store',tooltip:'将选中的数据移入档案库',onpress:catalogueRemoveFile}
+					
+					];
+		if(archiveType=='accounting'){
+			button.pop();//会计档案去掉移入档案库按钮
+		
+			}
+		//guolanrui 20140819 修改更多操作按钮的tooltip跟其中的按钮不一致的BUG：617
+		//gengqianfeng 20140910 补充更多操作提示字段
+		button.push({name: '更多操作&nbsp;&nbsp;&nbsp;&nbsp;', bclass: 'more',tooltip:'包含查看日志、目录报表、筛选、取消筛选、分组设置、排序设置、批量修改、数据导出、组合字段、批量生成档号',id:'do_more',more:moreButton});
+		
+}else if (status==3){
+	//moreButton.push( {name: '打印二维码', bclass: 'code',tooltip:'根据选择的数据或者输入的条件生成二维码',onpress:createCode});
+	var button=[
+		{name: '装盒上架', bclass: 'do_store',tooltip:'将选中的数据装盒上架',onpress:do_pack},
+		{name: '入库确认', bclass: 'confirm',tooltip:'将选中的数据移入档案库',onpress:remove_file},
+		{name: '上传原文', bclass: 'tranlist',tooltip:'上传电子文件',onpress:uploadFileByMenu},
+		//guolanrui 20140819 修改更多操作按钮的tooltip跟其中的按钮不一致的BUG：617
+		//gengqianfeng 20140910 补充更多操作提示字段
+		{name: '更多操作&nbsp;&nbsp;&nbsp;', bclass: 'more',tooltip:'包含查看日志、目录报表、筛选、取消筛选、分组设置、排序设置、批量修改、数据导出、组合字段',id:'do_more',more:moreButton}];
+}else if(status==100){
+	var button=[
+	    		{name: '数据恢复', bclass: 'add',onpress:revertData},
+				{name: '删除', bclass: 'delete',onpress:perDelData},
+				{name: '清空', bclass: 'grid_data_batch_delete',onpress:perEmptyData},
+				{name: '筛选', bclass: 'filter',onpress:commomFilter},
+				{name: '取消筛选', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:flexmeReset},//wanghongchen 20140716 增加还原功能
+				{name: '查看日志', bclass: 'note',onpress:showLog}
+				];
+}else{
+			
+			var moreButtons=[
+                {name: '查看日志', bclass: 'note',tooltip:'查看勾选数据的操作日志',onpress:showLog},
+				 {name: '目录报表', bclass: 'report',tooltip:'根据选择的数据或者输入的条件打印目录报表',onpress:printReport},
+				 {name: '筛选', bclass: 'filter',tooltip:'根据输入的条件进行查询',onpress:commomFilter},
+				 {name: '取消筛选', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:flexmeReset},
+				 {name:'分组设置',bclass:"group",tooltip:'设置分组',onpress:set_group},
+                 {name:'排序设置',bclass:"sort",tooltip:'设置排序',onpress:set_sort},
+                 {name:'批量修改',bclass:"batchmodify",tooltip:'批量修改',onpress:batchModify},
+                 {name:'批量删除',bclass:"batchdelete",tooltip:'批量删除',onpress:batchDelete},
+                 {name:'批量挂接',bclass:"batchhanging",tooltip:'批量挂接',onpress:batchHanging},
+                 //{name: '打印二维码', bclass: 'code',tooltip:'根据选择的数据或者输入的条件生成二维码',onpress:createCode},
+                 {name: 'zip导入', bclass: 'zipimport',tooltip:'导入zip包中的文件',onpress:zipImport},
+               //shiyangtao 添加组合字段按钮
+                 {name:'组合字段',bclass:"batchmodify",tooltip:'组合字段',onpress:checkcombinationFiled},
+                 {name: '手动鉴定', bclass: 'handIdentify',tooltip:'手动鉴定',onpress:handIdentify},
+                 {name: '自动鉴定', bclass: 'autoIdentify',tooltip:'自动鉴定',onpress:autoIdentify}
+				];
+			if('<?php echo $isgroupNode;?>'=='1'){
+				moreButtons=remove(moreButtons,'name','分组设置');
+			}		
+			var button=[{name: '添加', bclass: 'add',tooltip:'添加新的档案',onpress: addData},
+				{name: '删除', bclass: 'delete',tooltip:'删除所勾选的数据',onpress:delItems},
+				{name: '导入', bclass: 'import',tooltip:'导入数据',onpress:batchImport},
+				{name: '导出', bclass: 'export',tooltip:'导出数据',onpress:batchExport},
+				{name: '盒列表', bclass: 'do_store',tooltip:'查看当前结构下已上架的盒列表',onpress:do_pack},
+				{name: '上传原文', bclass: 'tranlist',tooltip:'上传电子文件',onpress:uploadFileByMenu},
+				//{name: '盒列表', bclass: 'do_store',tooltip:'查看当前结构下已上架的盒列表',onpress:getPacketList},
+				//guolanrui 20140819 修改更多操作按钮的tooltip跟其中的按钮不一致的BUG：617
+				//gengqianfeng 20140910 补充更多操作提示字段
+				{name: '更多操作&nbsp;&nbsp;&nbsp;&nbsp;', bclass: 'more',tooltip:'包含查看日志、目录报表、筛选、取消筛选、分组设置、排序设置、批量修改、批量删除、批量挂接、zip导入、组合字段、手动鉴定、自动鉴定',id:'do_more',more:moreButtons}];
+
+}
+var colModelVal;
+if(status==100){
+	colModelVal = [
+	       			{display: '序号', name : 'num', width : 20, align: 'center'},
+	    			{display: '<input type="checkbox" name="path" onclick=selectAll(checked,name,"#flexme")>', name : 'ids', width : 20, align: 'center'},
+	    			{display: '源系统', name : 'bussystemid', width : 60, align: 'center',metadata:'bussystemid',hide:true},
+	    			
+	    			<?php echo $fields;?>
+	    			];
+
+}else{
+	colModelVal = [
+	       			{display: '序号', name : 'num', width : 20, align: 'center'},
+	    			{display: '<input type="checkbox" name="path" onclick=selectAll(checked,name,"#flexme")>', name : 'ids', width : 20, align: 'center'},
+	    			{display: '操作', name : 'operate', width : 60, align: 'left',freeze:true},
+	    			{display: '源系统', name : 'bussystemid', width : 60, align: 'center',metadata:'bussystemid',hide:true},
+	    			
+	    			<?php echo $fields;?>
+	    			];
+	
+}
+ $("#flexme").flexigrid({
+		url: $.appClient.generateUrl({ESIdentify:'set_json',path:'<?php echo $type["path"];?>'}),
+		dataType: 'json',
+		colModel : colModelVal,
+		buttons : button,
+			usepager: true,
+			title: title,
+			useRp: true,
+			query:gc,
+			width: width,
+			onDoubleClick:modify,
+			height:height,
+			dblClickResize:true
+			//onSuccess: _initMemu
+	});
+	function _initMemu(){
+	
+		$("#flexme tr").attr('oncontextmenu',"showMenu(this)");
+	
+	};
+	function srcollTest()
+	{
+		var left=$('.bDiv').scrollLeft();
+		if(left > 100){
+			$('#srcollTest').show('fast');
+		}else{
+			$('#srcollTest').hide('slow');
+		}
+	}
+	/** xiaoxiong 20140807 完善模糊检索框 **/
+	$('div[class="tDiv2"]').append('<div class="find-dialog"><input id="queryKeyword" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="queryKeyword" value="请输入关键字" /><span onclick="fuzzyQuery(\'flexme\', \'queryKeyword\')"></span></div>');
+</script>
+
+<script type="text/javascript">
+//$('.bDiv').scroll(srcollTest);
+function showMenu(obj)
+{
+	
+	var X=event.clientX;
+	var Y=event.clientY;
+	$(obj).addClass('trSelected');
+	$("input[name='path']",$(obj)).attr('checked',true);
+	$("#menulist").show().offset({top:Y+1,left:X+1});
+	event.returnValue=false;
+	event.cancelBubble=true;
+	$("body").attr('oncontextmenu',false);
+	
+	
+	return false;
+}
+function clock(){
+	//$("#menulist").hide();
+	if(int)window.clearInterval(int);
+	
+
+}
+//查看盒内的档案
+function showBoxInnerFile(packetNum,pId){
+	packetNo=packetNum;
+	packetId=pId;
+	$.ajax({
+	    url:$.appClient.generateUrl({ESIdentify:'project'},'x'),
+	    type:'POST',
+	    data:"file=boxinnerfile&path="+'<?php echo $type["path"];?>',
+	    success:function(content){
+	    	$.dialog({
+	    		id:'artBoxInnerFilePanel',
+		    	title:'盒内档案',
+	    		width: '500px',
+	    	    padding:'0px',
+	    	   	fixed:true,
+	    	    resize: false,
+		    	content:content,
+			    cancelVal: '关闭',
+			    cancel: true 
+		    });
+		    },
+		    
+		    cache:false
+	});
+	
+}
+
+/** xiaoxiong 20140903 添加按钮权限与
+ *获取权限说明：1、null 			代表拥有全部权限
+ * 			 2、false 			代表没有任何权限
+ * 			 3、(C26 = '短期')	代表部分有权限
+ 3
+ **/
+(function(){
+	if("<?php echo $itemEditRight;?>" == "false"){
+		$(".add").addClass("not-allowed");
+		$(".add").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".back").addClass("not-allowed");
+		$(".back").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".tranlist").addClass("not-allowed");
+		$(".tranlist").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".batchmodify").addClass("not-allowed");
+		$(".batchmodify").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".batchimport").addClass("not-allowed");
+		$(".batchimport").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".batchhanging").addClass("not-allowed");
+		$(".batchhanging").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".transfer").addClass("not-allowed");
+		$(".transfer").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".cancel").addClass("not-allowed");
+		$(".cancel").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".store").addClass("not-allowed");
+		$(".store").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".delcode").addClass("not-allowed");
+		$(".delcode").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".code").addClass("not-allowed");
+		$(".code").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".confirm").addClass("not-allowed");
+		$(".confirm").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".handIdentify").addClass("not-allowed");
+		$(".handIdentify").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".autoIdentify").addClass("not-allowed");
+		$(".autoIdentify").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".import").addClass("not-allowed");
+		$(".import").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+		$(".zipimport").addClass("not-allowed");
+		$(".zipimport").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+	}
+	if("<?php echo $itemDeleteRight;?>" == "false"){
+		$(".delete").addClass("not-allowed");
+		$(".delete").attr("title", "您没有当前节点下的数据删除权限，此功能不可用！") ;
+		$(".batchdelete").addClass("not-allowed");
+		$(".batchdelete").attr("title", "您没有当前节点下的数据删除权限，此功能不可用！") ;
+	}
+	$('#escontent').attr("itemEditRight", "<?php echo $itemEditRight;?>");
+	$('#escontent').attr("itemDeleteRight", "<?php echo $itemDeleteRight;?>");
+})();
+
+</script>

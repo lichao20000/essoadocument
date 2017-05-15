@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>联通云门户</title>
+<link href="/templates/cu/css/global.css" rel="stylesheet" type="text/css" />
+<link href="/templates/cu/css/app_global.css" rel="stylesheet" type="text/css" />
+<link href="/templates/cu/css/cu_red.css" rel="stylesheet" type="text/css" />
+<link href="/templates/cu/css/jquery.ui.core.css" rel="stylesheet" type="text/css" />
+<link href="/templates/cu/css/jquery.ui.theme.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/templates/cu/js/jquery.js"></script>
+<script type="text/javascript" src="/templates/cu/js/jquery.block-ui.js"></script>
+<!--[if lt IE 10]>
+<script type="text/javascript" src="/templates/cu/js/PIE.js"></script>
+<![endif]-->
+<script type="text/javascript">
+var App = {};
+var ChinaUnicom = {};
+function getCurDate(){
+ var d = new Date();
+ var years = d.getFullYear();
+ var month = add_zero(d.getMonth()+1);
+ var days = add_zero(d.getDate());
+ var hours = add_zero(d.getHours());
+ var minutes = add_zero(d.getMinutes());
+ var seconds = add_zero(d.getSeconds());
+ var ndate = years+"-"+month+"-"+days+" "+hours+":"+minutes+":"+seconds;
+ document.getElementById("time").innerHTML = ndate;
+}
+function add_zero(temp){
+ if(temp<10) return "0"+temp;
+ else return temp;
+}
+setInterval("getCurDate()",100);
+</script>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="topLogin">
+    <div class="topLoginL"><a href="../"  target="_blank">进入云门户</a></div>
+    <div class="topLoginR"><span style=" margin-right:10px;" id="time"></span></div>
+  </div>
+  <div class="topLogo"> <a href="javascript:void(0);" class="topLogoL"></a>
+    <div class="topLogoR"></div>
+  </div>
+  <div class="topMenu"><a href="javascript:void(0);" class="topMenuOn">使用指南</a></div>
+  <div class="topLine">&nbsp;</div>
+</div>
+<div class="content940">
+  <div class="Operations_contop">
+  <table align="center" class=" OperNameTable">
+  <tr>
+    <td><a href="#search" name="top"><img src="/templates/cu/images/icons/search_icon1.gif" width="30" height="32" style="vertical-align:middle" /> 统一搜索</a></td>
+    <td><a href="#setting"><img src="/templates/cu/images/icons/setting.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 个人设置</a></td>
+    <td><a href="#undo_todo"><img src="/templates/cu/images/icons/undo_todo.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 待办待阅</a></td>
+    <td><a href="#app_center"><img src="/templates/cu/images/icons/app_center.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 应用订购与审批</a></td>
+  </tr>
+  <tr>
+    <td><a href="#weather"><img src="/templates/cu/images/icons/weather.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 天气预报</a></td>
+    <td><a href="#stocks"><img src="/templates/cu/images/icons/stocks.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 股票</a></td>
+    <td><a href="#bbs"><img src="/templates/cu/images/icons/bbs.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 论坛</a></td>
+    <td><a href="#weibo"><img src="/templates/cu/images/icons/weibo.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 微博</a></td>
+  </tr>
+  <tr>
+    <td><a href="#albums"><img src="/templates/cu/images/icons/albums.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 相册</a></td>
+    <td><a href="#perinfo"><img src="/templates/cu/images/icons/perinfo.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 个人资料汇聚</a></td>
+    <td><a href="#goodfriends"><img src="/templates/cu/images/icons/goodfriends.gif" alt="" width="32" height="32" style="vertical-align:middle" /> 好友动态</a></td>
+    <td><a href=""></a></td>
+  </tr>
+</table>
+  </div>
+  <div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="search" style="vertical-align:middle">统一搜索</a></div>
+    <table align="center" class="OperListTable">
+      <tr>
+        <td><a href="Search.ppt"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;统一搜索使用手册</a></td>
+      </tr>
+    </table>
+  <div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="setting">个人设置</a></div>
+    <table align="center" class=" OperListTable">
+      <tr>
+        <td><a href="Setting.ppt"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;个人设置使用手册</a></td>
+      </tr>
+    </table>
+  <div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="undo_todo">待办待阅</a></div>
+    <table align="center" class=" OperListTable">
+      <tr>
+        <td><a href="Task.ppt"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;待办待阅使用手册</a></td>
+      </tr>
+    </table>
+    <div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="app_center">应用订购与审批</a></div>
+    <table align="center" class=" OperListTable">
+      <tr>
+        <td><a href="#"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;应用订购与审批使用手册</a></td>
+      </tr>
+    </table>
+<div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="weather">天气预报</a></div>
+    <table align="center" class=" OperListTable">
+      <tr>
+        <td><a href="Weather.ppt"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;天气预报使用手册</a></td>
+      </tr>
+    </table>
+    <div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="stocks">股票</a></div>
+    <table align="center" class=" OperListTable">
+      <tr>
+        <td><a href="Stock.ppt"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;股票使用手册</a></td>
+      </tr>
+    </table>
+    <div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="bbs">论坛</a></div>
+    <table align="center" class=" OperListTable">
+      <tr>
+        <td><a href="Forum.ppt"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;论坛使用手册</a></td>
+      </tr>
+    </table>
+<div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="weibo">微博</a></div>
+<table align="center" class=" OperListTable">
+  <tr>
+    <td><a href="Twitter.ppt"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;微博使用手册</a></td>
+</tr>
+</table>
+<div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="albums">相册</a></div>
+<table align="center" class=" OperListTable">
+  <tr>
+    <td><a href="Album.ppt"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;相册使用手册</a></td>
+  </tr>
+</table>
+<div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="perinfo">个人资料汇聚</a></div>
+<table align="center" class=" OperListTable">
+  <tr>
+    <td><a href="Profile.ppt"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;个人资料汇聚使用手册</a></td>
+ </tr>
+</table>
+<div class="Operations_title"><span class="floatRight"><a href="#top">top</a></span><a  name="goodfriends">好友动态</a></div>
+    <table align="center" class=" OperListTable">
+      <tr>
+        <td><a href="#"><img src="/templates/cu/images/video.gif" alt="" width="16" height="16" style="vertical-align:middle" />&nbsp;&nbsp;&nbsp;好友动态使用手册</a></td>
+      </tr>
+    </table>
+</div>
+<div class="footer">
+  <div class="footerL"><img src="/templates/cu/images/logo_copyright.gif" width="107" height="60" alt="中国联通" /></div>
+  <div class="footerR">
+     <ul>
+      <li><a href="/guide/about.html">关于联通</a></li>
+      <li><a href="/guide/intro.html" target="_blank">新手入门</a></li>
+      <li><a href="/guide/guide.html" target="_blank">使用指南</a></li>
+      <li><a href="mailto:hq-eipwh@chinaunicom.cn" target="_blank">建议反馈</a></li>
+    </ul>
+    <p>&copy; 2012 中国联合网络通信有限公司</p>
+  </div>
+</div> 
+</body>
+</html>

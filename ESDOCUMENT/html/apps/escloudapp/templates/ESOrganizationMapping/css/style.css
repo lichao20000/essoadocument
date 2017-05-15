@@ -1,0 +1,34 @@
+#esmain .esleft{float:left;width:220px;overflow:scroll;border-left: 1px solid #ccc;}
+.estransfer{width:560px;overflow-y:auto;overflow-x:hidden}
+.estransfer ul{width: 550px;text-align:center;}
+.estransfer ul li{width:250px;margin-left:10px;float:left;margin-top:10px;}
+.estransfer span{width:80px;height:30px;line-height:30px;text-align:left;float:left;}
+.estransfer ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.estransfer ul li select{width:162px;height:22px;float:left;}
+.estransfer .esbottom{width:100%;float:left;margin-top:20px;}
+.estransfer button{width:60px;height:30px;cursor:pointer}
+
+/* 筛选锟斤拷锟斤拷通锟斤拷锟斤拷式 */
+.h2{ width:100%;  line-height:25px; text-indent:25px; color:#555; border-bottom:1px solid #f3f3f3; float:left; margin:5px 0; background:#f9f9f9 url(../../public/img/mess.png) no-repeat 5px 5px;}
+#addrolefree{ width:655px; height:auto; overflow:hidden; float:left;}
+#contents{ width:650px; height:150px; overflow:auto; marign-left:5px; _dispaly:inline;}
+.contbox{ width:645px; height:30px; float:left; margin-left:5px; _display:inline;}
+.w14090{ font-size:13px; color:#555; float:left; margin-right:10px; display:block;}
+.hei30{ line-height:30px;}
+.w140{ width:130px; padding-left:2px;}
+.w90{ width:80px;}
+.hei20{ height:20px; line-height:20px; margin-top:4px; border:1px solid #aaa;}
+
+/* 锟斤拷锟斤拷锟缴撅拷锟斤拷邪锟脚ワ拷锟绞�*/
+.newfilter,.delfilter{ width:70px; line-height:24px; text-indent:24px; color:#555; float:left; margin-top:3px;cursor:pointer;}
+.newfilter{ margin-right:10px; background:url(../../public/img/add.png) no-repeat 4px 4px;}
+.delfilter{ background:url(../../public/img/del.gif) no-repeat 4px 4px;}
+.newfilter:hover,.delfilter:hover{ width:68px; line-height:22px; text-indent:23px; border:1px solid #e3e3e3;}
+.newfilter:hover{ background:#f3f3f3 url(../../public/img/add.png) no-repeat 3px 3px;}
+.delfilter:hover{ background:#f3f3f3 url(../../public/img/del.gif) no-repeat 3px 3px;}
+
+.extra{display:none;width:150px;}
+.extra .extraretention{width:150px;}
+.extraSystem{display:none;width:150px;}
+.extraSystem .extraSelect{width:150px;}
+.esshowtree{height:220px;width:162px;background:#fff;border:1px solid #aaa;display:none;z-index:21000;position:absolute;overflow:auto;}

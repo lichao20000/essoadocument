@@ -1,0 +1,11 @@
+<?php if(isset($header)) echo $header; ?>
+<div class="content">
+  <div class="topTab">
+  </div>
+</div>
+<div class="content1000" >
+  <?php echo $this->render('sidebar', array('editable' => $editable, 'appadmin' => $appadmin, 'menuitem' => 'layout')) ?>
+  <div style="width:680px; padding:0px; background:#f8f8f8; float:left;">
+    <?php echo $layoutHtml;?>
+  </div>
+</div>

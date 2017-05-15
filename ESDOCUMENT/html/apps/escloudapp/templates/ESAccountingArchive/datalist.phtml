@@ -1,0 +1,119 @@
+<table id="borrowlist"></table>
+<script type="text/javascript">
+	var initInput='<div id="inputOperate" class="inputOperate">';
+	initInput+='<input type="text" id="searchIn" class="searchIn" name="searchIn" value="" />';
+	initInput+='<div><span id="searchButton" class="fill search">检索</span></div>';
+	initInput+='</div>';
+	$("#borrowlist").flexigrid({
+		url:$.appClient.generateUrl({ESIdentify:'set_json',path:'<?php echo $path;?>'}),
+		dataType: 'json',
+		colModel : [
+			{display: '序号', name : 'num', width : 20, align: 'center'},
+			{display: '<input type="checkbox" name="path" onclick=selectAll(checked,name,"#borrowlist")>', name : 'ids', width : 40, align: 'center'},
+			<?php echo $fields;?>
+		],
+		buttons : [
+			{name: '筛选', bclass: 'filter',onpress:filterList}
+		],
+		usepager: true,
+		useRp: true,
+		rp: 20,
+		nomsg:"没有数据",
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: 596,
+		height: 292,
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	$('#borrowlistbox .tDiv .tDiv2 .fbutton').after(initInput);
+	$('.inputOperate span').live('mouseover',function (){
+		$(this).addClass('extbtncsspan');
+		$(this).parent().addClass('extbtncssdiv');
+	});
+	$('.inputOperate span').live('mouseout',function (){
+		$(this).removeClass('extbtncsspan');
+		$(this).parent().removeClass('extbtncssdiv');
+	});
+	$("#searchButton").click(function(){
+		var key=$("#inputOperate").find("input[name='searchIn']").val();
+		var urk=$.appClient.generateUrl({ESAccountingArchive:'set_json',keyword:encodeURI(key),path:'<?php echo $path;?>'},'x');
+		$("#borrowlist").flexOptions({newp:1,url:urk}).flexReload();
+	});
+	//全选
+	function selectAll(status,name,obj){
+		var dataObj=$("input[name="+name+"]",$(obj));
+		dataObj.attr('checked',status);
+		if(status){
+			$(obj).find("tr").addClass("trSelected");
+		}else{
+			$(obj).find("tr").removeClass("trSelected");
+		}
+	}
+	//筛选增加、减少行 
+	$(function(){
+		var i=0;
+		$('.esadd').die().live('click',function(){
+			var $lastTr=$('#sift tr:last')
+			$lastTr.clone().insertAfter($lastTr);
+			i++;
+		});
+		$(".esreduce").die().live('click',function(){
+			if($('#sift tr').length == 2 )
+			{
+				return false;
+			}else{
+				$(this).parent().parent().remove();
+				i--;
+			}
+		});
+	});
+	//获取筛选条件
+	function filterValue()
+	{
+		var $where='';
+		$("#sift tr:gt(0)").each(function(i){
+			 var esfields=$("[name='esfields']").eq(i).val();
+			 var comparison=$("[name='comparison']").eq(i).val();
+			 var esfieldvalue=$("[name='esfieldvalue']").eq(i).val();
+			 var relation=$("[name='relation']").eq(i).val();
+			 if(esfieldvalue){
+				 if(relation=="AND"){
+					 relation='true';
+				 }else{
+					 relation='false';
+				 }
+				 $where+=esfields+','+comparison +','+esfieldvalue+','+relation+'@';
+			 }
+		});
+		return $where;
+	}
+	//筛选档案著录明细
+	function filterList(){
+		$.ajax({
+		    url:$.appClient.generateUrl({ESIdentify:'filter',status:2,strucid:strucid},'x'),
+		    success:function(data){
+		    	$.dialog({
+			    	title:'筛选数据',
+		    		width: '50%',
+		    	    height: '40%',
+		    	   	fixed:true,
+		    	    resize: false,
+			    	content:data,
+			    	okVal:'确定',
+				    ok:function(){
+						var thisDialog=this;
+						var condition=filterValue();
+						thisDialog.close();
+						$("#borrowlist").flexOptions({newp:1,query:condition}).flexReload();
+				    	return false;
+				    },
+				    cancelVal: '取消',
+				    cancel: true 
+			    });
+			},
+			cache:false
+		});
+	}
+</script>
+

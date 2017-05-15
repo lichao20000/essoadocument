@@ -1,0 +1,688 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESArchiveLending/css/orgtree.css" />
+<div style="width:620px;height:600px;">
+    <div>
+      <form id="form_update" method="post" action="" enctype="multipart/form-data">
+      <input type="hidden" name="submit" value="add"/>
+      <input type="hidden" name="readerid" value="<?php echo $readerid;?>"/>
+      <input type="hidden" name="deptcode" value="<?php echo $deptcode;?>"/>
+      <input type="hidden" name="identity" value="<?php echo $identity;?>"/>
+      <input type="hidden" name="edit" id ='editForm' value="<?php echo $edit;?>"/>
+      <div class="contentDiv" style="width:608px;height:280px;margin:5px 0 5px 0;border:1px solid #ccc;padding:5px; overflow-y:auto;overflow-x:hidden;position:relative;float: left;">
+      	<ul>
+      		<li class="leftTv">借阅人&nbsp;<font color="red" size="3">*</font></li>
+      		<li id="btnIn">
+      			<input type="text" value="<?php echo $reader;?>" title="请输入外来借阅人" name="reader"/>
+      			<span><img id="btn" title="单击我,可选择系统内借阅人信息" src="<?php echo $tplPath;?>/ESArchiveLending/images/group.png"/></span>
+      		</li>
+      		<li class="rightTv">单位</li>
+      		<li id="dept">
+      			<input type="text" value="<?php echo $dept;?>" name="dept"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">电话</li>
+      		<li>
+      			<input type="text" value="<?php echo $tel;?>" name="tel"/>
+      		</li>
+      		<li class="rightTv">邮箱</li>
+      		<li>
+      			<input type="text" value="<?php echo $email;?>" name="email"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">利用目的&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+      			<select name="usepurpose" id="selectSty" style="width:184px;height:23px;line-height:23px;">
+					<option value="编史修志">编史修志</option>
+					<option value="工作查考">工作查考</option>
+					<option value="学术研究">学术研究</option>
+					<option value="经济建设">经济建设</option>
+					<option value="宣传教育">宣传教育</option>
+					<option value="其他">其他</option>
+				</select>
+      		</li>
+      		<li class="rightTv">催还提前天数&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+      			<!-- <select name="select" id="select" style="clip:rect(0 184 22 162);"  onchange="validdate.value=select.options[select.selectedIndex].text;validdate.select()">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3" selected="selected">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+				</select> -->
+				<input type="text" name="validdate" value="<?php echo $validdate;?>"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">登记人&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+      			<input type="text" value="<?php echo $register;?>" name="register" readonly="readonly"/>
+      		</li>
+      		<li class="rightTv">登记日期&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+      			<input type="text" id='times' readonly='readonly' value="<?php echo $registdate;?>" name="registdate"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">状态&nbsp;<font color="red" size="3">*</font></li>
+      		<li>
+      			<input type="text" value="<?php echo $status;?>" id="status" readonly="readonly" name="status"/>
+      		</li>
+      		<li class="rightTv">身份证</li>
+      		<li>
+      			<input type="text" value="" readonly='readonly'  id="identity" value="11"/>
+      		</li>
+      	</ul>
+      	<ul>
+      		<li class="leftTv">备注</li>
+      		<li>
+      			<textarea style="resize:none;text-indent:2px;width:487px;height:50px;font-size:12px;font-family:Arial, Helvetica, sans-serif, 宋体" name="description"><?php echo $description;?></textarea>
+      		</li>
+      	</ul><?php 
+     if(isset($data)){
+     	for($i =0 ;$i<count($data);$i++){
+     		if($data[$i]['type']=='TEXT' || $data[$i]['type']=='NUMBER' || $data[$i]['type']=='FLOAT'){
+	     		if($i%2==0) echo '<ul>';
+	     		echo '<li class=';
+	     		if($i%2==0){
+	     			echo '"leftTv" >'.$data[$i]['field'].'</li>';
+	     		}else{
+	     			echo '"rightTv" >'.$data[$i]['field'].'</li>';
+	     		}
+	     			echo '<li>
+	      					<input type="text" value="'.$data[$i]['value'].'"  name="c'.$data[$i]['id'].'" id = "c'.$data[$i]['id'].'"/>
+	      				</li>';
+	     		if($i%2==1)  echo '</ul>';
+     			
+     		}else if($data[$i]['type']=='BOOLEAN'){
+     			if($i%2==0) echo '<ul>';
+     			echo '<li class=';
+     			if($i%2==0){
+     				echo '"leftTv" >'.$data[$i]['field'].'</li>';
+     			}else{
+     				echo '"rightTv" >'.$data[$i]['field'].'</li>';
+     			}
+     			echo '<li>
+     				<select style="width:184px;height:23px;line-height:23px;" name="c'.$data[$i]['id'].'" id = "c'.$data[$i]['id'].'">';
+     					if(null == $data[$i]['value'] || $data[$i]['value'] == ""){
+     						echo '<option value="" selected style = "display:none;"></option>';
+     					}
+     					echo '<option value="2"';
+     					if($data[$i]['value'] == '2'){
+     						echo ' selected ';
+     					}
+     					echo'>否</option>';
+     					echo '<option value="1"';
+     					if($data[$i]['value'] == '1'){
+     						echo ' selected ';
+     					}
+     				echo '>是</option></select>
+     			</li>';
+     			if($i%2==1)  echo '</ul>';
+     		}else if(isset($data[$i]['propValue'])){
+     			if($i%2==0) echo '<ul>';
+     			echo '<li class=';
+     			if($i%2==0){
+     				echo '"leftTv" >'.$data[$i]['field'].'</li>';
+     			}else{
+     				echo '"rightTv" >'.$data[$i]['field'].'</li>';
+     			}
+     			echo '<li>
+     			<select style="width:184px;height:23px;line-height:23px;" name="c'.$data[$i]['id'].'" id = "c'.$data[$i]['id'].'">';
+     			echo '<option value="">--请选择--</option>';
+     			for($t =0 ;$t<count($data[$i]['propValue']);$t++){
+     				if($data[$i]['value'] == $data[$i]['propValue'][$t]['identifier']){
+     					echo '<option value="'.$data[$i]['propValue'][$t]['identifier'].'" selected>'.$data[$i]['propValue'][$t]['title'].'</option>';
+     				}else{
+     					echo '<option value="'.$data[$i]['propValue'][$t]['identifier'].'" >'.$data[$i]['propValue'][$t]['title'].'</option>';
+     				}
+     			}
+     				
+     			echo '</select>
+     			</li>';
+     			if($i%2==1)  echo '</ul>';
+     		}else if($data[$i]['type']=='DATE'){
+     			if($i%2==0) echo '<ul>';
+     			echo '<li class=';
+     			if($i%2==0){
+     				echo '"leftTv" >'.$data[$i]['field'].'</li>';
+     			}else{
+     				echo '"rightTv" >'.$data[$i]['field'].'</li>';
+     			}
+     			echo '<li>
+     			<input type="text" class="Wdate" verify="date/20/0/0" value="'.$data[$i]['value'].'" name="c'.$data[$i]['id'].'" id = "c'.$data[$i]['id'].'"/>
+     			</li>';
+     			if($i%2==1)  echo '</ul>';
+     		}else if($data[$i]['type']=='TIME'){
+     			if($i%2==0) echo '<ul>';
+     			echo '<li class=';
+     			if($i%2==0){
+     				echo '"leftTv" >'.$data[$i]['field'].'</li>';
+     			}else{
+     				echo '"rightTv" >'.$data[$i]['field'].'</li>';
+     			}
+     			echo '<li>
+     			<input type="text" class="Wdate1" verify="00:00:00" name="c'.$data[$i]['id'].'" id = "c'.$data[$i]['id'].'" value="'.$data[$i]['value'].'"/>
+     			</li>';
+     			if($i%2==1)  echo '</ul>';
+     		}
+     	}
+     	
+     }
+     ?>
+      </div>
+      </form>
+	  <div class="bottom" >
+		<table id="borrowDetails"></table>
+	  </div>
+	</div>
+<script type="text/javascript">
+if('<?php echo $readerid;?>'!=-1){
+	$('#identity').removeAttr('readonly');
+}
+
+
+/**   liuhezeng 20140929 判断字符串长度    **/
+function getByteLen(val) {    //传入一个字符串
+    var len = 0;
+    for (var i = 0; i < val.length; i++) {
+        if (val[i].match(/[^\x00-\xff]/ig) != null) //全角 
+            len += 2; //如果是全角，占用两个字节
+        else
+            len += 1; //半角占用一个字节
+    }
+    return len;
+ } 
+
+var data =  eval( '<?php echo json_encode($data) ?>');
+for(var i=0;i<data.length;i++){
+	   var id = data[i].id;
+	   if(data[i].type== 'TEXT'){
+		   var l1 = parseInt(data[i].length);
+		   var isNull = data[i].isNull;
+		   $("#c"+id).attr('l1',l1);
+		   $('#c' +id).attr('isNull',isNull);
+		   $("#c"+id).blur(function(){
+			   var id = this.id;
+			   var l1 =  $(this).attr('l1');
+			   var isNull = $(this).attr('isNull');
+			   var length  = getByteLen($("#"+id).val());
+				if( isNull == 1 &&　 $("#"+id).val()==''){
+					$("#"+id).addClass("invalid-text").attr("title","此项不能为空");
+					return false;
+				}else if(length > l1){
+					$("#"+id).addClass("invalid-text").attr("title","该输入输入项的长度限制在"+parseInt(l1/2)+"个汉字以内");
+					return false;
+					}
+				$(this).removeClass("invalid-text").attr("title","");
+			   });
+			
+	   }else if(data[i].type=='NUMBER'){
+		   var reg=/^[0-9]*$/;
+		   var l1 = parseInt(data[i].length);
+		   var isNull = data[i].isNull;
+		   $("#c"+id).attr('l1',l1);
+		   $('#c' +id).attr('isNull',isNull);
+		   $("#c"+id).blur(function(){
+			   var id = this.id;
+			   var l1 =  $(this).attr('l1');
+			   var isNull = $(this).attr('isNull');
+			   var length  = getByteLen($("#"+id).val());
+			   if(!reg.test(this.value) && (this.value!='')){
+			   		$("#"+id).val('');
+					return false;
+			   }else if( isNull == 1 &&　 $("#"+id).val()==''){
+					$("#"+id).addClass("invalid-text").attr("title","此项不能为空");
+					return false;
+				}else if(length > l1){
+					$("#"+id).addClass("invalid-text").attr("title","该输入输入项的长度限制在"+l1+"个数字以内" );
+					return false;
+					}
+			   $(this).removeClass("invalid-text").attr("title","");
+		   });
+	   }else if(data[i].type== 'FLOAT'){
+		   var l1 = data[i].length;
+		   var l2 = data[i].doLength;
+		   var isNull = data[i].isNull;
+		   var s = "";
+		   for(var t=0;t<parseInt(l1-l2);t++){
+				s +="X";
+			   }
+		   for(var t=0;t<parseInt(l2);t++){
+			   if(t==0){
+				   s +=".";
+			   } 
+				s +="X";
+		   }
+		   $("#c"+id).attr('l1',l1);
+		   $("#c"+id).attr('l2',l2);
+		   $("#c"+id).attr('s',s);
+		   $('#c' +id).attr('isNull',isNull);
+		   $("#c"+id).blur(function(){
+			   var id = this.id;
+			   var l1 =  $(this).attr('l1');
+			   var l2 = $(this).attr('l2');
+			   var s = $(this).attr('s');
+			   var isNull = $(this).attr('isNull');
+			   var str="/^[0-9]{1,"+(parseInt(l1)-parseInt(l2))+"}(\\.[0-9]{1,"+l2+"}){0,1}$/";
+			   str = str.replace(/\/\//g,"\/");
+			   var reg = eval(str);
+			   if(!reg.test(this.value) && (this.value!='')){
+			   		$("#"+id).addClass("invalid-text").attr("title",'输入值非法！正确格式：'+ s);
+					return false;
+			   }else if( isNull == 1 &&　 $("#c"+id).val()==''){
+					$("#"+id).addClass("invalid-text").attr("title","此项不能为空");
+					return false;
+						}
+				if(parseInt(l2)>0){
+					if(this.value.indexOf(".")>0){
+						var v = this.value;
+						var tg = this.value.split('.')[1].length;
+						for(var t= 0;t<(parseInt(l2)-tg);t++){
+							v += '0';
+						}
+						$("#"+id).val(v);
+					}else{
+						var v = (this.value!=''?this.value:'0')+'.';
+						for(var t= 0;t<l2;t++){
+							v += '0';
+						}
+					$("#"+id).val(v);
+					}
+				}
+			   $(this).removeClass("invalid-text").attr("title","");
+		   });
+		}else{
+			var isNull = data[i].isNull;
+			   $('#c' +id).attr('isNull',isNull);
+			  $("#c"+id).blur(function(){
+				  var id = $(this).attr('id');
+			   var isNull = $(this).attr('isNull');
+				if( isNull == 1 &&　 $("#"+id).val()==''){
+					$("#"+id).addClass("invalid-text").attr("title","此项不能为空");
+					return false;
+				}else{
+					$(this).removeClass("invalid-text").attr("title","");
+				}
+			   });
+			}
+	  
+			
+	 }
+
+	
+$(function(){
+	arType="<?php echo $arType;?>";
+	formReaderId="<?php echo $readerid;?>";
+	if(formReaderId){
+		IreaderD=1;
+	}else if(formReaderId==''){
+		IreaderD=0;
+	}
+	var value=["<?php echo $usepurpose;?>"];
+	var $inside = '<?php echo $inside;?>';
+	$("[value="+value+"]").attr('selected',true);
+	$("input[name='tel']").keyup(function(){
+		var regTel=/^((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})$))$/g;
+		if((!regTel.test(this.value))&&(this.value!='')){
+			$("input[name='tel']").addClass("invalid-text").attr("title","请输入合法的电话号码");
+			return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+	$("input[name='email']").keyup(function(){
+		var regEmail=/^[\w]+([-.][\w]+)*@[\w]+([-.]\w+)*\.[\w]+(\.[\w]+)?$/;
+		if((!regEmail.test(this.value))&&(this.value!='')){
+			$("input[name='email']").addClass("invalid-text").attr("title","请输入合法的邮箱");
+			return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+
+	/**   liuhezeng 20140929 添加备注长度验证 **/
+	$("textarea[name='description']").keyup(function(){
+		if(getByteLen($(this).val())>200){
+			$(this).addClass("invalid-text").attr("title","备注的最大长度为100个汉字！");
+			return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+	
+	$("input[name='validdate']").keyup(function(){
+		var reg=/^[1-9]\d*$/;
+		if(!reg.test(this.value)){
+			$("input[name='validdate']").addClass("invalid-text").attr("title","此项不能为空且只能输入大于零的数字");
+		    return false;
+		}
+		if(this.value > 30){
+			$("input[name='validdate']").addClass("invalid-text").attr("title","借出天数不能超过30天");
+		    return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+	$('.Wdate').die().live('click', function (){WdatePicker({dateFmt:'yyyy-MM-dd'});});
+	$('.Wdate1').die().live('click', function (){WdatePicker({dateFmt:'HH:mm:ss'});});
+	/*$("select[name='select']").change(function(){
+		$("input[name='validdate']").removeClass("invalid-text").attr("title","");
+	});*/
+	//单位点击事件触发focus/click
+	var foo=function(){
+		var stut=$("input[id='status']").val();
+		
+		var checkboxes=$("#borrowDetails").find("td[colname='c6']");
+		var isCanEditFlag = false;
+		var counterFlag = 0;
+		checkboxes.each(function(){
+			if(null != $(this).text() && ($(this).text()=="" || $(this).text() == "未借阅")){
+				counterFlag ++;
+			}
+     	 });
+
+   		if(counterFlag == checkboxes.length){
+   			isCanEditFlag = true;
+   		}
+		if(stut!='未提交' && stut!='已退回' && !isCanEditFlag){
+			$.dialog.notice({content:'提交审批中或借阅中,不允许更改！',icon:'warning',time:3});
+			return false;
+		}else{
+			var content = [];
+			content.push("<div id='personlistbox' style='height:373px;overflow:auto;'>");
+			content.push("<table id='personlist'></table>");
+			content.push("</div>");
+			/****
+			content.push("<style>");
+			content.push(".ztree li a span{");
+			content.push(" 	color:#444;");
+			content.push(" 	}");
+			content.push("</style>");
+			content.push("<table>");
+			content.push("<tr>");
+			content.push("<td>");
+			content.push("<div id='orgtreebox' style='width:200px; height:350px;overflow:auto;'><ul id='orgtree' class='ztree'></ul></div>");
+			content.push("</td>");
+			content.push("<td>");
+			content.push("<div id='personlistbox' style='height:350px;overflow:auto;'>");
+			content.push("<table id='personlist'></table>");
+			content.push("</div>");
+			content.push("</td>");
+			content.push("</tr>");
+			content.push("</table>");   ****/
+			$.dialog({
+				title:'选择单位和借阅人',
+	    		width: '550px',
+	    	   	height: '373px',
+	    	   	padding: '0px',
+	    	    fixed:true,
+	    	    resize: false,
+	    		content:content.join(""),
+	    		cancelVal: '取消',
+	    		cancel: true,
+	    		okVal: '保存',
+	    		ok: function(){
+
+	    			if($inside == '1'){
+		    			// 填入单位和借阅人信息
+			    		var radioId = $("#personlist").find("input:checked").attr('id');
+						if(radioId=='' || radioId==undefined){
+							$.dialog.notice({title:'操作提示',icon:'warning',content:'请选择单位下的借阅人！'});
+							return false;
+						}
+						var listId=radioId.split('|');
+						$("input[name='readerid']").val(listId[0]);
+						$("input[name='deptcode']").val(listId[1]);
+						var radioName = $("#personlist").find("input:checked").attr('value');
+						var list=radioName.split('|');
+						$("input[name='reader']").val(list[0]);
+						$("#dept input[name='dept']").val(list[1]);
+						$("input[name='tel']").val(list[2]);
+						$("input[name='email']").val(list[3]);
+						
+			    		this.close();
+			    		IreaderD=1;
+			    		$("input[name='reader']").removeClass("invalid-text").attr({"title":""});
+			    		return false;
+		    		}else{
+		    			var radioId = $("#personlist").find("input:checked").val();
+						if(radioId=='' || radioId==undefined){
+							$.dialog.notice({title:'操作提示',icon:'warning',content:'请选择单位下的借阅人！'});
+							return false;
+						}
+						var listId=radioId.split('|');
+						$("input[name='readerid']").val(-1);
+						$("input[name='deptcode']").val(listId[2]);
+						var radioName = $("#personlist").find("input:checked").attr('value');
+						var list=radioName.split('|');
+						$("input[name='reader']").val(list[1]);
+						$("input[name='dept']").val(list[2]);
+						$("input[name='identity']").val(list[3]);
+						$("input[name='tel']").val(list[4]);
+						$("input[name='email']").val(list[5]);
+						$("input[name='identity']").attr('readonly','true');
+						
+			    		this.close();
+			    		IreaderD=1;
+			    		$("input[name='reader']").removeClass("invalid-text").attr({"title":""});
+			    		return false;
+		    		}
+		    		
+		    		// 填入单位和借阅人信息
+		    		/*****
+		    		var radioId = "";
+		    		if($inside == '1'){
+		    			radioId = $("#personlist").find("input:checked").attr('id');
+		    		}else{
+		    			radioId = $("#personlist").find("input:checked").val();
+		    		}
+		    		
+					if(radioId=='' || radioId==undefined){
+						$.dialog.notice({title:'操作提示',icon:'warning',content:'请选择单位下的借阅人！'});
+						return false;
+					}
+					var listId=radioId.split('|');
+					$("input[name='readerid']").val(listId[0]);
+					$("input[name='deptcode']").val(listId[1]);
+					var radioName = $("#personlist").find("input:checked").attr('value');
+					var list=radioName.split('|');
+					$("input[name='reader']").val(list[0]);
+					$("#dept input[name='dept']").val(list[1]);
+					$("input[name='tel']").val(list[2]);
+					$("input[name='email']").val(list[3]);
+		    		
+		    		this.close();
+		    		IreaderD=1;
+		    		$("input[name='reader']").removeClass("invalid-text").attr({"title":""});
+		    		return false;
+		    		****/
+		    	},
+				init:initSelectOrg
+	    	});
+			//初始化选择单位和借阅人界面
+			function initSelectOrg(){
+				if($inside == '1'){
+					createPersonList();
+				}else{
+					createTempPerson();
+				}
+			}
+		}
+	};
+
+
+	// 显示人员列表
+	function createPersonList(){
+		$("#personlist").flexigrid({
+			url:$.appClient.generateUrl({ESArchiveLending:'getUserList',showUser:true},'x'),
+			dataType: 'json',
+			editable: true,
+			colModel : [
+				{display: '操作', name : 'id2', width : 40, align: 'center'},
+				{display: '姓名', name: 'c1',  width : 68, align: 'center'},
+				{display: '联系电话', name: 'c2',width:110,align:'center'},
+				{display: '邮箱', name: 'c3',width:120,align:'center'},
+				{display: '所属机构', name: 'c4', width:100,align:'center'}
+			],
+			buttons:[],
+			usepager: true,
+			rp: 50,
+			useRp: true,
+			width : 550,
+     		height : 266
+		});
+		$("#personlist tr").live('click',function(){
+			$(this).find('div input').change();
+			$(this).find('div input').attr('checked',true);
+		});
+		$('#personlistbox div[class="tDiv2"]').append('<div class="find-dialog"><input id="queryPersonWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="keyWord" value="请输入关键字" /><span id="queryPersonTable"></span></div>');
+		$('#personlistbox div[class="tDiv"]').css({"border-top":"1px solid #ccc",'height':'25px'});
+	}
+
+
+
+
+
+	//临时用户grid列表
+	function createTempPerson(){
+		$("#personlist").flexigrid({
+			url : $.appClient.generateUrl({ESArchiveUsingModel:'getTempUsers',showUser:true},'x'),
+			dataType : 'json',
+			editable : true,
+			colModel : [
+			            {display:'操作', name:'cbox',  width:55, align:'center'},
+			            {display:'姓名', name:'userName',  width:120, align:'center'},
+			            {display:'单位', name:'dep',  width:120, align:'center'},
+			            {display:'身份证号', name:'identity',  width:120, align:'center'},
+			            {display:'电话', name:'phone',  width:120, align:'center'},
+			            {display:'Email', name:'email',  width:120, align:'center'}
+			            ],
+			            buttons:[],
+			                     singleSelect:true,
+			             		usepager : true,
+			             		title : '工作流管理',
+			             		useRp : true,
+			             		rp : 20,
+			             		nomsg : "没有数据",
+			             		showTableToggleBtn : false,
+			             		pagetext : '第',
+			             		outof : '页 /共',
+			             		width : 550,
+			             		height : 266,
+			             		pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条' 
+		});
+		$("#personlist tr").live('click',function(){
+			$(this).find('div input').change();
+			$(this).find('div input').attr('checked',true);
+		});
+		$('#personlistbox div[class="tDiv2"]').append('<div class="find-dialog"><input id="queryPersonWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="keyWord" value="请输入关键字" /><span id="queryPersonTable"></span></div>');
+		$('#personlistbox div[class="tDiv"]').css({"border-top":"1px solid #ccc",'height':'25px'});
+	}
+	$('#queryPersonTable').die().live('click',function(){
+		var keyWord = $('#queryPersonWord').val();
+		if(keyWord=='请输入关键字' ){
+			keyWord = '';
+		}
+		if($inside == '1'){
+			$("#personlist").flexOptions({url:$.appClient.generateUrl({ESArchiveLending:'getUserList'},'x'),newp:1,query:{keyWord:keyWord}}).flexReload();
+		}else{
+			$("#personlist").flexOptions({url:$.appClient.generateUrl({ESArchiveUsingModel:'getTempUsers'},'x'),newp:1,query:{keyWord:keyWord}}).flexReload();
+		}				
+	});
+	
+	
+	$("#btnIn img").bind("click",foo);
+	$("input[name='reader']").keydown(function(){
+		var stut=$("input[id='status']").val();
+		if(stut!='未提交' && stut!='已退回'){
+			$.dialog.notice({content:'提交审批中或借阅中,不允许更改！',icon:'warning',time:3});
+			return false;
+		}
+	});
+	$("input[name='reader']").keyup(function(){
+		$("#dept input[name='dept']").val("");
+		$("input[name='tel']").val("");
+		$("input[name='email']").val("");
+		$(this).removeClass("invalid-text").attr("title","您输入的借阅人为外来人员");
+		IreaderD=0;
+	});
+	// 创建机构树目录
+	function createOrgTree(){
+		var setting = {
+				view: {
+					dblClickExpand: false,
+					showLine: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				async: {
+					enable: true,
+					dataType: 'json',
+					url: $.appClient.generateUrl({ESArchiveLending:'getSubOrgList'},'x'),
+					autoParam: ["id"]
+				},
+				callback: {
+					onClick : nodeClick
+				}
+			};
+			function nodeClick(event, treeId, treeNode){
+				zTree = $.fn.zTree.getZTreeObj("orgtree");
+				zTree.expandNode(treeNode);
+				$("#personlist").flexOptions({url:$.appClient.generateUrl({ESArchiveLending:'getPersonList',orgid:treeNode.id},'x')}).flexReload();	
+			};
+			var url = $.appClient.generateUrl({ESArchiveLending:'initOrg'},'x');
+			$.ajax({
+				url:url,
+				dataType: 'json',
+				success:function(nodes){
+					$.fn.zTree.init($("#orgtree"), setting, nodes);
+				},
+				cache:false
+			});
+	};
+	// 显示人员列表
+	/** liuhezeng 20141008   先注释下面废弃代码  **/
+	/***
+	function createPersonList(){
+		$("#personlist").flexigrid({
+			url:false,
+			dataType: 'json',
+			editable: true,
+			colModel : [
+				{display: '操作', name : 'id2', width : 40, align: 'center'},
+				{display: '姓名', name: 'c1',  width : 68, align: 'center'},
+				{display: '联系电话', name: 'c2',width:110,align:'center'},
+				{display: '邮箱', name: 'c3',width:120,align:'center'},
+				{display: '所属机构', name: 'c4', width:100,align:'center'}
+			],
+			usepager: true,
+			rp: 50,
+			useRp: true,
+			width: 500,
+			height: 290
+		});
+	}  ****/
+	//借阅明细全选按钮
+	$("input[name='ids3']").die().live('click',
+		function(){
+			$("input[name='id3']").attr('checked',$(this).is(':checked'));
+		}
+	);
+	$('#identity').val('<?php echo $identity;?>');
+
+
+	function formatValue(tdDiv){
+		if(tdDiv.innerHTML=='1')
+			tdDiv.innerHTML='是';
+		else 
+			tdDiv.innerHTML='否';
+	}
+
+});
+
+
+
+</script>
+</div>

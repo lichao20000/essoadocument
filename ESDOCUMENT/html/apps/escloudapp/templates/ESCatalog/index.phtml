@@ -1,0 +1,148 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="<?php echo $tplPath?>/public/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath ?>/public/js/script.js"></script>
+<div style="background-color:black;margin-top:0px;height:30px;">
+	<ul id="left_menu">
+		<li><a href="#"><font color="#FFFFFF">常用站点</font></a></li>
+		<li><a href="#"><font color="#FFFFFF">业务应用</font></a></li>
+		<li><a href="#"><font color="#FFFFFF">业务功能</font></a></li>
+		<li><a href="#"><font color="#FFFFFF">关键业务数据</font></a></li>
+	</ul>
+	<ul id="right_menu">
+		<li>2010-08-14 14:52</li>
+		<li>张吉日木图</li>
+		<li>中国联通总部管理部门</li>
+		<li><a href="#"><font color="#FFFFFF">退出</font></a></li>
+	</ul>
+</div>
+<div style="margin-top:0px;float:none;" ></div>
+<div style="background-color:#C90F0F;margin-top:0px;">
+	<img src="<?php echo $tplPath?>/public/img/logo.jpg" />
+</div>
+<div style="background-color:#800000;margin-top:0px;height:35px;text-align:center;">
+	<ul id="top_menu">
+		<li><a href="#"><font color="#FFFFFF">首页</font></a></li>
+		<li><a href="#"><font color="#FFFFFF">联通集团</font></a></li>
+		<li><a href="#"><font color="#FFFFFF">我的公司</font></a></li>
+		<li><a href="#"><font color="#FFFFFF">我的部门</font></a></li>
+		<li><a href="#"><font color="#FFFFFF">我的空间</font></a></li>
+		<li><a href="#"><font color="#FFFFFF">应用中心</font></a></li>
+	</ul>
+</div>
+<div style="background-color:#666666;margin-top:0px;height:7px;float:none;" ></div>
+
+
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'元数据管理'));?>
+<div style="background-color:#CCCCCC;width:1335px; margin-top:5px; "><img src="<?php echo $tplPath?>/public/img/y1.jpg"><font size="-1">元数据集</font></div>
+<div><input type="button" value="添加" onclick="testMessageBox(event);" /><input type="button" value="删除" /><span style="float:right;padding:0px 100px 0px 10px;">
+<input type="text" name="serache" /></span></div>
+<table style="width:100%;border-collapse:collapse;padding-bottom:5px;">
+  <tr style="background-color:#C0C0C0;height:28px;">
+  	<th style="border:1px solid #000;width:5px"></th>
+  	<th style="border:1px solid #000;padding:3px;width:40px"></th>
+    <th style="border:1px solid #000;padding:3px;width:300px">名称</th>
+    <th style="border:1px solid #000;padding:3px;width:">描述</th>
+    <th style="border:1px solid #000;padding:3px;width:100px">编号</th>
+    <th style="border:1px solid #000;padding:3px;width:150px">日期</th>
+    <th style="border:1px solid #000;padding:3px;width:80px">版本</th>
+  </tr>
+  <tr>
+     <td style="border:1px solid #000;text-align:center;"><input type="checkbox"/></td>
+     <td style="border:1px solid #000; text-align:center;"><a onclick="show();"><img src="<?php echo $tplPath?>/public/img/editor.jpg" /></a></td>
+     <td style="border:1px solid #000;text-align:center;">系统元数据</td>
+     <td style="border:1px solid #000;text-align:center;">系统元数据</td>
+     <td style="border:1px solid #000;text-align:center;">DC</td>
+     <td style="border:1px solid #000;text-align:center;">2005-12-22</td>
+     <td style="border:1px solid #000;text-align:center;">1.0</td>
+  </tr>
+  <tr>
+     <td style="border:1px solid #000;text-align:center;"><input type="checkbox"/></td>
+     <td style="border:1px solid #000; text-align:center;"><a onclick="show();"><img src="<?php echo $tplPath?>/public/img/editor.jpg" /></a></td>
+     <td style="border:1px solid #000;text-align:center;">业务元数据</td>
+     <td style="border:1px solid #000;text-align:center;">业务元数据</td>
+     <td style="border:1px solid #000;text-align:center;">flyingsoft</td>
+     <td style="border:1px solid #000;text-align:center;">2006-02-22</td>
+     <td style="border:1px solid #000;text-align:center;">1.1</td>
+  </tr>
+  <tr>
+     <td style="border:1px solid #000;text-align:center;"><input type="checkbox"/></td>
+     <td style="border:1px solid #000; text-align:center;"><a onclick="show();"><img src="<?php echo $tplPath?>/public/img/editor.jpg" /></a></td>
+     <td style="border:1px solid #000;text-align:center;">系统元数据</td>
+     <td style="border:1px solid #000;text-align:center;">系统元数据</td>
+     <td style="border:1px solid #000;text-align:center;">DC</td>
+     <td style="border:1px solid #000;text-align:center;">2006-12-02</td>
+     <td style="border:1px solid #000;text-align:center;">1.0</td>
+  </tr>
+  <tr>
+     <td style="border:1px solid #000;text-align:center;"><input type="checkbox"/></td>
+     <td style="border:1px solid #000; text-align:center;"><a onclick="show();"><img src="<?php echo $tplPath?>/public/img/editor.jpg" /></a></td>
+     <td style="border:1px solid #000;text-align:center;">业务元数据</td>
+     <td style="border:1px solid #000;text-align:center;">业务元数据</td>
+     <td style="border:1px solid #000;text-align:center;">flyingsoft</td>
+     <td style="border:1px solid #000;text-align:center;">2007-01-01</td>
+     <td style="border:1px solid #000;text-align:center;">2.3</td>
+  </tr>
+  <tr>
+     <td style="border:1px solid #000;text-align:center;"><input type="checkbox"/></td>
+     <td style="border:1px solid #000; text-align:center;"><a onclick="show();"><img src="<?php echo $tplPath?>/public/img/editor.jpg" /></a></td>
+     <td style="border:1px solid #000;text-align:center;">系统元数据</td>
+     <td style="border:1px solid #000;text-align:center;">系统元数据</td>
+     <td style="border:1px solid #000;text-align:center;">DC</td>
+     <td style="border:1px solid #000;text-align:center;">2005-12-22</td>
+     <td style="border:1px solid #000;text-align:center;">1.0</td>
+  </tr>
+</table>
+<div style="background-color:#F0F0F0;">
+	<img src="<?php echo $tplPath ?>/public/img/prev.jpg">
+	<img src="<?php echo $tplPath ?>/public/img/prev_p.jpg">
+	<font>第</font><input type="text" style="width:20px;height:10px;" value="1" />页
+	<font>共 1 页</font>
+	<img src="<?php echo $tplPath ?>/public/img/next.jpg">
+	<img src="<?php echo $tplPath ?>/public/img/next_n.jpg">
+	<select name="select">
+		<option value="0">10</option>
+		<option value="1">20</option>
+		<option value="2">50</option>
+		<option value="3">100</option>
+	</select>
+</div>
+
+<div style="background-color:#CCCCCC;width:1335px; margin-top:5px; "><img src="<?php echo $tplPath?>/public/img/y1.jpg"><font size="-1">元数据</font></div>
+<div><input type="button" value="添加" onclick="testMessageBox(event);" /><input type="button" value="删除" /><span style="float:right;padding:0px 100px 0px 10px;">
+<input type="text" name="serache" /></span></div>
+<table style="width:100%;border-collapse:collapse;padding-bottom:5px;">
+  <tr style="background-color:#C0C0C0;height:28px;">
+  	<th style="border:1px solid #000;width:5px"></th>
+  	<th style="border:1px solid #000;padding:3px;width:40px"></th>
+    <th style="border:1px solid #000;padding:3px;width:70px">名称</th>
+    <th style="border:1px solid #000;padding:3px;width:70px">唯一标识</th>
+    <th style="border:1px solid #000;padding:3px;width:70px">编号</th>
+    <th style="border:1px solid #000;padding:3px;width:70px">日期</th>
+    <th style="border:1px solid #000;padding:3px;">版本</th>
+  </tr>
+  <tr>
+     <td style="border:1px solid #000;text-align:center;"><input type="checkbox"/></td>
+     <td style="border:1px solid #000; text-align:center;"><a onclick="show();"><img src="<?php echo $tplPath?>/public/img/editor.jpg" /></a></td>
+     <td style="border:1px solid #000;text-align:center;">系统元数据</td>
+     <td style="border:1px solid #000;text-align:center;">系统元数据</td>
+     <td style="border:1px solid #000;text-align:center;">DC</td>
+     <td style="border:1px solid #000;text-align:center;">2005-12-22</td>
+     <td style="border:1px solid #000;text-align:center;">1.0</td>
+  </tr>
+  
+</table>
+<div style="background-color:#F0F0F0;">
+	<img src="<?php echo $tplPath ?>/public/img/prev.jpg">
+	<img src="<?php echo $tplPath ?>/public/img/prev_p.jpg">
+	<font>第</font><input type="text" style="width:20px;height:10px;" value="1" />页
+	<font>共 1 页</font>
+	<img src="<?php echo $tplPath ?>/public/img/next.jpg">
+	<img src="<?php echo $tplPath ?>/public/img/next_n.jpg">
+	<select name="select">
+		<option value="0">10</option>
+		<option value="1">20</option>
+		<option value="2">50</option>
+		<option value="3">100</option>
+	</select>
+</div>

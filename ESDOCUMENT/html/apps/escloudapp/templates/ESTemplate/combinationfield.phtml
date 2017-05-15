@@ -1,0 +1,660 @@
+<style type="text/css">
+.showornot{display:none;}
+.clear{clear:both;}
+.comsave{text-align:center;}
+#centerRole{margin-top:15px;}
+#comRole .userList,#centerRole .userList{ width:190px; height:180px; float:left; margin-top:10px; border:1px solid #ccc; overflow-y:scroll;}
+.esleftMargin{margin:0 30px 5px;}
+</style>
+
+<div id='comRole'>
+  <div id='' class='useLis'>
+    <div class='searchRole'>
+      <input type='text' id='one' class='searchusername' value='' onKeyUp="show1(this.value,'left');"/>
+	  <input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+	</div>
+    <ul id='combineRole' class='userList' style="height:150px">
+    <?php $left = $list->left;
+	foreach ($left as $k=>$val){
+    ?>
+    <li id="<?php echo $val->tagId;?>"><?php echo $val->display;?></li>
+    <?php }?>
+	</ul>
+  </div>
+  
+	<div id='esbutton' class='selBut'>
+		<span id="combinetop" class="estop" title="置顶" style="margin:0 30px 5px;"></span>
+		<span id="combineup" class="esup" title="上移" style="margin:0 30px 5px;"></span>
+		<span id="combineleft" class="esleft" title="左移" style="margin:0 30px 5px;"></span>
+		<span id="combineright" class="esright" title="右移" style="margin:0 30px 5px;"></span>
+		<span id="combinedown" class="esdown" title="下移" style="margin:0 30px 5px;"></span>
+		<span id="combinebottom" class="esbottom endspan" title="置底" style="margin:0 30px 5px;" ></span>
+	</div>
+	<div id='' class='useLis'>
+		<div class='searchRole'>
+			<input type='text' id='two' class='searchusername'  value='' onKeyUp="show1(this.value,'right');"/>
+			<input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+		</div>
+		<ul id='combinesaveRole' class='userList' style="height:150px">
+				<?php $right = $list->right;
+				//var_dump($right);return;
+				foreach ($right as $k=>$val){
+			    ?>
+			    <li id="<?php echo $val->tagId;?>"><?php echo $val->display;?></li>
+			    <?php }?>
+		
+		</ul>
+	</div>
+</div>
+<div class="clear"></div>
+
+
+<div id='centerRole' style="display:none;">
+  <div id='' class='useLis'>
+    <div class='searchRole'>
+      <input type='text' id='one' class='searchusername' value='' onKeyUp="showr(this.value,'left');"/>
+	  <input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+	</div>
+    <ul id='extraRole' class='userList' style="height:150px">
+
+	</ul>
+  </div>
+  
+  	
+	<div id='extrabutton' class='selBut'>
+	<div id="extrarule" class="zerorule" ><p  class='spa' style="font-size:10px;">连接符</p><input  type="text" name="comlen" class="inpu" style="width:15px;border:1px solid #CCCCCC;" /><button id="chan" style="width:25px;">=></button></div>
+		<span id="extratop" class="estop" title="置顶" style="margin:0 30px 5px;"></span>
+		<span id="extraup" class="esup" title="上移" style="margin:0 30px 5px;"></span>
+		<span id="extraleft" class="esleft" title="左移" style="margin:0 30px 5px;"></span>
+		<span id="extraright" class="esright" title="右移" style="margin:0 30px 5px;"></span>
+		<span id="extradown" class="esdown" title="下移"  style="margin:0 30px 5px;"></span>
+		<span id="extrabottom" class="esbottom endspan" title="置底" style="margin:0 30px 5px;"></span>
+	</div>
+	<div id='' class='useLis' style="">
+		<div class='searchRole'>
+			<input type='text' id='two' class='searchusername'  value='' onKeyUp="showr(this.value,'right');"/>
+			<input type='image' id='' class='searchuserbutton' src='<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif' />
+		</div>
+		<ul id='extrasaveRole' class='userList' style="height:150px">
+		
+		
+		</ul>
+	</div>
+	<div class="clear"></div>
+	<div class="comsave"><button id="comsave">保存</button></div>
+</div>
+
+<div id="itt"> 
+<table id="addchangeval">
+</table></div>
+
+<script type="text/javascript">
+$('#itt').addClass("showornot");
+var parentid="";//父id
+var leftstr = new Array();//上方左边表中的数据
+var centerstr = new Array();//中间表右方数据tagid
+$('#comRole li').die().live('click',function(){
+	$('#comRole li').removeClass('esselected');
+	$(this).addClass('esselected');
+});
+$('#centerRole li').die().live('click',function(){
+	$('#centerRole li').removeClass('esselected');
+	$(this).addClass('esselected');
+});
+
+//左移
+$("#combineleft").die().live('click',function(){
+	var objhtml = $('#combinesaveRole .esselected');
+	var id = objhtml.attr("id");
+	if(id==undefined)return;
+	if(arraysearch(leftstr,id)==false){
+		$.dialog({
+			content : '确定要删除吗？',
+			okVal : '确定',
+			ok : true,
+			cancelVal : '关闭',
+			cancel : true,
+			ok : function() {
+				$.post($.appClient.generateUrl({ESTemplate:'deleteCombinFieldRule'},'x'),{stid:structureID,moid:molid,tagid:id},function(datas){
+					if(datas){
+						$.dialog.notice({icon:'succeed',content:'操作成功',time:3});
+						donext(objhtml);
+						leftstr.push(id);
+						/**liqiubo 20140313 刷新数据**/
+						$('#edit_rule_tbl').flexReload();
+					}else{
+						$.dialog.notice({icon:'error',content:'操作失败',time:3});
+					}
+				});
+				
+			}
+		});
+	}else{
+		$('#combineRole').append(objhtml);
+		$('#centerRole').css('display','none');
+		$('#itt').addClass("showornot");
+	}
+	//$('#combinesaveRole .esselected').appendTo('#combineRole');
+	
+});
+$("#extraleft").die().live('click',function(){
+	//liqiubo 20140819 修复左移问题 修复bug 709
+	var str = /(\|true)+/;
+	var str1=/(\|false)+/;
+	var html = $('#extrasaveRole .esselected').html();
+	if(str.test(html)==true){
+		var newhtml = html.replace(str,"");
+		$('#extrasaveRole .esselected').html(newhtml);
+		$('#extraRole').append($('#extrasaveRole .esselected'));
+		return;
+	}
+	$('#extrasaveRole .esselected').remove();
+	
+});
+//右移
+$("#combineright").die().live('click',function(){
+	var tagid=$('#combineRole .esselected').attr("id");
+	if(tagid==undefined)return;
+	parentid = tagid;
+	$('#extraRole').html("");
+	$('#extrasaveRole').html("");
+	var url=$.appClient.generateUrl({ESTemplate:'comshowcenter'},'x');
+	$.post(url,{tagid:tagid,moid:molid,stid:structureID},function(result){
+		
+		var obj = eval("(" + result + ")");
+		//alert(obj);
+		var left= obj.left;
+		var llen = left.length;
+		var lhtm = '';
+		for(var i=0;i<llen;i++){
+			lhtm += '<li id="'+left[i].tagId+'">'+left[i].display+'</li>';
+		}
+		$('#extraRole').html(lhtm);
+		var right = obj.right;
+		var rlen = right.length;
+		centerstr.length=0;
+		var rhtm = '';
+		for(var i=0;i<rlen;i++){
+			rhtm += '<li id="'+right[i].tagId+'">'+right[i].display+'</li>';
+			centerstr.push(right[i].tagId);
+		}
+		$('#extrasaveRole').html(rhtm);
+	});
+	$('#combineRole .esselected').appendTo(' #combinesaveRole');
+});
+$("#extraright").die().live('click',function(){
+	var html = $('#extraRole .esselected').html();
+	html+='|true';
+	$('#extraRole .esselected').html(html);
+	$('#extraRole .esselected').appendTo('#extrasaveRole');
+	$('#itt').addClass("showornot");
+});
+$("#chan").die().live('click',function(){
+	var length = $("input[name='comlen']").val();
+	if(length=="" || typeof length == "undefined" ){
+		$.dialog.notice({icon:'error',content:'请先填写连接符',time:3,title:'3秒后自动关闭'});
+		return;
+	}
+	length+='|false';
+	var html='<li id="">'+length+'</li>';
+	$('#extrasaveRole').append(html);
+});
+//置顶
+$("#combinetop").die().live('click',function(){
+	if($("#combinesaveRole .esselected").html()==$('#combinesaveRole li:eq(0)').html()){
+		return;
+	}
+	$('#combinesaveRole li:eq(0)').before($("#combinesaveRole .esselected"));
+});
+$("#extratop").die().live('click',function(){
+	if($("#extrasaveRole .esselected").html()==$('#extrasaveRole li:eq(0)').html()){
+		return;
+	}
+	$('#extrasaveRole li:eq(0)').before($("#extrasaveRole .esselected"));
+});
+//置底
+$("#combinebottom").die().live('click',function(){
+	if($("#combinesaveRole .esselected").html()==$('#combinesaveRole li:last').html()){
+		return;
+	}
+	$('#combinesaveRole li:last').after($("#combinesaveRole .esselected"));
+});
+$("#extrabottom").die().live('click',function(){
+	if($("#extrasaveRole .esselected").html()==$('#extrasaveRole li:last').html()){
+		return;
+	}
+	$('#extrasaveRole li:last').after($("#extrasaveRole .esselected"));
+});
+//上移
+$("#combineup").die().live('click',function(){
+	var index=$('#combinesaveRole .esselected').index()-1;
+	//guolanrui 20141014 添加index的判断，避免在IE8下选择最上的字段上移时字段消失BUG：1352
+	if(index>-1){
+		$('#combinesaveRole li:eq('+index+')').before($("#combinesaveRole .esselected"));
+	}	
+});
+$("#extraup").die().live('click',function(){
+	var index=$('#extrasaveRole .esselected').index()-1;
+	//guolanrui 20141014 添加index的判断，避免在IE8下选择最上的字段上移时字段消失BUG：1352
+	if(index>-1){
+		$('#extrasaveRole li:eq('+index+')').before($("#extrasaveRole .esselected"));
+	}	
+});
+//下移
+$("#combinedown").die().live('click',function(){
+	var index=$('#combinesaveRole .esselected').index()+1;
+	$('#combinesaveRole li:eq('+index+')').after($("#combinesaveRole .esselected"));
+});
+$("#extradown").die().live('click',function(){
+	var index=$('#extrasaveRole .esselected').index()+1;
+	$('#extrasaveRole li:eq('+index+')').after($("#extrasaveRole .esselected"));
+});
+//左双击
+$('#combineRole li').die().live('dblclick',function (){
+	var tagid=$(this).attr("id");
+	$('#extraRole').html("");
+	$('#extrasaveRole').html("");
+	parentid = tagid;
+	var url=$.appClient.generateUrl({ESTemplate:'comshowcenter'},'x');
+	$.post(url,{tagid:tagid,moid:molid,stid:structureID},function(result){
+		var obj = eval("(" + result + ")");
+		var left= obj.left;
+		var llen = left.length;
+		var lhtm = '';
+		for(var i=0;i<llen;i++){
+			lhtm += '<li id="'+left[i].tagId+'">'+left[i].display+'</li>';
+		}
+		$('#extraRole').html(lhtm);
+		var right = obj.right;
+		var rlen = right.length;
+		centerstr.length=0;
+		var rhtm = '';
+		for(var i=0;i<rlen;i++){
+			rhtm += '<li id="'+right[i].tagId+'">'+right[i].display+'</li>';
+			centerstr.push(right[i].tagId);
+		}
+		$('#extrasaveRole').html(rhtm);
+	});
+		$('#combinesaveRole').append($(this));
+});
+$('#extraRole li').die().live('dblclick',function (){
+	var ext = $(this).html();
+	ext+='|true';
+	$(this).html(ext);
+	$('#extrasaveRole').append($(this));
+	$('#itt').addClass("showornot");
+});
+
+$('#combinesaveRole li').die().live('click dblclick',function(event){
+	if(event.type=='dblclick'){
+		var objhtml = $(this);
+		var id = $(this).attr("id");
+		if(arraysearch(leftstr,id)==false){
+			$.dialog({
+				content : '确定要删除吗？',
+				okVal : '确定',
+				ok : true,
+				cancelVal : '关闭',
+				cancel : true,
+				ok : function() {
+					$.post($.appClient.generateUrl({ESTemplate:'deleteCombinFieldRule'},'x'),{stid:structureID,moid:molid,tagid:id},function(datas){
+						if(datas){
+							$.dialog.notice({icon:'succeed',content:'操作成功',time:3});
+							donext(objhtml);
+							leftstr.push(id);
+							/**liqiubo 20140313 刷新数据**/
+							$('#edit_rule_tbl').flexReload();
+						}else{
+							$.dialog.notice({icon:'error',content:'操作失败',time:3});
+						}
+					});
+					
+				}
+			});
+		}else{
+			$('#combineRole').append(objhtml);
+			$('#centerRole').css('display','none');
+			$('#itt').addClass("showornot");
+		}
+	}
+	else{
+			$('#extraRole').html("");
+			$('#extrasaveRole').html("");
+			$('#centerRole').css('display','block');
+			tagid=$(this).attr("id");
+			var url=$.appClient.generateUrl({ESTemplate:'comshowcenter'},'x');
+			$.post(url,{tagid:tagid,moid:molid,stid:structureID},function(result){
+				var obj = eval("(" + result + ")");
+				var left= obj.left;
+				var llen = left.length;
+				var lhtm = '';
+				for(var i=0;i<llen;i++){
+					lhtm += '<li id="'+left[i].tagId+'">'+left[i].display+'</li>';
+				}
+				$('#extraRole').html(lhtm);
+				var right = obj.right;
+				var rlen = right.length;
+				var rhtm = '';
+				centerstr.length=0;
+				for(var i=0;i<rlen;i++){
+					rhtm += '<li id="'+right[i].tagId+'">'+right[i].display+'</li>';
+					centerstr.push(right[i].tagId);
+				}
+				$('#extrasaveRole').html(rhtm);
+			});
+		}
+});
+function donext(param){
+	$('#combineRole').append(param);
+	$('#centerRole').css('display','none');
+	$('#itt').addClass("showornot");
+}
+//筛选
+function show1(value,position)
+{
+	if($.trim(value)==''){
+		$('#combineRole li').show();
+		$('#combinesaveRole li').show();
+		return;
+	}
+	if(position=='left' && $.trim(value)!='')
+	{
+		$('#combineRole li').hide();
+		var liObj=$('#combineRole li:contains('+value+')').show();
+		$('#combineRole').append(liObj);
+	}else if(position=='right' && $.trim(value)!='')
+	{
+		$('#combinesaveRole li').hide();
+		var liObj=$('#combinesaveRole li:contains('+value+')').show();
+		$('#combinesaveRole').append(liObj);
+	}else{
+		return;
+	}
+}
+function showr(value,position)
+{
+	if($.trim(value)==''){
+		$('#extraRole li').show();
+		$('#extrasaveRole li').show();
+		return;
+	}
+	if(position=='left' && $.trim(value)!='')
+	{
+		$('#extraRole li').hide();
+		var liObj=$('#extraRole li:contains('+value+')').show();
+		$('#extraRole').append(liObj);
+	}else if(position=='right' && $.trim(value)!='')
+	{
+		$('#extrasaveRole li').hide();
+		var liObj=$('#extrasaveRole li:contains('+value+')').show();
+		$('#extrasaveRole').append(liObj);
+	}else{
+		return;
+	}
+}
+var uri1=$.appClient.generateUrl({ESTemplate:'com_json'});
+$("#addchangeval").flexigrid({
+url: uri1,
+dataType: 'json',
+colModel : [
+	{display: '<input type="checkbox" name="ids" />', name : 'id2', width : 40, align: 'center'},
+	{display: '操作', name : 'c1',  width: 50, sortable : true, align: 'center'},
+	{display: '字段', name : 'c2', width : 50, sortable : true, align: 'center'},
+	{display: '被替换值', name : 'c3', width : 80, sortable : true, align: 'center'},
+	{display: '替换值', name : 'c4', width : 80, sortable : true, align: 'center'},
+	{display: '描述', name : 'c5', width : 100, sortable : true, align: 'center'}
+	
+	],
+buttons : [
+	{name: '添加', bclass: 'add',onpress: add},
+	{name: '删除', bclass: 'delete',onpress:del}
+	],
+sortname: "id",
+sortorder: "asc",
+usepager: true,
+title: '添加替换值',
+procmsg:'正在加载，请稍后……',
+useRp: true,
+rp: 20,
+nomsg:"没有数据",
+showTableToggleBtn: true,
+pagetext: '第',
+outof: '页 /共',
+width: 490,
+height: 80,
+
+pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+});
+
+var yn="";//判断中间右边数据是否保存 -1是未保存
+var tagids="";//中间表的右方tagid
+$('#extrasaveRole li').die().live('click dblclick',function(event){
+	if(event.type=='dblclick'){
+		$('#itt').addClass("showornot");
+		var str = /(\|true)+/;
+		var str1=/(\|false)+/;
+		var html = $(this).html();
+		//alert(str.test(html));return;
+		if(str.test(html)==true){
+			var newhtml = html.replace(str,"");
+			$(this).html(newhtml);
+			$('#extraRole').append($(this));
+			return;
+		}
+		$(this).remove();
+		//$('#itt').addClass("showornot");
+		}
+	else{
+			tagids=$(this).attr("id");
+			if(tagids==""){
+				$('#itt').addClass('showornot');
+				return;
+			}
+			$('#itt').removeClass('showornot');
+			comdia.position('50%','50%');
+			yn = arraysearch(centerstr,tagids);
+			var url = $.appClient.generateUrl({ESTemplate:'com_json',stid:structureID,moid:molid,parid:tagid,id:tagids});
+			$("#addchangeval").flexOptions({newp:1,url:url}).flexReload();
+		}
+});
+//添加
+function add()
+{
+	//liqiubo 20140818 当yn为0时，0==false为true，故用串判断
+	if(String(yn)=='false'){
+		$.dialog.notice({icon:'error',content:'请先保存组合字段规则再添加',time:3});
+		return;
+	}
+	var url = $.appClient.generateUrl({ESTemplate:'comadd'},'x');
+	$.ajax({
+	    url:url,
+	    success:function(data){
+	    	$.dialog({
+	    		id:'name2',
+		    	title:'添加',
+	    		//width: '200',
+	    	    //height: '200',
+	    	   	fixed:true,
+	    	    resize: false,
+		    	content:data,
+		    	ok:true,
+				okVal:'保存',
+				cancel:true,
+				cancelVal:'取消',
+				ok:function(){
+					var form=$('#comadd');
+					var data=form.serialize();
+					//alert(data);return;
+					
+					//alert(yn);return;
+					var url=$.appClient.generateUrl({ESTemplate:'comaddval'},'x');
+						$.post(url,{data:data,stid:structureID,moid:molid,parid:tagid,id:tagids,dataid:0},function(result){
+							$.dialog.notice({icon:'succeed',content:'添加成功',time:3});
+							$('#addchangeval').flexOptions({newp: 1}).flexReload();
+							
+						});
+					
+				}
+		    });
+		    },
+		    cache:false
+	});	
+}
+var checkids='';//下表选中的id
+
+function getattrdata(id){
+	var url = $.appClient.generateUrl({ESTemplate:'comadd',id:id,stid:structureID,moid:molid,parid:tagid,tag:tagids},'x');
+	$.ajax({
+	    url:url,
+	    success:function(data){
+	    	$.dialog({
+		    	title:'编辑面板',
+	    		//width: '40%',
+	    	    //height: '40%',
+	    	   	fixed:true,
+	    	    resize: false,
+		    	content:data,
+		    	ok:true,
+				okVal:'保存',
+				cancel:true,
+				cancelVal:'取消',
+				ok:function(){
+					var form=$('#comadd');
+					var data=form.serialize();
+					var url=$.appClient.generateUrl({ESTemplate:'comaddval'},'x');
+						$.post(url,{data:data,stid:structureID,moid:molid,parid:tagid,id:tagids,dataid:id},function(result){
+							$.dialog.notice({icon:'succeed',content:'修改成功',time:3});
+							$('#addchangeval').flexOptions({newp: 1}).flexReload();
+							
+						});
+					
+				}
+		    });
+		    },
+		    cache:false
+	});	
+	
+}
+//全选
+$("input[name='ids']").die().live('click',
+		function(){
+		$("input[name='id2']").attr('checked',$(this).is(':checked'));
+		}
+);
+//删除
+function del(){
+	var data=new Array();
+	var checkboxObj=$("input[name='id2']:checked");
+	if(checkboxObj.length =='0' || checkboxObj.length==='undefined')
+	{
+		$.dialog.notice({icon:'warning',content:'请选择要删除的数据',time:3});
+		return false;
+	}else{
+		//遍历选中的数据
+		checkboxObj.each(function(i){
+			data[i]={};
+			data[i]['TAG_PREPROPVALUE']=$(this).parent().parent().parent().find("td").eq(3).text();
+			data[i]['TAG_PROPVALUE']=$(this).parent().parent().parent().find("td").eq(4).text();
+			});
+	}
+	//alert(data);return;
+	$.dialog({
+		content:'确定要删除吗?',
+		ok:true,
+		okVal:'确定',
+		cancel:true,
+		cancelVal:'取消',
+		ok:function(){
+			var url=$.appClient.generateUrl({ESTemplate:'comattrdel'},'x');
+			
+			$.post(url,{data:data,stid:structureID,moid:molid,parid:tagid,tag:tagids},function(result){				
+				if(result==1){
+					$("input[name='ids']").attr("checked",false);
+					$.dialog.notice({icon:'succeed',content:'数据删除成功',time:3,title:'3秒后自动关闭'});
+					$('#addchangeval').flexOptions({newp: 1}).flexReload();
+					
+				}
+				
+				});
+			
+		}
+	});
+}
+//组合字段保存
+$('#comsave').die().live('click',function(){
+	var exg = /\|\w+$/;
+	var url=$.appClient.generateUrl({ESTemplate:'combinationsave'},'x');
+	var data="";
+	if(parentid==""){
+		parentid = $('#combinesaveRole .esselected').attr("id");
+		if(parentid==""||parentid==undefined){
+			$.dialog.notice({icon:'warning',content:'没有要保存的数据',time:3,title:'3秒后自动关闭'});
+			return;
+		}
+	}
+	var judge = $('#combinesaveRole .esselected').html();
+	if(judge==null){
+		$.dialog.notice({icon:'warning',content:'请标注要保存的数据',time:3,title:'3秒后自动关闭'});
+		return;
+	}
+	$('#extrasaveRole li').each(function(i){
+		var id=$(this).attr("id");
+		var ss=$(this).html();
+		if(id=="" || id ==undefined || typeof id == 'undefined'){
+			data+=ss+',';
+		}else{
+			var html = ss.match(exg).toString();
+			data+=id+html+',';
+		}
+	});
+	//liqiubo 20140807 加入验证，组合字段没有参考字段时候不允许保存，修复bug541
+	if(!data){
+		$.dialog.notice({icon:'warning',content:'组合字段规则设置不完整，请设置完整后再保存!',time:3,title:'3秒后自动关闭'});
+		return;
+	}
+	$.post(url,{data:data,stid:structureID,moid:molid,tagid:parentid},function(result){
+		if(result){
+			var index = arraysearch(leftstr,tagid);
+			leftstr = removearr(leftstr,index);
+			centerstr.length=0;
+			$('#extrasaveRole li').each(function(i){
+				centerstr.push($(this).attr("id"));
+			});
+			//alert(centerstr);
+			$.dialog.notice({icon:'succeed',content:'保存成功',time:3,title:'3秒后自动关闭'});
+			$('#edit_rule_tbl').flexReload();
+		}
+	});
+});
+/**
+ * 数组查找
+ */
+function arraysearch(arr,val){
+	var arrlen = arr.length;
+	for(var i=0;i<arrlen;i++){
+		if(arr[i]==val){
+			return i;
+		}
+	}
+	return false;
+}
+/**
+ * 数组删除
+ */
+ function removearr(arr,index){
+	 var arrlen = arr.length;
+	 if(index>=0&&index<arrlen){
+		 for(var i=index;i<arrlen;i++){
+				arr[i] = arr[i+1];
+			}
+		arr.length = arrlen-1;
+	}
+	return arr;
+}
+$(function(){
+	
+	$('#combineRole li').each(function(i){
+		leftstr[i] = $(this).attr("id");
+	});
+});
+</script>

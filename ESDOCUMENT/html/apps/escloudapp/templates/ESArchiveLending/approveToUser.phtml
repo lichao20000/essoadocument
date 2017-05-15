@@ -1,0 +1,76 @@
+<style>
+.user{width:800px;}
+.user .esleft{float:left;width:200px;height:386px;overflow:scroll;}
+.user .esright{height:386px;overflow:auto;}
+</style>
+<div class="user">
+	<div class="esleft"><ul id='perorgtree' class='ztree'></ul></div>
+	<div class="esright">
+		<table id="perList"></table>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#perList").flexigrid({
+		url:false,
+		dataType: 'json',
+		colModel : [
+					{display: '操作', name : 'id2', width : 40, align: 'center'},
+					{display: '姓名', name: 'c1',  width : 80, align: 'center'},
+					{display: '联系电话', name: 'c2',width:120,align:'center'},
+					{display: '邮箱', name: 'c3',width:160,align:'center'},
+					{display: '所属机构', name: 'c4', width:120,align:'center'}
+				],
+		usepager: true,
+		title: '人员信息',
+		useRp: true,
+		rp: 20,
+		procmsg:"正在加载，请稍等",
+		nomsg:"没有数据",
+		resizable:false,
+		minColToggle:0,
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: 600,
+		height: 300,
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	//选择审批人创建机构人员树目录start
+	var setting = {
+		view: {
+			dblClickExpand: false,
+			showLine: false
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		},
+		async: {
+			enable: true,
+			dataType: 'json',
+			url: $.appClient.generateUrl({ESArchiveLending:'getSubOrg1'},'x'),
+			autoParam: ["id"]
+		},
+		callback: {
+			onClick : nodeClick
+		}
+	};
+	function nodeClick(event, treeId, treeNode){
+		zTree = $.fn.zTree.getZTreeObj("perorgtree");
+		zTree.expandNode(treeNode);
+		$("#perList").flexOptions({url:$.appClient.generateUrl({ESArchiveLending:'getUserList',orgid:treeNode.id},'x')}).flexReload();	
+	};
+	var url = $.appClient.generateUrl({ESArchiveLending:'initOrg'},'x');
+	$.ajax({
+		url:url,
+		dataType: 'json',
+		success:function(nodes){
+			$.fn.zTree.init($("#perorgtree"), setting, nodes);
+		},
+		cache:false
+	});
+	//选择审批人创建机构人员树目录end
+});
+</script>

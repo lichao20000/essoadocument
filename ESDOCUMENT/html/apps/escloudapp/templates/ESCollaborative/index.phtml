@@ -1,0 +1,55 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/viewfile.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath?>/ESCollaborative/css/index.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESYearlyReport/css/layout.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESCollaborative/css/flowsheet.css" />
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ckeditor/ckeditor.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>0));?>
+<div id='ESSystemIndex' style="width:96%;margin-left:2%">
+	<div class='leftDiv' id='leftDiv'>
+		<div id='type_all'>
+			<a href='javascript:;' class='selected' id='todo'>待办业务</a>
+			<a href='javascript:;' id='send'>待发业务</a>
+			<a href='javascript:;' id='have_send'>已发业务</a>
+			<a href='javascript:;' id='have_todo'>已办业务</a>
+		</div>
+<!-- 		<h2>全部</h2> -->
+		<div id='type_list'>
+<!-- 			<a href='javascript:;' id='using'>借阅申请</a> -->
+<!-- 			<a href='javascript:;' id='bianyan'>编研审批</a> -->
+<!-- 			<a href='javascript:;' id='nianbao'>年报审批</a> -->
+<!-- 			<a href='javascript:;' id='jianding'>档案鉴定</a> -->
+<!-- 			<a href='javascript:;' id='destroy'>档案销毁</a> -->
+<!-- 			<a href='javascript:;' id='publish'>信息发布</a> -->
+		</div>
+	</div>
+	<div class='rightDiv' id='rightDiv'>
+		<table id='mylist' selectType='todo'></table>
+	</div>
+</div>
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/newIndex.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/extModel.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/collaborativeHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/formStartHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/formApprovalHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+
+<script>
+$(function(){
+	$('#rightDiv .tDiv2').append('<span style="float:left;margin-bottom:5px;">&nbsp;</span><div class="find-dialog"><input id="searchKeyword" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="searchKeyword" value="请输入关键字" /><span onclick="collaborativeHandle.searchKeyword()"></span></div>');
+
+	$(document).keydown(function(event){
+		if(event.keyCode == 13 && document.activeElement.id == 'searchKeyword') {
+			collaborativeHandle.searchKeyword();
+			return false;
+		}
+	});
+});
+</script>

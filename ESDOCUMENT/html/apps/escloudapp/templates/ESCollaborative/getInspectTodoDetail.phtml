@@ -1,0 +1,16 @@
+<div class="espakcet">
+<ul>
+<li style="width:420px"><span>标题<font color="red" size="3">*</font></span><input type="text" name="pendingTitle" style="width:352px" disabled="true" value="<?php echo $lists->title;?>"></li>
+<li><span>年度<font color="red" size="3">*</font></span><input type="text" name="year" disabled="true" value="<?php echo $lists->year; ?>"></li>
+<!-- <li><span>承办机构</span><input type="text" name="pendingOrg" disabled="true" value="<?php echo $lists->receive_company; ?>"></li> -->
+<li><span>督办等级</span>
+<input disabled="true" value="<?php echo $lists->level; ?>" />
+</li>
+<li><span>承办人<font color="red" size="3">*</font></span><input disabled="true" type="text" name="pendingUserName" value="<?php echo $lists->receive_user; ?>" readonly>
+</li>
+<li><span>所属机构</span><span id="belongOrg"><input disabled="true" value="<?php echo $lists->receive_company; ?>" /></span></li>
+<li><span>督办机构</span><input title="<?php echo $lists->start_company; ?>" disabled="true" type="text" name="start_company" readonly value="<?php echo $lists->start_company; ?>"></li>
+<li><span>督办人</span><input disabled="true" type="text" name="start_user" readonly value="<?php echo $lists->display_name; ?>"></li>
+<li style="width:420px"><span>督办说明</span><textarea disabled="true" style="width:350px;height:110px;float:left; font-size:12px;" name="desc"><?php echo $lists->mark; ?></textarea></li>
+</ul>
+</div>

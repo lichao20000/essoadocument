@@ -1,0 +1,72 @@
+<link href="<?php echo $tplPath?>/public/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css">
+<link href="<?php echo $tplPath?>/public/jquery-easyui/themes/default/easyui.css" rel="stylesheet" type="text/css">
+<link href="<?php echo $tplPath?>/ESCatalogCheck/css/index.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCatalogCheck/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/jquery-easyui/jquery.easyui.min.js"></script>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link href="<?php echo $tplPath;?>/public/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"目录检查", content:"#esmenu, #esone, #eslist,#err_title,#errlist"});
+	$(".esleft").css("height",esleftH);//设置左侧菜单
+});
+
+</script>
+<input type="hidden" id="condition">
+<input type="hidden" id ="tplPath" value="<?php echo $tplPath;?>" />
+<div  class='esmain'>
+	<div id="escontent">
+			<div id="esmenu" class="esleft">
+				<ul id="esStageTree" class="ztree" ></ul>
+				<input type="hidden" id="treenodeid" value="" />
+				<input type="hidden" id="deviceId" value="0" />
+				<input type="hidden" id="devicename" value="0" />
+				<input type="hidden" id="partId" value="" />
+			</div>
+			<div class="esright" id ="esone">
+					<div id="eslist" >
+					  <table id="esDataList"></table>
+			       </div>
+			       <div id="errlist">
+			     	  <table id="errorList"></table>
+			       </div>
+
+			</div>
+			
+			<div id="esfileview"></div>
+			<div id="esnotfiling"></div>
+	</div>
+	<div id="transfer"></div>
+	
+</div>
+
+<script type="text/javascript">
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".esleft").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".esleft").offset().top;
+var esleftH=winH-eslefttop-11;
+var height=winH-eslefttop-115;
+window.onresize=function()
+{
+	var winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".esleft").width()-5;
+	}
+	var winH=$(window).height();
+	var height=winH-eslefttop-115;
+	$(".flexigrid").css({width:width});	
+};
+</script>

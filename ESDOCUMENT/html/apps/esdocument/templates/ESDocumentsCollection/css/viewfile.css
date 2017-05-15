@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+.esmain td {vertical-align: top;}
+.esfilehead {width:750px;background-color:#eeeeee;border:1px silver solid;}
+.esfilehead .estitle{width:750px;text-align:center;font-weight:bold;line-height:40px;font-size:20px!important;display:block;}
+.esfilehead .hh {width:750px;padding:0px 3px;}
+.esfilehead .hh span{height:30px;text-align:left;line-height:20px;}
+.esfilehead .hh span.field{padding-left:10px;color:#00C;}
+
+.esmain .flexpaper_viewer {width:750px;height:450px;}
+
+.esfileinfo {width:210px ;float:left;}
+.esfileinfo div.title {padding-left:10px;height:30px;line-height:30px;text-align:left;font-weight:bold;border-bottom:1px solid silver;}
+.esfileinfo ul li {height:20px;color:#666666;width:205px;white-space:nowrap;text-overflow:ellipsis}
+.esfileinfo ul.filelist {overflow:auto;padding-left:0px;height:540px}
+.esfileinfo ul.filelist li { width:250; text-overflow:ellipsis;color:#2A00E1;cursor:pointer; overflow:hidden;white-space :nowrap ;line-height:20px;vertical-align:center;border-bottom:1px dotted silver;height:20px;padding:3px 0px 3px 5px;}
+.esfileinfo span.val {height:20px;line-height:20px;}

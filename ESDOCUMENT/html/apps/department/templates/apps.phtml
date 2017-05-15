@@ -1,0 +1,94 @@
+<?php if(isset($header)) echo $header; ?>
+<div class="content">
+  <div class="topTab">
+<?php if ($editable): ?>
+    <div class="but1" style="margin-left:220px;width:70px;" id="save_apps">保存</div>
+<?php endif ?>
+    <div class="topTabPage">
+      <div class="but3Box margin0">
+        <div class="but3"  style="width:35px;"></div>
+        <div class="but3_icon"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content1000 floatLeft">
+  <?php echo $this->render('sidebar', array('editable' => $editable, 'appadmin' => $appadmin, 'menuitem' => 'apps')) ?>
+  <div class="margin10 floatLeft">
+    <form enctype="multipart/form-data" action="<?php echo url($this->getUrl('apps')) ?>" method="post" id="apps" class="eip-cu-form">
+      <div class="globalForm">
+<?php
+$userId = $GLOBALS['user']->id;
+$hasManageLink = false;
+foreach ($apps as $info):
+  if (!$editable && !in_array($userId, $info['members'])) {
+    continue;
+  }
+  if (!isset($info['id'])) {
+    continue;
+  }
+  $appId = $info['id'];
+  // TODO 目前先固定虚拟站点只能支持列表中的应用
+  if (!in_array($appId, array('weather', 'stock', 'quicklinks', 'fileshare', 'sns', 'unisxinxifabu', 'unisapptongxunlu'))) {
+    continue;
+  }
+  $hasManageLink = true;
+?>
+        <ul>
+          <li for="edit-title" class="bold">
+<?php
+$enabledApps = isset($setting->data) && isset($setting->data['apps']) ? $setting->data['apps'] : array();
+if ($editable):
+  $checked = in_array($appId, $enabledApps) ? ' checked="checked"' : '';
+?>
+            <input id="chk-<?php echo $this->plain($appId) ?>" type="checkbox" name="enable[<?php echo $this->plain($appId) ?>]" style="vertical-align:middle;margin-right:5px"<?php echo $checked ?>>
+<?php endif ?>
+            <label for="chk-<?php echo $this->plain($appId) ?>"><?php echo $this->plain($info['name']) ?></label>
+<?php if (isset($info['link'])): ?>
+            <a href="<?php echo $info['link'] ?>" style="margin-left:20px">进入应用管理页</a>
+<?php endif ?>
+          </li>
+        </ul>
+<?php if ($editable && isset($info['link'])): ?>
+        <ul>
+          <li>
+            <input type="hidden" name="apps[]" value="<?php echo $this->plain($appId) ?>">
+            <input style="padding: 2px" type="text" id="edit-title" name="people[]" value="<?php echo implode(', ', $info['members']) ?>" size="60" maxlength="128" class="form-text globalFormInput">
+            <?php echo $info['finder'] ?>
+          </li>
+        </ul>
+<?php
+  endif;
+endforeach;
+if (!$hasManageLink):
+?>
+        <ul><li>没有可管理的应用</li></ul>
+<?php endif ?>
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+<!--
+jQuery('#save_apps').click(function(e) {
+	$('#apps').submit();
+});
+var callbackPeopleFinder = function(data, index) {
+  var i, people = [], el, t;
+  for (i in data) {
+    if (data.hasOwnProperty(i)) {
+      people.push(data[i].id);
+    }
+  }
+  el = $('input[name="people[]"]').eq(index);
+  t = $.trim(el.val());
+  if (t !== '') {
+	  if(el.val().indexOf(people.join(', ')) < 0){
+		  el.val(t + ', ' + people.join(', '));
+	  }
+  } else {
+    el.val(people.join(', '));
+  }
+};
+//-->
+</script>

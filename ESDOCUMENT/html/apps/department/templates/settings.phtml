@@ -1,0 +1,75 @@
+<?php if(isset($header)) echo $header; ?>
+<div class="content">
+  <div class="topTab">
+    <div class="but1" style="margin-left:220px!important; margin-left:110px;width:70px;" id="save_settings">保存</div>
+    <div class="topTabPage">
+      <div class="but3Box margin0">
+        <div class="but3"  style="width:35px;"></div>
+        <div class="but3_icon"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content1000 floatLeft">
+  <?php echo $this->render('sidebar', array('editable' => $editable, 'appadmin' => $appadmin, 'menuitem' => 'settings')) ?>
+  <div class="margin10 floatLeft">
+    <form enctype="multipart/form-data" action="<?php echo url($this->getUrl('settings')) ?>" method="post" id="settings" class="eip-cu-form">
+      <div class="globalForm">
+        <ul>
+          <li for="edit-title" class="bold">站点名称　</li>
+          <li><input style="padding: 2px" type="text" id="edit-title" name="title"<?php if (!$editable) echo ' disabled="disabled"' ?> value="<?php echo isset($setting->title)?$setting->title : '' ?>" size="60" maxlength="128" class="form-text globalFormInput"></li>
+        </ul>
+        <ul>
+          <li for="edit-pic" class="bold">显示图片　</li>
+          <li><input style="padding: 2px" type="file" id="edit-pic" name="pic"<?php if (!$editable) echo ' disabled="disabled"' ?> class="form-text globalFormInput" size="47"></li>
+        </ul>
+<?php if ($setting->pic): ?>
+        <ul>
+          <li style="margin-left:65px"><img src="<?php echo url($setting->pic) . '?' . mt_rand() ?>"></li>
+        </ul>
+<?php endif ?>
+        <ul>
+          <li for="edit-description" class="bold">站点简介　</li>
+          <li>
+            <textarea id="edit-description" name="description" rows="6" cols="40"<?php if (!$editable) echo ' disabled="disabled"' ?>><?php echo $this->plain($setting->description) ?></textarea>
+          </li>
+        </ul>
+ <?php if(isset($setting->level) && $setting->level == 2){ ?>
+        <ul>
+          <li for="edit-title" class="bold">常用链接　</li>
+          <li><input style="padding: 2px" type="text" id="edit-path" name="path"<?php if (!$editable) echo ' disabled="disabled"' ?> value="<?php echo isset($setting->path)?$setting->path : '' ?>" size="60" maxlength="10" class="form-text globalFormInput"></li>
+        </ul>
+ <?php } ?>
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+<!--
+jQuery('#save_settings').click(function(e) {
+  var title_length = $("#edit-title").val().length;
+  if(title_length == 0){
+    alert("站点名称不能为空");
+    return;
+  }
+  if(title_length > 20){
+    alert("站点名称不能超过20个字符");
+    return;
+  }
+  var content_length = $("#edit-description").val().length;
+  if(content_length>200){
+    alert("站点简介不能超过200个字符");
+    return;
+  }
+	$('#settings').submit();
+});
+jQuery('#edit-pic').change(function() {
+   var filename = $(this).val();
+   var ext = filename.substring(filename.lastIndexOf(".")+1,filename.length).toLowerCase();
+   if(ext !="jpg" && ext != "gif" && ext != "png"){
+     alert("上传图片格式错误.");
+     $(this).val("");
+   }
+});
+//-->
+</script>

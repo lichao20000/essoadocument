@@ -1,0 +1,142 @@
+<style type="text/css">
+@CHARSET "UTF-8";
+body,html{ margin:0; overflow:hidden;}
+
+.init-style{ float:left; overflow:hidden;}
+/* 查看详细信息按钮样式 */
+.details{ width:16px; height:16px; background:url(../../public/flexigrid/css/images/grid.png) no-repeat; border:0; cursor:pointer;}
+
+
+
+</style>
+
+<div id="ESSystemIndex" style = "margin-left:0px;">
+<div id='table' class='init-style'>
+	<table id='structureModel-table'></table>
+</div>
+</div>
+<script type="text/javascript">
+var nodeId = <?php echo $TreeNodeID?>;
+var _table = {
+		total: false, // 用于保存接口日志总条数,该参数只在第一次得到
+		init: function (){
+			
+			document.getElementById('table').innerHTML = "<table id='structureModel-table'></table>";
+			
+			var col_ = url_ = title_ = button_ = type_ = false;
+				button_ = [{name: '选择', bclass: 'choose', tooltip: '选择模板', onpress: _opens.choose}
+				         ];
+				col_ = [
+						/** wanghongchen 20141009 调整列顺序及列名称**/
+				        {display: '行号', name:'line', width: 30, align: 'center'},
+				        {display: '<input type="checkbox" id="checkAll" >', name:'cb', width: 20, align: 'center'},
+				        {display: '操作', name:'details', width: 40, align: 'center'},
+			    		{display: '模板类型', name: 'modelType', width: 100, sortable: true, align: 'left'},
+			    		{display: '模板名称', name: 'modelName', width: 130, sortable: true, align: 'left'},
+			    		/** wanghongchen 20140929  将所属业务显示出来，bug1257**/
+				    	{display: '档案类型', name: 'modelClass', width: 130, align: 'left'},
+			    		{display: '模板描述', name: 'modelDes', width: 270, sortable: true, align: 'left'},
+			    		{display: 'modelTypeHide', name: 'modelTypeHide', width: 250, sortable: true, align: 'left',hide: true},
+			    		{display: 'id', name: 'modelId', width: 250, sortable: true, align: 'left',hide: true}
+			    	];
+				
+				url_ = $.appClient.generateUrl({ESStructureModel: 'getModelData'},'x');
+			
+			$("#structureModel-table").flexigrid({
+				url: url_,
+				dataType: 'json',
+				colModel : col_,
+				buttons : button_,
+				usepager: true,
+				useRp: true,
+				title:'选择结构模板', 
+				showTableToggleBtn:false,
+				width: 800,
+				height: 400,
+				rp: 20,
+				nomes: '没有数据',
+				pagetext: '第',
+				outof: '页 /共',
+				pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+			});
+			
+		}
+	};
+var _opens={
+		query:function(){
+				var keyword = $.trim($('input[name="KeyWord"]').val());
+				if (keyword == '' || keyword == '请输入关键字') {
+					keyword = '';
+				}
+				var url=$.appClient.generateUrl({ESStructureModel: 'getModelData',keyWord : encodeURI(keyword)},'x');
+				$("#structureModel-table").flexOptions({url : url,newp:1}).flexReload();
+				return false;
+			},
+		choose:function(){
+			  var checkObj=$("#structureModel-table").find("input[name='checks']:checked");
+			  if(checkObj.length==0){
+				  $.dialog.notice({title:'操作提示',icon:'warning',content:'请选择数据！',time:3});
+				  return false;
+			  }else if(checkObj.length>1){
+				  $.dialog.notice({title:'操作提示',icon:'warning',content:'请选择一条数据数据！',time:3});
+				  return false;
+			  }else if(checkObj.length==1){
+				  var ids=[];
+					$("#structureModel-table").find("input[name='checks']:checked").each(function(){
+						ids.push($(this).val());
+					});
+					ids=ids.join(',');
+					$.ajax({
+					    url:$.appClient.generateUrl({ESTemplate:'chooseModelStructure'},'x'),
+					    type:'post',
+					    data:'modelId='+ids+'&nodeId='+nodeId,
+					    dataType:'json',
+					    success:function(rtdata){
+						    if(rtdata.success == true){
+						    	$.dialog.notice({
+									icon : 'succeed',
+									content : '保存成功',
+									time :2,
+									lock:false
+								}); 
+						    	comdia.close();
+						    	is_allowed.init({CHOOSE_STRU_NODE:false,QUOTE_STRU_NODE:false,DEL_NODE:false,DELETE_STRU_NODE:true}); // init
+						    	ClickEditNodeObj.sId = rtdata.treeNode.sId;
+						    	zTree.updateNode(ClickEditNodeObj);
+						    	get_by_sid();
+						    }
+					    }
+					});
+				}
+		}
+		
+}
+
+$(".details").die().live('click',function(){
+	var tr = $(this).closest("tr");
+	var id = tr.find("td[colname='modelId']").text();
+	var modelType = tr.find("td[colname='modelTypeHide']").text();
+	$.ajax({
+	    url:$.appClient.generateUrl({ESTemplate:'getModelTags',modelId:id,modelType:modelType},'x'),
+	    success:function(data){
+	    	comdia = $.dialog({
+	    		id:'modelTags',
+		    	title:'模板明细',
+		    	width:800,
+		    	padding:0,
+		    	fixed:false,
+	    	    resize: true,
+			    content:data
+		    });
+		    },
+		    cache:false
+	});					
+})
+_table.init();
+$('div[class="tDiv2"]').append('<div class="find-dialog"><input id="KeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="KeyWord" value="请输入关键字" /><span  onclick="_opens.query()"></span></div>');
+$(document).keydown(function(event) {
+	if (event.keyCode == 13 && document.activeElement.id == 'KeyWord') {
+		_opens.query();
+	}
+});
+</script>

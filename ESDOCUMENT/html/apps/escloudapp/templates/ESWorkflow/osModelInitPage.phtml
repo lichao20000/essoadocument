@@ -1,0 +1,77 @@
+<div class='i-estransfer'>
+<form id="osModel_init_formA" action=""	method="post" isValid="false">
+	<fieldset class='i-fieldset'>
+  		<legend>流程属性</legend>
+  		<div style='margin-bottom:12px'>
+			<div class="a-label">工作流名称：</div>
+			<input class="required" type="text" verify="text/50/1/0" id="osModel_init_ES_MODEL_NAME" name="osModel_init_ES_MODEL_NAME" value="" style="width:184px;"/>
+		</div>
+		<div style='margin-bottom:12px'>
+			<div class="a-label">工作流描述：</div>
+			<input class="required" type="text" verify="text/100/1/0" id="osModel_init_ES_DESCRIPTION" name="osModel_init_ES_DESCRIPTION" value="" style="width:184px;"/>
+		</div>
+	</fieldset>
+	
+	<fieldset class='i-fieldset'>
+  		<legend>选择关联业务</legend>
+		<div style='margin-bottom:12px'>
+			<div class="a-label">选择关联的业务：</div>
+			<select name="selectBusiness" id="selectBusiness" style="width:184px;height:23px;line-height:23px;">
+				<option value="empty">不关联业务</option>
+				<option value="using">档案利用</option>
+				<option value="moving">档案移交</option>
+				<option value="destroy">档案销毁</option>
+				<option value="helpSearch">档案协查</option>
+			</select>
+		</div>
+	</fieldset>
+</form> 
+</div>
+<script type="text/javascript">
+var formName = "osModel_init_formA";
+var osModelInitPage = {
+		checkVerify:function (obj){
+// 	        obj.parent().find(".formtips").remove();
+// 			var reg = /^[a-zA-Z0-9\u4e00-\u9fa5-_()（）]*$/;
+// 			var errMsg = '只能由中文、英文、数字、下划线、中划线或（中英文）小括号组成！';
+// 			if(obj.val()=='' || !reg.test(obj.val())){ 
+// 				obj.addClass("warnning");
+// 				$('.errMsg').html('<span class="formtips onError">'+errMsg+'</span>');
+// 			} else {
+// 				obj.removeClass("warnning");
+// 				$('.errMsg').html('<span class="formtips onSuccess"></span>');
+// 			}
+		},
+		verify: function () {
+			$("form :input.required").trigger('blur');
+            var numError = $('form .onError').length;
+            if(numError){
+                return false;
+            } 
+            return true;
+		}
+};
+$(function(){
+	$("form :input.required").each(function(){
+        var $required = $("<strong class='high' style='color:red'> *</strong>"); //创建元素
+        $(this).parent().append($required); //然后将它追加到文档中
+    });
+
+	
+	$('#osModel_init_ES_MODEL_NAME').blur(function(){
+		osModelInitPage.checkVerify($(this));
+	}).keyup(function(){
+        $(this).triggerHandler("blur");
+    }).focus(function(){
+         $(this).triggerHandler("blur");
+    });
+	$('#osModel_init_ES_DESCRIPTION').blur(function(){
+		osModelInitPage.checkVerify($(this));
+	}).keyup(function(){
+        $(this).triggerHandler("blur");
+    }).focus(function(){
+         $(this).triggerHandler("blur");
+    });
+
+});
+</script>

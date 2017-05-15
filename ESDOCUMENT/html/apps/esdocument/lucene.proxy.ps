@@ -1,0 +1,91 @@
+<?php
+/**
+ * 索引库管理
+ * @author gaoyide
+ *
+ */
+class ProxyEsdocumentLucene extends AgentProxyAbstract {
+	const SERVICE_NAME = "lucene";
+	public function getCreatedNodesList($param){
+		$urlParam = array (
+				'getCreatedNodesList'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function getNoCreateNodesList($param){
+		$urlParam = array (
+				'getNoCreateNodesList'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function deleteIndexStore($param){
+		$urlParam = array (
+				'deleteIndexStore'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function deleteAllIndexStore($param){
+		$urlParam = array (
+				'deleteAllIndexStore'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function optimizeIndexStore($param){
+		$urlParam = array (
+				'optimizeIndexStore'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function reCreateIndexStore($param){
+		$urlParam = array (
+				'reCreateIndexStore'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function createIndexStore($param){
+		$urlParam = array (
+				'createIndexStore'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function createAllIndexStore($param){
+		$urlParam = array (
+				'createAllIndexStore'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function getOtherNodes($param){
+		$urlParam = array (
+				'getOtherNodes'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function getOtherNodesForCreated($param){
+		$urlParam = array (
+				'getOtherNodesForCreated'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function getHasMetaDataTags($ids){
+		$urlParam = array (
+				'getHasMetaDataTags',
+				$ids
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url);
+	}
+	public function getIndexedStageType(){
+		$url = "getIndexedStageType" ;
+		return $this->post ( self::SERVICE_NAME, $url, "application/json;charset=UTF-8" );
+	}
+}

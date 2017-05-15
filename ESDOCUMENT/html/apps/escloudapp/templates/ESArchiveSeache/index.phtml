@@ -1,0 +1,99 @@
+<link href="<?php echo $tplPath?>/ESArchiveSeache/css/index.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<div class="main">
+<div class="search">
+<div class="remind"></div>
+<div class="disp">
+<form name="myform" onsubmit="return false;">
+	<div class='searchBox2'>
+		<span class='leftbg2'></span>
+		<div class='middlebg2'>
+			<input id="onword" type='text' class='searchText2' maxlength="100" name="key" placeholder='多个关键字用空格分开' value="" style="line-height: 30px;" />
+			<!-- <input type='button' class='searchSubmit2' value='搜索' /> -->
+		</div>
+		<span class='rightbg2'></span>
+		<input type='button' class='searchSubmit2' value='搜索' />
+	</div>
+	<a class="advSearchTitle" href="<?php echo $esaction->generateUrl(array('ESArchiveSeache'=>'intricate'));?>">高级搜索</a>
+</form>
+</div>
+<div class="clear"></div>
+</div>
+</div>
+<script type="text/javascript">
+$.fn.placeholder = function(){
+	var searchText = this;
+	var searchValue = searchText.attr('placeholder');
+	if( searchText.length > 0 ){
+		if ( !( 'placeholder' in document.createElement('input') ) ){
+			searchText.css('color','#A9A9A9').val(searchValue).bind('focus',function(){
+				searchText.css('color','#000000');
+				if ( this.value==searchValue) {this.value=''; };
+			}).bind('blur',function(){
+				if ( $.trim(this.value)=='' ){searchText.css('color','#A9A9A9'); this.value=searchValue; };
+			});
+		}
+	}
+}
+$(function(){
+	/** 隐藏nav导航条 **/
+	$("#estabs,.seporateArea,.seporateLine").css("display","none");
+	
+	$('#onword').placeholder();
+});
+	$(".searchSubmit2").live('click',function(){
+		CheckForm();
+		if(document.getElementById('onword')){
+			var wordVal=$("#onword").val();
+			if(wordVal=='' || wordVal==$('#onword').attr('placeholder')){
+				return false;
+			}
+			
+			var url = $.appClient.generateUrl({ESArchiveSeache:"admin"});
+			window.location.href =encodeURI(url+'#tag|'+wordVal+'|'+new Date().getTime());
+			return;
+		}
+	});
+	function CheckForm(){ 
+		
+		var onword = document.getElementById('onword');
+		if(!onword.value || onword.value==$('#onword').attr('placeholder')){
+			var times = 0;
+			function exec(){
+				if(times++%2===0){
+					onword.style.background = '#faa';
+				}else{
+					onword.style.background = '#fff';
+				}
+			}
+			for(var i=0; i<4; i++)
+			{
+				setTimeout(exec, i*100);
+			}
+			onword.setAttribute('title','此处关键字不能为空！');
+			return false;	
+		}
+
+		return true; 
+		
+	}
+	document.onkeyup = function (e){
+		var e_ = window.event || e;
+		if(e_.keyCode===13 && document.getElementById('onword')){
+			CheckForm();
+			var wordVal=$("#onword").val();
+			if(wordVal=='' || $('#onword').val()==$('#onword').attr('placeholder')){
+				return false;
+			}
+			var url = $.appClient.generateUrl({ESArchiveSeache:"admin"});
+			window.location.href =encodeURI(url+'#tag|'+wordVal+'|'+new Date().getTime());
+			return;
+		}
+	};
+</script>
+

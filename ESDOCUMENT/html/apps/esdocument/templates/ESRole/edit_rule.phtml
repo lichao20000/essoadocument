@@ -1,0 +1,156 @@
+<script type='text/javascript'>
+	dataAuth.options = <?php echo $joptions;?>;
+	//dataAuth.authId = <?php echo $data->id;?>;
+</script>
+<div class='rule-public'>
+	<div class='condition-free'>
+		<ul>
+			<li class='long'>字段名</li>
+			<li class='short'>比较符</li>
+			<li class='long'>字段值</li>
+			<li class='short'>关系符</li>
+			<li>添加行</li>
+			<li>删除行</li>
+		</ul>
+		<div class='condition' id='condition'>
+			<?php
+				$condLength = count($data->dataAuth);
+				$dataArr = explode('&', $data->en);
+				$condLength = count($dataArr);
+				foreach ($dataArr as $row){
+					$rows = explode(',', $row); // C23,equal,00100086984,true = [C23,equal,00100086984,true]
+			?>
+			<ul>
+				<li class='long'>
+					<select name='key'>
+						<?php 
+							
+							foreach ($options as $en => $cn)
+							{
+								$selected = ($en === $rows[0]) ? 'selected="selected"' : '';
+								
+								echo '<option value="'. $en .'" '. $selected .'>'. $cn .'</option>';
+							}
+						?>
+					</select>
+				</li>
+				<li class='short'>
+					<select name='comparison'>
+						<?php 
+							$comp = array('equal'=> '等于', 'greaterThan'=> '大于', 'lessThan'=> '小于', 'notEqual'=> '不等于', 'greaterEqual'=> '大于等于', 'lessEqual'=> '小于等于', 'like'=> '包含', 'notLike'=> '不包含');
+							foreach ($comp as $en => $cn)
+							{
+								$selected = ($en === $rows[1]) ? 'selected="selected"' : '';
+								
+								echo '<option value="'. $en .'" '. $selected .'>'. $cn .'</option>';
+							}
+						?>
+					</select>
+				</li>
+				<li class='long'>
+					<?php if($row == 'all'){ ?>
+						<input type='text' name='value' />
+					<?php }else{ ?>
+						<input type='text' name='value' value='<?php echo $rows[2] ?>' />
+					<?php } ?>
+				</li>
+				<li class='short'>
+					<select name='relation'>
+						
+						<?php 
+							$rel = array('true'=> '并且', 'false'=> '或者');
+							foreach ($rel as $en => $cn)
+							{
+								$selected = ($en === $rows[3]) ? 'selected="selected"' : '';
+								
+								echo '<option value="'. $en .'" '. $selected .'>'. $cn .'</option>';
+							}
+						?>
+					</select>
+				</li>
+				<li>
+					<a href='javascript:;' class='add' style = "margin-left:10px;"></a>
+				</li>
+				<li class='clear'>
+					<a href='javascript:;' class='del' style = "margin-left:8px;"></a>
+				</li>
+			</ul>
+			<?php } ?>
+			
+			<?php if($condLength<5){ ?>
+			<?php
+				for($i=0; $i<5-$condLength; $i++){
+			?>
+			<ul>
+				<li class='long'>
+					<select name='key'>
+						<?php 
+							foreach ($options as $en => $cn)
+							{
+								echo '<option value="'. $en .'" '. $selected .'>'. $cn .'</option>';
+							}
+							?>
+					</select>
+				</li>
+				<li class='short'>
+					<select name='comparison'>
+						<option value="equal">等于</option>
+						<option value="greaterThan">大于</option>
+						<option value="lessThan">小于</option>
+						<option value="notEqual">不等于</option>
+						<option value="greaterEqual">大于等于</option>
+						<option value="lessEqual">小于等于</option>
+						<option value="like">包含</option>
+						<option value="notLike">不包含</option>
+					</select>
+				</li>
+				<li class='long'>
+					<input type='text' name='value' />
+				</li>
+				<li class='short'>
+					<select name='relation'>
+						<option value='true'>并且</option>
+						<option value='false'>或者</option>
+					</select>
+				</li>
+				<li>
+					<a href='javascript:;' class='add' style = "margin-left:10px;"></a>
+				</li>
+				<li class='clear'>
+					<a href='javascript:;' class='del' style = "margin-left:8px;"></a>
+				</li>
+			</ul>
+			<?php } ?>
+			
+			<?php } ?>
+		</div>
+	</div>
+	<h2>数据权限设置</h2>
+	<div class='rights' id='rights'>
+		<?php
+			if($isfile == '1'){
+				$ps = array('fileRead'=>'文件浏览', 'filePrint'=>'文件打印', 'fileDownload'=>'文件下载');
+			} else {
+				$ps = array('fileRead'=>'文件浏览', 'filePrint'=>'文件打印', 'fileDownload'=>'文件下载', 'itemRead'=>'条目浏览', 'itemEdit'=>'条目编辑', 'itemDelete'=>'条目删除');
+			}
+			
+			$checkedleng = 0;
+			foreach ($ps as $en => $cn)
+			{
+				if(strstr($data->dataAuth,$en)){
+					$checked = 'checked="checked"';
+					$checkedleng++;
+				}else{
+					$checked = '';
+				}
+				echo '<label for="'. $en .'"><input type="checkbox" name="auth" id="'. $en .'" '. $checked .' /><span>'. $cn .'</span></label>';
+			}
+			
+			
+			$checked = $checkedleng === count($ps) ? 'checked="checked"' : '';    
+			
+			echo '<label class="btn" for="checkedAll"><input type="checkbox" id="checkedAll" '. $checked .' /><span>全选</span></label>';
+		?>
+		<label class="btn" for="cancelChecked"><input type="checkbox" id="cancelChecked" /><span>反选</span></label>
+	</div>
+</div>

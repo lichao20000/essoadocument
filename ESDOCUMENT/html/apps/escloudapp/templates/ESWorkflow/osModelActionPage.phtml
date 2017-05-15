@@ -1,0 +1,232 @@
+<div id='OsModel_Action_Wind' class='a-estransfer modelActionPage' 
+	modelId='<?php echo $data[0];?>'
+	actionId='<?php echo $data[1];?>'
+	stepName='<?php echo $data[2];?>'
+	actionMessage='<?php echo $data[3];?>'
+	isNoticeCaller='<?php echo $data[4];?>'
+	isSendEmail='<?php echo $data[5];?>'
+	isSendMessage='<?php echo $data[6];?>'
+	isValidateForm='<?php echo $data[7];?>'
+	actionIsSaved='<?php echo $data[8];?>'
+	>
+	<div class="tabpanel">
+		<ul id="subnav" class="subnav">
+			<li id='BASE_TAB' class="defalutTagOpen"><span>基本设置</span></li>
+			<li id='USER_TAB'><span>设置知会人</span></li>
+		</ul>
+	</div>
+	
+	<div id='BASE_TAB_DIV' class="formBuilderDiv Tags">
+		<div id='formBuilderPanelDiv' class="formBuilderPanelDiv">
+			<form id="OsModel_Action_Form_Id" action="" method="post" isValid="false">
+				<fieldset class='a-fieldset' style="height:150px;">
+					<legend>动作属性</legend>
+				  	<div class='labelDiv'>
+					  	<div class="a-label">动作名称：</div>
+						<input class="required" type="text" verify="text/50/1/0" id="ES_ACTION_NAME" name="ES_ACTION_NAME" value="" style="width:184px;"/>
+						<span style="color:red">*</span>
+				  	</div>
+				  	<div class='labelDiv'>
+					  	<div class="a-label">是否发送消息：</div>
+						<input type="checkbox" id="ES_STEP_ISSENDMESSAGE" name="ES_STEP_ISSENDMESSAGE" checked="checked" class="chkbox"/>
+				  	</div>
+				  	<div class='labelDiv'>
+					  	<div class="a-label">消息内容：</div>
+						<input class="required" tyep="text" verify="text/50/1/0" id="ES_ACTION_MESSAGE" name="ES_ACTION_MESSAGE" value="请您审批" style="width:184px;"/>
+				  	</div>
+				  	<div class='labelDiv'>
+					  	<div class="a-label">是否通知流程发起人：</div>
+						<input type="checkbox" id="ES_ACTION_ISSENDCALLER" name="ES_ACTION_ISSENDCALLER" value="" class="chkbox"/>
+				  	</div>
+				  	<div class='labelDiv'>
+					  	<div class="a-label">是否发送邮件：</div>
+						<input type="checkbox" id="ES_STEP_ISSENDEMAIL" name="ES_STEP_ISSENDEMAIL"  class="chkbox"/>
+				  	</div>
+				</fieldset>
+				
+				<fieldset class='a-fieldset' style="height:230px;">
+				  <legend>选择函数</legend>
+				  <div class='s-fieldset-bwrap'>
+					<div id='userRole' class = "userRole">
+					<fieldset class='a-fieldset a-child' style="margin-left: 40px;">
+						<legend>所有函数</legend>
+						  <div id='' class='useLis'>
+						    <div class='searchRole'>
+						      <input type='text' id='one' class='searchusername' value='' onKeyUp="show(this.value,'left');"/>
+							  <img alt="" class='searchuserbutton' src="<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif">
+							</div>
+						    <ul id='listRole' class='userList' style="height: 130px;">
+						
+						 	<?php 
+								if(count($source)>0){
+									foreach($source as $value){
+										echo '<li><input type="hidden" name='.$value->display.' value='.$value->name.'>'.$value->display.'</li>';
+									}
+								}
+							?>
+							</ul>
+						  </div>
+					</fieldset>
+				
+					<div id='esbutton' class='selBut' style="padding-top: 20px;">  
+						<span id="estop" class="estop" title='置顶'></span>
+						<span id="esup" class="esup" title='上移'></span>
+						<span id="esleft" class="esleft" title='左移'></span>
+						<span id="esright" class="esright" title='右移'></span>
+						<span id="esdown" class="esdown" title='下移'></span>
+						<span id="esbottom" class="esbottom endspan" title='置底'></span>
+					</div>
+					<fieldset class='a-fieldset a-child' >
+						<legend>已选择函数</legend>
+						<div class='useLis'>
+							<div class='searchRole'>
+								<input type='text' id='two' class='searchusername'  value='' onKeyUp="show(this.value,'right');"/>
+								<img alt="" class='searchuserbutton' src="<?php echo $tplPath;?>/ESTemplate/img/search.bg.gif">
+							</div>
+							<ul id='useRole' class='userList referenceValues' style="height: 130px;">
+							<?php 
+								if(count($returndata)>0){
+									foreach($returndata as $value){
+										echo '<li><input type="hidden" name='.$value->display.' value='.$value->name.'>'.$value->display.'</li>';
+									}
+								}
+							?>
+							</ul>
+						</div>
+					</fieldset>
+					</div>
+				  </div>
+				</fieldset>
+				
+			</form>
+		</div>
+	</div>
+	
+	<div id='USER_TAB_DIV' class="formBuilderDiv Tags">
+		<div id='formBuilderPanelDiv' class="formBuilderPanelDiv">
+		  <form id="ES_MODEL_STEP_SELECT_NEXT_OWER" action="" method="post">
+			<div>
+			  	<label><input type='radio' id='ES_STEP_ROLE_SELECT' name='ES_STEP_OWER_SELECT'  onclick="modelStep.stepRoleSelectForActionEvent($('#OsModel_Action_Wind').attr('modelId'),$('#OsModel_Action_Wind').attr('actionId'))"/>按角色选择</label>
+			  	<label><input type='radio' id='ES_STEP_USER_SELECT' name='ES_STEP_OWER_SELECT'  onclick="modelStep.stepOrganSelectForActionEvent($('#OsModel_Action_Wind').attr('modelId'),$('#OsModel_Action_Wind').attr('actionId'))" checked="checked"/>按机构选择</label>
+			</div>
+			<div class='s-left' style="clear:both">
+				<div id="selectType" class="s-left-top">
+			  		<div id="wfModelStep_Select_Tree" selectNodeId="0">
+			  	    	<ul id="wfModelStep_Select_Organ_Tree" class="ztree"></ul>
+			  	  	</div>
+			  	  	<div id="wfModelStep_Select_Role" class='s-role'>
+			  	  		<div id="osModel_step_Role_select" style="height: 80px;"></div>
+			  	  	</div>
+			  	</div>
+			  	<div class='s-left-buttom s-user'>
+			  	  	<div id="osModel_step_user_select_organ" style="height: 120px;"></div>
+			  	</div>
+			</div>
+			<div class='s-right'>
+				<div id='osModel_step_user_selected'></div>
+			</div>
+		  </form>
+		</div>
+	</div>
+	
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/orgListTree.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/modelStepManager.js"></script>
+<script>
+$(function(){
+	$(".tabpanel").find("li").each(function(i){
+		$(this).click(function(){
+	    	displayTag($(this).attr('id')+'_DIV', i);
+		});
+	});
+	$('#USER_TAB_DIV').hide();
+
+	$('#wfModelStep_Select_Role').hide();
+
+	// 初始化表单数据
+	function initFormData(){
+		$('#ES_ACTION_NAME').val($('#OsModel_Action_Wind').attr('stepName'));
+		$('#ES_ACTION_MESSAGE').val($('#OsModel_Action_Wind').attr('actionMessage'));
+	
+		if($('#OsModel_Action_Wind').attr('isNoticeCaller')=='true'){
+			$('#ES_ACTION_ISSENDCALLER').attr("checked",true);
+		}
+		if($('#OsModel_Action_Wind').attr('isSendMessage')=='0'){
+			$('#ES_STEP_ISSENDMESSAGE').attr("checked",false);
+		}
+		if($('#OsModel_Action_Wind').attr('isSendEmail')=='1'){
+			$('#ES_STEP_ISSENDEMAIL').attr("checked",true);
+		}
+		if($('#ES_STEP_ISSENDMESSAGE').attr('checked')){
+			$('#ES_ACTION_MESSAGE').attr('verify','text/50/1/0');
+		}
+		$('#ES_STEP_ISSENDMESSAGE').click(function(){
+			if ($(this).is(':checked')) {
+				// ES_ACTION_MESSAGE 检查且不能为空
+				$('#ES_ACTION_MESSAGE').attr('verify','text/50/1/0');
+			} else {
+				if (!$('#ES_STEP_ISSENDEMAIL').is(':checked')) {
+					//// ES_ACTION_MESSAGE 检查且可为空
+					$('#ES_ACTION_MESSAGE').attr('verify','text/50/0/0');
+				}
+			}
+		});
+		$('#ES_STEP_ISSENDEMAIL').click(function(){
+			if ($(this).is(':checked')) {
+				// ES_ACTION_MESSAGE 检查且不能为空
+				$('#ES_ACTION_MESSAGE').attr('verify','text/50/1/0');
+			} else {
+				if (!$('#ES_STEP_ISSENDEMAIL').is(':checked')) {
+					//// ES_ACTION_MESSAGE 检查且可为空
+					$('#ES_ACTION_MESSAGE').attr('verify','text/50/0/0');
+				}
+			}
+		});
+	}
+	initFormData();
+
+	// 修改样式
+	var htDiv2HtmlUser = $('.s-user .tDiv2').html();
+	var recHtmlUser = '<div class="find-dialog" style="left:8px;position:relative;margin-right:260px"><input id="userKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="userKeyWord" value="请输入关键字" /><span onclick="modelStep.getUserQuery()"></span></div>' + htDiv2HtmlUser;
+	$('.s-user .tDiv2').html(recHtmlUser);
+	// 修改样式
+	var htDiv2HtmlRole = $('.s-role .tDiv2').html();
+	var recHtmlRole = '<div class="find-dialog" style="left:8px;position:relative;margin-right:260px"><input id="roleKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="roleKeyWord" value="请输入关键字" /><span onclick="modelStep.getRoleQuery()"></span></div>' + htDiv2HtmlRole;
+	$('.s-role .tDiv2').html(recHtmlRole);
+
+	$('.s-user .btnToRight').click(function(){
+		modelStep.toRight4User();
+	});
+
+	$('.s-role .btnToRight').click(function(){
+		modelStep.toRight4Role();
+	});
+
+	$('#osModel_step_user_selected').find('tr').die().live("dblclick", function(){
+		modelStep.rowDblclick_stepSelected(this);
+	}); 
+
+	$('#osModel_step_user_select_organ').find('tr').die().live("dblclick", function(){
+		modelStep.rowDblclick_stepSelected_user(this);
+	}); 
+	$('#osModel_step_Role_select').find('tr').die().live("click", function(){
+		modelStep.rowClick_stepSelected_role(this);
+	});
+
+
+	
+});
+
+//显示第t个Tags标签内容
+function displayTag(id, t) {
+	$('.Tags').hide();
+	$('#' + id).show();
+	$('#subnav li').removeClass('defalutTagOpen');
+	$('#subnav li:eq(' + t + ')').addClass('defalutTagOpen');
+}
+</script>
+<style>
+.ztree li span{
+	color:#444;
+}
+</style>

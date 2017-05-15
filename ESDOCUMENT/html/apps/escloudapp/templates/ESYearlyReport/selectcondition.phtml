@@ -1,0 +1,190 @@
+<script type="text/javascript">
+$(document).ready(function(){
+	var datatypes = <?php echo json_encode($datatypes)?>;
+	var conditions = "<?php echo $conditions?>";
+	var conditions_return = "<?php echo $conditions_return?>";
+	$("#contents").find("[name='esfields']").die("change").live("change", function(){
+		var val = $(this).val();
+		var display = $(this).find("option:selected").text();
+		if(val != '-') {
+			$(this).next("[name='esfieldtype']").val(datatypes[val]);
+			$(this).next("[name='esfieldtype']").next("[name='displayFields']").val(display);
+		}
+	});
+	$('.newfilter').die().live('click',function (){
+		var p = $(this).parent().clone().insertAfter($(this).parent());
+		var tds=p.children();
+		tds.each(function(i){
+			if(i==0){
+				$(this).val('-');
+			}
+			if(i==3){
+				$(this).val('=');
+			}
+			if(i==4){
+				$(this).val('');
+			}
+			if(i==6){
+				$(this).val('and');
+			}
+		});
+	});
+
+	$('.delfilter').die().live('click',function (){
+// 		$('#contents p').length > 1 ? $(this).parent().remove() : '';
+
+		if($('#contents p').length > 5){
+			$(this).parent().remove();
+		} else {
+			var tds=$(this).parent().children();
+			tds.each(function(i){
+				if(i==0){
+					$(this).val('-');
+				}
+				if(i==3){
+					$(this).val('=');
+				}
+				if(i==4){
+					$(this).val('');
+				}
+				if(i==6){
+					$(this).val('and');
+				}
+			});
+		}
+	});
+
+	// longjunhao 20141015 为销毁状态添加下拉选 修复bug1312
+	$('[name="esfields"]').change(function() {
+		var val = $(this).val();
+		if (val == "destroystatus") {
+			var esfields = $(this).parent().find('[name="esfieldvalue"]');
+			var esfieldvalueSelect = $(this).parent().find('[name="esfieldvalueSelect"]');
+			esfields.eq(0).css('display','none');
+			esfieldvalueSelect.eq(0).css('display','');
+		} else {
+			var esfields = $(this).parent().find('[name="esfieldvalue"]');
+			var esfieldvalueSelect = $(this).parent().find('[name="esfieldvalueSelect"]');
+			esfields.eq(0).css('display','');
+			esfieldvalueSelect.eq(0).css('display','none');
+		}
+	});
+
+	$('select[name="esfieldvalueSelect"]').change(function() {
+		var val = $(this).val();
+		$(this).prev("textarea[name='esfieldvalue']").html(val);
+	});
+	
+});
+</script>
+<p class='contbox' style="width:650px;">
+	<span class='w140 w14090 hei30'>字段名</span>
+	<span class='w90 w14090 hei30'>比较符</span>
+	<span class='w140 w14090 hei30'>字段值</span>
+	<span class='w90 w14090 hei30'>关系符</span>
+</p>
+<div id='contents' style="width:680px;height:200px">
+<?php 
+$conditions_count = 0;
+if($conditions_return!=''){
+	$conditions = explode('(⊙０⊙)',$conditions_return);
+	$conditions_count = count($conditions);
+	for($P=0; $P<$conditions_count; $P++){
+		$condition = explode('($_$)',$conditions[$P]);
+		$esfields = $condition[0];
+		$comparison = $condition[1];
+		$esfieldvalue = $condition[2];
+		if (count($condition)>3) {
+			$relation = $condition[3];
+		} else {
+			$relation = "and";
+		}
+?>
+	<p class='contbox creatediv' style="width:650px;">
+		<select id='esfields<?php echo $P?>' name='esfields' class='w140 w14090 hei20'><?php echo $options;?></select>
+		<!-- <input type='hidden' name='esfieldtype' value='text' /> -->
+		<textarea name="esfieldtype" cols ="20" rows = "20" style="display:none;">text</textarea>
+		<input id='displayFields<?php echo $P;?>' type="hidden" name="displayFields" value=""/>
+		<select id='comparison<?php echo $P?>' name='comparison'  class='w90 w14090 hei20'>
+			<option value="=">等于</option>
+			<option value=">">大于</option>
+			<option value="<?php echo '<'; ?>">小于</option>
+			<option value="!=">不等于</option>
+			<option value=">=">大于等于</option>
+			<option value="<=">小于等于</option>
+			<option value="like">包含</option>
+			<option value="not like">不包含</option>
+		</select>
+		<!-- <input type='text' name='esfieldvalue' class='w140 w14090 hei20' /> -->
+		<textarea name="esfieldvalue" cols ="25" rows = "1" class='w140 w14090 hei20' style="height:18px; padding: 0px;"><?php echo $esfieldvalue?></textarea>
+		<select id='esfieldvalue<?php echo $P?>' name='esfieldvalueSelect' class='w140 w14090 hei20' style="display: none;width:132px; padding: 0px;">
+			<option value=''></option>
+			<option value='identify or edit'>鉴定中</option>
+			<option value='destory'>待销毁</option>
+			<option value='destroyed'>已销毁</option>
+		</select>
+		<select id='relation<?php echo $P?>' name='relation' class='w14090 w90 hei20'>
+			<option value='and'>并且</option>
+			<option value='or'>或者</option>
+		</select>
+		<a class='newfilter'>添加行</a>
+		<a class='delfilter'>删除行</a>
+	</p>
+	<script type="text/javascript">
+		// 设置值
+		var tmp = $('#esfields<?php echo $P?> option').filter(function () { return $(this).html() == "<?php echo $esfields;?>"; }).val();
+		$("#esfields<?php echo $P?> option[value='"+tmp+"']").attr("selected", true);
+		$("#comparison<?php echo $P?> option[value='<?php echo $comparison;?>']").attr("selected", true);
+		$("#relation<?php echo $P?> option[value='<?php echo $relation;?>']").attr("selected", true);
+		
+		$('#displayFields<?php echo $P;?>').val('<?php echo $esfields;?>');
+
+		// 判断是否是销毁状态条件
+		if (tmp == 'destroystatus') {
+			var esfieldObj = $('#esfieldvalue<?php echo $P?>').prev('textarea[name="esfieldvalue"]');
+			$('#esfieldvalue<?php echo $P?>').css('display','');
+			esfieldObj.css('display','none');
+			$("#esfieldvalue<?php echo $P?> option[value='<?php echo $esfieldvalue?>']").attr("selected", true);
+		}
+	</script>
+<?php 
+	}
+}
+	if ($conditions_count<5) {
+		for ($P=$conditions_count; $P<5; $P++) {
+?>
+	<p class='contbox creatediv' style="width:650px;">
+		<select name='esfields' class='w140 w14090 hei20'><?php	echo $options;?></select>
+		<!-- <input type='hidden' name='esfieldtype' value='text' /> -->
+		<textarea name="esfieldtype" cols ="20" rows = "20" style="display:none;">text</textarea>
+		<input type="hidden" name="displayFields" value=""/>
+		<select name='comparison'  class='w90 w14090 hei20'>
+			<option value="=">等于</option>
+			<option value=">">大于</option>
+			<option value="<?php echo '<'; ?>">小于</option>
+			<option value="!=">不等于</option>
+			<option value=">=">大于等于</option>
+			<option value="<=">小于等于</option>
+			<option value="like">包含</option>
+			<option value="not like">不包含</option>
+		</select>
+		<!-- <input type='text' name='esfieldvalue' class='w140 w14090 hei20' /> -->
+		<textarea name="esfieldvalue" cols ="25" rows = "1" class='w140 w14090 hei20' style="height:18px; padding: 0px;"></textarea>
+		<select name='esfieldvalueSelect' class='w140 w14090 hei20' style="display: none;width:132px; padding: 0px;">
+			<option value=''></option>
+			<option value='identify or edit'>鉴定中</option>
+			<option value='destory'>待销毁</option>
+			<option value='destroyed'>已销毁</option>
+		</select>
+		<select name='relation' class='w14090 w90 hei20'>
+			<option value='and'>并且</option>
+			<option value='or'>或者</option>
+		</select>
+		<a class='newfilter'>添加行</a>
+		<a class='delfilter'>删除行</a>
+	</p>
+<?php 
+		}
+	}
+?>
+</div>

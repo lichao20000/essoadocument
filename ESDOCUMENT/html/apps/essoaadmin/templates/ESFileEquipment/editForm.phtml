@@ -1,0 +1,113 @@
+<style>
+
+#editForm table tr{height:50px;}
+
+
+</style>
+<?php
+$fromIP = explode('.',$data->startIP);
+$toIP = explode('.',$data->endIP);
+$loginIP = explode('.',$data->loginIP);
+
+?>
+
+<div style="height:230px;">
+<!--
+<div style="margin-top: 10px;font-size:24px;font-weight:bold;border-bottom:1px solid #CCC;">条目概览</div>
+-->
+<div style="padding-top:10px;">
+<form id="editForm" method="post" enctype="multipart/form-data">
+<table style="height:100px;">
+  <tr>
+    <td>从:</td>
+    
+		    <td><input type="text" name="fromIP_1" verify="ip/3/1/0" id="fromIP_1" value="<?php echo $fromIP[0];?>" style="width:40px;height:20px;"  /></td>
+		    <td>.</td>
+		    <td><input type="text" name="fromIP_2" verify="ip/3/1/0" id="fromIP_2" value="<?php echo $fromIP[1];?>" style="width:40px;height:20px;"  /></td>
+		    <td>.</td>
+		    <td><input type="text" name="fromIP_3" verify="ip/3/1/0" id="fromIP_3" value="<?php echo $fromIP[2];?>" style="width:40px;height:20px;"  /></td>
+		    <td>.</td>
+		    <td><input type="text" name="fromIP_4" verify="ip/3/1/0" id="fromIP_4" value="<?php echo $fromIP[3];?>" style="width:40px;height:20px;"  /></td>
+	   
+  </tr>
+  <tr>
+    <td>到:</td>
+    
+    
+		    <td><input type="text" name="toIP_1" verify="ip/3/1/0" id="toIP_1" value="<?php echo $toIP[0];?>" style="width:40px;height:20px;"  /></td>
+		    <td>.</td>
+		    <td><input type="text" name="toIP_2" verify="ip/3/1/0" id="toIP_2" value="<?php echo $toIP[1];?>" style="width:40px;height:20px;"  /></td>
+		    <td>.</td>
+		    <td><input type="text" name="toIP_3" verify="ip/3/1/0" id="toIP_3" value="<?php echo $toIP[2];?>" style="width:40px;height:20px;"  /></td>
+		    <td>.</td>
+		    <td><input type="text" name="toIP_4" verify="ip/3/1/0" id="toIP_4" value="<?php echo $toIP[3];?>" style="width:40px;height:20px;"  /></td>
+	    
+  </tr>
+  
+  <tr>
+    <td>登录IP:</td>
+    
+		    <td><input type="text" name="loginIP_1" verify="ip/3/1/0" id="loginIP_1" value="<?php echo $loginIP[0];?>" style="width:40px;height:20px;"  /></td>
+		    <td>.</td>
+		    <td><input type="text" name="loginIP_2" verify="ip/3/1/0" id="loginIP_2" value="<?php echo $loginIP[1];?>" style="width:40px;height:20px;"  /></td>
+		    <td>.</td>
+		    <td><input type="text" name="loginIP_3" verify="ip/3/1/0" id="loginIP_3" value="<?php echo $loginIP[2];?>" style="width:40px;height:20px;"  /></td>
+		    <td>.</td>
+		    <td><input type="text" name="loginIP_4" verify="ip/3/1/0" id="loginIP_4" value="<?php echo $loginIP[3];?>" style="width:40px;height:20px;"  /></td>
+	   
+  </tr>
+  
+  <tr>
+    <td>登录端口:</td>
+    <td colspan=8><input type="text" name="portNum" verify="portNum/5/1/0" id="portNum" value="<?php echo $data->portNum;?>" style="width:210px;height:20px;"  /></td>
+  </tr>
+</table>
+</form>
+</div>
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$("#saveForEdit").click(function(){
+		/** guolanrui 20140812 提交前添加表单验证BUG：721 **/
+		var form=$('#editForm');
+		if (!form.validate()) {
+			return false;
+		}
+		var zero = ['','0','00'];
+		var fromIPStr1 = zero[3-$("#editForm input[name='fromIP_1']").val().length]+$("#editForm input[name='fromIP_1']").val()+'.'+zero[3-$("#editForm input[name='fromIP_2']").val().length]+$("#editForm input[name='fromIP_2']").val()
+						+'.'+zero[3-$("#editForm input[name='fromIP_3']").val().length]+$("#editForm input[name='fromIP_3']").val()+'.'+zero[3-$("#editForm input[name='fromIP_4']").val().length]+$("#editForm input[name='fromIP_4']").val();
+
+		var toIPStr1 = zero[3-$("#editForm input[name='toIP_1']").val().length]+$("#editForm input[name='toIP_1']").val()+'.'+zero[3-$("#editForm input[name='toIP_2']").val().length]+$("#editForm input[name='toIP_2']").val()
+						+'.'+zero[3-$("#editForm input[name='toIP_3']").val().length]+$("#editForm input[name='toIP_3']").val()+'.'+zero[3-$("#editForm input[name='toIP_4']").val().length]+$("#editForm input[name='toIP_4']").val();
+// 		alert(toIPStr1);
+		var fromIPStr = $("#editForm input[name='fromIP_1']").val()+'.'+$("#editForm input[name='fromIP_2']").val()+'.'+$("#editForm input[name='fromIP_3']").val()+'.'+$("#editForm input[name='fromIP_4']").val();
+		var toIPStr = $("#editForm input[name='toIP_1']").val()+'.'+$("#editForm input[name='toIP_2']").val()+'.'+$("#editForm input[name='toIP_3']").val()+'.'+$("#editForm input[name='toIP_4']").val();
+		var loginIPStr = $("#editForm input[name='loginIP_1']").val()+'.'+$("#editForm input[name='loginIP_2']").val()+'.'+$("#editForm input[name='loginIP_3']").val()+'.'+$("#editForm input[name='loginIP_4']").val(); 
+		var portNum = $("#editForm input[name='portNum']").val(); 
+// 		alert(fromIPStr+'     '+toIPStr+'     '+loginIPStr+'     '+portNum);
+		/** guolanrui 20140813 添加对标题是否重复的验证BUG:711 **/
+		$.ajax({
+			type: "POST",
+			dataType:'json',
+	    	url:$.appClient.generateUrl({ESFileEquipment:'edit'},'x'),
+	    	data:{id:"<?php echo $data->id; ?>",fileStoreId:"<?php echo $fileStoreId;?>",fromIPStr:fromIPStr,toIPStr:toIPStr,loginIPStr:loginIPStr,portNum:portNum,fromIPStr1:fromIPStr1,toIPStr1:toIPStr1},
+	    	success:function(data){
+//     	    	alert(data.success);
+    	    	if(data.success == 'true'){
+    	    		art.dialog.list["editPanel"].close();
+    	    		$("#loginNetSegment").flexReload();
+    	    		$.dialog.notice({icon:'success', content:data.msg, time:3});
+    				
+    	    	}else{
+    	    		$.dialog.notice({icon:'warning', content:data.msg, time:3});
+    				return;
+            	}	
+	    	},
+		    cache:false
+		});
+		
+	});
+});
+</script>

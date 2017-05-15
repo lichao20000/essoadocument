@@ -1,0 +1,8 @@
+Options -Indexes FollowSymLinks ExecCGI
+DirectoryIndex index.php
+RewriteEngine On
+# RewriteCond %{HTTP_HOST} ^domain.com$ [NC]
+# RewriteRule .* http://www.domain.com/$0 [L,R=301]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* index.php?q=$0 [L,QSA]

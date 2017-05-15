@@ -1,0 +1,286 @@
+<link href="<?php echo $tplPath?>/ESWorkflow/css/condition.css" rel="stylesheet" type="text/css">
+<div id='OsModel_Spit_Wind' class="c-estransfer modelConditionPage"
+	fieldList='<?php echo $fieldList?>'
+	tempIDs='<?php echo $tempIDs?>'
+	rightCondition='<?php echo $rightCondition?>'
+	showfieldstr='<?php echo $showfieldstr?>'
+	currentType='left'
+	>
+  <div class="tabpanel">
+	<ul id="subnav" class="subnav">
+	  <li id='ORGAN_TAB' class="defalutTagOpen"><span>根据机构设置</span></li>
+	  <li id='FORM_TAB'><span>根据表单字段设置</span></li>
+	</ul>
+  </div>
+
+  <div id='ORGAN_TAB_DIV' class="formBuilderDiv Tags">
+	<div id='formBuilderPanelDiv' class="formBuilderPanelDiv">
+	<form id="esOrganForm">
+	  <div class='rule-public'>
+		<div class='condition-free'>
+			<ul>
+				<li class='short'>左括号</li>
+				<li class='maxshort'>字段名</li>
+				<li class='short'>比较符</li>
+				<li class='long'>字段值</li>
+				<li class='short'>右括号</li>
+				<li class='short'>关系符</li>
+			</ul>
+			<div class='condition' id='conditionLeft' maxRowNum='4'>
+				<?php
+					for($i=0; $i<4; $i++){
+				?>
+				<ul>
+					<li class='short'>
+						<select name='leftBracketsName<?php echo $i?>'>
+							<option value=""></option>
+							<option value="(">(</option>
+							<option value="((">((</option>
+							<option value="(((">(((</option>
+							<option value="((((">((((</option>
+							<option value="(((((">(((((</option>
+						</select>
+					</li>
+					<li class='maxshort'>
+						<select class='esfields' name='fieldName<?php echo $i?>'>
+							<option value="">--请选择--</option>
+							<option value="机构">机构</option>
+							<option value="角色">角色</option>
+						</select>
+					</li>
+					<li class='short'>
+						<select name='compare<?php echo $i?>'>
+							<option value="等于">等于</option>
+							<option value="不等于">不等于</option>
+						</select>
+					</li>
+					<li class='long'>
+						<input type='text' class='esDisplayField' name='inputField<?php echo $i?>' />
+						<input type='hidden' class='esValueField' name='hiddenvalue<?php echo $i?>' />
+					</li>
+					<li class='short'>
+						<select name='rightBracketsName<?php echo $i?>'>
+							<option value=""></option>
+							<option value=")">)</option>
+							<option value="))">))</option>
+							<option value=")))">)))</option>
+							<option value="))))">))))</option>
+							<option value=")))))">)))))</option>
+						</select>
+					</li>
+					<li class='short'>
+						<select name='relation<?php echo $i?>'>
+							<option value='并且'>并且</option>
+							<option value='或者'>或者</option>
+						</select>
+					</li>
+					<li>
+						<a href='javascript:;' class='add' id='addrowbut<?php echo $i?>'></a>
+					</li>
+					<li class='clear'>
+						<a href='javascript:;' class='del'></a>
+					</li>
+				</ul>
+				<?php } ?>
+			</div>
+		</div>
+	  </div>
+	</form>
+	<div class="escatagory" id='catagory'>
+		<ul id="fication" class="ztree"></ul>
+	</div>
+	<div class='escatagoryRole' id='catagoryRole'>
+		<div id="esConditionRole"></div>
+	</div>
+	</div>
+  </div>
+	
+  <div id='FORM_TAB_DIV' class="formBuilderDiv Tags">
+ 	<div id='formBuilderPanelDiv' class="formBuilderPanelDiv">
+ 	<form id="esFormForm" action="" method="post">
+	  <div class='rule-public'>
+		<div class='condition-free'>
+			<ul>
+				<li class='short'>左括号</li>
+				<li class='maxshort'>字段名</li>
+				<li class='short'>比较符</li>
+				<li class='long'>字段值</li>
+				<li class='short'>右括号</li>
+				<li class='short'>关系符</li>
+			</ul>
+			<div class='condition' id='conditionRight' maxRowNum='4'>
+				<?php
+					for($i=0; $i<4; $i++){
+				?>
+				<ul>
+					<li class='short'>
+						<select name='leftBracketsName<?php echo $i?>'>
+							<option value=""></option>
+							<option value="(">(</option>
+							<option value="((">((</option>
+							<option value="(((">(((</option>
+							<option value="((((">((((</option>
+							<option value="(((((">(((((</option>
+						</select>
+					</li>
+					<li class='maxshort'>
+						<select name='fieldName<?php echo $i?>'>
+							<option value="">--请选择--</option>
+							<?php 
+								if (count($showfieldstr)>0) {
+									foreach ($showfieldstr as $value) {
+										echo "<option value=".$value->name.">".$value->display."</option>";
+									}
+								}
+							?>
+						</select>
+					</li>
+					<li class='short'>
+						<select name='compare<?php echo $i?>'>
+							<option value="等于">等于</option>
+							<option value="不等于">不等于</option>
+							<option value="大于">大于</option>
+							<option value="小于">小于</option>
+							<option value="大于等于">大于等于</option>
+							<option value="小于等于">小于等于</option>
+							<option value="包含">包含</option>
+							<option value="不包含">不包含</option>
+						</select>
+					</li>
+					<li class='long'>
+						<input type='text' name='hiddenvalue<?php echo $i?>' />
+						<input type='hidden' name='inputvalue<?php echo $i?>' />
+					</li>
+					<li class='short'>
+						<select name='rightBracketsName<?php echo $i?>'>
+						<option value=""></option>
+						<option value=")">)</option>
+						<option value="))">))</option>
+						<option value=")))">)))</option>
+						<option value="))))">))))</option>
+						<option value=")))))">)))))</option>
+					</select>
+					</li>
+					<li class='short'>
+						<select name='relation<?php echo $i?>'>
+							<option value='并且'>并且</option>
+							<option value='或者'>或者</option>
+						</select>
+					</li>
+					<li>
+						<a href='javascript:;' class='add'></a>
+					</li>
+					<li class='clear'>
+						<a href='javascript:;' class='del'></a>
+					</li>
+				</ul>
+				<?php } ?>
+			</div>
+		</div>
+	  </div>
+ 	</form>
+	</div>
+  </div>
+
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/modelStepManager.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/conditionCatagory.js"></script>
+<script>
+$(function(){
+	$(".tabpanel").find("li").each(function(i){
+		$(this).click(function(){
+	    	displayTag($(this).attr('id')+'_DIV', i);
+		});
+	});
+	$('#FORM_TAB_DIV').hide();
+
+	//显示第t个Tags标签内容
+	function displayTag(id, t) {
+		$('.Tags').hide();
+		$('#' + id).show();
+		$('#subnav li').removeClass('defalutTagOpen');
+		$('#subnav li:eq(' + t + ')').addClass('defalutTagOpen');
+		if (t==0) {
+			$('#OsModel_Spit_Wind').attr('currentType','left');
+		} else {
+			$('#OsModel_Spit_Wind').attr('currentType','right');
+		}	
+	}
+
+	//添加行
+	$('#conditionLeft .add').live('click', function (){
+		modelStep.addConditionRow('left');
+	});
+	
+	// 删除行
+	$('#conditionLeft .del').live('click', function (){
+		modelStep.delConditionRow(this,'left');
+	});
+
+	//添加行
+	$('#conditionRight .add').live('click', function (){
+		modelStep.addConditionRow('right');
+	});
+	
+	// 删除行
+	$('#conditionRight .del').live('click', function (){
+		modelStep.delConditionRow(this,'right');
+	});
+
+	// 展示条件
+	modelStep.showConditions();
+
+	// 初始化 机构和角色下拉框的事件
+	function initComFieldHandler() {
+		var objs = $('[class="esfields"]');
+		objs.each(function(i){
+			setComFieldHandler(this);
+		});
+		objs.die().live('change',function(){
+			setComFieldHandler(this);
+		});
+	}
+
+	function setComFieldHandler(conditionField) {
+		var t = $(conditionField).val();
+		var obj=$(conditionField).parents().next().next().children(':input');
+		$(obj).attr('readonly',false);
+		$(obj).unbind('click');
+		//如果是分类号，需要见分类树显示
+		if(t=="机构"){
+			$(obj).click(function(){
+				var offset=$(obj).offset();
+				index=$(this).closest('ul').index();// 获取点击的是第行 0-n
+				$('#catagory').show().offset({top:offset.top+20,left:offset.left});
+			});
+		} else if(t=="角色") {
+			$(obj).click(function(){
+// 				$("#esConditionRole").flexOptions({url:$.appClient.generateUrl({ESWorkflow : 'getAllRolesNew'}, 'x'),query:{searchKeyword:''}, newp:1}).flexReload();
+				var offset=$(obj).offset();
+				index=$(this).closest('ul').index();// 获取点击的是第行 0-n
+				$('#catagoryRole').show().offset({top:offset.top+20,left:offset.left});
+			});
+		}
+	}
+
+	initComFieldHandler();
+	
+	$("body").bind("mousedown", clickBodyDown);
+
+	$('#catagoryRole .tDiv2').append('<div class="find-dialog"><input id="roleKeyWordCond" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="roleKeyWord" value="请输入关键字" /><span onclick="conditionMgr.getRoleQuery()"></span></div>');
+
+	$(document).keydown(function(event){
+		var activeId = document.activeElement.id;
+		if(event.keyCode == 13 && activeId == 'roleKeyWordCond') {
+			conditionMgr.getRoleQuery();
+			return false;
+		}
+	});
+});
+
+</script>
+<style>
+.ztree li span{
+	color:#444;
+}
+</style>

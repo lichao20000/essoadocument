@@ -1,0 +1,38 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESSyncConfig/css/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESSyncConfig/js/autovalidate/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESSyncConfig/js/ESSync.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESSyncConfig/js/autovalidate/validate.js"></script>
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"同步配置", content:"#esmenu,#esone,#eslist"});
+	function sizeChanged(){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var h = $(window).height() - $("#syncConfig").position().top-10;
+		var flex = $("#syncConfigGrid").closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    bDiv.height(h - headflootHeight);
+	    flex.height(h);
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	sizeChanged();
+	$('div[class="tDiv2"]').append('<div class="find-dialog"><input id="syncKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="syncKeyWord" value="请输入关键字" /><span id="syncConfigQuery"></span></div>');
+});
+</script>
+<div id='syncConfig'  style="border:none;width:96%;margin-left:2%;">
+    <table id="syncConfigGrid" style="border:none"></table>  
+</div>
+

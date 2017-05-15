@@ -1,0 +1,154 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESOrganizationMapping/css/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'机构对应设置'));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESOrganizationMapping/js/index.js"></script>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"机构对应设置", content:".esmain"});
+	$(".esleft").css("height",esleftH);//设置左侧菜单
+});
+</script>
+<div id="esmain">
+<div id="esleft" class="esleft">
+<ul id="organtree" class="ztree"></ul>
+</div>
+<div class="esshowtree" id='catagory'>
+<ul id="fication" class="ztree"></ul>
+</div>
+<div class="esshowtree" id='catagorys' >
+<ul id="fications" class="ztree"></ul>
+</div>
+
+<div id="esright" class="esright">
+<table id="organtable"></table>
+</div>
+</div>
+<div id="extra" class="extra">
+<select id="extraretention" name="extraretention" class="extraretention">
+<?php foreach ($list as $k=>$val){?>
+<option value="<?php echo $val->ESIDENTIFIER;?>"><?php echo $val->ESIDENTIFIER;?></option>
+<?php } ?>
+</select>
+</div>
+<div id="extraSystem" class="extraSystem">
+<select id="extraSelect" name="extraSelect" class="extraSelect">
+<?php
+	if($oaList){
+		foreach ($oaList as $key=>$val){
+			echo '<option value="'.$val->system.'">'.$val->sysName.'</option>';
+		}
+	}
+?>
+</select>
+</div>
+<script type="text/javascript">
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".esleft").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".esleft").offset().top;
+var esleftH=winH-eslefttop-1;
+var height=winH-eslefttop-115;
+window.onresize=function()
+{
+	var winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".esleft").width()-5;
+	}
+	var winH=$(window).height();
+	var height=winH-eslefttop-115;
+	$(".flexigrid").css({width:width});	
+}
+/*
+var archivetype="document";
+function changemolid(){
+	var obs = document.getElementById("select");
+	archivetype = obs.options[obs.selectedIndex].value;
+	$("#datatbl").flexOptions({newp:1,query:archivetype}).flexReload();
+    //alert(molid);
+}
+*/
+
+function createSWFUpload(){
+
+	var upload = new SWFUpload({
+		//提交路径
+		//upload_url: 'http://10.13.125.22:8080/escloud/rest/escloud_organcorrespondingws/importOrgancorresponding',
+		upload_url: '<?php echo $ip;?>',
+		//向后台传递额外的参数
+		//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+		//上传文件的名称
+		file_post_name: "file.txt",
+		file_size_limit : 102400,	// 100MB
+		file_types : "*.xls;*.xlsx",
+		file_types_description : "文件类型",
+		file_upload_limit : "1",
+		file_queue_limit : "0",
+
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnAdd",
+		button_width: 72,
+		button_height: 28,
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel",
+			startButtonId : "btnStart",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data){
+
+				if(data === 'false'){
+
+					$.dialog({
+						title: file.name,
+						content: '导入失败！',
+						time: 2,
+						icon: 'error',
+						lock: false
+					});
+					return;
+				}
+
+				$.dialog.list.importPanel.close();
+				
+				$.dialog({
+					title: file.name,
+					content: '成功导入（'+ data +'）条数据！',
+					time: 2,
+					icon: 'succeed',
+					lock: false
+				});
+			}
+		}
+	});
+	$("#btnCancel").click(function(){cancelQueue(upload);});
+	$("#btnStart").click(function(){startQueue(upload);});
+};
+</script>

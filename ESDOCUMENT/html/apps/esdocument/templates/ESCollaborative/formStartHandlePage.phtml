@@ -1,0 +1,116 @@
+<style type="text/css">
+.button {
+	cursor: pointer;
+	padding: 5px;
+	background-color: #6F6E81;
+	color: #FFF;
+	border: 0px none;
+	outline: 0px none;
+}
+
+#nextStepOwer li {
+	float: left;
+	background-color: white;
+	height: 20px;
+	line-height: 20px;
+	width: 100%;
+	margin-top: 0px;
+	margin-left: 0px;
+	padding-left: 3px;
+}
+
+#nextStepOwer li:hover {
+	background: #5599ff;
+	color: #fff;
+}
+
+#nextStepOwer li span {
+	height: 20px;
+	line-height: 20px;
+}
+
+#nextStepOwer li .delPart:hover {
+	background: #5599ff
+		url(<?php echo $tplPath?>/public/flexigrid/css/images/close.png)
+		no-repeat right;
+	cursor: pointer;
+	margin-right: 3px;
+}
+</style>
+<form id="formStartHandleForm" action="" method="post">
+	<div class="formStartHanderForm">
+		<ul>
+			<li style="margin-top: 0px;"><span>选择决策<font color="red" size="3">*</font></span>
+				<?php echo $data[0];?>
+			</li>
+			<li><span>选择处理部门<font color="red" size="3">*</font></span>
+				<div class="selectOwner"
+					style="width: 250px; border: 0px; float: left; margin-left: 5px;">
+					<div id="nextStepOwer" readonly="true" name=""
+						style="width: 243px; height: 60px; border: 1px solid #aaa; background:#fff; float: left; margin-top: 2px; overflow-x: hidden; overflow-y: auto; text-align: left;"></div>
+					<div
+						style="float: left; width: 243px; height: 30px; margin-top: 5px;">
+						<span class="button addPart" style="padding-right:22px; background:#6F6E81 url(<?php echo $tplPath?>/public/flexigrid/css/images/add.png) no-repeat right; width:30px; height:20px; line-height: 20px;" >&nbsp;添加</span>
+					</div>
+				</div></li>
+			<li style="display: none;">
+				<div id="nextStepOwners" class="nextStepOwners" currentUserId=""></div>
+			</li>
+		</ul>
+	</div>
+</form>
+<script type="text/javascript">
+$(document).ready(function(){
+	var id=$("input[type='radio']:checked").attr("id");
+	var len="actionRadio".length;
+	$("#formStartPage").attr("actionId",id.substr(len));	
+
+	//删除部门事件
+	$("#nextStepOwer li delPart").die().live("click",function(){
+		if($("#nextStepOwer li").length>1){
+			$(this).parent("li").remove();
+		}else{
+			$.dialog.notice({
+				content : '至少要保留一个部门',
+				time : 3,
+				icon : "warning"
+			});
+		}	
+	});
+
+	//添加部门事件
+	$("#formStartHandleForm .addPart").die().live("click",function(){
+		$.ajax({
+			type : 'POST',
+			url : $.appClient.generateUrl({
+				ESDocumentTransfer : 'userDefinedPart'
+			}, 'x'),		
+			data:{stepId:$("#nextStepOwer").attr("name")},	
+			success : function(data) {
+				$.dialog({
+					id : 'userDefinedPartDialog',
+					title : '添加下一步处理部门',
+					modal : true, // 蒙层（弹出会影响页面大小）
+					fixed : false,
+					stack : true,
+					resize : false,
+					lock : true,
+					opacity : 0.1,
+					padding : '0px',
+					width : 750,
+					height : 350,
+					content : data,
+					okVal : '确定',
+					ok : true,
+					cancelVal : '关闭',
+					cancel : true,
+					ok : function() {
+						art.dialog.list['userDefinedPartDialog'].close();
+					}
+				});
+			},
+			cache : false
+		});
+	});
+});
+</script>

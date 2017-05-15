@@ -1,0 +1,55 @@
+<link href="<?php echo $tplPath?>/ESDocumentSend/css/index.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDocumentSend/js/menu.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDocumentSend/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php 
+echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"文件发放", content:"#esmenu, #esone, #eslist"});
+	$(".esleft").css("height",esleftH);//设置左侧菜单
+});
+</script>
+<input type="hidden" id="condition">
+<div  class='esmain'>
+	<div id="escontent">
+			<div id="esmenu" class="esleft">
+				<ul id="esTypeTree" class="ztree" treenodeid=''></ul>
+				<input type="hidden" id="selTreeId" name="selTreeId" value=""/>
+				<input type="hidden" id="treeName" name="treeName" value=""/>
+			</div>
+			<div class="esright" id ="esone">
+					<div id="eslist">
+					  <table id="esDataList"></table>
+			       </div>
+			</div>
+			<div id="esfileview"></div>
+			<div id="esnotfiling"></div>
+	</div>
+	<div id="transfer"></div>
+</div>
+<script type="text/javascript">
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".esleft").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".esleft").offset().top;
+var esleftH=winH-eslefttop-11;
+var height=winH-eslefttop-115;
+window.onresize=function()
+{
+	winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".esleft").width()-5;
+	}
+	winH=$(window).height();
+	height=winH-eslefttop-115;
+	esleftH=winH-eslefttop-11;
+	$(".esleft").css("height",esleftH);
+	$(".flexigrid").css({width:width});		
+}
+</script>

@@ -1,0 +1,21 @@
+<?php
+/**
+ * 合同工程服务代理
+ * @author gaoyide
+ *
+ */
+class ProxyEsdocumentFulltextsearch extends AgentProxyAbstract {
+	const SERVICE_NAME = "fulltextsearch";
+	public function admin(){
+
+	}
+	public function retrieveQuery($page, $limit, $param){
+		$urlParam = array (
+				'search'
+				,$page
+				, $limit
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+	}
+}

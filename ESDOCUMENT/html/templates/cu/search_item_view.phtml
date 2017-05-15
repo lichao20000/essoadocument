@@ -1,0 +1,12 @@
+<h1><a href="<?php echo $v['fields']['url'] ?>" target="_blank"><?php echo $v['title']?></a></h1>
+<h2> <span class="bold marginRight10"><?php if(isset($v['fields']['bundle_name'])){echo $v['fields']['bundle_name'];}?></span><?php echo $v['fields']['created_name'];?><span class="marginLeft10" style="color:#808080;"><?php echo $v['fields']['created']?></span></h2>
+<p>
+<?php
+if(isset($v['fields']['bundle']) && $v['fields']['bundle'] == 'album'){
+	echo "<a href='".$v['fields']['url']."' target='_blank'>";
+	echo "<img src='".$v['fields']['teaser']."' /><br/>".$v['fields']['created_name'];
+	echo "</a>";
+}else{
+	echo isset($v['fields']['teaser'])?$v['fields']['teaser']:'';
+}?>
+</p>

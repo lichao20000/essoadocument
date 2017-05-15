@@ -1,0 +1,83 @@
+<?php
+/**
+ * 合同工程服务代理
+ * @author gaoyide
+ *
+ */
+class ProxyEsdocumentContractItem extends AgentProxyAbstract {
+	const SERVICE_NAME = "contractitem";
+	
+	/**
+	 * 获取所有合同工程
+	 */
+	public function findContractList($page, $pre, $param) {
+		$urlParam = array (
+				'list',
+				$page,
+				$pre
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8');
+	}
+	/**
+	 * 新增新的合同工程
+	 */
+	public function addContract($list) {
+		$urlParam = array (
+				'add' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $list, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 删除
+	 * @param unknown $lists
+	 */
+	public function delContract($lists) {
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'delete',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $lists, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 获取总条数
+	 */
+	public function getCount($param){
+		$urlParam = array (
+				'count'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8');
+	}
+	public function getContract($id) {
+		$urlParam = array (
+				'get',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	public function updateContract($contract){
+		$urlParam = array (
+				'update' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $contract, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 验证合同号唯一性
+	 * @param string $contractNum
+	 */
+	public function uniqueContractNum($contractNum) {
+		$urlParam = array (
+				'uniqueContractNum'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $contractNum, 'text/plain;charset=UTF-8' );
+	}
+}

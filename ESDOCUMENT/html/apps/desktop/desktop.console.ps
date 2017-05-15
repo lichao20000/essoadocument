@@ -1,0 +1,180 @@
+<?php
+class AppConsoleDesktop extends AppConsoleAbstract
+{
+  public function urls(){
+    return array(
+      'default' => 'default',
+      'layout' => 'layout',
+      'edit' => 'edit',
+      'setting' => 'setting',
+    );
+  }
+
+  public function menus(){
+    return array(
+      'default' => array(
+      	'title' => '布局列表',
+        'weight' => -10,
+      ),
+      'edit' => '添加布局',
+    );
+  }
+
+  public function url_edit(){
+    $form = $this->getForm()->buildForm('edit');
+    return $form;
+  }
+
+  protected function getDefaultLayout($layoutId)
+  {
+    $mysql = $this->getProxy('mysql');
+    $sql = 'SELECT data FROM `default_layout` WHERE `id` = "' . $layoutId . '"';
+    $result = $mysql->fetchField($sql);
+    if ($result) {
+      return unserialize($result);
+    }
+    return '';
+  }
+
+  protected function setDefaultLayout($id, $data)
+  {
+    $mysql = $this->getProxy('mysql');
+    $data = serialize($data);
+    $sql = 'update default_layout set data =\'' . $data . '\' where id = "' . $id . '" ';
+    $mysql->execute($sql);
+  }
+
+  public function url_default(){
+    $mysql = $this->getProxy('mysql');
+    $sql = 'select * from default_layout';
+    $layoutList = $mysql->fetchAll($sql);
+
+    $rows = array();
+    foreach ($layoutList as $layout) {
+      $id = $layout->id;
+      $rows[] = array(
+        $layout->name,
+        $layout->machine_name,
+        '<a href="layout/' . $id . '">布局</a>',
+      );
+    }
+     $header = array(
+      '布局名称',
+      '标识',
+      '操作',
+    );
+    return $this->getTheme()->table(array('header' => $header, 'rows' => $rows, 'empty' => '列表为空'));;
+  }
+
+  public function getAppList()
+  {
+    static $list = null;
+    if (!isset($list)) {
+      $list = array();
+      $info = $this->getAppInfo();
+      $children = $info['children'];
+      //获取所有的app信息
+      if (is_string($children) && $children == '*') {
+      	$appList = AopApp::getList();
+      	$children = array_keys($appList);
+      }
+      //@todo App中如何拿到app列表
+      foreach ($children as $appid) {
+        if ((!$info = AopApp::getInfo($appid)) || !$info['is_app']) {
+          continue;
+        }
+        $list[$appid] = AopApp::getInstance($info);
+      }
+    }
+    return $list;
+  }
+
+  public function url_layout($id){
+    $layout = $this->getDefaultLayout($id);
+    $layoutProxy = $this->getProxy('layout');
+    $postUrl = $this->getUrl("setting/$id");
+
+    $apps = $this->getAppList();
+    $appConfigList = $this->getConfigViews();
+    $applist = array();
+    foreach ($apps as $appid => $app) {
+      if(isset($appConfigList[$appid])){
+        $info = $app->getAppInfo();
+        $row = array(
+          'name' => $info['name'],
+          'views' => array(),
+        );
+        foreach ($app->views($this->getInstanceId()) as $viewid => $view) {
+          if(in_array($viewid, $appConfigList[$appid])){
+            if($viewid=='jingfen'){  //经分系统过滤
+              if($GLOBALS['user']->id == 'eipadmin'){
+                $row['views'][$viewid] = $view['title'];
+              }
+            } else {
+              $row['views'][$viewid] = $view['title'];
+            }
+          }
+        }
+  
+        if ($row['views']) {
+          $applist[$appid] = $row;
+        }
+      }
+    }
+
+    unset($apps);
+    return $layoutProxy->generateHtml($layout, $applist, '/'.$postUrl);
+  }
+
+  public function url_setting($id) {
+    $data = $this->getContext()->getRequest()->getPost('data');
+    $layoutProxy = $this->getProxy('layout');
+    $result = $layoutProxy->filterData($data);
+    $result = true;
+    if ($result) {
+      $this->setDefaultLayout($id, json_decode($data));
+    }
+ 		echo json_encode(array());
+    exit;
+  }
+
+  public function form_edit($form, $form_state){
+    $form['name'] = array(
+      '#title' => '名称',
+      '#type' => 'textfield',
+      '#reauired' => true
+    );
+    $form['machine_name'] = array(
+      '#title' => '系统识别名称',
+      '#type' => 'textfield',
+      '#reauired' => true
+    );
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => '提交'
+    );
+    return $form;
+  }
+
+  public function form_edit_submit($form, &$form_state){
+    $name = $form_state['values']['name'];
+    $machineName = $form_state['values']['machine_name'];
+    $data = serialize(array());
+    $mysql = $this->getProxy('mysql');
+    $sql = 'insert into default_layout (`name`, `machine_name`, `data`) values ("' . $name . '", "' . $machineName . '", "' . $data . '") ';
+    $mysql->execute($sql);
+    return $form_state['redirect_url'] = 'default';
+  }
+  
+  /**
+   * 获取我的空间可以显示出来的视图
+   */
+  private function getConfigViews() {
+    $configProxy = $this->getProxy('config');
+    $list = $configProxy->searchConfig('views');
+    if ($list=='') {
+      return array();
+    }
+    return unserialize($list);
+  }
+}

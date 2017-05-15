@@ -1,0 +1,198 @@
+@CHARSET "UTF-8";
+
+/*
+ * author # fangjixiang
+ * date # 20121031
+ */
+
+html,body{ margin:0; padding:0; overflow:hidden;}
+input,textarea,h2{ margin:0; padding:0; outline:0; font-size:12px; font-weight:normal;}
+
+.leftfree,.rightfree{ float:left;}
+
+.rightfree{background-color:#fff;}
+
+.leftfree{ overflow:auto;margin-right:10px;background-color:#133959;border-radius:5px;}
+.archivelist{ float:left;}
+.auto_scroll{ width:100%; float:left; overflow-y:scroll}
+
+.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+
+/* 暂时未用到2013/3/27@fangjixiang ->
+.navchildvalbox{ float:left;}
+.navchildvalbox span{ float:left; padding:0 10px; line-height:23px; display:block; background:#ccc}
+.navchildvalbox input{ width:200px; height:18px; line-height:18px; float:left; padding:3px; clear:left;}
+.editortitlebox{ width:100%; height:40px; float:left;}
+.summarybox{ width:100%; height:90px; float:left;}
+.typebutton{ width:100%; height:30px; float:left; margin:10px 0 20px;}
+.onlystyle{ float:left; width:100%; height:auto; overflow:hidden;}
+.s{ height:10px; overflow:hidden;}
+
+.fnleftbox{ width:400px; height:30px; float:left;}
+.fnrightbox{ width:300px; height:30px; float:right;}
+/* the end */
+
+.archivetbl{ float:left;}
+.editor,.editPic{ overflow:hidden; float:left; padding-left:30px; display:none;}
+
+.editortitle,.summary{ width:100%; line-height:20px; font-size:12px; float:left; border:1px solid #ccc;}
+.editortitle{ height:20px; padding:5px; border-radius:5px;}
+.summary{ height:80px; padding:0 5px; overflow:hidden; resize:none;}
+
+.editorcontent{ width:100%; height:auto; float:left;}
+
+
+/* 清除插件自带样式 默认padding:5px; ckeditor*/
+div span.cke_skin_kama{ padding:0; border-radius:0;}
+.cke_skin_kama .cke_wrapper{ border-radius:0;}
+/* swfupload */
+.aui_content .fieldset { width:550px; border:0; height:315px; margin:0; overflow:auto; padding:0;}
+.aui_content .fieldset .progressWrapper { overflow: hidden; width:530px;}
+.aui_content .fieldset_new { width:300px; border:0; height:150px; margin:0; overflow:auto; padding:0;}
+.aui_content .fieldset_new .progressWrapper { overflow: hidden; width:280px;}
+.aui_content .progressName{ font-size:12px; font-weight:bold;}
+.aui_content .progressBarStatus{ font-size:12px;}
+
+/* 列表编辑按钮 */
+.editcontent{ width:16px; height:16px; display:inline-block; background:url(../../public/flexigrid/css/images/PresalesManager.png) no-repeat 0 0 transparent; cursor:pointer;}
+/* 修改状态按钮 */
+.modifyStatus{ display:inline-block; cursor:pointer;}
+
+
+.annexsize,.annexname{ width:60px; line-height:28px; text-align:center; margin-right:5px;}
+.annexname{ float:left;}
+.annexsize{ float:right;}
+
+.showannexname{ width:500px; line-height:28px; float:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+.removeannex{ line-height:28px; float:right; cursor:pointer; display:none; cursor:pointer;}
+
+.fileitemtitle{ width:100%; height:20px; float:left;}
+.annextitle{ float:left; padding-left:5px;}
+.removeFile{ width:100%; height:auto; float:left; margin:5px 0;}
+.removefileitem{ width:16px; height:16px; float:right; background:url(../../public/SWFUpload/img/close.png); cursor:pointer;}
+
+.FileItem{ width:100%; height:auto; overfow:hidden; float:left; padding-top:10px;}
+
+/* 档案规范 */
+.shortinput{ height:28px; line-height:28px; font-size:12px; float:left; margin-bottom:10px; border:1px solid #ccc; background:#f3f3f3;}
+
+/* 上传附件按钮 */
+.addannex{ width:60px; height:25px; line-height:24px; text-align:center; color:#fff; float:left; cursor:pointer; background:#6f6e81;padding: 2px 5px 2px 5px;font-size: 12px;}
+.addannex:hover{
+	background-color:#133959;
+}
+.removefile{ width:60px; line-height:28px; text-align:center; color:#248ED0; cursor:pointer; float:right;}
+
+/* 上传完成自动生成规范表单  */
+.extendsinputarea{ margin-bottom:0; padding:3px 0;}
+.extendshortinput{ height:115px;}
+.fileannextitle{ width:100%; line-height:28px; text-indent:5px; float:left;}
+.textareainput{ height:80px; line-height:20px; float:left; padding:0 3px; margin-left:4px; resize:none; border:1px solid #ddd; overflow:hidden; _display:inline;}
+
+.h2{ width:50px; line-height:28px; text-indent:5px; float:left;}
+.input{ height:20px; line-height:20px; float:left; margin-top:3px; padding:0 3px;}
+.ofloat{ float:right;}
+.FOCUS_EVENT{ border:1px solid #ddd;}
+
+/* 上传图片样式 */
+.upload_box,.show_pic{ width:700px; height:300px; float:left;}
+.upload_item{ width:100%; height:40px; float:left;}
+.uploadimage_bro{ float:left; margin:4px 20px 0 0; border:1px solid #ccc;}
+.uploadimage_btn,.insertimage_btn{ width:70px; height:27px; float:left; margin-right:10px; background:url(../../public/img/upload_insert.bg.gif) no-repeat}
+.uploadimage_btn{ background-position:0 0;}
+.uploadimage_btn_focus{ background-position:0 -26px;}
+.insertimage_btn{ background-position:0 -52px;}
+.insertimage_btn_focus{ background-position:0 -78px;}
+
+.select_date{ width:100%; height:30px; float:left;}
+.pic_list{ width:100%; height:270px; float:left; background:#fff; overflow-y:auto;}
+.select_year,.select_month{ width:100px; height:20px; float:left; margin-right:15px; border:1px solid #A0A0A0; background:#fff;}
+.select_year option,.select_month option{ height:20px;}
+
+.pic_list li{ width:100px; height:120px; float:left; margin:3px 0 0 3px; border:1px solid #ccc; padding:2px; _display:inline;}
+.pic_list .li_focus{ border:1px solid #000;}
+.pic_list .li_click{ background:#ddd}
+
+.pic_list div,.pic_list b{ width:100px; float:left; overflow:hidden;}
+.pic_list div{ height:100px;}
+.pic_list b{ height:20px; line-height:20px; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+
+/* 按钮样式 */
+.public_buttons{ width:100%; height:39px; float:left;  padding-top:10px; border-bottom:1px solid #248ED0;}
+.buttons{ width:70px; height:30px; float:left; margin:0 15px; border:0;}
+.submit{ background-color:#6f6e81;
+	color:#fff; 
+	cursor:pointer;
+	border:none;
+}
+
+.submit:hover{
+	background-color:#133959;
+}
+
+.reset{ background:url(../img/buttons.bg.gif) no-repeat 0 -30px; color:#333; cursor:pointer;}
+
+.power_status{ width:600px; height:40px; float:left; margin-top:10px;}
+.power_status div{ width:auto; height:auto; float:left; padding:5px 10px; margin-right:15px; border:1px solid #ccc;}
+.power_status input{ float:left; margin-right:5px;}
+.power_status label{ float:left; color:red;}
+
+/* 上传图片,附件按钮 */
+.common_btns{ width:600px; height:28px; float:left; margin-top:10px;}
+.showSumPics .insert_position{ height:120px; overflow:hidden; float:left; margin:0 0 0 10px;}
+.showSumPics .title_for{width:100%;height: 15px;margin: 0 0 0 10px;float: left;font-size: 12px;color: #346187;}
+.insert_position .pic_beds{ width:884; height:104px; float:left; margin:5px 10px 0 0; overflow:hidden; float:left;}
+.insert_position .pic_beds .pic_bed{ width:102px; height:102px; float:left; border:1px solid #ccc;}
+.insert_position .pic_beds .close_pic{ width:15px; height:15px; float:left; display:block; background:url(../img/close.gif) no-repeat center center; cursor:pointer;}
+.insert_position .pic_beds .pic_bed .pic_bed_in{ width:100px; height:100px; border:1px solid #fff; overflow:hidden;}
+.insert_position .pic_beds .pic_bed input{ display:none;}
+.insert_position .pic_beds .editorcontent1 {padding-left: 10px; width: 690px; float: left; height: 104px; }
+
+/* 生成附件 */
+.files_div{ height:30px; font-size:13px; float:left; border-bottom:1px dotted #666; margin-botom:5px;}
+.files_div .file_icon{ width:30px; height:26px; float:left; margin:2px 5px 2px 0;}
+.files_div .file_name{ width:600px; height:30px; line-height:30px; float:left;}
+.files_div .file_size{ width:150px; height:30px; line-height:30px; float:right;}
+.rm_file{ width:60px; line-height:30px; float:right; color:#f00; text-decoration:none;}
+.rm_file:hover{ color:#248ED0; text-decoration:underline;}
+
+.process_now{width:600px; line-height:38px; text-indent:20px; font-size:14px; color:red; float:left; display:none;}
+.display-none{ display:none;}
+.formbuilder_public {
+	background: url(../img/application_form.png) no-repeat center left;
+}
+.formbuilder_delete {
+	background: url(../img/application_form_delete.png) no-repeat center left;
+}
+/*shimiao 20140709 为了展示上传*/
+.showSumPics{width:300px; height: 150px;margin: 5px auto 0 auto;}
+
+/*过滤条件框 样式*/
+.public_filter{ width:620px; height:180px; float:left; overflow:auto}
+.propmt_fields,.filter_condition{ width:600px; height:30px; float:left;}
+
+.filter_conditions{ width:600px; height:150px; float:left; }
+.condition_fields option{ height:20px; line-height:20px}
+
+.long_fields_tag,.short_fields_tag,.add_del_tag{ height:22px; line-height:20px; float:left; margin-right:5px; overflow:hidden;}
+.long_fields_tag{ width:150px;}
+.short_fields_tag{ width:75px;}
+.add_del_tag{ width:55px; text-align:center;}
+
+.long_area,.short_area{ height:20px; line-height:20px; float:left; border:1px solid #7F9DB9;}
+.long_area{ width:145px;}
+.short_area{ width:75px;}
+
+.ext_long_area{ height:18px; line-height:18px; overflow:hidden;}
+.wdate{ font-family:微软雅黑,arial; background:#fff url(../../public/DatePicker/skin/datePicker.gif) no-repeat right; cursor:pointer;}
+/* 添加行删除行按钮样式 {author:fangjixiang} */
+.new_filter_condition,.del_filter_condition{ width:55px; height:18px; color:#555; float:left;}
+.new_filter_condition{ margin-right:5px; background:url(../../public/img/add.png) no-repeat center 1px;}
+.del_filter_condition{ background:url(../../public/img/del.gif) no-repeat center 1px;}
+.new_filter_condition:hover,.del_filter_condition:hover{ cursor:pointer;}
+
+/**/
+.position{ position:relative;}
+.select_user_btn{ width:16px; height:16px; position:absolute; top:2px; right:8px; cursor:pointer; background:url(../../public/flexigrid/css/images/group.png);}

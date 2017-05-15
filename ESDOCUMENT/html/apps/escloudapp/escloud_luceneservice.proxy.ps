@@ -1,0 +1,115 @@
+<?php
+class ProxyEscloudappEscloud_luceneservice extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_luceneservice";
+  
+  /**
+   * 获取已经索引库的节点列表
+   * liqiubo 20140504
+   * @param $param
+   * @return Ambigous <return_type, mixed, string>
+   */
+  public function getCreatedNodesList($param)
+  {
+  	$urlParam = array('getCreatedNodesList');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+  }
+  
+  /**
+   * 获取没有创建索引库的节点列表
+   * liqiubo 20140504
+   * @param unknown_type $param
+   */
+  public function getNoCreateNodesList($param)
+  {
+  	$urlParam = array('getNoCreateNodesList');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+  }
+  
+  /**
+   * 创建索引库
+   * @param unknown_type $param
+   */
+  public function createIndexStore($param){
+  	$urlParam = array('createIndexStore');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+  }
+  
+  /**
+   * 创建所有库
+   */
+  public function createAllIndexStore($param){
+  	$urlParam = array('createAllIndexStore');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,"application/json;charset=UTF-8");
+  }
+  
+  /**
+   * 删除索引库
+   * @param unknown_type $param
+   */
+  public function deleteIndexStore($param){
+  	$urlParam = array('deleteIndexStore');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,"application/json;charset=UTF-8");
+  }
+  
+  /**
+   * 删除全部索引库
+   * @param unknown_type $param
+   */
+  public function deleteAllIndexStore($param){
+  	$urlParam = array('deleteAllIndexStore');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,"application/json;charset=UTF-8");
+  }
+  
+  /**
+   * 重建索引库
+   * @param unknown_type $param
+   * @return Ambigous <return_type, mixed, string>
+   */
+  public function reCreateIndexStore($param){
+  	$urlParam = array('reCreateIndexStore');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,"application/json;charset=UTF-8");
+  	
+  }
+  
+  /**
+   * 优化索引库
+   * @param unknown_type $param
+   * @return Ambigous <return_type, mixed, string>
+   */
+  public function optimizeIndexStore($param){
+  	$urlParam = array('optimizeIndexStore');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param,"application/json;charset=UTF-8");
+  	
+  }
+  /**
+	 * 获取根据id，获取其他的同结构下的树节点
+	 * liqiubo 20140709
+	 */
+  public function getOtherNodes($param){
+  	$urlParam = array('getOtherNodes');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+  }
+  
+  /**
+   * 根据id 获取其他同结构下的id（已经建立了索引库的节点）
+   * liqiubo 20140710
+   */
+  public function getOtherNodesForCreated($param){
+  	$urlParam = array('getOtherNodesForCreated');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8");
+  }
+   
+}
+
+

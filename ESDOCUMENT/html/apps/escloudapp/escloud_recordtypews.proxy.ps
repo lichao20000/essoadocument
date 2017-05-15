@@ -1,0 +1,108 @@
+<?php
+
+/**
+ * 文种对应设置
+ * @author ldm
+ */
+
+
+class ProxyEscloudappEscloud_recordtypews extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_recordtypews";
+  
+  //ID查询文件种类
+  public function getOneFileType($id)
+  {
+  	$urlParam = array('getRecordType',$id);
+    $url = implode('/', $urlParam);
+    return $this->get(self::SERVICE_NAME,$url);
+  }
+   
+  //查询文种列表
+  public function getTypeList($userId,$archivetype,$start,$limit)
+  {
+    $urlParam = array('getRecordTypeList',$userId,$archivetype,$start,$limit);
+    $url = implode('/', $urlParam);
+    return $this->get(self::SERVICE_NAME,$url);
+  }
+  
+  
+  //根据档案类型查询    总数
+  public function getAllRows($archiveType,$start,$end)
+  {
+  	$urlParam = array('countAll',$archiveType,$start,$end);
+    $url = implode('/', $urlParam);
+    return $this->get(self::SERVICE_NAME,$url);
+  }
+  
+  //保存
+  public function saveFileType($archiveText)
+  {
+  	$urlParam = array('saveRecordType');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$archiveText,"application/json;charset=UTF-8");
+  }
+  
+  //批量保存
+  public function saveMoreFileType($archiveText,$userId)
+  {
+  	$urlParam = array('addBatchRecordType',$userId);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$archiveText,"application/json;charset=UTF-8");
+  }
+  
+  //批量修改
+  public function modMoreFileType($archiveText)
+  {
+  	$urlParam = array('updateBatchRecordType');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$archiveText,"application/json;charset=UTF-8");
+  }
+  
+  //ID批量删除文件种类
+  public function delMoreFileType($idArr)
+  {
+  	$urlParam = array('deleteBatchRecordType');
+  	$url = implode('/', $urlParam);
+   	return $this->post(self::SERVICE_NAME,$url,$idArr,"application/json;charset=UTF-8");
+  }
+  /**
+   * 筛选
+   * @author ldm
+   */
+  
+  public function sqlFilter($param){
+  	$urlParam = array('getRecordTypeByCondition');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,"application/json;charset=UTF-8");
+  	 
+  }
+  /**
+   * 根据下拉框动态刷新数据
+   * @author ldm
+   */
+  public function showagain($archiveType,$page,$rp)
+  {
+  	$urlParam = array('getRecordTypeListByArchiveType',$archiveType,$page,$rp);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME,$url);
+  }
+  /**
+   * 下拉框筛选获取总数
+   * @author ldm
+   */
+  public function showcount($archiveType){
+  	$urlParam = array('countAll',$archiveType);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME,$url);
+  }
+  /**
+   * 根据用户名获取机构下的总数
+   * @author ldm
+   */
+  public function countAllByUserid($userId,$type){
+  	$urlParam = array('countAllByUserid',$userId,$type);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME,$url);
+  }
+}

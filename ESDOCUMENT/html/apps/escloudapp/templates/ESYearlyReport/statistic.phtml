@@ -1,0 +1,183 @@
+<script type="text/javascript">
+$(document).ready(function(){
+	var yearid = $("input[name='yearid']").val();
+	var field = $("input[name='field']").val();
+	$("#statistic").flexigrid({
+		url: $.appClient.generateUrl({ESYearlyReport:'getstatistic','yearid':yearid,'field':field},'x'),
+		dataType: 'json',
+		editable: false,
+		colModel : [
+			{display: '<input type="checkbox" id="linkFileSelectAll">', name : 'ids', width : 40, align: 'center'},
+			{display: '序号', name : 'num', width : 30, align: 'center',hide:true}, 
+			{display: '档案类型',name:'library',width:150,align:'center'},
+			{display: '档案库',name:'class',width:150,align:'center'},
+			{display: '条件',name :'condition_cn', width:200,align:'center'},
+			{display: '条件2',name :'condition', width:200,align:'center',hide : true},
+			{display: '条件3',name :'condition_return', width:200,align:'center',hide : true}
+		],
+		// longjunhao 20140912 add 删除操作
+		buttons : [{
+			name : '取消对应',
+			tooltip : '删除对应条件',
+			bclass : 'delete',
+			onpress : deleteCondition
+		},{
+			name : '清除条件',
+			tooltip : '清空选择条件',
+			bclass : 'cancel',
+			onpress : clearCondition
+		}],
+		usepager: true,
+		useRp: true,
+		width: 600,
+		height: 300
+	});
+	$(":input[type='text']",$("#statistic")).die().live('focus',function(){
+		var selinput = this;
+		var structureid = $(this).attr("name");
+		selectCondition(structureid,selinput);
+		return false;
+	});
+
+	// longjunhao 20140912 add 全选复选框
+	$("#linkFileSelectAll").die("click").live("click", function(){
+		$("#statistic").find("input[name='id']").attr("checked", this.checked);
+	});
+	
+	function selectCondition(structureid,selinput){
+		// 用于查询的input
+		var selinput2 = $(selinput).closest('td').next('td').find('input');
+		// 用于条件显示的input
+		var selinput3 = $(selinput2).closest('td').next('td').find('input');
+		var conditions = $(selinput2).val();
+		var conditions_return = $(selinput3).val();
+		$.post($.appClient.generateUrl({ESYearlyReport:"selectcondition"}, "x"), 
+				{sId:structureid,conditions:conditions,conditions_return:conditions_return}, function(data){
+			$.dialog({
+				title: "选择条件",
+				width: "500px",
+				padding: "10px, 10px",
+				content: data,
+				cancel: true,
+				ok: function(){
+					var conds = generateCondition();
+					var tmp = conds.split('(☆_☆)');
+					if(conds.length > 0){
+						$(selinput).val(tmp[1]);
+						$(selinput2).val(tmp[0]);
+						$(selinput3).val(tmp[2]);
+					} else {
+						$(selinput).val("");
+						$(selinput2).val("");
+						$(selinput3).val("");
+					}
+				}
+			});
+		});
+	}
+
+	// longjunhao 20140821 添加拼接condition_return，使用符号'($_$)'分隔条件列，使用'(⊙０⊙)'分隔条件	
+	function generateCondition(){
+		var plength = $("#contents p").length;
+		var fields = $("[name='esfields']");
+		var displayFields = $("[name='displayFields']");
+		var fieldtypes = $("[name='esfieldtype']");
+		var comparisons = $("[name='comparison']");
+		var esfieldvalues = $("[name='esfieldvalue']");
+		var relations = $("[name='relation']");
+		var sql = [];
+		var sql_string = "";
+		var sql_full = [];
+		var sql_string_full = "";
+		var sql_return = [];
+		var sql_string_return = "";
+		for(var i=0; i<plength; i++)
+		{
+// 			if(fields.eq(i).val() != "-" && esfieldvalues.eq(i).val()){
+			// longjunhao 20140929 修复bug1084 条件的值可以设置为空
+			if(fields.eq(i).val() != "-"){
+				var filedname		=	fields.eq(i).val();
+				var displayField   =   displayFields.eq(i).val();   
+				var filedtype		=	fieldtypes.eq(i).val();
+				var comparison		=	comparisons.eq(i).val();
+				var filedvalue		=	esfieldvalues.eq(i).val();
+				var relationship	=	relations.eq(i).val();
+				if(comparison == "like" || comparison == "not like"){
+					sql.push(filedname+" "+comparison+" '%"+filedvalue+"%' "+relationship+" ");
+					sql_full.push(displayField+" "+comparison+" '%"+filedvalue+"%' "+relationship+" ");
+				} else {
+					sql.push(filedname+" "+comparison+" '"+filedvalue+"' "+relationship+" ");
+					sql_full.push(displayField+" "+comparison+" '"+filedvalue+"' "+relationship+" ");
+				}
+				sql_return.push("(⊙０⊙)"+displayField+"($_$)"+comparison+"($_$)"+filedvalue+"($_$)"+relationship);
+			}
+		}
+		if(sql.length > 0) {
+			sql_string = sql.join("");
+			sql_string = sql_string.substr(0, sql_string.length - 4);
+			
+			sql_string_full = sql_full.join("");
+			sql_string_full = sql_string_full.substr(0, sql_string_full.length - 4);
+
+			sql_string_return = sql_return.join("");
+			sql_string_return = sql_string_return.substr(5, sql_string_return.lastIndexOf('($_$)'));
+		}
+		// longjunhao 20140808 使用分隔符(☆_☆)隔开，前面的是保存数据库的，后面的是显示的，不会冲突吧。。
+		if (sql_string != ''){
+			sql_string = sql_string + "(☆_☆)" + sql_string_full + "(☆_☆)" + sql_string_return;
+		}
+		return sql_string;
+	}
+
+	// 取消对应  longjunhao 20141008 edit 修复bug1291
+	function deleteCondition() {
+		// 获取要删除的数据的ID
+		var checkboxs = $('#statistic [name="id"]:checked');
+		if (checkboxs.length == 0) {
+			$.dialog.notice({content:'请选择取消对应的数据', icon:'warning',time:2});
+			return false;
+		}
+		var ids = '';
+		checkboxs.each(function(){
+			ids += "," + $(this).val();
+		});
+		if (checkboxs.length > 0) {
+			ids = ids.substring(1);
+		}
+		$.post($.appClient.generateUrl({ESYearlyReport:"deleteConditionByIds"}, "x"), 
+				{ids:ids}, function(data){
+			if (data) {
+				$.dialog.notice({content:'取消对应成功!',icon:'succeed',time:2});
+				$("#statistic").flexReload(); // 刷新条件列表
+				return;				
+			} else {
+				$.dialog.notice({content:'取消对应失败!',icon:'error',time:2});
+				return;
+			}
+		});
+	}
+
+	// longjunhao 20141008 add 清除条件
+	function clearCondition() {
+		// 获取要删除的数据的ID
+		var checkboxs = $('#statistic [name="id"]:checked');
+		if (checkboxs.length == 0) {
+			$.dialog.notice({content:'请选择清空的条件数据', icon:'warning',time:2});
+			return false;
+		}
+		checkboxs.each(function(){
+			// 找出条件的input并清空
+			var objTr = $(this).closest('tr');
+			objTr.children('td').eq(4).find('input').eq(0).val('');
+			objTr.children('td').eq(5).find('input').eq(0).val('');
+			objTr.children('td').eq(6).find('input').eq(0).val('');
+		});
+	}
+});
+</script>
+<table id="statistic"></table>
+<input type="hidden" name="yearid" value="<?php echo $yearid; ?>" />
+<input type="hidden" name="field" value="<?php echo $field; ?>" />
+
+
+

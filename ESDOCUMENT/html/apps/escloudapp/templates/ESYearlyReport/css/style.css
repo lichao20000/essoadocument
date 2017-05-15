@@ -1,0 +1,103 @@
+@CHARSET "UTF-8";
+.esymain {
+	clear:both; 
+	width:96%;
+	margin-left:2%;
+}
+.esymain .btnPanel {
+	padding-left:5px;
+	height:27px;
+	border-bottom:1px solid #CCC;
+	background:url(../../public/flexigrid/css/images/wbg.gif);
+}
+.esymain .btnPanel div.fbutton{
+	padding:2px;
+	float:left;
+	height:27px;
+	padding-left:7px;
+}
+.esymain .btnPanel div.fbutton:hover{
+	padding:0px;
+	margin-top:2px;
+	height:23px;
+	border:1px solid silver;
+}
+.esymain .btnPanel span {
+	padding-left:20px;
+	padding-right:5px;
+	line-height:27px;
+	cursor: pointer;
+}
+.esymain .btnPanel div.fbutton:hover span {
+	padding-left:20px;
+	padding-right:5px;
+	line-height:23px;
+	cursor: pointer;
+}
+.esymain .btnPanel div.fbutton:hover div {
+	padding:0px;
+	padding-left:5px;
+	padding-right:1px;
+	border-left:1px solid white;
+	border-top:1px solid white;
+	cursor: pointer;
+}
+.esymain .btnPanel .add {
+	background:url(../../public/flexigrid/css/images/add.png) no-repeat center left;
+}
+.esymain .btnPanel .delete {
+	background:url(../../public/flexigrid/css/images/close.png) no-repeat center left;
+}
+.esymain .btnPanel .modify {
+	background:url(../../public/flexigrid/css/images/edit.jpg) no-repeat center left;
+}
+.esymain .esyleft {
+	background-color:#133959;
+	border-radius:5px;
+   	float: left; 
+   	border-bottom: 5px; 
+   	width: 220px; 
+   	margin-right:10px;
+}
+
+.esymain .esyright {
+}
+/* form validate */
+textarea.invalid-text,input.invalid-text,select.invalid-text{border:2px #DD0000 solid;}
+textarea.valid-text,input.valid-text,select.valid-text{border:2px #06AC87 solid;}
+/*	提交审批按钮的添加	*/
+.tab_btn .fbutton .yearSubmit{background:url(../../public/flexigrid/css/images/report_go.png) no-repeat center left;}
+
+/** longjunhao 20140828 add 封面页面 */
+.coverinfo {
+	margin-left:10%;
+	margin-right:10%;
+}
+.coverinfo ul li{
+	margin: 10px;
+	position: relative;
+	font-size: 15px;
+	color: #3D3D3D;
+	text-align: center;
+}
+.coverinfo .thead{
+	font-size: 20px;
+	font-weight: bold;
+	color: #3D3D3D;
+	margin-top:14px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+.coverinfo .ttrail{
+	font-weight: bold;
+	margin: 20px 10% 0 10%;
+	color: #3D3D3D;
+}
+.coverinfo span {
+	width: 150px;
+	display: inline-block;
+	float: left;
+}
+.coverinfo input {
+	width: 250px;
+}

@@ -1,0 +1,102 @@
+<!-- xiewenda-->
+<div id="eslist" style="width: 560px; height: 3250x;">
+	<div class="Search">
+		<input id="searchKeyWord"
+			onblur="if($(this).val()=='')$(this).val('请输入关键字')"
+			onfocus="if($(this).val()=='请输入关键字')$(this).val('')" type="text"
+			name="roleKeyWord" value="请输入关键字" /><span
+			onclick="getRegulationQuery()"></span>
+	</div>
+	<br>
+	<table id="listRegulationGrid"></table>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	 $("#listRegulationGrid").flexigrid({url :$.appClient.generateUrl({ESRegulations: 'findRegulationList1'}, 'x'),
+			dataType : 'json',
+			colModel : [ 
+	        {display : '序号',name : 'startNum',width : 30,align : 'center'}, 
+		    {display : '',name : 'ids',width : 15,align : 'center'}, 
+		    {
+				display : 'ID',
+				name : 'id',
+				metadata:'id',
+				width : 40,
+				align : 'center',
+				hide:true
+			}, {
+				display : '编号',
+				name : 'no',
+				metadata:'no',
+				width : 100,
+				align : 'left'
+			},{
+				display : '中文名称',
+				name : 'chineseName',
+				metadata:'chineseName',
+				width : 200,
+				align : 'left'
+			},{
+				display : '英文名称',
+				name : 'englishName',
+				metadata:'englishName',
+				width : 200,
+				align : 'left'
+			},{
+				display : '发布时间',
+				name : 'publishTime',
+				metadata:'publishTime',
+				width : 80,
+				align : 'center'
+			}],
+			singleSelect:true,
+			usepager : true,
+			title : '规定规范管理',
+			useRp : true,
+			rp : 20,
+			nomsg : "没有数据",
+			showTableToggleBtn : false,
+			pagetext : '第',
+			outof : '页 /共',
+			pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条'  
+		});
+		function sizeChanged(){
+			if($.browser.msie && $.browser.version==='6.0'){
+				$("html").css({overflow:"hidden"});
+			}
+			var h = $(window).height() - $("#eslist").position().top;
+			var flex = $("#listRegulationGrid").closest("div.flexigrid");
+			var bDiv = flex.find('.bDiv');
+		    var contentHeight = bDiv.height();
+		    var headflootHeight = flex.height() - contentHeight; 
+		    bDiv.height(300 - headflootHeight);
+			flex.height(300);
+			flex.width(560);
+			// 修改IE表格宽度兼容
+			if($.browser.msie && $.browser.version==='6.0'){
+				flex.css({width:"-=3px"});
+			}
+		};
+		
+		sizeChanged();
+		function formatValue(tdDiv){
+			if(tdDiv.innerHTML=='1')
+				tdDiv.innerHTML='是';
+			else 
+				tdDiv.innerHTML='否';
+		};
+});
+//所属规范页搜索单击事件
+function getRegulationQuery(){
+	var searchValue = $('#searchKeyWord').val();
+	if(searchValue == '请输入关键字') searchValue = null;
+	var url = $.appClient.generateUrl({ESRegulations:'getRegulationQuery'},'x');
+	$('#listRegulationGrid').flexOptions({url: url, newp:1, query:{searchValue:searchValue}}).flexReload();
+}
+//回车事件
+$(document).keydown(function(event) {
+    if (event.keyCode == 13 && document.activeElement.id == 'searchKeyWord') {
+    	getRegulationQuery();
+    }
+});
+</script>

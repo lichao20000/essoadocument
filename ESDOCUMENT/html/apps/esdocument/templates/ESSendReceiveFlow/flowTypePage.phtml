@@ -1,0 +1,19 @@
+<div class="flowType">
+	<form id="flowType">
+		<table id="table_detail" style="height: 80px;">
+			<input type="hidden" name="pid" id="pid" value="<?php echo isset($pid)?$pid:''; ?>" />
+			<tr>
+				<td>名称<font size="3px" color="red">*</font>&nbsp;&nbsp;</td>
+				<td><input type="text" name="name" id="name" verify="unspecial/50/1/0" value="<?php echo isset($name)?$name:''; ?>"
+					style="width: 200px; height: 20px;" />
+					<input type="hidden" name="oldTypeName" id="oldTypeName" value="<?php echo isset($name)?$name:''; ?>"/>
+				</td>
+			</tr>
+			<tr>
+				<td>排序<font size="3px" color="red">*</font>&nbsp;&nbsp;</td>
+				<td><input type="text" name="sort" id="sort" verify="number/11/1/0" value="<?php echo isset($sort)?$sort:''; ?>"
+					style="width: 200px; height: 20px;" /></td>
+			</tr>
+		</table>
+	</form>
+</div>

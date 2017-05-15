@@ -1,0 +1,25 @@
+<div class="content">
+  <div class="calendarBox" style="width:1000px;">
+    <div class="left">&nbsp; </div>
+    <div class="calendar" style="width:780px;">
+      <div class="errorText2" style="font-size:60px">系统错误</div>
+      <div class="errorText1">
+        <span class="font16 bold"><?php echo $this->plain($title) ?></span>
+<?php
+if (AopConfig::get('debug', false)):
+  if ($exception instanceof AopException):
+?>
+        <p><?php echo $this->plain($exception->getMessage()) ?></p>
+        <pre style="clear:both;margin-top:20px;font-size:14px;color:red;font-family:'Bitstream Vera Sans Mono','Courier New',Courier,monospace">
+<?php print_r($exception->getContext()) ?>
+        </pre>
+<?php else: ?>
+        <p><?php echo $this->plain($exception->getMessage()) ?></p>
+<?php
+  endif;
+endif;
+?>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<style type="text/css">
+/* 得到字段的界面 */
+.modelTags {
+	width: 790px;
+	height: auto;
+	float: left;
+}
+
+.modelTags .subnav {
+	width: 100%;
+	height: 30px;
+	float: left;
+	padding-left: 10px;
+	margin-left: 0;
+	margin-bottom: 0;
+	border-bottom: 5px solid #41b3e5;
+}
+
+.modelTags .subnav li {
+	line-height: 30px;
+	color: #fff;
+	float: left;
+	padding: 0 10px;
+	margin-right: 5px;
+	background: rgb(74, 139, 194);
+	cursor: pointer;
+	border-radius: 5px 5px 0 0;
+}
+
+.modelTags .subnav li:hover {
+	background: #41b3e5;
+}
+
+.showModelTags {
+	width: 800px;
+	float: left;
+	padding-left: 0;
+}
+</style>
+<div id="modelTags" class="modelTags">
+	<!-- 标签切换 -->
+	<ul id="subnav" class="subnav">
+		<?php if($modelType == "file"){ ?>
+		<li id='fileTags' style="background: #41b3e5;"><span
+			class='img-fileTags' id="img-fileTags">案卷级</span></li>
+		<?php }?>
+		<li id='innerFileTags'><span class='img-innerFileTags'
+			id="img-innerFileTags">卷内级</span></li>
+	</ul>
+</div>
+<div class='showModelTags' id='showModelTags'></div>
+<script type="text/javascript">
+var type ='<?php echo  $modelType?>';
+var modelId = <?php echo  $modelId?>;
+var $_tdObj,$_metadata,metadata_dialog; // 元数据列,元数据,选择元数据窗口
+_tagTable = {
+		total: false, // 用于保存接口日志总条数,该参数只在第一次得到
+		init: function (){
+			
+			document.getElementById('showModelTags').innerHTML = "<table id='modelTag-table'></table>";
+			
+			var col_ = url_ = title_ = button_ = type_ = false;
+			col_ = [
+					{display : '字段名',	name : 'ESIDENTIFIER',editable : true,	width : 100,align : 'center'},
+					{display : '元数据',	name : 'METADATA',width : 130,align : 'center'},
+					{display : '类型',name : 'ESTYPE',width : 60,align : 'center', editable:true, dropdown:['文本','数值','日期','浮点','时间','布尔']},
+					{display : '是否为必填项',name : 'ESISNULL', width : 70, align : 'center', editable : true, dropdown : ['是','否']},
+					{display : '是否为系统字段',name : 'ESISEDIT', width : 70, align : 'center', editable : true, dropdown : ['是','否']},
+					{display : '字段长度', name : 'ESLENGTH', editable : true, width:80, validate:/^\d{1,5}$/i,  validateMsg:"必须为数字",align :'center'},
+					{display : '小数点位数', name : 'ESDOTLENGTH', editable : true, width : 80, validate:/^\d+$/i, validateMsg:"必须为数字",align :'center'},
+					{display : '描述', name : 'ESDESCRIPTION', editable : true, width : 600, align : 'left'}
+		    	];
+			url_ = $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+			$("#modelTag-table").flexigrid({
+				url: url_,
+				editable:true,
+				dataType: 'json',
+				colModel : col_,
+				usepager: true,
+				useRp: true,
+				rp: 20,
+				width:800,
+				height:400,
+				nomes: '没有数据',
+				pagetext: '第',
+				outof: '页 /共',
+				pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+			});
+			
+		}
+	};
+
+	$('#documentTags').click(function(){
+		type = 'document';
+		$("#subnav li").each(function(){
+			$(this).css("background","");
+		});
+		$(this).css("background","#41b3e5");
+		var url =  $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+		$('#modelTag-table').flexOptions({url:url}).flexReload();
+	});
+	$('#innerFileTags').click(function(){
+		type = 'innerFile';
+		$("#subnav li").each(function(){
+			$(this).css("background","");
+		});
+		$(this).css("background","#41b3e5");
+		var url =  $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+		$('#modelTag-table').flexOptions({url:url}).flexReload();
+	});
+	$('#fileTags').click(function(){
+		type = 'file';
+		$("#subnav li").each(function(){
+			$(this).css("background","");
+		});
+		$(this).css("background","#41b3e5");
+		var url =  $.appClient.generateUrl({ESStructureModel: 'getTagForModel',modelType:type,modelId:modelId},'x');
+		$('#modelTag-table').flexOptions({url:url}).flexReload();
+	});
+	_tagTable.init();
+</script>

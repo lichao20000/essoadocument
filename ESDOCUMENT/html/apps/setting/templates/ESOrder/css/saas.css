@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+.estranssass{
+	width:300px;
+	height:240px;
+	readonly:true;
+	font-weight: normal;
+	margin: 0px;
+	padding: 0px;
+	text-align:center;
+}
+.estranssass ul{width: 300px;text-align:center;margin:5px; padding:5px;}
+.estranssass ul li{width:300px;color:black;text-align:center;float:left;margin-top:10px;}
+.estranssass span{width:100px;height:30px;line-height:30px;text-align:left;float:left;}
+.estranssass ul li input{height:20px;float:left;line-height:20px;width:170px;}
+.estranssass ul li select{width:175px;height:25px;float:left;line-height:25px;}
+.estranssass .esbottom{width:100%;float:left;margin-top:20px;}
+.estranssass button{width:60px;height:30px;cursor:pointer}

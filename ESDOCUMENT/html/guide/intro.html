@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>联通云门户</title>
+<link href="/templates/cu/css/global.css" rel="stylesheet" type="text/css" />
+<link href="/templates/cu/css/app_global.css" rel="stylesheet" type="text/css" />
+<link href="/templates/cu/css/cu_red.css" rel="stylesheet" type="text/css" />
+<link href="/templates/cu/css/jquery.ui.core.css" rel="stylesheet" type="text/css" />
+<link href="/templates/cu/css/jquery.ui.theme.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/templates/cu/js/jquery.js"></script>
+<script type="text/javascript" src="/templates/cu/js/jquery.block-ui.js"></script>
+<!--[if lt IE 10]>
+<script type="text/javascript" src="/templates/cu/js/PIE.js"></script>
+<![endif]-->
+<script type="text/javascript">
+var App = {};
+var ChinaUnicom = {};
+$(document).ready(function(){
+	$("div.faq_question p").hide();
+	$("div.faq_question p:first").show();
+	$("div.faq_question h3").click(function(){
+	   $("div.faq_question p").hide();
+	   $(this).next("p").show();
+	});
+	$("#moreCon").click(function(){
+	   if($("div.moreCon").is(":hidden")){
+		   $("div.moreCon").show();
+		   $("div.provinces_news_top").prevAll().hide();
+	   }	
+    });
+});
+function getCurDate(){
+ var d = new Date();
+ var years = d.getFullYear();
+ var month = add_zero(d.getMonth()+1);
+ var days = add_zero(d.getDate());
+ var hours = add_zero(d.getHours());
+ var minutes = add_zero(d.getMinutes());
+ var seconds = add_zero(d.getSeconds());
+ var ndate = years+"-"+month+"-"+days+" "+hours+":"+minutes+":"+seconds;
+ document.getElementById("time").innerHTML = ndate;
+}
+function add_zero(temp){
+ if(temp<10) return "0"+temp;
+ else return temp;
+}
+setInterval("getCurDate()",100);
+</script>
+</head>
+<body>
+<div class="top">
+  <div class="topLogin">
+    <div class="topLoginL"><a href="../"  target="_blank">进入云门户</a></div>
+    <div class="topLoginR"><span style=" margin-right:10px;" id="time"></span></div>
+  </div>
+  <div class="topLogo"> <a href="javascript:void(0);" class="topLogoL"></a>
+    <div class="topLogoR"></div>
+  </div>
+  <div class="topMenu"><a href="javascript:void(0);" class="topMenuOn">新手入门</a></div>
+  <div class="topLine">&nbsp;</div>
+</div>
+<div class="content940">
+<div class="indexL">
+  <div class="provinces_news">
+      <div class="all_news_title margin10"><a href="javascript:void(0);" class=" floatRight" name="top"></a><b>导航介绍</b></div>
+      <div class="provinces_news_list">
+<!-- 导航介绍 -->     
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+<!--统一搜索 -->     
+      <div class="all_news_title margin10"><a href="#top" class=" floatRight color369" name="search">top</a><b>统一搜索</b></div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+<!-- 常用应用 -->
+      <div class="all_news_title margin10"><a href="#top" class=" floatRight color369" name="normalapp">top</a><b>常用应用</b></div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+<!-- 专业应用 -->  
+      <div class="moreCon" style="display:none">
+      <div class="all_news_title margin10"><a href="#top" class=" floatRight color369" name="proApp">top</a><b>专业应用</b></div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+<!-- 个人设置 -->      
+      <div class="all_news_title margin10"><a href="#top" class=" floatRight color369" name="setting">top</a><b>个人设置</b></div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+<!-- 虚拟站点 -->      
+      <div class="all_news_title margin10"><a href="#top" class=" floatRight color369" name="virSite">top</a><b>虚拟站点</b></div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+<!-- 移动终端 -->      
+      <div class="all_news_title margin10"><a href="#top" class=" floatRight color369" name="mobileTer">top</a><b>移动终端</b></div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+<!-- 分类1 -->      
+      <div class="all_news_title margin10"><a href="#top" class=" floatRight color369" name="other1">top</a><b>分类1</b></div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+<!-- 分类2 -->      
+      <div class="all_news_title margin10"><a href="#top" class=" floatRight color369" name="other2">top</a><b>分类2</b></div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+      <div id="FAQ_Question" class="faq_question">
+        <h3><a href="javascript:void(0);">浏览网页时怎样调整字号的大小？</a></h3>
+        <p>IE5.0/6.0中 您可以在菜单中选"查看(View)"中的"文字大小(Text Fonts)"来选定你需要的字体大小。 Netscape中您可以使用热键"Ctrl+ ]"来增大字体，用"Ctrl+["来减小字体。</p>
+      </div>
+    </div>
+    <div class="provinces_news_more_box"> <img src="/templates/cu/images/more.gif"  alt="更多" class="provinces_news_more_box_img" /><a href="javascript:void(0);" id="moreCon">更多常见问题</a>
+      <div class="provinces_news_top"><a href="#top" style="display:block;width:40px;height:40px;"></a></div>
+    </div>
+  </div>
+  </div>
+  </div>
+<div class="indexR">
+    <div class="content_filtering">
+      <div class="content_filtering_title">问题分类</div>
+      <div id="FAQ_sortlist">
+      <div class="menuSelected">导航介绍<span class="color999">(1)</span></div>
+      <a href="#search" class="color369">统一搜索<span class="color999">(1)</span></a>
+      <a href="#normalapp" class="color369">常用应用<span class="color999">(3)</span></a>
+      <a href="#proApp" class="color369">专业应用<span class="color999">(3)</span></a>
+      <a href="#setting" class="color369">个人设置<span class="color999">(3)</span></a>
+      <a href="#virSite" class="color369">虚拟站点<span class="color999">(3)</span></a>
+      <a href="#mobileTer" class="color369">移动终端<span class="color999">(3)</span></a>
+      <a href="#other1" class="color369">分类1<span class="color999">(3)</span></a>
+      <a href="#other2" class="color369">分类1<span class="color999">(3)</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="footer">
+  <div class="footerL"><img src="/templates/cu/images/logo_copyright.gif" width="107" height="60" alt="中国联通" /></div>
+  <div class="footerR">
+     <ul>
+      <li><a href="/guide/about.html">关于联通</a></li>
+      <li><a href="/guide/intro.html" target="_blank">新手入门</a></li>
+      <li><a href="/guide/guide.html" target="_blank">使用指南</a></li>
+      <li><a href="mailto:hq-eipwh@chinaunicom.cn" target="_blank">建议反馈</a></li>
+    </ul>
+    <p>&copy; 2012 中国联合网络通信有限公司</p>
+  </div>
+</div>
+</body>
+</html>

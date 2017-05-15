@@ -1,0 +1,86 @@
+@CHARSET "UTF-8";
+.treebox {width:198px;float:left; height:530px;border-right:1px solid #898989; overflow: auto;}
+.tab {width:750px;}
+.tab_menu {width:750px;padding-left:5px;padding-top:5px;}
+.tab_menu li {color:#FFF;width:200px;height:30px;line-height:30px; float:left; text-align:center; cursor:pointer; list-style:none; padding:1px 6px; margin-right:4px; background: #6f6e81; border:0px solid #898989; border-bottom:none;}
+.tab_menu li.hover { background:#133959;}
+.tab_menu li.selected { color:#FFF; background: #133959;}
+.tab_btn {clear:both; padding:1px; height:32px; border-top: 4px solid #133959; border-bottom:0px;}
+.tab_btn div.fbutton {
+	float: left;
+	display: block;
+	cursor: pointer;
+	padding: 3px;
+	background-color: #6f6e81;
+	margin-left: 5px;
+	color: #FFF;
+	border: 0px none;
+	outline: 0px none;
+}
+.tab_btn div.fbutton div {padding-left:5px;float:left;}
+.tab_btn div.fbutton:hover {
+	border: 0px none;
+    outline: 0px none;
+	background-color: #133959;
+}
+/*
+.tab_btn div.fbutton:hover div{padding:0px;padding-left:5px;border-left:1px solid white;border-top:1px solid white;}
+.tab_btn div.fbutton:hover span{padding-right:0px;cursor:pointer;}
+*/
+.tab_btn span {padding-left:20px;line-height:23px;cursor:pointer;}
+.tab_box {border-top:1px solid #898989; height:460px; overflow: auto; width:750px;}
+.hide {display:none}
+
+.tab_btn div.fbutton .relation {background:url(../img/addLink.png) no-repeat center left}
+.tab_btn div.fbutton .cancel {background:url(../img/dropLink.png) no-repeat center left}
+.tab_btn div.fbutton .condition {background:url(../../public/flexigrid/css/images/table_relationship.png) no-repeat center left}
+.tab_btn div.fbutton .closed {background:url(../img/cross.png) no-repeat center left}
+.tab_btn div.fbutton .save {background:url(../../public/flexigrid/css/images/save.png) no-repeat center left}
+.tab_btn div.fbutton .autostat {background:url(../../public/flexigrid/css/images/report.png) no-repeat center left}
+
+/* 年报输入框 
+.noborder td {border:0px;}
+.yeartable {border:0px; border-collapse: collapse;table-layout:fixed;width:676pt}
+.yeartable td {padding:2px;}
+.yeartable input {background-color:#F7F7F7;border:1px solid silver;width:122px;}
+*/
+.topdis { margin: 0 auto;}
+.topdis td {color:#3D3D3D;}
+.topdisborder{border:0px solid #3d3d3d;text-align:center;border-collapse:collapse; margin: 0 auto;}
+.topdisborder td{border:1px solid #3d3d3d;border-width:1px 1px 1px 1px;margin:2px 0 2px 0;text-align:left; height: 22px; line-height: 22px; padding-left: 5px;}
+.topdisborder input{background-color:#F7F7F7;border:1px solid silver;width:130px; text-align: center;}
+
+/* 档基三标题 
+.year3title {font-size:20.0pt;font-weight:400;font-style:normal;text-decoration:none;font-family:黑体, monospace;text-align:center;vertical-align:middle;white-space:nowrap;}
+*/
+/* 统计条件对话框中的样式 */
+.conditionitem16 {width:300px;line-height:25px; text-indent:25px; color:#555; border-bottom:1px solid #f3f3f3; margin:5px 0; background:#f9f9f9 url(../../public/img/mess.png) no-repeat 5px 5px;}
+.conditionitem30 {width:300px;height:30px;}
+
+/*添加权限规则*/
+#addrolefree{ width:655px; height:auto; overflow:hidden; float:left;}
+#contents{ width:650px; height:150px; overflow:auto; marign-left:5px; _dispaly:inline;}
+.contbox{ width:620px; height:29px; float:left; margin-left:5px; _display:inline; border-bottom:1px solid silver;}
+.w14090{ font-size:13px; color:#555; float:left; margin-right:10px; display:block;}
+.hei30{ line-height:30px;}
+.w140{ width:130px; padding-left:2px;}
+.w90{ width:80px;}
+.hei20{ height:20px; margin-top:4px; border:1px solid #aaa;}
+.hei20 option{ padding:2px 0;} 
+
+/* 添加行删除行按钮样式 */
+.newfilter,.delfilter{ width:70px; line-height:24px; text-indent:24px; color:#555; float:left; margin-top:3px;}
+.newfilter{ margin-right:10px; background:url(../../public/img/add.png) no-repeat 4px 4px;}
+.delfilter{ background:url(../../public/img/del.gif) no-repeat 4px 4px;}
+.newfilter:hover,.delfilter:hover{ width:68px; line-height:22px; text-indent:23px; border:1px solid #e3e3e3;}
+.newfilter:hover{ background:#f3f3f3 url(../../public/img/add.png) no-repeat 3px 3px;}
+.delfilter:hover{ background:#f3f3f3 url(../../public/img/del.gif) no-repeat 3px 3px;}
+
+/* 人员信息界面 */
+.editdiv div{padding:5px;height:20px;border-bottom:1px dotted silver;}
+
+.leftdiv {width:200px; overflow:auto; overflow:hidden; float:left;border-right:1px solid #898989;}
+.treeboxTop {width:198px;float:left; height:340px; overflow: auto;border-top: 1px solid #898989;}
+.treeboxBottom {width:198px;float:left; height:160px; overflow: auto;border-top: 1px solid #898989;}
+.left-box-title{line-height:10px; text-indent:24px; float:left; border-bottom: 1px solid #fff; border-top-left-radius: 5px; border-top-right-radius: 5px; font-weight: bold; text-indent: 20px;}
+

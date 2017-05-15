@@ -1,0 +1,71 @@
+@CHARSET "UTF-8";
+body,html{margin:0px;overflow:hidden;}
+input { margin:0; padding:0;}
+ol,ul{ margin:0; padding:0; list-style-type:none;}
+h2,p,form,table{ margin:0; padding:0; font-weight:normal;}
+#paper{ margin:0 auto;}
+
+#flexme1 img{cursor:pointer;}
+a{
+	text-decoration : none ;
+}
+.estransfer{width:560px;overflow-y:auto;overflow-x:hidden}
+.estransfer ul{width: 560px;text-align:center;}
+.estransfer ul li{width:250px;margin-left:20px;float:left;margin-top:10px;}
+.estransfer span{width:80px;height:30px;line-height:30px;text-align:left;float:left;}
+.estransfer ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.estransfer ul li select{width:160px;height:22px;float:left;}
+.estransfer .esbottom{width:100%;float:left;margin-top:20px;}
+.estransfer button{width:60px;height:30px;cursor:pointer}
+
+/* 报表打印样式 */
+.warehouseWrap{ width:500px; height:auto; overflow:hidden; float:left;}
+.warehouseWrap h2{ width:100%; line-height:25px; font-weight:normal; text-indent:15px; float:left; background:#eee; border-bottom:1px solid #ccc;}
+.warehouseSelect{ width:100%; height:auto;overflow:hidden; float:left;}
+.warehouseSelect p{ width:100%; height:30px; float:left; cursor:default;}
+.warehouseSelect p input{ float:left; margin:8px 0 0 15px; _margin-top:5px;}
+.warehouseSelect p span{ float:left; margin:8px 0 0 10px;}
+/* end */
+
+.ztree{float:left;}
+.clear{clear:both;}
+.treedit{ width:100%; height:auto; overflow:hidden; flaot:left;}
+.buttoncss{ padding-left:5px;float:left;}
+.buttoncss div{ float:left; margin-top:2px; border:1px solid transparent; cursor:pointer;}
+.buttoncss span{ float:left; padding:2px 5px 3px 20px; border-top:1px solid transparent; border-left:1px solid transparent;}
+.filedValuesEdit{ width:600px; height:200px; float:left; border:1px solid #eee;}
+
+#extendsbuttoncssdiv{ border:1px solid #aaa;}
+#extendsbuttoncsspan{ border-top:1px solid #fff; border-left:1px solid #fff;}
+
+.save{ background:url(../img/save.gif) no-repeat 2px center;}
+.delete{ background:url(../../public/flexigrid/css/images/close.png) no-repeat 2px center;}
+.edit{ background:url(../../public/flexigrid/css/images/edit.jpg) no-repeat 2px center;}
+.addchild{ background:url(../img/add.gif) no-repeat 2px center;}
+.batchAdd{background:url(../../public/flexigrid/css/images/autocorre.gif) no-repeat 2px center;}
+.load{ background:url(../../public/flexigrid/css/images/load.png) no-repeat 2px center;}
+.autocorre{ background:url(../../public/flexigrid/css/images/autocorre.gif) no-repeat 2px center;}
+.print{background:url(../../public/flexigrid/css/images/application_form.png) no-repeat 2px center;}
+
+.Seledopreate{float:right;margin-right:30px;margin-top:3px;}
+.editattr {display:inline-block; width:16px; height:16px; background:url(../../public/img/edit.jpg) no-repeat no-repeat; cursor:pointer;}
+
+    
+#housesave { color: #FFF; border: solid 1px #1c6a9e; background: #2288cc; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bbee', endColorstr='#2288cc'); background: linear-gradient(top, #33bbee, #2288cc); background: -moz-linear-gradient(top, #33bbee, #2288cc); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#33bbee), to(#2288cc)); text-shadow: -1px -1px 1px #1c6a9e; }
+#housesave:hover { color:#FFF; border-color:#0F3A56; }
+#housesave:active { border-color:#1c6a9e; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bbee', endColorstr='#2288cc'); background: linear-gradient(top, #33bbee, #2288cc); background: -moz-linear-gradient(top, #33bbee, #2288cc); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#33bbee), to(#2288cc)); }
+/** 调整自适应  **/
+.essmain{
+	width:96%;
+	margin-left:2%;
+}
+
+
+.selectInput {
+	height: 20px;
+	border: 1px solid #ccc;
+	background-image: url('../../public/img/drop_down_tab.gif');
+	background-repeat: no-repeat;
+	background-position: 99% 50%;
+	background-size: 20px20px;
+}

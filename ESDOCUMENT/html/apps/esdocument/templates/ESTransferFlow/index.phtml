@@ -1,0 +1,67 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeTbar.css" type="text/css"/>
+<link rel="stylesheet" href="<?php echo $tplPath?>/ESTransferFlow/css/style.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.select.tree.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTransferFlow/js/jumpwindow.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTransferFlow/js/template.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTransferFlow/js/workFlowManager.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"定制文件流转流程", content:"#workflow_model_type,#workflowDataGridDiv"});
+	$(".workflow_model_tree").css("height",esleftH);//设置左侧菜单
+});
+</script>
+<div id="showss"></div>
+<div class='wf_manager_main'>
+	<div id='workflow_model_type' class='workflow_model_tree'>
+		<div id='modelTypeTreeTBar' class='treeTbar'>
+			<div class="tbarDiv" style = "margin-left:12px;">
+				<div class="tbarButton">
+					<div>
+						<span class="add" style="padding-left:20px;" hander="addFun()">添加</span>
+					</div>
+				</div>
+				<div class="tbarButton">
+					<div>
+						<span class="edit" style="padding-left:20px;" hander="editFun()">编辑</span>
+					</div>
+				</div>
+				<div class="tbarButton">
+					<div>
+						<span class="delete" style="padding-left:20px;" hander="deleteFun()">删除</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ul id='modelTypeTree' class='ztree'></ul>
+	</div>
+	<div id='workflowDataGridDiv' tplPath="<?php echo $tplPath;?>" class='workflow_model_grid'>
+		<table id='modelDataGrid'></table>
+	</div>
+</div>
+<script type="text/javascript">
+var windowW=($(window).width()*0.96-230)*0.6;
+var winH=$(window).height();
+var eslefttop=$(".workflow_model_tree").offset().top;
+var esleftH=winH-eslefttop;
+//窗口大小变动事件
+$(window).resize(function() {
+	var wdth=$(window).width()*0.96-230;
+	if(wdth<windowW){
+		wdth=windowW;
+	}
+	winH=$(window).height();
+	eslefttop=$(".workflow_model_tree").offset().top;
+	esleftH=winH-eslefttop;
+	$(".workflow_model_tree").css("height",esleftH);
+	$(".flexigrid").css("width",wdth);
+	$("#estabs").css("padding-left",wdth/2-54).css("width",wdth/2+54);
+	$(".seporateLine").css("width",wdth);
+	$(".seporateArea").css("width",wdth);
+});
+</script>

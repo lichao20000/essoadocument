@@ -1,0 +1,215 @@
+<div id='OsModel_Step_Wind' class='s-estransfer' 
+	isFirstCell='<?php echo $data[0]; ?>'
+	modelId='<?php echo $data[1]; ?>'
+	stepId='<?php echo $data[2]; ?>'
+	formId='<?php echo $data[3]; ?>'
+	stepName='<?php echo $data[4]; ?>'
+	>
+<form id="OsModel_Step_Form_Id" action="" method="post" isValid="false">
+<fieldset class='s-fieldset' style="height:60px;">
+  <legend>属性</legend>
+  <div class='labelDiv'>
+  	<div class="a-label">步骤名称：</div>
+	<input class="required" type="text" verify="unspecial/50/1/0" id="ES_STEP_NAME" name="ES_STEP_NAME" value="<?php echo $data[4]; ?>" style="width:184px;"/>
+	<span style="color:red">*</span>
+  </div>
+</fieldset>
+<?php if ($data[3]!='') {?>
+<fieldset class='s-fieldset'>
+  <legend>表单权限设置（请选择需要编辑的字段）</legend>
+  <div class='s-fieldset-bwrap'>
+	<div id='userRole' class = "userRole">
+	<fieldset class='s-fieldset' style="width:260px;margin-left: 50px;">
+		<legend>所有字段</legend>
+		  <div id='' class='useLis'>
+		    <div class='searchRole'>
+		      <input type='text' id='one' class='searchusername' value='' onKeyUp="show(this.value,'left');"/>
+			  <img alt="" class='searchuserbutton' src="<?php echo $tplPath;?>/ESTransferFlow/img/search.bg.gif">
+			</div>
+		    <ul id='listRole' class='userList'>
+				<?php 
+				if(count($noEditFields)>0){
+					foreach($noEditFields as $field){
+						echo '<li><input type="hidden" code='.$field['code'].' value='.$field['name'].'>'.$field['name'].'</li>';
+					}
+				}
+				?>
+			</ul>
+		  </div>
+	</fieldset>
+	<div id='esbutton' class='selBut'>  
+		<span id="estop" class="estop" title='置顶'></span>
+		<span id="esup" class="esup" title='上移'></span>
+		<span id="esleft" class="esleft" title='左移'></span>
+		<span id="esright" class="esright" title='右移'></span>
+		<span id="esdown" class="esdown" title='下移'></span>
+		<span id="esbottom" class="esbottom endspan" title='置底'></span>
+	</div>
+	<fieldset class='s-fieldset' style="width:260px;">
+		<legend>已选择字段</legend>
+		<div class='useLis'>
+			<div class='searchRole'>
+				<input type='text' id='two' class='searchusername'  value='' onKeyUp="show(this.value,'right');"/>
+				<img alt="" class='searchuserbutton' src="<?php echo $tplPath; ?>/ESTransferFlow/img/search.bg.gif">
+			</div>
+			<ul id='useRole' class='userList referenceValues'>
+				<?php 
+				if(count($editFields)>0){
+					foreach($editFields as $field){
+						echo '<li><input type="hidden" code='.$field['code'].' value='.$field['name'].'>'.$field['name'].'</li>';
+					}
+				}
+				?>
+			</ul>
+		</div>
+	</fieldset>
+	</div>
+  </div>
+</fieldset>
+<?php }?>
+<fieldset class='s-fieldset'>
+  <legend>表单打印设置（请选择需要打印的模板）</legend>
+  <div class='s-fieldset-bwrap'>
+	<div id='userRole2' class = "userRole">
+	<fieldset class='s-fieldset' style="width:260px;margin-left: 50px;">
+		<legend>所有模版</legend>
+		  <div id='' class='useLis'>
+		    <div class='searchRole'>
+		      <input type='text' id='one2' class='searchusername' value='' onKeyUp="show2(this.value,'left');"/>
+			  <img alt="" class='searchuserbutton' src="<?php echo $tplPath; ?>/ESTransferFlow/img/search.bg.gif">
+			</div>
+		    <ul id='listRole2' class='userList'>
+				<?php 
+				if(count($noPrintFields)>0){
+					foreach($noPrintFields as $field){
+						echo '<li><input type="hidden" code='.$field['code'].' value='.$field['name'].'>'.$field['name'].'</li>';
+					}
+				}
+				?>
+			</ul>
+		  </div>
+	</fieldset>
+	<div id='esbutton2' class='selBut'>  
+		<span id="estop2" class="estop" title='置顶'></span>
+		<span id="esup2" class="esup" title='上移'></span>
+		<span id="esleft2" class="esleft" title='左移'></span>
+		<span id="esright2" class="esright" title='右移'></span>
+		<span id="esdown2" class="esdown" title='下移'></span>
+		<span id="esbottom2" class="esbottom endspan" title='置底'></span>
+	</div>
+	<fieldset class='s-fieldset' style="width:260px;">
+		<legend>已选择模板</legend>
+		<div class='useLis'>
+			<div class='searchRole'>
+				<input type='text' id='two2' class='searchusername'  value='' onKeyUp="show2(this.value,'right');"/>
+				<img alt="" class='searchuserbutton' src="<?php echo $tplPath;?>/ESTransferFlow/img/search.bg.gif">
+			</div>
+			<ul id='useRole2' class='userList referenceValues'>
+				<?php 
+				if(count($printFields)>0){
+					foreach($printFields as $field){
+						echo '<li><input type="hidden" code='.$field['code'].' value='.$field['name'].'>'.$field['name'].'</li>';
+					}
+				}
+				?>
+			</ul>
+		</div>
+	</fieldset>
+	</div>
+  </div>
+</fieldset>
+<?php if (!$data[0] || $data[0]=='false') { ?>
+<fieldset class='s-fieldset' style="height:480px;">
+  <legend>选择处理人</legend>
+  <div style='margin-bottom:12px'>
+  	<label><input type='radio' id='ES_STEP_ROLE_SELECT' name='ES_STEP_OWER_SELECT'  onclick="modelStep.stepRoleSelect('')"/>按角色选择</label>
+  	<label><input type='radio' id='ES_STEP_PART_SELECT' name='ES_STEP_OWER_SELECT'  onclick="modelStep.stepPartSelect('0')" checked="checked"/>按单位部门选择</label>
+  </div>
+  <div class='s-left'>
+  	<div id="selectType" class="s-left-top">
+  	  <div id="select_Tree" selectNodeId="0">
+  	  	<input type="hidden" name="partId" id="partId" value="" />
+  	    <ul id="select_Part_Tree" class="ztree"></ul>
+  	  </div>
+  	  <div id="select_Role" class='s-role'>
+  	  	<input type="hidden" name="roleIds" id="roleIds" value="" />
+  	  	<div id="select_List_Role" style="height: 91px;"></div>
+  	  </div>
+  	</div>
+  	<div class='s-left-buttom s-user'>
+  	  <div id="select_User" style="height: 112px;"></div>
+  	</div>
+  </div>
+  <div class='s-right'>
+  	<input type="hidden" name="iscountersign" id="iscountersign" value="<?php echo $iscountersign; ?>" />
+  	<div id='selected_User' class="selected_User"></div>
+  </div>
+</fieldset>
+<?php } ?>
+</form>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTransferFlow/js/partTree.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTransferFlow/js/modelStepManager.js"></script>
+<script type="text/javascript">
+$(function(){
+	// 初始化数据
+	function init(){
+		// 修改样式
+		var htDiv2HtmlUser = $('.s-user .tDiv2').html();
+		var recHtmlUser = '<div class="find-dialog" style="left:8px;position:relative;margin-right:260px"><input id="userKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="userKeyWord" value="请输入关键字" /><span onclick="modelStep.getUserQuery()"></span></div>' + htDiv2HtmlUser;
+		$('.s-user .tDiv2').html(recHtmlUser);
+		// 修改样式
+		var htDiv2HtmlRole = $('.s-role .tDiv2').html();
+		var recHtmlRole = '<div class="find-dialog" style="left:8px;position:relative;margin-right:260px"><input id="roleKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="roleKeyWord" value="请输入关键字" /><span onclick="modelStep.getRoleQuery()"></span></div>' + htDiv2HtmlRole;
+		$('.s-role .tDiv2').html(recHtmlRole);
+		// 修改样式
+		$('.s-right .tDiv2').append('<label style="margin:4px 0 0 70px;"><input type="checkbox" id="ES_STEP_ISCOUNTERSIGN" name="ES_STEP_ISCOUNTERSIGN"/>是否会签</label>');
+
+		if($("#iscountersign").val()=="1"){
+			$("#ES_STEP_ISCOUNTERSIGN").attr("checked","checked");
+		}
+		
+		$('#select_Role').hide();
+
+		$('.s-user .btnToRight').click(function(){
+			modelStep.toRight4User();
+		});
+
+		$('.s-role .btnToRight').click(function(){
+			modelStep.toRight4Role();
+		});				
+	}
+	
+	init();
+	
+	var modelId=$("#OsModel_Step_Wind").attr("modelId");
+	var stepId=$("#OsModel_Step_Wind").attr("stepId");
+	$("#selected_User").flexOptions({url:$.appClient.generateUrl({ESTransferFlow : 'getSelectedUserList',modelId:modelId,stepId:stepId}, 'x'),newp:1}).flexReload();
+	
+	$('#selected_User').find('tr').die().live("dblclick", function(){
+		modelStep.rowDblclick_stepSelected(this);
+	}); 
+
+	$('#select_User').find('tr').die().live("dblclick", function(){
+		modelStep.rowDblclick_stepSelected_user();
+	}); 
+	
+	$('#select_List_Role').find('tr').die().live("click", function(){
+		modelStep.rowClick_stepSelected_role();
+	}); 
+	
+	$(document).keydown(function(event){
+		var activeId = document.activeElement.id;
+		if(event.keyCode == 13 && activeId == 'roleKeyWord') {
+			modelStep.getRoleQuery();
+			return false;
+		} else if (event.keyCode == 13 && activeId == 'userKeyWord') {
+			modelStep.getUserQuery();
+			return false;
+		}
+	});
+});
+</script>
+<style type="text/css">
+.ztree li span{color:#444;}
+</style>

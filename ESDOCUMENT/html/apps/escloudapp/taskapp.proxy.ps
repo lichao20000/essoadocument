@@ -1,0 +1,87 @@
+<?php
+class ProxyEscloudappTaskapp extends AgentProxyAbstract {
+
+	/**
+	 *
+	 * 待办待阅服务名称
+	 * @var const
+	 */
+	const TASK_APP_SERVICE_NAME = 'taskappservice';
+
+	/**
+	 * 添加待办内容
+	 * @param array $pending
+	 * @return boolean
+	 *
+	 * @POST
+	 * @Path("addpending/{appId}/{authToken}")
+	 * @Produces(MediaType.APPLICATION_JSON+ ";chartset=UTF-8")
+	 * public Map<String,String> addPending(@PathParam("appId")String appId,
+    		                             @PathParam("authToken")String authToken,
+    		                             PendingEntity[] data);
+	 */
+	public function addPending(array $pending) {
+    $urlParam = array($this->getAppId(), $this->getAppToken());
+    array_unshift($urlParam, 'addpending');
+    $url = implode('/', $urlParam);
+    return $this->post(self::TASK_APP_SERVICE_NAME, $url, json_encode($pending), 'application/json;charset=UTF-8');
+	}
+
+	/**
+	 * 更新待办状态
+	 * @param array $pendingIds
+	 *
+	 * @POST
+	 * @Path("updatependingstatus/{appId}/{authToken}")
+	 * @Produces(MediaType.APPLICATION_JSON+ ";chartset=UTF-8")
+	 * public Map<String,String> updatePendingStatus(@PathParam("appId")String appId,
+    		                                      @PathParam("authToken")String authToken,
+    		                                      PendingEntity[] data);
+	 */
+	public function updatePendingStatus(array $pendingIds) {
+		$urlParam = array($this->getAppId(), $this->getAppToken());
+		array_unshift($urlParam, 'updatependingstatus');
+		$url = implode('/', $urlParam);
+		return $this->post(self::TASK_APP_SERVICE_NAME, $url, json_encode($pendingIds), 'application/json;charset=UTF-8');
+	}
+	
+	/**
+	 * 添加待阅内容
+	 * @param array $reading
+	 * @return boolean
+	 * 
+	 * @POST
+     @Path("addreading/{appId}/{authToken}")
+     @Produces(MediaType.APPLICATION_JSON+ ";charset=UTF-8")
+     public Map<String,String> addReading(@PathParam("appId")String appId,
+    		                             @PathParam("authToken")String authToken,
+    		                             ReadingEntity[] data);
+	 *
+	 */
+	public function addReading(array $reading) {
+	  $urlParam = array($this->getAppId(), $this->getAppToken());
+	  array_unshift($urlParam, 'addreading');
+	  $url = implode('/', $urlParam);
+
+	  return $this->post(self::TASK_APP_SERVICE_NAME, $url, json_encode($reading), 'application/json;charset=UTF-8');
+	}
+
+	
+	/**
+	 * 更新待阅状态
+	 * @param array $readings
+	 * 
+	 * @POST
+     @Path("updatereadingstatus/{appId}/{authToken}")
+     @Produces(MediaType.APPLICATION_JSON+ ";charset=UTF-8")
+     public Map<String,String> upateReadingStatus(@PathParam("appId")String appId,
+    		                                     @PathParam("authToken")String authToken,
+    		                                     ReadingEntity[] data); 
+	 */
+	public function updateThirdPartyReadingStatus(array $readings) {
+	  $urlParam = array($this->getAppId(), $this->getAppToken());
+	  array_unshift($urlParam, 'updatereadingstatus');
+	  $url = implode('/', $urlParam);
+	  return $this->post(self::TASK_APP_SERVICE_NAME, $url, json_encode($readings), 'application/json;charset=UTF-8');
+	}
+}

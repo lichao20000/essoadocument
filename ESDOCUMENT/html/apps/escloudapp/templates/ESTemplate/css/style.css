@@ -1,0 +1,229 @@
+body{ margin:0 auto; padding:0;} /**/
+body,html{ overflow:hidden;}
+input{ margin:0; padding:0;}
+select{_font-size:12px;}
+ul{ margin:0; padding:0; list-style-type:none;}
+h2,p,form,table{ margin:0; padding:0; font-weight:normal;}
+h2{font-size:14px;}
+#paper{ margin:0 auto;}
+
+.leftdiv{margin-right:10px;}
+.leftdiv,.rightdiv{ width:220px; overflow:auto; overflow:hidden; float:left;}
+.rightdiv{background-color:#fff;}
+
+.left-box-tree{ width:220px; height:150px; background-color: #133959; border-radius: 5px; float:left;}
+.left-box-tree .left-box-title{ padding:5px;width:220px; line-height:24px; text-indent:24px; float:left; border-bottom: 1px solid #fff; /* background:#eee url(../../public/img/list.png) no-repeat 5px center; */ border-top-left-radius: 5px; border-top-right-radius: 5px; color: #fff; font-weight: bold; text-indent: 80px;}
+.left-box-tree .tree-stru, .left-box-tree .stru-tree{width:220px; height:125px; float:left; overflow:auto; padding:0;}
+
+form{ width:100%; height:auto; overflow:hidden; float:left;}
+.flexigrid{ float:left;}
+
+.tblfloat{ width:auto; height:auto; overflow:hidden; float:left;}
+
+
+/**/
+.righttopdiv{ width:100%; height:40px; float:left; padding-top:10px; overflow:hidden;}
+.subnav{width:100%; height:30px; float:left; padding-left:10px; border-bottom: 5px solid #133959;}
+.subnav li{ line-height:30px; color:#fff; float:left; padding:0 10px; margin-right:5px; background: #6f6e81; cursor:pointer; border-radius:5px 5px 0 0;}
+.subnav .defalutTagOpen{ background: #133959;}
+
+.temselect{ width:200px; height:20px; line-height:20px; border:1px solid #ccc; float:left; margin:4px 0 0 10px; background:#fff; _display:inline;}
+
+.headmess,.buttoncss,.titles{ width:100%; height:35px; float:left;  }
+.headmess{ border-left:1px solid #ccc;}
+.titles{ line-height:27px; text-indent:7px; font-weight:bold;}
+
+
+/*閹稿鎸抽弽宄扮础*/
+.treedit{ width:100%; height:auto; overflow:hidden; float:left;}
+.buttoncss{ padding-left:5px; border-left:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+}
+.buttoncss div{ float:left;  border:0px solid transparent; _border-color:tomato; _filter:chroma(color=tomato); cursor:pointer;padding:1px 3px 1px 3px;}
+.buttoncss span{ float:left; height:28px; line-height:28px; padding:0 5px 0 25px;  _border-top-color:tomato; _border-left-color:tomato; _filter:chroma(color=tomato);
+	background-position-x:5px;
+}
+.filedValuesEdit{ width:600px; height:200px; float:left; border:1px solid #eee;}
+
+.subnav .not-allowed{color:#ffffff; cursor:not-allowed;}
+.not-allowed{color:#ffffff; cursor:not-allowed;}
+/*
+#extendsbuttoncssdiv{ border:1px solid #aaa;}
+#extendsbuttoncsspan{ border-top:1px solid #fff; border-left:1px solid #fff;}
+*/
+
+.buttoncss .extbtncssdiv{ border:1px solid #ccc;}
+.buttoncss .extbtncsspan{ border-top:1px solid #fff; border-left:1px solid #fff;}
+
+.save{ background:url(../../public/flexigrid/css/images/save.png) no-repeat left;
+	background-color:#6f6e81;}
+.delete{ background:url(../../public/flexigrid/css/images/close.png) no-repeat 2px center;}
+.reset{ background:url(../../public/flexigrid/css/images/resetBtn.png) no-repeat 2px center;}
+.addchild{ background:url(../../public/flexigrid/css/images/add.png) no-repeat 2px center;}
+.load{ background:url(../../public/flexigrid/css/images/load.png) no-repeat 2px center;}
+.autocorre{ background:url(../../public/flexigrid/css/images/autocorre.gif) no-repeat 2px center;}
+/**/
+.filedit{ width:100%; height:115px; float:left; border-left:1px solid #ccc; border-bottom:1px solid #ccc;}
+.fileditdiv{ width:260px; height:25px; float:left; padding:5px 0;}
+.filedname{ width:100px; line-height:25px; text-indent:5px; float:left;}
+.filedvalue{ width:160px; height:25px; float:left}
+
+.Tags{ width:100%; float:left;}
+
+.filedvalue .input{ width:140px; height:20px; line-height:20px; border:1px solid #ccc; float:left; padding-left:3px; margin-top:3px; background:#fff;}
+
+.floatand3{ height:auto; overflow:hidden; float:left;}
+.float2{ width:520px; height:35px; float:left; margin:0 auto;}
+.float3{ width:780px; height:35px; float:left; margin:0 auto;}
+
+
+.Tags{ float:left; width:100%; height:auto; overflow:hidden;}
+
+#Tag1{ display:block;}
+#Tag2,#Tag3{ display:none;}
+#substructureli{display:block;}
+a{padding:0;}
+
+
+.onlyline{ width:1000px; height:4px; float:left; background:red;  margin-bottom:10px; overflow:hidden;}
+
+
+
+.esselected{background:#CCC;color:#fff;}
+/*缁崵绮虹憴鎺曞閸掓銆僓L,鐎电厧鍤�鐓庡弳閹稿鎸矰IV,瀹告煡锟界憴鎺曞閸掓銆僓L*/
+.only_style{ width:486px; float:left; overflow:auto;}
+#userRole,.referValues{ width:466px; height:auto; overflow:hidden; float:left;}
+.referValues{ clear:left; display:none; margin-top:20px; border-radius:5px;}
+
+.ruleTitle{ width:100%; height:25px; float:left; margin-bottom:10px;}
+.ruleTitle span{ line-height:25px; float:left; padding:0 10px; background:#eee; border-radius:5px;}
+
+.useLis,.selBut{ height:auto; overflow:hidden; float:left;}
+.useLis{ width:193px;}
+.selBut{ width:80px; padding-top:35px; position:relative;}
+.selBut span{width:20px; height:20px; float:right; margin:0 30px 10px; cursor:pointer; background:url(../img/button.bg.gif) no-repeat;}
+.selBut .endspan{ margin-bottom:0;}
+.selBut .estop{ background-position:0px 0px;}
+.selBut .esup{ background-position:0px -20px;}
+.selBut .esleft{ background-position:0px -40px;}
+.selBut .esright{ background-position:0px -60px;}
+.selBut .esdown{ background-position:0px -80px;}
+.selBut .endspan{ background-position:0px -100px;}
+/*gengqianfeng 20140910 修改排序样式图标*/
+.selBut .A-Z{ background-position:0px -140px;}
+.selBut .Z-A{ background-position:0px -120px;}
+.selBut .esleftall{background-position:0px -180px;}
+.selBut .esrightall{background-position:0px -160px;}
+
+.zerorule{ width:80px; height:22px; position:absolute; top:0; left:0; z-index:200}
+.selBut .zerorule .spa{ width:35px; line-height:22px; text-align:center; float:left; font-size:12px;}
+.selBut .zerorule .inpu{ width:40px; height:20px; line-height:20px; float:left; border:1px solid #ccc;}
+
+/*閹兼粎鍌ㄩ弬鍥ㄦ拱濡楀棗鎷伴幖婊呭偍閹稿鎸�/
+.searchRole{ width:187px; height:20px; float:left; padding-left:2px; border:1px solid #ccc;}
+.searchusername{ width:165px; height:20px; float:left; border:0; font-size:13px; color:#555;}
+.searchuserbutton{ width:20px; height:20px; float:right; border:none;}
+
+/*娑撱倓閲滈崚妤勩�*/
+.userList{ width:190px; height:190px; float:left; margin-top:10px; border:1px solid #ccc; overflow-y:scroll;}
+.userList li{ width:170px; height:22px;line-height:22px;color:#555; text-indent:4px; cursor:pointer;}
+/*鐟欏嫬鍨拋鍓х枂閺嶅嘲绱�<----end--->*/
+
+/*杩滅▼鐢靛瓙鏂囦欢閫夋嫨*/
+.clear{clear:both;}
+.filemain{width:600px;height:400px;position:relative;}
+.filemain .mycontent{float:left;width:600px;height:350px;overflow:auto;}
+.ldmtop{border-bottom:1px solid #999999;}
+.filemain .submit{text-align:left;padding-bottom:10px;padding-top:10px;float:left;}
+.filemain .path{float:left;margin-top:20px;margin-left:20px;font-size:15px;}
+.filemain .submit input{width:86px;height:36px;background:url("../img/approve.gif");border:0 none;cursor:pointer;}
+.mycontent .line{width: 580px; height: auto; float: left;}
+.mycontent .list{float:left;margin-top:10px;margin-left:25px;width:120px;overflow:hidden;}
+.mycontent .list .photo{border:1px solid #DDDDDD;width:80px;height:80px;padding:5px;position:relative;overflow:hidden;}
+.mycontent .list span{font-size:14px;}
+.selected{background:#ccc; color:#fff;}
+
+/* 閺傛澘鍨悰銊︾壉瀵拷*/
+#second_list{ display:none;}
+.boxs{ width:505px; height:280px; float:left; overflow-y:scroll;}
+.content_box{ width:485px; height:272px; float:left; padding-bottom:8px}
+.title{ width:100%; height:20px; float:left; margin-bottom:5px;}
+.title span{ padding:0 10px; line-height:20px; float:left; border-radius:3px; background:#eee;}
+
+
+.list_box,.move_btn{ height:auto; float:left; overflow:hidden;}
+.list_box{ width:192px;}
+.move_btn{ width:100px;}
+.move_btn .btnhover{ border-width:1px; border-style:solid; border-color:#ccc #666 #666 #ccc;}
+
+.search_box{ width:190px; height:18px; float:left; margin-bottom:5px; border:1px solid #ccc;}
+.search_box input{ width:170px; height:18px; line-height:18px; float:left; padding-left:2px; border:0;}
+.search_box span{ width:18px; height:18px; float:right; background:url(../img/search.bg.gif) no-repeat center center; _overflow:hidden}
+
+.lists{ width:190px; height:220px; float:left; border:1px solid #ccc; overflow-y:scroll}
+.lists li{ width:170px; line-height:24px; font-size:12px; text-indent:3px; float:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+.exts{ width:100px; height:20px; float:left; margin-bottom:5px;}
+.buttons{ width:22px; height:220px; float:left; margin-left:38px; _display:inline}
+.buttons li{ width:20px; height:20px; float:left; border:1px solid #fff; border-radius:3px; background:url(../img/button.bg.gif) no-repeat}
+
+
+.buttons .tofirst{ background-position:0 0;}
+.buttons .toup{ background-position:0 -20px;}
+.buttons .toleft{ background-position:0 -40px;}
+.buttons .toright{ background-position:0 -60px;}
+.buttons .todown{ background-position:0 -80px;}
+.buttons .tolast{ background-position:0 -100px;}
+.buttons .za{ background-position:0 -120px;}
+.buttons .az{ background-position:0 -140px;}
+.buttons .torightall{ background-position:0 -160px;}
+.buttons .toleftall{ background-position:0 -180px;}
+/* 閺傛澘鍨悰銊︾壉瀵拷缂佹挻娼�*/
+
+/* 濡楋絾顢嶉柎鏉戠暰鐟欏嫬鍨�*/
+.identify_rule{ width:600px; height:360px; float:left; overflow:hidden;}
+.field_box{ width:100%; height:auto; overflow:hidden; float:left;}
+.field_box h2{ width:100%; line-height:24px; font-weight:bold; text-indent:6px; float:left; border-bottom:2px solid #ccc; background:url("../../public/flexigrid/css/images/wbg.gif") repeat-x scroll center top transparent;}
+
+.fields{ width:100%; height:30px; float:left; margin:25px 0;}
+.fields p{ width:280px; height:25px; float:left; overflow:hidden;}
+.onlymargin{ margin-right:10px;}
+.fields p span{ width:100px; line-height:25px; text-align:center; float:left}
+.fields p select{ width:175px; line-height:25px; float:left; margin-top:3px; _margin-top:0;}
+
+
+.btn_box{ width:100%; height:40px; float:left;}
+.base-btn{ line-height:25px; padding:0 10px; background:#eee; border-radius:5px;}
+.btn-pos{ float:right; margin-right:280px; border-width:1px; border-style:solid; border-color:#eee #ccc #ccc #eee}
+.extbtnpos{ border-color:#ccc #ddd #ddd #ccc; cursor:pointer;}
+
+.code_tbl_box{ width:100%; height:250px; float:left;}
+
+.code_tbl_box .flexigrid div.mDiv{ border-top:1px solid #ccc;}
+/* 濡楋絾顢嶉柎鏉戠暰鐟欏嫬鍨�閿涳拷缂佹挻娼�*/
+.see{ width:16px; height:16px; border:0; background:url('../img/edit.png'); cursor:pointer;}
+/*shimiao  **/
+.img-TreeEdit{background:url(../img/treeEdit.png) no-repeat 2px center;padding-left:25px;}
+.img-StructureEdit{background:url(../img/structureEdit.png) no-repeat 2px center;padding-left:25px;}
+.img-RuleEdit{background:url(../img/ruleEdit.png) no-repeat 2px center;padding-left:25px;}
+/**shimiao */
+.quoteModel{background:url(../img/quote.ico) no-repeat 2px center;}
+.chooseModel{background:url(../img/choose.png) no-repeat 2px center;}
+
+/* 鏌ョ湅璇︾粏淇℃伅鎸夐挳鏍峰紡 */
+.details{ width:16px; height:16px; background:url(../../public/flexigrid/css/images/grid.png) no-repeat; border:0; cursor:pointer;}
+
+.quoteModel{background:url(../img/quote.png) no-repeat 2px center;}
+.chooseModel{background:url(../img/choose.png) no-repeat left;}
+.deleteModel{background:url(../../public/flexigrid/css/images/close.png) no-repeat left;}
+#CHOOSE_STRU_NODE,#QUOTE_STRU_NODE,#DEL_NODE,#SAVE_NODE,#RESET_NODE,#DELETE_STRU_NODE{
+	background-color: #6f6e81;
+	color:#fff;
+	height:30px;
+}
+#CHOOSE_STRU_NODE:hover,#QUOTE_STRU_NODE:hover,#DEL_NODE:hover,#DELETE_STRU_NODE:hover,#SAVE_NODE:hover,#RESET_NODE:hover{
+	background-color:#133959;
+	margin:0px;
+	border:0px;
+	height:30px;
+}

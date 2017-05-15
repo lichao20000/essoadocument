@@ -1,0 +1,58 @@
+<div id="ESLuceneOtherNodes"></div>
+<script type="text/javascript">
+var _eSLuceneOtherNodes = {
+		total : false, // 用于保存接口消息总条数,该参数只在第一次得到
+		init : function() {
+			document.getElementById('ESLuceneOtherNodes').innerHTML = "<table id='lucene-ESLuceneOtherNodes'></table>";
+			var col_ = url_ = title_ = button_ = condition_ = false;
+			col_ = [ {
+				display: '序号', 
+				name:'line', 
+				width: 50, 
+				align: 'center'
+			}, {
+				display : '<input id="checkAllOtherNodes" type="checkbox" name="idAllOtherNodes">',
+				name : 'id',
+				width : 20,
+				align : 'center'
+			}, {
+				display : '节点的名称',
+				name : 'otherNodeName',
+				width : 420,
+				align : 'left'
+			}];
+			$("#lucene-ESLuceneOtherNodes").flexigrid({
+				dataType : 'json',
+				colModel : col_,
+				title : title_,
+				showTableToggleBtn : false,
+				width : 500,
+				height : 350,
+				nomes : '没有数据'
+			});
+		}
+	};
+	/**初始化table**/
+	_eSLuceneOtherNodes.init();
+	$("#lucene-ESLuceneOtherNodes").flexExtendData([
+		<?php   
+		$line=1;
+		foreach ($lists as $list){                           
+		  echo  '{
+					\'cell\':{
+						\'id\':\'<input type="checkbox" name="checkAllOtherNodesOne" value="'.$list->id.'@'.$list->id_structure.'"/>\',
+						\'line\':\''.$line++.'\',
+						\'otherNodeName\':\''.$list->estitle.'\'
+					   }
+				  }';
+		  if($line!=$total-1){
+		  	echo ',';
+		  }
+		}?>
+	 ]);
+
+	//复选框全选,取消全选 //
+	$(document).on('click', '#checkAllOtherNodes', function() {
+		checkBox.selectAll(this, 'lucene-ESLuceneOtherNodes');
+	});
+</script>

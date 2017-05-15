@@ -1,0 +1,58 @@
+<?php
+
+/*
+ * action ESUserManageAction.php
+ * author fangjixiang
+ * date 20121024
+ * 
+ */
+class ProxyEscloudappEscloud_consumerservice extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_consumerservice";
+	
+	// 页面载入时获取一级树@方吉祥
+	public function getCompanyList()
+	{
+		$urlParam = array('getCompanyList');
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	// 页面载入时获取二级树@方吉祥
+	public function getSubOrgList($id)
+	{
+		$urlParam = array('getSubOrgList',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	// 根据orgid查找用户信息@方吉祥
+	public function findUserListByOrgid($orgid,$start,$limit)
+	{
+		$urlParam = array('findUserListByOrgid',$orgid,$start,$limit);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	// 页面载入时获取二级树@方吉祥
+	public function getOrgList($id)
+	{
+		$urlParam = array('getOrgList',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/*
+	 * 获只取自己省的机构
+	 * 方吉祥
+	 * 20130509
+	 */
+	public function getOwnOrgByUserId($userid)
+	{
+		$urlParam = array('getOwnOrgByUserId', $userid);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+}

@@ -1,0 +1,36 @@
+<div id='addrole' class='addrole'>
+	<div class='prompt_message' id='prompt_message'></div>
+	<div class='input'>
+		<h2>角色标识：</h2>
+		<input type='text' id='code' class='input font' />
+	</div>
+	<div class='input'>
+		<h2>角色名称：</h2>
+		<input type='text' id='name' class='input font' />
+	</div>
+	<div class='textarea mb'>
+		<h2>角色描述：</h2>
+		<textarea id='remark' class='font border-gray'></textarea>
+	</div>
+	<?php 
+	if($isAdmin=='isAdmin'){
+		echo "<div class='input'>" .
+				"<h2>系统角色：</h2>" .
+				"<div class='select-item'>" .
+					"<label for='is_system_role'>" .
+						"<input id='is_system_role' type='radio' value='0' name='issystemrole' />" .
+						"<span>是</span>" .
+					"</label>" .
+					"<label for='is_custom_role'>" .
+						"<input id='is_custom_role' type='radio' value='1' name='issystemrole' checked='checked' />" .
+						"<span>否</span>" .
+					"</label>" .
+				"</div>" .
+			"</div>";
+	}
+	?>
+	<input id='id' type='hidden' value='NULL' />
+</div>
+<script type="text/javascript">
+	var isAdmin="<?php echo $isAdmin;?>";
+</script>

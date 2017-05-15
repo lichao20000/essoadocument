@@ -1,0 +1,179 @@
+<div id='boxinnerfileDiv'>
+<table id = "boxinnerfile"></table>
+</div>
+<div id='boxfileDiv'>
+<table id = "boxfile"></table>
+</div>
+<script type="text/javascript">
+var btn=[{name: '退回', bclass: 'back',onpress:removeOut}];
+/*var name=$("#flexme").flexGetColumnName('CaseID');
+  var condition=name+',equal,'+packetNo+',true';*/
+ $("#boxinnerfile").flexigrid({
+		url: $.appClient.generateUrl({ESIdentify:'InnerfileSet_json',path:nodePath,boxID:packetId,boxfile:true}),
+		dataType: 'json',
+		colModel : [
+			{display: '序号', name : 'num', width : 20, align: 'center'},
+			{display: '<input type="checkbox" name="path" onclick=selectAll(checked,name,"#boxinnerfile")>', name : 'ids', width : 20, align: 'center'},
+			{display: '操作', name : 'operate', width : 60, align: 'center'},
+			{display: '关系', name : 'relation', width : 60, align: 'center',metadata:'relation',hide:true},
+			<?php echo $fields;?>
+			],
+		buttons:btn,
+			usepager: true,
+			useRp: true,
+			//query:condition,
+			width: 800,
+			onDoubleClick:dbClickshowBoxFile,
+			height:200,
+			dblClickResize:true,
+			onSuccess: getVal
+			//onSuccess: autoResize
+	});
+  $("#boxfile").flexigrid({
+		url: false,
+		dataType: 'json',
+		colModel : [
+			{display: '序号', name : 'num', width : 20, align: 'center'},
+			{display: '操作', name : 'operate', width : 60, align: 'center'},
+			{display: '关系', name : 'relation', width : 60, align: 'center',metadata:'relation',hide:true},
+			<?php echo $downFields;?>
+			],
+			usepager: true,
+			title: '卷内目录',
+			useRp: true,
+			//query:condition,
+			width: 800,
+			height:200,
+			dblClickResize:true
+	});
+  	$("#boxinnerfile tr").die().live('click',function(){
+		var val=$(this).find("input").val();
+		if(!val)return;
+		var url=$.appClient.generateUrl({ESIdentify:'set_json',path:'<?php echo $nextPath;?>',prePath:val,boxfile:1});
+			$("#boxfile").flexOptions({newp:1,url:url}).flexReload();/** xiaoxiong 20140807 添加newp:1参数，使其在切换案卷时，卷内永远显示第一页数据 **/
+		});	
+  	function getVal(){
+  		var val=$("#boxinnerfile tr:first input").val();
+  		if(!val)return;
+  		var url=$.appClient.generateUrl({ESIdentify:'set_json',path:'<?php echo $nextPath;?>',prePath:val,boxfile:1});
+  			$("#boxfile").flexOptions({url:url}).flexReload();
+  	}
+  /** xiaoxiong 20140807 添加模糊检索框 **/
+  $('#boxinnerfileDiv div[class="tDiv2"]').append('<div class="find-dialog"><input onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="boxinnerfileQueryKeyword" value="请输入关键字" /><span onclick="boxinnerfileQuery()"></span></div>');
+
+  /** xiaoxiong 20140807 模糊检索处理方法 **/
+  function boxinnerfileQuery(){
+		var keyword=$.trim($('input[name="boxinnerfileQueryKeyword"]').val());
+		if(keyword=='' || keyword=='请输入关键字') {
+			keyword = '';
+		}
+		$("#boxinnerfile").flexOptions({newp:1,query:keyword}).flexReload();
+		return false;
+	}
+	
+//将文件从盒中退回
+	function removeOut(){
+		var id='';
+		var checkboxObj=$("input[name='path']:checked",$('#boxinnerfile'));
+		if(checkboxObj.length == 0 )
+		{
+			$.dialog.notice({content:'请选择要退回的数据',time:3,icon:'warning'});
+			return false;
+		}else{
+			var notEditCount = 0 ;
+			var allDataCount = 0 ;
+			//遍历选中的数据
+			checkboxObj.each(function(i){
+				id+=$(this).val()+',';
+				if("false" == $(this).attr("edit")){
+					notEditCount++ ;
+				}
+				allDataCount++ ;
+			});
+			if(notEditCount>0){
+				if(allDataCount == notEditCount){
+					$.dialog.notice({content:'您对选择的全部数据都没有数据编辑权限，不能进行退回操作！',time:5,icon:'warning'});
+					return false;
+				} else {
+					$.dialog.notice({content:'您对选择的部分数据没有数据编辑权限，不能进行退回操作！',time:5,icon:'warning'});
+					return false;
+				}
+			}
+		}
+		$.dialog({
+				content:'确定要退回吗?',
+				ok:true,
+				okVal:'确定',
+				cancel:true,
+				cancelVal:'取消',
+				ok:function()
+				{
+					var url=$.appClient.generateUrl({ESIdentify:'removeOut',path:nodePath},'x');
+					$.post(url,{pkgPath:id,strucid:strucid,packetId:packetId,type:archiveType},function(data){
+						if(data){
+							setGroup();
+							$("input[name='packetIds']").attr("checked",false);
+							$.dialog.notice({width: 150,content: '操作成功',icon: 'success',time: 3});
+							$('#boxinnerfile,#flexme,#pack').flexReload();
+						} else {
+							$.dialog.notice({width: 150,content: '操作失败',icon: 'error',time: 3});
+						}
+						});
+				}
+
+			})
+
+	}
+//查看檔案詳細信息
+function showBoxFile(path,systemid,itemEdit,fileread,obj){
+	file_Path=path.replace(/\//g,'-');
+	var url=$.appClient.generateUrl({ESIdentify:'eidtItem',path:path,boxfile:true,itemEdit:false,fileread:fileread,isBoxFile:1},'x');
+	$.ajax({
+	    url:url,
+	    success:function(data){
+	    	$.dialog({
+		    	title:'查看面板',
+		    	width: '550px',
+	    	   	fixed:false,
+	    	   	padding:'0px',
+	    	    resize: false,
+			    cancelVal: '关闭',
+			    cancel: true,
+		    	content:data,
+		    	init:function(){
+					/** xiaoxiong 20140804 当不可编辑时，将编辑窗体中的所有组件设置为不可编辑 **/
+					if(itemEdit == 'false'){
+						$('.estransfer input').attr('disabled', true);	
+						$('.estransfer select').attr('disabled', true);
+						//xiewenda 20140915 将textarea 元素也设置为不可编辑
+						$('.estransfer textarea').attr('disabled', true);	
+						$('.estransfer textarea').attr('disabled', true);	
+					}
+	    		}
+		    });
+	    	
+		    },
+		    cache:false
+	});
+
+	
+}
+//双击查看档案详细信息
+function dbClickshowBoxFile(tr,g,p){
+		var obj = $("[name='path']",tr) ;
+		var path = obj.val();
+		/** xiaoxiong 20140804 获取待显示数据是否可编辑，从而控制保存按钮是否可用 **/
+		var edit = obj.attr('edit') ;
+		var fileread = obj.attr('fileread') ;
+		
+		file_Path=path.replace(/\//g,'-');
+		showBoxFile(path, null, edit, fileread, obj);
+}
+/** xiaoxiong 20140904 根据用户权限控制按钮的权限 **/
+(function(){
+	if(($('#escontent').attr("itemEditRight")+"") == "false"){
+		$(".back").addClass("not-allowed");
+		$(".back").attr("title", "您没有当前节点下的数据编辑权限，此功能不可用！") ;
+	}
+})();
+</script>

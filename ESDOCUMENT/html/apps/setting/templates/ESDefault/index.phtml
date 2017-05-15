@@ -1,0 +1,36 @@
+<link href='<?php echo $tplPath?>/ESDefault/css/index.css' rel="stylesheet"/>
+<link href='<?php echo $tplPath?>/ESDefault/css/main.css' rel="stylesheet"/>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>1));?>
+
+<div style="padding-top: 55px; align: center; margin: 0 auto; overflow-x: auto; overflow-y: hidden;"	id="mainContentContainer">
+	<div id="centerFunc" class="centerFunc">
+		<!-- @author liuhezeng 左侧功能区  -->
+		<div class="lineModelLeft1">
+			<div id="dateSection" class="dateSection">
+				<div id="hourSection" class="hourSection"></div>
+				<div class="clearFloat"></div>
+				<div id="daySection" class="daySection"></div>
+				<div class="clearFloat"></div>
+				<div id="monthSection" class="monthSection"></div>
+				<div class="clearFloat"></div>
+				<div id="weekSection" class="weekSection">星期一</div>
+				<img src="<?php echo $tplPath;?>/ESDefault/img/dateLogo.png" id="dataLogo" class="dataLogo" />
+			</div>
+		</div>
+		<div class="lineModelRight1" controller="EsOrder" action="index">
+			<div class="showTextAreaUpLeft2">
+				<a class="arcStandardImg" id="arcStandardImga"><i class="icon-user icon-4x" id="arcStandardImgId"></i> </a>
+				<div id="titleLineRight1" class="titleImgArcs">订购服务</div>
+			</div>
+		</div>
+
+		
+	</div>
+</div>
+
+<!-- BEGIN JAVASCRIPTS -->
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script	type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script	type="text/javascript" src='<?php echo $tplPath?>/ESDefault/js/index.js'></script>
+<script	type="text/javascript" src='<?php echo $tplPath?>/ESDefault/js/pagebtn.js'></script>
+<!-- END JAVASCRIPTS -->

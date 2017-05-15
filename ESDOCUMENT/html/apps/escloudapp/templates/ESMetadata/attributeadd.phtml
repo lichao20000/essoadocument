@@ -1,0 +1,19 @@
+
+<form id="attrform" style="width:500px;height:150px;padding: 0px;margin: 0px;">
+<div style="padding-left: 10px;">
+  <div>
+  <table id="attr">
+    <tr style="height: 20px">
+      <td><p class="st">属性值</p></td>
+      <td><input type="text" name="attr" verify="attrValue/128/1/0" value="<?php echo isset($list[0]['estitle'])?$list[0]['estitle']:"";?>" ></td>
+    </tr>
+    <tr>
+      <td ><p class="st">描述</p></td>
+      <td colspan="3"><textarea name="describe" verify="attrDescribe/128/0/0" style="width:90%;"><?php echo isset($list[0]['esdescription'])?$list[0]['esdescription']:"";?></textarea></td>
+    </tr>
+  </table>
+  </div>
+  <input type="hidden" name="atrrid" value="<?php echo isset($list[0]['id'])?$list[0]['id']:"";?>" />
+    <input type="hidden" name="idmeta" value="<?php echo isset($list[0]['idMetadata'])?$list[0]['idMetadata']:"";?>" />
+</div>
+</form>

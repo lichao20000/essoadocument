@@ -1,0 +1,36 @@
+<div>
+<table id="choosearchive"></table>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#choosearchive").flexigrid({
+		//url:$.appClient.generateUrl({ESCompilation:'get_json'},'x'),
+		dataType: 'json',
+		colModel : [
+		    {display: '<input type="checkbox" name="choose" />', name : 'check', width : 40, align: 'center'},
+		    {display: 'pdfid', name : 'pdfid', width : 100,  align: 'center',hide:true},
+		    {display: '标题', name : 'title', width : 200,  align: 'center'},
+		    {display: '类型', name : 'type', width : 200,  align: 'center'}
+			],
+		usepager: true,
+		useRp: true,
+		rp: 20,
+		procmsg:"正在加载，请稍等",
+		nomsg:"没有数据",
+		resizable:false,
+		minColToggle:0,
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: '600',
+		height: '200',
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	var complyurl = $.appClient.generateUrl({ESCompilation:'choose_json'},'x');
+	$('#choosearchive').flexOptions({newp: 1,url:complyurl}).flexReload();
+	$('#choosearchive tr').die().live('click',function(){
+		$('input[name="checkornot"]').attr("checked",false);
+		$(this).find("input[name='checkornot']").attr("checked",true);
+	});
+});
+</script>

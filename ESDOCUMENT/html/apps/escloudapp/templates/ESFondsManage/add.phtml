@@ -1,0 +1,55 @@
+<style type="text/css">
+.subnav{width:270px;padding:15px;height:14px;margin-bottom:-10px;}
+.subnav a{display:block;height:24px;text-decoration:none;font-weight:bold;color:black}
+.subnav li{float:left;width:100px;line-height:24px;text-align:center;margin-left:5px;}
+.subnav a:hover{background-color: red;color:white;text-decoration:none;font-weight:bold;color:black}
+</style>
+<div>
+  <ul id="subnav" class="subnav">
+    <li><a onclick="javascript:information();">全总信息</a></li>
+    <li><a onclick="javascript:fondsnext();">全宗下归档单位</a></li>
+  </ul>
+</div>
+<div style="clear: both;"></div>
+<hr  size="5" color="red" /> 
+<div id="xinxi" style="display:block;">
+  <p><img src="<?php echo $tplPath?>/ESTemplate/img/chakan.jpg">&nbsp;基本信息</p>
+
+<div>
+  <input type="submit" value="保存"/>
+</div>
+<table style="width:750px;">
+  <tr style="width:750px;height:30px;">
+    <td style="width:100px;">全宗名称：</td>
+    <td style="width:450px;" colspan="2"><input type="text" name="" value="" style="width:450px;"/></td>
+  </tr>
+  <tr style="width:750px;height:30px;">
+    <td style="width:200px;">全宗号：</td>
+    <td><input type="text" name="" value="" /></td>
+    <td style="width:200px;">是否启用：</td>
+    <td><input type="text" name="" value="" /></td>
+  </tr>
+  <tr>
+    <td>全总说明：</td>
+    <td colspan="3"><textarea cols=60 rows=10 name="text"></textarea></td>
+  </tr>
+</table>
+</div>
+<div id="danwei" style="display:none;">
+  <ul id="liebiao" class="ztree" ></ul>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFondsManage/js/template.js"></script>
+<script type="text/javascript">
+
+    function information()
+  {
+	  document.getElementById("xinxi").style.display == "block";	
+	  document.getElementById("danwei").style.display == "none";
+	  }
+  function fondsnext()
+  {
+	  document.getElementById("xinxi").style.display == "none";	
+	  document.getElementById("danwei").style.display == "block";
+	  }
+</script>
+

@@ -1,0 +1,480 @@
+<link href="<?php echo $tplPath?>/ESIdentify/css/main.css" rel="stylesheet" type="text/css">
+<link href="<?php echo $tplPath;?>/public/DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/viewfile.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript">var status=100;</script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESRecycleBin/js/menu.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/common.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/validate.js"></script>
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>1));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"数据回收站", content:"#esmenu, #esone, #eslist"});
+	$(".esleft").css("height",esleftH);//设置左侧菜单
+	
+});
+
+</script>
+<div  class='esmain'>
+	<div id="escontent">
+		<div id="esmenu" class="esleft">
+			<ul id="treeDemo" class="ztree"></ul>
+		</div>
+	<div class="esright" id ="esone">
+		<div id="eslist">
+		<table id = "recycle"></table>
+</div>
+	</div>
+	<div id="esfileview"></div>
+	<div id="esnotfiling"></div>
+	</div>
+	<div id="transfer"></div>
+</div>
+
+<script type="text/javascript">
+
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".esleft").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".esleft").offset().top;
+var esleftH=winH-eslefttop-12;
+var height=winH-eslefttop-115;
+window.onresize=function()
+{
+	var winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".esleft").width()-5;
+	}
+	var winH=$(window).height();
+	var height=winH-eslefttop-115;
+	$(".flexigrid").css({width:width});	
+}
+</script>
+<script type="text/javascript">
+$("#recycle").flexigrid({
+		url: false,
+		dataType: 'json',
+		colModel : [
+			{display: '序号', name : 'num', width : 20, align: 'center'}, 
+			{display: '<input type="checkbox" name="paths">', name : 'ids', width : 20, align: 'center'},
+			{display: '操作', name : 'operate', width : 60, align: 'center'}
+			
+			],
+	
+		buttons : [
+			{name: '数据恢复', bclass: 'add',disable:true},
+			{name: '删除', bclass: 'delete',disable:true},
+			{name: '清空', bclass: 'delete',disable:true},
+			{name: '筛选', bclass: 'filter',disable:true},
+			{name: '查看日志', bclass: 'note',disable:true}
+			],
+			usepager: true,
+			title: '回收站',
+			useRp: true,
+			width: width,
+			height:height
+	});
+function createNewSWFUpload(){
+	var upload = new SWFUpload({
+		//提交路径
+		upload_url: "<?php echo $serviceIp;?>/importData/",
+		//向后台传递额外的参数
+		//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+		//上传文件的名称
+		file_post_name: "file.txt",
+		
+		file_size_limit : "20480",	// 100MB
+		file_types : "*.xlsx;*.xls;*.xml",
+		file_types_description : "所有文件",
+		file_upload_limit : "1",
+		file_queue_limit : "0",
+		post_params:{path:nodePath,userid:"<?php echo $userid;?>"},
+
+		// 事件处理
+		swfupload_loaded_handler : swfuploadLoaded,
+		file_dialog_start_handler : fileDialogStart,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+
+		// 按钮的处理
+		button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+		button_placeholder_id : "btnUpload",
+		button_width: 72,
+		button_height: 28,
+		
+		// Flash文件地址设置
+		flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+		
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel",
+			startButtonId : "btnStart",
+			// 上传成功的回调函数
+			uploadSuccess : function(file, data){
+				if(data){
+					if(data=="false"){
+						$.dialog.notice({width: 150,content: '导入数据失败',icon: 'error',time: 3});
+					}else{
+						setGroup();
+						$.dialog.notice({width: 150,content: '成功导入'+data+'条数据',icon: 'success',time: 3});
+						$("#flexme,#innerfile").flexReload();
+						$.dialog.list['importDialog'].close();
+					}
+				}
+			}
+		},
+		
+		// Debug 设置
+		debug: false
+	});
+	$("#btnCancel").click(function(){cancelQueue(upload);});
+	$("#btnStart").click(function(){startQueue(upload);});
+};
+$("body").die().live("click", onBodyDown);
+</script>
+<!-- 编辑页面文件操作方法-->
+<script type="text/javascript">
+function addFile(){
+		var content = [];
+		content.push("<table>");
+		content.push("<tr>");
+		content.push("<td>");
+		content.push("<div id='filetreebox' style='width:200px; height:350px;overflow:auto;'><ul id='filetree' class='ztree'></ul></div>");
+		content.push("</td>");
+		content.push("<td>");
+		content.push("<div id='filelistbox' style='height:350px;overflow:auto;'>");
+		content.push("<table id='filelist'></table>");
+		content.push("</div>");
+		content.push("</td>");
+		content.push("</tr>");
+		content.push("</table>");
+		var linkdialog = $.dialog({
+			title:'挂接文件',
+    		width: '800px',
+    	   	height: '350px',
+    	   	padding: '0px',
+    	    fixed:true,
+    	    resize: false,
+    		content:content.join(""),
+    		cancelVal: '关闭',
+    		cancel: true,
+    		okVal: '挂接文件',
+    		ok: function(){linkFile(); return false;},
+			init:initSelectFile
+    	});	
+    	// 挂接文件
+		function linkFile(){
+			var files = [];
+			var checkboxs = $("#filelist").find("input[name='id']:checked");
+			if (checkboxs.length > 0 ){
+				checkboxs.each(function(){
+					var tr = $(this).closest("tr");
+					var selectFile = tr.prop("data").cell;
+					var file = {};
+					file.ORIGINAL_ID = selectFile.originalId;
+					file.EssType = selectFile.essType==null?"":selectFile.essType;
+					files.push(file);
+				});
+				$.post($.appClient.generateUrl({ESIdentify:'linkFiles'},'x'), {path:file_Path, IdBusiModel:status, files:files, upload:false}, function(data){
+					$("#efiletable").flexReload();
+					linkdialog.close();
+				});
+			}
+		};
+	};
+	// 去除挂接文件
+	function delFile(){
+		var checkboxs = $("#efiletable").find("input[name='id']:checked");
+		if(checkboxs.length==0){
+			$.dialog.notice({icon:'warning',content:'请选择删除的文件',time:3});
+			return;
+		}
+		$.dialog({
+			content:'确定要删除吗?',
+			ok:true,
+			okVal:'确定',
+			cancel:true,
+			cancelVal:'取消',
+			ok:function(){
+				if(checkboxs.length > 0){
+					var ids = [];
+					checkboxs.each(function(){
+						ids.push($(this).closest("tr").attr("id").substr(3));
+					});
+					
+					$.post($.appClient.generateUrl({ESIdentify:'deleteLinkFiles'},'x'), {path:file_Path, ids:ids}, function(data){
+						if(data){
+							$("#efiletable").flexReload();
+							//全部删除则执行下列代码
+							var obj=$('input[metadata="Attachments"]');
+							if(checkboxs.length >= parseInt(obj.val())){
+								obj.val(0);
+							}
+						}
+						
+					});
+				}
+
+			}
+		})
+	
+	};
+	//在删除操作和添加电子文件时动态修改附件数
+	function _initInput(){
+		var trlen=$("#efiletable").find('tr').length;
+			$('input[metadata="Attachments"]').val(trlen);
+	}
+	// 保存修改后的挂接文件信息
+	function saveFile(){
+		var trs = $("#efiletable").find("tr[datastate='modify']");
+		if(trs.length > 0){
+			var files = [];
+			trs.each(function(){
+				var td = $(this).find("td[colname='essType']").text();
+				var file = {};
+				file.ORIGINAL_ID = $(this).prop("id").substr(3);
+				file.EssType = $(this).find("td[colname='essType']").text();
+				file.Dept = $(this).find("td[colname='dept']").text();;
+				files.push(file);
+			});
+			$.post($.appClient.generateUrl({ESIdentify:'modifyLinkFiles'},'x'), {path:file_Path, files:files}, function(data){
+				if(data){
+					$.dialog.notice({icon: 'success',content:'保存成功',time:2});
+					$("#efiletable").flexReload();
+				}
+			});
+		}
+	};
+	// 浏览电子文件
+	function viewFile(){
+
+		if(!nodePath){
+			$.dialog.notice({content: 'PATH不存在', time: 2, icon: 'warning', lock: false});
+		}
+		// 方吉祥修改（在浏览原文时用户勾选数据时选择用户勾选的第一条）
+		var fileId = '';
+			if(document.getElementById('efiletable')){
+					if(!$('#efiletable tr').length){
+						$.dialog.notice({content: '不存在电子文件', time: 3, icon: 'warning', lock: false});
+						return;
+
+					}
+				var checked = $('#efiletable input[name="id"]:checked:first').closest('tr');
+					if(checked.length){
+	
+						fileId = checked[0].id.split('row');
+						fileId = fileId[1];
+						
+					}else{ // 默认第一条数据
+	
+						fileId = $('#efiletable tr:first')[0].id.split('row');
+						fileId = fileId[1];
+						
+					}
+			}
+
+		/// ----------
+		var url = $.appClient.generateUrl({ESIdentify:'file_view',path:file_Path, fileId: fileId},'x');
+		
+		// 修改结束
+		$.ajax({
+			url:url,
+			cache:false,
+			success:function(data){
+
+				if(data === 'pathErr'){
+					$.dialog.notice({content: '参数不正确（PATH）', time: 2, icon: 'warning', lock: false});
+				}
+				$.dialog({
+			    	title:'浏览电子文件',
+			    	width: '960px',
+		    	   	fixed:false,
+		    	    resize: false,
+		    	    padding: 0,
+		    	    top: '10px',
+			    	content:data
+			    });
+			}
+		});
+	};
+	// 上传文件
+	function uploadFile(){
+		$.dialog({
+			title:'上传文件',
+    		width: '450px',
+    	   	height: '250px',
+    	    fixed:true,
+    	    resize: false,
+    		content:"<div id='content'><div class='fieldset flash' id='fsUploadProgress'></div></div>",
+    		cancelVal: '关闭',
+    		cancel: true,
+    		padding: '10px',
+			button: [
+	    		{id:'btnAdd', name: '添加文件'},
+	            {id:'btnCancel', name: '删除所有', disabled: true},
+	            {id:'btnStart', name: '开始上传', disabled: true, callback: function(){return false;}}
+			],
+			init:createSWFUpload
+    	});	 
+	};
+	// 创建上传文件组件
+	function createSWFUpload(){
+		var files = [];
+		var upload = new SWFUpload({
+			//提交路径
+			upload_url: '',
+			file_post_name: "file.txt",		
+			file_size_limit : "1048576",	// 100MB  longjunhao 20140905 修改为1024MB=1GB
+			file_types : "*.*",
+			file_types_description : "所有文件",
+			file_upload_limit : "0",
+			file_queue_limit : "0",
+
+			// 事件处理
+			swfupload_loaded_handler : swfuploadLoaded,
+			file_dialog_start_handler : fileDialogStart,
+			file_queued_handler : fileQueued,
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_start_handler : uploadStart,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+
+			// 按钮的处理
+			button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+			button_placeholder_id : "btnAdd",
+			button_width: 72,
+			button_height: 28,
+			
+			// Flash文件地址设置
+			flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+			
+			custom_settings : {
+				progressTarget : "fsUploadProgress",
+				cancelButtonId : "btnCancel",
+				startButtonId : "btnStart",
+				// 上传成功的回调函数
+				uploadSuccess : function(file, data, remainder){
+					var f = $.parseJSON(data);
+					var extName = file.name.substr(file.name.lastIndexOf(".")+1);
+					extendFile(f.fileId, f.contentMD5, f.fileSize, f.createTime, file.name, extName, remainder);
+				}
+			},
+			
+			// Debug 设置
+			debug: false
+		});
+		$("#btnCancel").click(function(){cancelQueue(upload);});
+		$("#btnStart").click(function(){
+			$.post($.appClient.generateUrl({ESIdentify:'getUploadURL'},'x'),  function(data){
+				upload.setUploadURL(data);
+				startQueue(upload);
+			});
+		});
+		// 挂接文件
+		function extendFile(fileid, md5, filesize, createtime, filename, extName, remainder){
+			files.push({ORIGINAL_ID:fileid, ESMD5:md5, ESTITLE:filename, ESTYPE:extName, ESSIZE:filesize, EsCreateTime:createtime});
+			if(remainder ===0){
+				$.post($.appClient.generateUrl({ESIdentify:'linkFiles'},'x'), {path:file_Path, IdBusiModel:status, files:files, upload:true}, function(data){
+					files=[];
+					$("#efiletable").flexReload();
+				});
+			}
+		};
+	};
+
+	// 初始化选择文件界面
+	function initSelectFile(){
+		createFolderTree();
+		createFileList();
+	}
+	// 创建树目录
+	function createFolderTree(){
+		var url = $.appClient.generateUrl({ESEFile:'access'},'x');
+		var setting = {
+			async: {
+				enable: true,
+				dataType: 'json',
+				url: url,
+				autoParam: ["id=param"]
+			},	
+			data: {
+				key: {
+					name: 'estitle',
+					children: 'isPid'
+				},
+				simpleData: {
+					enable: true,
+					idKey: 'id',
+					pIdKey: 'parentid',
+					rootPId: 0
+				}
+			},
+			callback: {
+				beforeClick: beforeClick,
+				onClick : nodeClick
+			}
+		};
+		$.fn.zTree.init($("#filetree"), setting);
+		var efileTree = $.fn.zTree.getZTreeObj("filetree");
+		function beforeClick(treeId, node) {
+			if (node.isParent) {
+				efileTree.expandNode(node);
+			}
+		};
+		function nodeClick(event, treeId, node){
+			$("#filelist").flexOptions({url: $.appClient.generateUrl({ESEFile:'getFileList', folderid:node.id}, 'x')}).flexReload();
+		};
+	};
+
+	// 创建文件列表
+	function createFileList(){
+		$("#filelist").flexigrid({
+			url: $.appClient.generateUrl({ESEFile:'getFileList', folderid:0}, 'x'),
+			dataType: 'json',
+			editable: true,
+			colModel : [
+				{display: '<input type="checkbox" id="fileSelectAll">', name : 'ids', width : 40, align: 'center'},
+				{display: '文件名', name: 'estitle', width:230},
+				{display: '创建时间', name: 'createTime', width:230},
+				{display: '文件大小', name: 'essize'},
+				{display: '文件验证', name: 'esmd5'}
+			],
+			usepager: true,
+			rp: 50,
+			useRp: true,
+			width: 600,
+			height: 290
+		});
+		$("#fileSelectAll").die("click").live("click", function(){
+			document.title = this.checked;
+			$("#filelist").find("input[name='id']").attr("checked", this.checked);
+		});
+	}
+	
+
+
+</script>

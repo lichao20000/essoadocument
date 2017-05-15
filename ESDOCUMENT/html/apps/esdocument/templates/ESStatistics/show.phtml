@@ -1,0 +1,68 @@
+	<div class="flexigrid ie" style="width: 800px;">
+<div class="mDiv">
+	<div class="ftitle">布局浏览</div>
+</div>
+<div class="hDiv">
+	<div class="hDivBox">
+		<table cellSpacing="0" cellPadding="0">
+			<thead>
+				<tr>
+				<?php 
+				$str='';
+				if($result['count']>0){		
+						$str='<th axis="col0" align="center"><div style="width: 245px; text-align: center;">文件类型</div></th>';
+						for($m=1;$m<=$result['count'];$m++){
+							$str.='<th axis="col'.$m.'" align="center"><div style="width: 200px; text-align: center;">列'.$m.'</div></th>';
+						
+						}
+				}
+				echo $str;
+						?>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div style="height: 300px;" class="bDiv">
+	<table id="showRule" style="display: table;" border="0" cellSpacing="0" cellPadding="0">
+	<?php 
+		 		$html='<tr><div style="width: 200px; text-align: left;">没有数据</div></tr>';
+		 		if($result['count']>0){		
+					$html='<tbody>';
+			    	$html.='<tr><td><div style="width: 245px; text-align: left;">列名称</div></td>';
+			    	//$title=explode(';', $colItems->titles);
+			    	$title=explode(';', $items->colTitle);
+					for($n=1;$n<=$result['count'];$n++){
+						$html.='<td><div style="width: 200px; text-align: left;">'.$title[$n-1].'</div></td>';
+					
+					}
+					$html.='</tr>';
+					for($j=0; $j <count($result['data']);$j++){
+						$t=$result['data'][$j];
+						if(($j+1)%2==0){
+							$html.='<tr>';
+						}else{
+							$html.='<tr class="erow">';
+						}
+						$html.='<td align="center"><div style="width: 245px; text-align: " >'.$t['c0']['name'].'</div></td>';
+						
+						for($i=1;$i<=$result['count'];$i++){
+							if(isset($t['c'.$i])){
+								if(!$t['c'.$i]['text']){$text='';}else $text=$t['c'.$i]['text'];
+								$html.='<td align="center"><div style="width: 200px; text-align: left;">'.$text.'</div></td>';
+							}else{
+								$html.='<td align="center"><div style="width: 200px; text-align: left;"></div></td>';
+							}
+						}
+						$html.='</tr>';
+					}
+					$html.='</tbody>';
+		 		}
+				echo $html;
+			?>
+	
+	</table>
+	<div style="display: none;" class="iDiv"></div>
+</div>
+</div>

@@ -1,0 +1,149 @@
+<style type='text/css'>
+.public_filter{ width:620px; height:180px; float:left; overflow:auto}
+.propmt_fields,.filter_condition{ width:600px; height:30px; float:left;}
+
+.filter_conditions{ width:600px; height:150px; float:left; }
+.condition_fields option{ height:20px; line-height:20px}
+
+.long_fields_tag,.short_fields_tag,.add_del_tag{ height:22px; line-height:20px; float:left; margin-right:5px; overflow:hidden;}
+.long_fields_tag{ width:150px;}
+.short_fields_tag{ width:75px;}
+.add_del_tag{ width:55px; text-align:center;}
+
+.long_area,.short_area{ height:20px; line-height:20px; float:left; border:1px solid #7F9DB9;}
+.long_area{ width:148px;}
+.short_area{ width:75px;}
+
+.ext_long_area{ height:18px; line-height:18px; overflow:hidden;}
+
+
+/* 添加行删除行按钮样式 {author:fangjixiang} */
+.new_filter_condition,.del_filter_condition{ width:55px; height:18px; color:#555; float:left; border:1px solid #fff;}
+.new_filter_condition{ margin-right:5px; background:url(<?php echo $tplPath;?>/public/img/add.png) no-repeat center 1px;}
+.del_filter_condition{ background:url(<?php echo $tplPath;?>/public/img/del.gif) no-repeat center 1px;}
+.new_filter_condition:hover,.del_filter_condition:hover{ border:1px solid #e3e3e3;}
+.new_filter_condition:hover{ background:#f3f3f3 url(<?php echo $tplPath;?>/public/img/add.png) no-repeat center 1px;}
+.del_filter_condition:hover{ background:#f3f3f3 url(<?php echo $tplPath;?>/public/img/del.gif) no-repeat center 1px;}
+
+
+.DATE_INPUT_AREA,.TYPE_INPUT_AREA{ display:none;}
+.ztree li a span{
+	color:#444;
+}
+</style>
+<div class='public_filter'>
+	<div class='propmt_fields'>
+		<span class='long_fields_tag'>字段名</span>
+		<span class='short_fields_tag'>比较符</span>
+		<span class='long_fields_tag'>字段值</span>
+		<span class='short_fields_tag'>关系符</span>
+		<span class='add_del_tag'>添加行</span>
+		<span class='add_del_tag'>删除行</span>
+	</div>
+	
+	<div class='filter_conditions' id='filter_conditions'>
+	<?php
+		for($tagNumber=1; $tagNumber<6; $tagNumber++){
+	?>
+		<div class='filter_condition'>
+			<div class='long_fields_tag'>
+				<select class='long_area CHANGE_EVENT filter_Field'>
+					<option value='empty'>请选择</option>
+					<option value='USERID'>移交人</option>
+					<option value='TIMES'>移交日期</option>
+					<option value='ORGID'>移交部门</option>
+					<option value='TYPE'>档案类型</option>
+					<option value='NUMBERS'>移交数量</option>
+					<option value='REMARK'>备注</option>
+				</select>
+			</div>
+			<div class='short_fields_tag'>
+				<select class='short_area filter_Comparison'>
+					<option value="equal">等于</option>
+					<option value="greaterThan">大于</option>
+					<option value="lessThan">小于</option>
+					<option value="notEqual">不等于</option>
+					<option value="greaterEqual">大于等于</option>
+					<option value="lessEqual">小于等于</option>
+					<option value="like" selected>包含</option>
+					<option value="notLike">不包含</option>
+				</select>
+			</div>
+			<div class='long_fields_tag'>
+				<input type='text' class='long_area ext_long_area DEFAULT_INPUT_AREA filter_Value' />
+				<input type='text' class='long_area ext_long_area DATE_INPUT_AREA filter_TransferTimes' onclick = "WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+				<select class='long_area TYPE_INPUT_AREA filter_Type'>
+					<option value='document'>文书档案</option>
+					<option value='contract'>合同档案</option>
+					<option value='project'>工程档案</option>
+					<option value='accounting'>会计档案</option>
+					<option value='purchase'>采购档案</option>
+					<option value='technical'>科技档案</option>
+					<option value='carrierfiles'>多种载体档案</option>
+					<option value='personal'>员工档案</option>
+					<option value='auditfiles'>审计档案</option>					
+				</select>
+			</div>
+			<div class='short_fields_tag'>
+				<select class='short_area filter_Relation '>
+					<option value="true">并且</option>
+					<option value="false">或者</option>
+				</select>
+			</div>
+			<a class='new_filter_condition'></a>
+			<a class='del_filter_condition'></a>
+		</div>
+	<?php }?>
+	</div>
+</div>
+<script type='text/javascript'>
+$('.CHANGE_EVENT').live('change',function (){
+	//alert($('.CHANGE_EVENT').val());
+	$(this).parent().parent().find('div:eq(2) .TYPE_INPUT_AREA').val('');
+	$(this).parent().parent().find('div:eq(2) .DEFAULT_INPUT_AREA').val('');
+	$(this).parent().parent().find('div:eq(2) .DATE_INPUT_AREA').val('');
+	$(this).parent().parent().find('div:eq(2) .DEFAULT_INPUT_AREA').removeAttr('name');
+	
+	if($(this).val() == 'TIMES'){
+		$(this).parent().parent().find('div:eq(2) .TYPE_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .DEFAULT_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .DATE_INPUT_AREA').show();
+		
+	}else if($(this).val() == 'TYPE'){
+		$(this).parent().parent().find('div:eq(2) .DEFAULT_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .DATE_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .TYPE_INPUT_AREA').show();
+	}else if($(this).val() == 'USERID'){
+		$(this).parent().parent().find('div:eq(2) .TYPE_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .DATE_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .DEFAULT_INPUT_AREA').show();
+		$(this).parent().parent().find('div:eq(2) .DEFAULT_INPUT_AREA').attr('name','USERID');
+	}else if($(this).val() == 'ORGID'){
+		$(this).parent().parent().find('div:eq(2) .TYPE_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .DATE_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .DEFAULT_INPUT_AREA').show();
+		$(this).parent().parent().find('div:eq(2) .DEFAULT_INPUT_AREA').attr('name','ORGID');
+	}else{
+		$(this).parent().parent().find('div:eq(2) .TYPE_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .DATE_INPUT_AREA').hide();
+		$(this).parent().parent().find('div:eq(2) .DEFAULT_INPUT_AREA').show();
+	}
+});
+
+
+// 添加行,删除行按钮
+$('.new_filter_condition').die().live('click',function (){
+	$($('#filter_conditions>div:last').clone()).appendTo($('#filter_conditions'));
+	
+	$('#filter_conditions>div:last .TYPE_INPUT_AREA').hide();
+	$('#filter_conditions>div:last .DATE_INPUT_AREA').hide();
+	$('#filter_conditions>div:last .DEFAULT_INPUT_AREA').show().val('');
+	
+});
+
+$('.del_filter_condition').die().live('click',function (){
+	$('#filter_conditions>div').length > 1 ? $('#filter_conditions>div:last').remove() : '';
+});
+
+
+</script>

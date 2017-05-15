@@ -1,0 +1,96 @@
+<link href='<?php echo $tplPath?>/ESDefaultLogin/css/login.css' rel="stylesheet">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<div style="background-color: #4a8bc2; padding-top: 55px; align: center; margin: 0 auto; overflow-x: auto; overflow-y: hidden;" id="mainContentContainer">
+	<div id="centerFunc" class="centerFunc">
+		<!-- logo Section -->
+		<!-- @author liuhezeng 左侧功能区  -->
+		<div class="lineModelLeft1">
+			<div id="dateSection" class="dateSection">
+				<div id="hourSection" class="hourSection"></div>
+				<div class="clearFloat"></div>
+				<div id="daySection" class="daySection"></div>
+				<div class="clearFloat"></div>
+				<div id="monthSection" class="monthSection"></div>
+				<div class="clearFloat"></div>
+				<div id="weekSection" class="weekSection">星期一</div>
+				<img src="<?php echo $tplPath;?>/ESDefaultLogin/img/dateLogo.jpg" id="dataLogo" class="dataLogo" />
+			</div>
+		</div>
+		<div class="lineModelRight1">
+			<div id="titleLineRight1" class="titleLineRight1">最新公告</div>
+			<div id="news" class="showSectionClass"></div>
+		</div>
+
+		<!--  登录Fun -->
+		<div class="lineModelRight1Login" id="loginButton">
+			<!-- <div class="loginModelText" id="loginModelText">登录</div> -->
+			<div class="hideTextAreaUpRight1Login">
+				<a class="loginImg" id="loginImga" href="/escloudapp"><i class="icon-arrow-right icon-4x" id="loginImgId"></i> </a>
+			</div>
+			<div class="showTextAreaUpRight1Login">
+				<div id="titleLineRight1" class="loginModelText">登录</div>
+			</div>
+		</div>
+		<div class="lineModelRight14">
+			<div class="hideTextAreaUpRight14">
+				<div id="titleLineRight1Content">暂时无内容</div>
+			</div>
+			<div class="showTextAreaUpRight14">
+				<a class="arcStandardImg" id="arcStandardImga"><i class="icon-camera-retro icon-4x" id="arcStandardImgId"></i> </a>
+				<div id="titleLineRight1" class="titleImgArcs">图说档案</div>
+			</div>
+		</div>
+
+		<!-- 换行符 -->
+		<div class="clearFloat"></div>
+		<div class="lineModelLeft2">
+			<div class="hideTextAreaUpLeft2">
+				<div id="standard" class="showSectionClass"></div>
+			</div>
+			<div class="showTextAreaUpLeft2">
+				<a class="arcStandardImg" id="arcStandardImga"><i
+					class="icon-group icon-4x" id="arcStandardImgId"></i> </a>
+				<div id="titleLineRight1" class="titleImgArcs">档案规范</div>
+			</div>
+		</div>
+		<div class="lineModelRight2">
+			<div id="titleLineRight1" class="titleLineRight1">大事记</div>
+			<div id="event" class="showSectionClass"></div>
+		</div>
+
+		<!-- 换行符 -->
+		<div class="clearFloat"></div>
+		<div class="lineModelLeft3">
+			<div id="titleLineRight1" class="titleLineRight1">档案故事</div>
+			<div id="story" class="showSectionClass"></div>
+		</div>
+		<div class="lineModelRight3">
+			<div class="hideTextAreaUpRight3">
+				<div id="Tasks" class="showSectionClass"></div>
+			</div>
+			<div class="showTextAreaUpRight3">
+				<a class="arcStandardImg" id="arcStandardImga"><i
+					class="icon-list-ol icon-4x" id="arcStandardImgId"></i> </a>
+				<div id="titleLineRight1" class="titleImgArcs">我的代办</div>
+			</div>
+		</div>
+
+		<div class=lineModelRight33>
+			<div id="titleLineRight1" class="titleLineRight1">档案概览</div>
+			<div class='swfmap'>
+				<object codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="500px" height="320px" wmode="transparent">
+					<param name="movie" value="<?php echo $tplPath?>/ESDefault/map/map.swf" />
+					<param name="quality" value="high" />
+					<param name="FlashVars" value="dataxml=<?php echo $esaction->generateUrl(array('ESDefault'=>'xmlurl'))?>" />
+					<embed quality="high"
+						pluginspage="http://www.macromedia.com/go/getflashplayer"
+						type="application/x-shockwave-flash" width="500" height="320"
+						src="<?php echo $tplPath?>/ESDefault/map/map.swf"
+						FlashVars="dataxml=<?php echo $esaction->generateUrl(array('ESDefault'=>'xmlurl'))?>"
+						wmode="transparent"></embed>
+				</object>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDefaultLogin/js/index.js"></script>

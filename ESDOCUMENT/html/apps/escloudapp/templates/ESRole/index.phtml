@@ -1,0 +1,27 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link href="<?php echo $tplPath?>/ESRole/css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESRole/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/highcharts.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/modules/exporting.js"></script>
+
+<link href="<?php echo $tplPath?>/public/autovalidate/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/autovalidate/validate.js"></script>
+<script>
+	$(document).ready(function(){
+		$("#estabs").esTabs("open", {title:"角色管理", content:"#esmenu,#esone,#eslist"});
+	});
+</script>
+<div id="eslist" class = "essContainer">
+    <table id="roleGrid"></table> 
+</div> 
+
+
+

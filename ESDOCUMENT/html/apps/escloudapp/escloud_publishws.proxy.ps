@@ -1,0 +1,330 @@
+<?php
+
+/*
+ * 首页@方吉祥
+ */
+class ProxyEscloudappEscloud_publishws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "escloud_publishws";
+
+
+	// 根据栏目名称查询文章
+	public function selectAllInfo($keyWords,$pageNum,$pageSize)
+	{
+		$urlParam = array('selectAllInfo',$keyWords,$pageNum,$pageSize);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	// 获得某栏目下列表
+	 public function getPublishTopicList($boardId,$page,$limit,$params)
+	  {
+	  	$urlParam = array('getPublishTopicList',$boardId,$page,$limit);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	  }
+	  
+	 // 根据栏目名称和栏目下文章ID查询详细信息
+	 public function getPublishTopic($boardId,$topicId,$params)
+	 {
+	 	$urlParam = array('getPublishTopic',$boardId,$topicId);
+		$url = implode('/', $urlParam);
+		//return $url;
+		//modify
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	 }
+	 
+	 /*
+	  * @author wangtao
+	  * 保存发布信息(用于信息添加、修改功能)
+	  * @param int $boardId 栏目ID
+	  * @param mixed $params 栏目信息
+	  * @date 20130228
+	  * @return bool
+	  */
+	 public function savePublishTopic($boardId,$params)
+	 {
+	 	$urlParam = array('savePublishTopic',$boardId);
+	    $url = implode('/', $urlParam);
+	    return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	 }
+ 
+	 // 添加档案规范类型数据
+	 public function addFileItemsFile($fileitemsId,$params)
+	 {
+	 	$urlParam = array('addFileItemsFile',$fileitemsId);
+	    $url = implode('/', $urlParam);
+	    //return $url.'--'.$params;
+	    return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	 }
+	 
+	 
+	// 查询栏目@未用到@20130407
+	public function selectAllInfoPublish($start,$limit)
+	{
+		$urlParam = array('getPublishBoardList',$start,$limit);
+		$url = implode('/', $urlParam);
+		$params=json_encode(new stdClass());//保留参数
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	}
+	
+	// 验证栏目唯一性@未用到@20130407
+	public function checkPublishName($keyWords)
+	{
+		$urlParam = array('checkPublishName',$keyWords);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+
+	// 添加栏目@未用到@20130407
+	 public function addInfoPublish($params)
+	 {
+	 	$urlParam = array('savePublishBoard');
+	    $url = implode('/', $urlParam);
+	    return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	 }
+	 
+	 // 修改栏目@未用到@20130407
+	 public function updateInfoPublish($params)
+	 {
+	 	$urlParam = array('updateInfoPublish');
+	    $url = implode('/', $urlParam);
+	    // return $url.'==='.$params;
+	    return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	 }
+	 
+	 // 删除栏目@未用到@20130407
+	 public function deleteInfoPublish($ids)
+	 {
+	 	$urlParam = array('deleteInfoPublish');
+	    $url = implode('/', $urlParam);
+	    //return $url.'==='.$ids;
+	    return $this->post(self::SERVICE_NAME,$url,$ids,"application/json;charset=UTF-8");
+	 }
+	 
+	 // 删除栏目下文章
+	 public function deletePublishTopic($boardId,$ids)
+	 {
+		$urlParam = array('deletePublishTopic',$boardId);
+	    $url = implode('/', $urlParam);
+	    return $this->post(self::SERVICE_NAME,$url,$ids,"application/json;charset=UTF-8");
+	 }
+	 
+	 // 修改文章内容(非档案规范)
+	 public function modifyItems($keyWords,$params)
+	 {
+	 	$urlParam = array('modifyItems',$keyWords);
+	    $url = implode('/', $urlParam);
+	    //return $url.'==='.$params;
+	    return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	 }
+	 
+	 // 修改档案规范
+	 public function ModifyFileItemsFile($id,$params)
+	 {
+	 	$urlParam = array('ModifyFileItemsFile',$id);
+	    $url = implode('/', $urlParam);
+	    // return $url.'==='.$params;
+	    return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	 * 修改主题的发布状态
+	 * @author fangjixiang 20130201
+	 * @param boardId 版块ID
+	 * @param topicId 主题ID
+	 * @param permission true允许 false不允许
+	 * @return
+	 */
+	  public function modifyStatus($boardId, $topicId, $permission)
+	  {
+	  	$urlParam = array('modifyStatus',$boardId, $topicId, $permission);
+	    $url = implode('/', $urlParam);
+	    return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	  }
+	  
+	  // 查询某一栏目下所有文章列表
+	  public function findAllInfo($id,$pageNow,$pageSize,$params)
+	  {
+	  	$urlParam = array('getPublishTopicList',$id,$pageNow,$pageSize);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,$params,"application/json;charset=UTF-8");
+	  }
+	  
+	 
+	  
+	  // 上传
+	  public function uploadFile()
+	  {
+	  	$urlParam = array('uploadFile');
+		$url = implode('/', $urlParam);
+		//return $url;
+		
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	  }
+	 
+	/* 文件下载接口
+	 * @author fangjixiang 20121105
+	 * @param filePath 要下载文件的路径
+	 * @param id 当前文件的id 根据这个id获得对象方便下载次数的增加
+	 * @return 
+	 */
+	 public function download($id)
+	 {
+	 	$urlParam = array('download',$id);
+		$url = implode('/', $urlParam);
+		//return $url;
+		
+		return $this->get(self::SERVICE_NAME,$url);
+	 }
+	  
+	  
+	  public function getServiceIP()
+	  {
+	  	$urlParam = array('getServiceIP');
+		$url = implode('/', $urlParam);
+		// return $url;
+		
+		return $this->get(self::SERVICE_NAME,$url);
+	  }
+	  
+	  /**
+	   * 首页信息发布的流程发起
+	   * @author fangjixiang 20130130
+	   * @param appId
+	   * @param appToken
+	   * @param processDefinitionKey 信息发布的流程的唯一标识 （来源于部署与平台的流程图的唯一标识） 信息发布的审批流程ID 为  np046_publishProcess
+	   * @param businessKey 唯一的业务key 用于生成每一次要发布数据流程的流程ID 形式为escloudPublish+当前毫秒数
+	   * @param userId 用户的id
+	   * @param publishid 数据信息的id
+	   * @param  status 要变更的状态
+	   * @return
+	   */
+	 public function startInfoPublishFlow($processDefinitionKey,$businessKey,$userId,$publishid,$status,$leaderId)
+	 {
+	 	$appId = $this->getAppId();
+	 	$appToken = $this->getAppToken();
+	 	$urlParam = array('startInfoPublishFlow',$appId,$appToken,$processDefinitionKey,$businessKey,$userId,$publishid,$status,$leaderId);
+	 	$url = implode('/', $urlParam);
+	 	//return array($urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, '', "application/json;charset=UTF-8");
+	 }
+
+	 /**
+	  * 查看信息发布流程的待办列表
+	  * @param appId np046
+	  * @param appToken wwwwww
+	  * @param author fangjixiang
+	  * @param start 0
+	  * @param size 100
+	  * @param sort id
+	  * @param order asc
+	  * @param map (传入参数"assignee":"yangqianya","candidate":"null","candidateGroup":"null","workflowDefKey":"publishProcess")
+	  * @return
+	  */
+	 public function getPublishHaveToDo($start,$size,$sort,$order,$params)
+	 {
+	 	$appId = $this->getAppId();
+	 	$appToken = $this->getAppToken();
+	 	$urlParam = array('getPublishHaveToDo',$appId,$appToken,$start,$size,$sort,$order);
+	 	$url = implode('/', $urlParam);
+	 	//return array($urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  * 信息发布流程 领导审批
+	  * @param appId np046
+	  * @param appToken wwwwww
+	  * @param taskId 任务ID
+	  * @param userId 当前的登陆用户（只有在转审批时传入的是选择人的userId）
+	  * @param operation 同意或拒绝传入complete  转审批传入 delegate
+	  * @param localvar   （只有转审批operation=delegate时传入true  其他传入false）
+	  * @param vars （传入fileClerkConfirm(下一节点审批人，转审批时不许传入)
+	  * 				departmentApprovalResult (同意拒绝需要传入的参数，转审批不许传入)
+	  * 				opinion_workflowid(流程ID)  opinion_desc(审批意见描述),boardid  (模块的id) topicid(这条数据的id)）
+	  * @return true/false
+	  */
+	 public function LeadershipApproval($taskId,$userId,$operation,$localvar,$vars)
+	 {
+	 	$appId = $this->getAppId();
+	 	$appToken = $this->getAppToken();
+	 	$urlParam = array('LeadershipApproval',$appId,$appToken,$taskId,$userId,$operation,$localvar);
+	 	$url = implode('/', $urlParam);
+	 	//return array($urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, $vars, "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  * 查看单个信息发布的流程的待办的详细
+	  * @author fangjixiang 20130204
+	  * @return
+	  */
+	 public function getPublishToDoDetail($boardId, $topicId, $accessType)
+	 {
+	 	$appId = $this->getAppId();
+	 	$appToken = $this->getAppToken();
+	 	$urlParam = array('getPublishToDoDetail',$boardId, $topicId, $accessType,$appId,$appToken);
+	 	$url = implode('/', $urlParam);
+	 	//return array($urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, '{}', "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  *在次发起流程
+	  * @author fangjixiang 20130315
+	  * @param appId
+	  * @param appToken
+	  * @param taskId
+	  * @param userId
+	  * @param operation 	complete
+	  * @param localvar 		false
+	  * @param workflowId
+	  * @param status
+	  * @param publishid
+	  * @return
+	  */
+	 public function aginStartstartInfoPublishFlow($taskId,$userId,$operation,$localvar,$workflowId,$status,$publishid,$leaderId)
+	 {
+	 	$appId = $this->getAppId();
+	 	$appToken = $this->getAppToken();
+	 	$urlParam = array('aginStartstartInfoPublishFlow',$appId,$appToken,$taskId,$userId,$operation,$localvar,$workflowId,$status,$publishid,$leaderId);
+	 	$url = implode('/', $urlParam);
+	 	//return array($url);
+	 	return $this->post(self::SERVICE_NAME, $url, '', "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  * shimiao 20140630  更新发布状态
+	  * @param unknown_type $boardId
+	  * @param unknown_type $id
+	  * @param unknown_type $state
+	  */
+	 public function updateTopicStatus($params){
+	 	$url = "updatePublishTopicStatus";
+		// $urlParam = array('updatePublishTopicStatus',$boardId,$id,$state,$fileId,$canType);
+		// $url = implode('/', $urlParam);
+	 	// return array($urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8");
+	 	
+	 }
+	 public function deletePublishFileById($id){
+	 	$urlParam = array('deletePublishFileById',$id);
+	 	$url = implode('/', $urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 
+	 /**
+	  * 更新下载次数
+	  * @author longjunhao 20140815
+	  * @param unknown $id
+	  */
+	 public function updateFileDownloadTimes($id){
+	 	$urlParam = array('updateFileDownloadTimes',$id);
+	 	$url = implode('/', $urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+}

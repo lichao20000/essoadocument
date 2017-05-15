@@ -1,0 +1,106 @@
+<link href="<?php echo $tplPath?>/ESCDMake/css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo url('js/jquery.js')?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath; ?>/public/ztree/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<SCRIPT type="text/javascript">
+		<!--
+		var settingFilingCD = {
+				view: {
+					dblClickExpand: false,
+					showLine: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				callback: {
+					onClick: onClick
+				}
+		
+		};
+		var zNodesFilingCD =[
+			{ id:1, pId:0, name:"档案著录", open:true},
+			{ id:11, pId:1, name:"中国联合网络通信集团有限公司"},
+				{ id:111, pId:11, name:"文书档案"},
+				  { id:1111, pId:111, name:"2011"},
+				    { id:11111, pId:1111, name:"文书档案案卷"},
+				    { id:11122, pId:1111, name:"文书档案案卷"},
+				  { id:1112, pId:111, name:"2012"},
+				 			
+				{ id:112, pId:11, name:"科技档案"},
+				  { id:1113, pId:112, name:"2011"},
+				    { id:11133, pId:1113, name:"科技档案案卷"},
+				    { id:11134, pId:1113, name:"科技档案案卷"},
+				  { id:1114, pId:112, name:"2012"},
+					  
+			    { id:113, pId:11, name:"文书档案"},
+				 { id:1115, pId:113, name:"2011"},
+				 { id:1116, pId:113, name:"2012"},
+				 			
+				{ id:114, pId:11, name:"审计档案"},
+				  { id:1117, pId:114, name:"2011"},
+				  { id:1118, pId:114, name:"2012"},
+
+				{ id:115, pId:11, name:"工程建设"},
+				  { id:1119, pId:115, name:"2011"},
+				  { id:11120, pId:115, name:"2012"},
+				 			
+				{ id:116, pId:11, name:"多种载体档案"},
+				  { id:11121, pId:116, name:"2011"},
+				  { id:11122, pId:116, name:"2012"},
+
+				{ id:117, pId:11, name:"会计档案"},
+				  { id:11123, pId:117, name:"2011"},
+				  { id:11124, pId:117, name:"2012"},
+				 			
+				{ id:118, pId:11, name:"采购档案"},
+				  { id:11125, pId:118, name:"2011"},
+				  { id:11126, pId:118, name:"2012"},
+
+				{ id:119, pId:11, name:"合同档案"},
+				  { id:11127, pId:119, name:"2011"},
+				  { id:11128, pId:119, name:"2012"}
+		];
+		function onClick(e,treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("ESCDMake");
+			zTree.expandNode(treeNode);
+		}
+		$(document).ready(function(){
+			$aa = $.fn.zTree.init($("#ESCDMake"), settingFilingCD, zNodesFilingCD);
+
+		});
+		//-->
+	</SCRIPT>
+<hr>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"光盘制作", content:"#ESSystemIndex"});
+	$("#estabs").esTabs("select", "光盘制作");
+});
+</script>
+<div id="ESSystemIndex" style="background:red;">光盘制作
+<div id="wrap">
+<div class='escdmain'>
+		<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>0));?>
+	<div class="escdleft">
+		<ul id="ESCDMake" class="ztree"></ul>
+	</div>
+	<div class="escdright">
+	<table id="flexme1">
+	</table>  
+	<script type="text/javascript">
+	  var uri="<?php echo $esaction->generateUrl(Array('ESCDMake'=>'set_json'));?>";
+
+	</script>
+    <script type="text/javascript" src="<?php echo $tplPath ?>/ESCDMake/js/ESCDMake.js"></script>
+	</div>
+</div>
+</div>
+</div>
+

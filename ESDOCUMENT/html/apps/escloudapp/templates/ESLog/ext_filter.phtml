@@ -1,0 +1,26 @@
+<div class='public_filter'>
+	<form id='native_form'>
+		<ul class='condition' id='condition'>
+			<li>
+				<p>日志日期</p>
+				<div><input id='native_logdate' name='logdate' type='text' value='<?php echo date("Y-m-d") ?>' onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" /></div>
+			</li>
+			<li>
+				<p>业务系统</p>
+				<div><select id='native_system' name='system'><?php echo $sysOption; ?></select></div>
+			</li>
+			<li>
+				<p>日志类型</p>
+				<div><select id='native_range' name='range'><?php echo $rangeOption; ?></select></div>
+			</li>
+			<li>
+				<!-- 
+				<label for='native_duplicate'>
+					<input type='checkbox' id='native_duplicate' name='delDuplicate' />
+					<span class='filter-duplicate'>去除重复档案的日志</span>
+				</label>
+				 -->
+			</li>
+		</ul>
+	</form>
+</div>

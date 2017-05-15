@@ -1,0 +1,267 @@
+<?php
+/**
+ * 文件接收模块
+ * @author gengqianfeng
+ *
+ */
+class ProxyEsdocumentDocumentBorrowing extends AgentProxyAbstract{
+
+	const SERVICE_NAME="documentBorrowing";
+	//引用平台服务
+	const SERVICE_NAME_USER='escloud_userws';
+	public function getTree($param){
+		$urlParam = array (
+				'getTree'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function getColumnModel($param){
+		$urlParam = array (
+				'getcolumn'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8' );
+	}
+	public function getCount($param){
+		$urlParam = array (
+				'count'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8'  );
+	}
+	public function getUsingFieldForForm($param){
+		$urlParam = array (
+				'getUsingFieldForForm'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, 'application/json;charset=UTF-8'  );
+	}
+	public function addForm($params){
+		$urlParam = array (
+				'addform'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function delBorrowList($id){
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'delform',
+				$userId,
+				$ip
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$id, 'application/json;charset=UTF-8'  );
+	}
+	public function getFormWithId($id){
+		$urlParam = array (
+				'edit'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$id, 'application/json;charset=UTF-8'  );
+	}
+	public function getDetils($bId){
+		$urlParam = array (
+				'getdetils'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$bId, 'application/json;charset=UTF-8'  );
+	}
+	public function save($params){
+		$urlParam = array (
+				'save'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function getBorrowRoleWithId($params){
+		$urlParam = array (
+				'getBorrowRoleWithId'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function changeDetails($params){
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'changeDetails',
+				$userId,
+				$ip
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function dirChangeStatus($params){
+		$urlParam = array (
+				'dirChangeStatus'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function returnForForm($params){
+		$urlParam = array (
+				'returnForForm'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function relendForForm($params){
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'relendForForm',
+				$userId,
+				$ip
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function bespeak($params){
+		$urlParam = array (
+				'bespeak'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function getBespeakList($params){
+		$urlParam = array (
+				'getBespeakList'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function getBespeakDetail($params){
+		$urlParam = array (
+				'getBespeakDetail'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function lendDocumentUpOrder($params){
+		$urlParam = array (
+				'lendDocumentUpOrder'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function getCountWithTname($tc){
+		$urlParam = array (
+				'getCount'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$tc, 'application/json;charset=UTF-8'  );
+	}
+	public function getUserByuserId($userid){
+		$urlParam = array (
+				'getUserInfo',
+				'1',
+				'1',
+				$userid
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME_USER, $url);
+	}
+	public function getESScommon($id){
+		$urlParam = array (
+				'getRespeakById'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$id, 'application/json;charset=UTF-8'  );
+	}
+	public function delFormArchivesCar($id){
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'delFormArchivesCar',
+				$userId,
+				$ip
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$id, 'application/json;charset=UTF-8'  );
+	}
+	public function printBorrowreport($param){
+		$urlParam = array (
+				'printBorrowreport'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param, 'application/json;charset=UTF-8'  );
+	}
+	public function endUsingForm($param){
+		$urlParam = array (
+				'endUsingForm'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param, 'application/json;charset=UTF-8'  );
+	}
+	public function delDetails($param){
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array (
+				'delDetails',
+				$userId,
+				$ip
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param, 'application/json;charset=UTF-8'  );
+	}
+	public function getBorrowFileIdByNum($param){
+		$urlParam = array (
+				'getBorrowFileIdByNum'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param, 'application/json;charset=UTF-8'  );
+	}
+	public function getDocumentBorrowStatus($params){
+		$urlParam = array (
+				'getDocumentBorrowStatus'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	public function editSave($params){
+		$urlParam = array (
+				'editSave'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$params, 'application/json;charset=UTF-8'  );
+	}
+	
+	public function getFormDataByFormID($formId){
+		$urlParam = array (
+				'getFormDataByFormID'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$formId, 'application/json;charset=UTF-8'  );
+	}
+	public function getDetailsByFormId($param){
+		$urlParam = array (
+				'getDetailsByFormId'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param, 'application/json;charset=UTF-8'  );
+	}
+	public function relendOrReturnForForm($param){
+		$urlParam = array (
+				'relendOrReturnForForm'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param, 'application/json;charset=UTF-8'  );
+	}
+	public function relendOrReturnForDetails($param){
+		$urlParam = array (
+				'relendOrReturnForDetails'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param, 'application/json;charset=UTF-8'  );
+	}
+	public function addCarForBespeak($param){
+		$urlParam = array (
+				'addCarForBespeak'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param, 'application/json;charset=UTF-8'  );
+	}
+}

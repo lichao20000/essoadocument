@@ -1,0 +1,105 @@
+<!-- wangbo 20140403-->
+ <div id="eslist"   style="width: 560px;height:3250x;">
+        <div class="roleSearch"> <input id="roleKeyWord" onblur="if($(this).val()=='')$(this).val('请输入关键字')" onfocus="if($(this).val()=='请输入关键字')$(this).val('')" type="text" name="roleKeyWord" value="请输入关键字" /><span onclick="getRoleQuery()"></span></div>
+		<br><table id = "listRoleGrid"></table>
+ </div>
+ <input type="hidden" id="idstrHide" value="<?php echo $data;?>"/>
+ <script type="text/javascript">
+$(document).ready(function(){
+	 $("#listRoleGrid").flexigrid({url :$.appClient.generateUrl({ESOrgAndUser: 'findRoleList',idStr:'<?php echo $data;?>'}, 'x'),
+			dataType : 'json',
+			colModel : [ 
+               {display : '',name : 'startNum',width : 30,align : 'center'}, 
+			   {display : '<input type="checkbox" id="listRoleList">',name : 'ids',width : 50,align : 'center'},
+			   {
+					display : 'ID',
+					name : 'roleId',
+					metadata:'roleId',
+					width : 30,
+					align : 'left',
+					hide:true
+				}, {
+					display : '角色标识',
+					name : 'roleCode',
+					metadata:'roleCode',
+					width : 80,
+					align : 'left'
+				},{
+					display : '角色名称',
+					name : 'roleName',
+					metadata:'roleName',
+					width : 80,
+					align : 'left'
+				},{
+					display : '创建时间',
+					name : 'createTime',
+					metadata:'createTime',
+					width : 60,
+					align : 'left'
+				}, 
+				 {
+					display : '修改时间',
+					name : 'updateTime',
+					metadata:'updateTime',
+					width : 60,
+					sortable : true,
+					align : 'left'
+				}, {
+					display : '是否为系统角色',
+					name : 'isSystem',
+					metadata:'isSystem',
+					width : 80,
+					sortable : true,
+					align : 'center',
+					process:formatValue
+				},{
+					display : '角色描述',
+					name : 'roleRemark',
+					metadata:'roleRemark',
+					width : 600,
+					align : 'left'
+				}],
+				singleSelect:true,
+				usepager : true,
+				title : '角色列表',
+				useRp : true,
+				rp : 20,
+				nomsg : "没有数据",
+				showTableToggleBtn : false,
+				pagetext : '第',
+				outof : '页 /共',
+				width : 'auto',
+				height : 'auto',
+				pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条' 
+		});
+		function sizeChanged(){
+			if($.browser.msie && $.browser.version==='6.0'){
+				$("html").css({overflow:"hidden"});
+			}
+			var h = $(window).height() - $("#eslist").position().top;
+			var flex = $("#listRoleGrid").closest("div.flexigrid");
+			var bDiv = flex.find('.bDiv');
+		    var contentHeight = bDiv.height();
+		    var headflootHeight = flex.height() - contentHeight; 
+		    bDiv.height(300 - headflootHeight);
+			flex.height(300);
+			flex.width(560);
+			// 修改IE表格宽度兼容
+			if($.browser.msie && $.browser.version==='6.0'){
+				flex.css({width:"-=3px"});
+			}
+		};
+		sizeChanged();
+		//全选
+		$("#listRoleList").die().live('click',function(){
+			$("input[name='listRoleServerId']").attr('checked',$(this).is(':checked'));
+		});
+		function formatValue(tdDiv){
+			if(tdDiv.innerHTML=='1')
+				tdDiv.innerHTML='是';
+			else 
+				tdDiv.innerHTML='否';
+		};
+});
+</script>
+ 

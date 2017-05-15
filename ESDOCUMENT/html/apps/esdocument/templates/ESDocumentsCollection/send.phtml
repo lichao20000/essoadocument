@@ -1,0 +1,33 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDocumentsCollection/js/send.js"></script>
+<div class="linkFile">
+	<div class="linkLeft">
+		<ul id="sendTree" class="ztree"></ul>
+		<input type="hidden" id="selTreeId" name="selTreeId" value="" />
+	</div>
+	<div class="linkRight">
+		<form id="sendPage">
+			<table id="table_detail" style="">
+				<tr>
+					<td>编号<font size="3px" color="red">*</font></td>
+					<td><input type="text" name="no" id="no" verify="text/30/1/0" value=""
+						style="width: 250px; height: 20px;" readonly="readonly"/></td>
+				</tr>
+				<tr>
+					<td>收发流程名称<font size="3px" color="red">*</font>&nbsp;&nbsp;</td>
+					<td>
+						<input type="hidden" name="fileflow_id" id="fileflow_id" value="" />
+						<input type="hidden" name="typeNo" id="typeNo" value='' stageId="" />
+						<select name="flowId" id="flowId" style="width: 200px; height: 25px;">
+							<option value="">请选择</option>
+						</select>
+						<span>&nbsp;&nbsp;<a id="scanMatrix" href="javascript:;">查看流程</a></span>
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>每种文件需分发&nbsp;<font color="red">0</font>&nbsp;份</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

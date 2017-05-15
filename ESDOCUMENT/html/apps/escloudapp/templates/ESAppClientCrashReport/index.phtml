@@ -1,0 +1,23 @@
+<!-- yanghuiqiang 20140523 客户端异常报告主页-->
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESAppClientCrashReport/css/main.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESAppClientCrashReport/js/template.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'APP客户端异常报告'));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<div id='ESAppClientCrashReport' class = "ESAppClientCrashReportContainer">
+	<div class='leftDiv' id='leftDiv'>
+		<div id='type_all'>
+			<a href='javascript:;' class='selected' id='all'>全部</a>
+			<a href='javascript:;' id='solved'>已解决</a>
+			<a href='javascript:;' id='nosolved'>未解决</a>
+		</div>
+	</div>
+	<div class='rightDiv' id='rightDiv'> 
+		 <table id="crashReport"></table>
+	</div>
+</div>

@@ -1,0 +1,198 @@
+<?php
+/**
+ * 文件归档模块
+ * @author gengqianfeng
+ *
+ */
+class ProxyEsdocumentFiling extends AgentProxyAbstract {
+	const SERVICE_NAME = "filing";
+	const SERVICE_D_NAME = "escloud_businesstreews";
+	const SERVICE_STRUCT_NAME = "escloud_structurews";
+	
+	/**
+	 * 获取待归档文件记录总数
+	 *
+	 * @param unknown $where
+	 *        	筛选条件
+	 */
+	public function getCount($document) {
+		$urlParam = array (
+				"count" 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $document ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取待归档文件列表
+	 */
+	public function findDocumentList($document) {
+		$urlParam = array (
+				"list" 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $document ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取文件动态列
+	 *
+	 * @param unknown $stageId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findMoveCols($stageId) {
+		$urlParam = array (
+				"findMoveCols",
+				$stageId,
+				1 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 通过id获取选中文件列表总条数
+	 *
+	 * @param unknown $ids        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getCountById($stageId, $ids) {
+		$urlParam = array (
+				"getCountById",
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, 'text/plain;charset=UTF-8' );
+	}
+	
+	/**
+	 * 通过id获取选中文件列表
+	 *
+	 * @param unknown $ids        	
+	 */
+	public function findDocumentById($page, $pre, $stageId, $ids) {
+		$urlParam = array (
+				"findDocumentById",
+				$page,
+				$pre,
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, 'text/plain;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取元数据列表
+	 *
+	 * @param unknown $stageId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findDocumentMetaByStageId($stageId) {
+		$urlParam = array (
+				"findDocumentMetaByStageId",
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 依据选择的id归档文件
+	 *
+	 * @param unknown $ids        	
+	 * @param unknown $code        	
+	 */
+	public function idsFiling($fill) {
+		$fill ['ip'] = $_SERVER ['REMOTE_ADDR'];
+		$fill ['platformId'] = $this->getAppId ();
+		$fill ['user'] = $this->getUserId ();
+		$urlParam = array (
+				"idsFiling" 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $fill ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 依据筛选条件归档文件
+	 *
+	 * @param unknown $where        	
+	 * @param unknown $code        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function conditionFiling($fill) {
+		$fill ['ip'] = $_SERVER ['REMOTE_ADDR'];
+		$fill ['platformId'] = $this->getAppId ();
+		$fill ['user'] = $this->getUserId ();
+		$urlParam = array (
+				"conditionFiling" 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, json_encode ( $fill ), 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取归档目标目录树
+	 *
+	 * @param unknown $id        	
+	 * @param unknown $modelId        	
+	 * @param unknown $userId        	
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getBusinessAuthorTree($id, $modelId, $userId) {
+		$urlParam = array (
+				'getBusinessAuthorTree',
+				$id,
+				$modelId,
+				$userId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_D_NAME, $url );
+	}
+	
+	/**
+	 * 检验收集范围是否定义归档规则
+	 *
+	 * @param unknown $code        	
+	 */
+	public function checkFilingRegulation($code) {
+		$urlParam = array (
+				'checkFilingRegulation',
+				$code 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取结构元数据列表
+	 *
+	 * @param unknown $id        	
+	 * @param unknown $page        	
+	 * @param unknown $rp        	
+	 */
+	public function getStructureList($id, $page, $rp) {
+		$urlParam = array (
+				'getStructureTagList',
+				$id,
+				$page,
+				$rp 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_STRUCT_NAME, $url );
+	}
+	
+	/**
+	 * 获取收集范围父节点ids
+	 * @param unknown $stageId
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getParentStageIds($stageId){
+		$urlParam = array (
+				'getParentStageIds',
+				$stageId
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+}

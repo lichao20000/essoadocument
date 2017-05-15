@@ -1,0 +1,43 @@
+<?php echo $html?>
+<?php if ($editable):?>
+<style>
+#floatBox {
+    Z-INDEX: 9999; LEFT: -262px; WIDTH: 296px; POSITION: absolute
+}
+
+.OnlineBtn {
+    DISPLAY: inline; FLOAT: right; MARGIN: 161px 0px 0px; WIDTH:20px; padding:5px; text-align:center; font-size:12px;border:1px solid #666; cursor:pointer; background:#CCC; color:#369;
+}
+.OnlineBtn a{ text-decoration:none; color:#369;}
+.OnlineBtn  a:hover{ text-decoration:none; color:red}
+</style>
+<div  id="floatBox" style="top:100px">
+  <div class="OnlineBtn"><a href="<?php echo url($url, true);?>/edit">进入管理页面</a></div>
+</div>
+<script type="text/javascript">
+<!--
+lastScrollY = 0;
+function FloatScroll() {
+    var diffY;
+    if (document.documentElement && document.documentElement.scrollTop){
+      diffY = document.documentElement.scrollTop;
+  }
+    else if (document.body){
+      diffY = document.body.scrollTop;
+  }
+    else{}
+    percent = .1 * (diffY - lastScrollY);
+    if (percent > 0){
+    percent = Math.ceil(percent);
+  }
+    else{
+    percent = Math.floor(percent);
+  }
+    document.getElementById("floatBox").style.top = parseInt(document.getElementById("floatBox").style.top) + percent + "px";
+    lastScrollY = lastScrollY + percent;
+}
+
+window.setInterval("FloatScroll()",1);
+//-->
+</script>
+<?php endif;?>

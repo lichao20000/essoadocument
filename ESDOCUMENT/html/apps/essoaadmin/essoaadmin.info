@@ -1,0 +1,8 @@
+﻿appid = essoaadmin
+apptoken = wwwwww
+name = 后台管理系统
+description = 后台管理系统应用
+version = 1.0
+tag = 专业应用
+is_public = 0
+icon = essoaadmin.png

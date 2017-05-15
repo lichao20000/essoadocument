@@ -1,0 +1,42 @@
+<!-- caojian 20140512-->
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+  <link href="<?php echo $tplPath?>/ESAppConfig/css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+ <script type="text/javascript" src="<?php echo $tplPath;?>/ESAppConfig/js/ESAppConfig.js"></script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESAppConfig/js/button.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/highcharts.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/highcharts/js/modules/exporting.js"></script>
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"系统应用配置", content:"#appConfigSetting"});
+	function sizeChanged(){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var h = $(window).height() - $("#appConfigSetting").position().top;
+		var flex = $("#appConfigSettingGrid").closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    bDiv.height(h - headflootHeight);
+	    flex.height(h);
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	//sizeChanged();
+	$('div[class="tDiv2"]').append('<div class="find-dialog"><input id="appKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="appKeyWord" value="请输入关键字" /><span onclick="appQuery()"></span></div>');
+});
+</script>
+<div id='appConfigSetting' class= "appConfigSettingContainer">
+        <table id="appConfigSettingGrid"></table>  
+</div>
+

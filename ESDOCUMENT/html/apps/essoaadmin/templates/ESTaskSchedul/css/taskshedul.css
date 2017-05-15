@@ -1,0 +1,21 @@
+.subnav{width:270px;}
+.subnav a{display:block;height:24px;text-decoration:none;font-weight:bold;color:#fff;}
+.subnav li{background:#666666;float:left;width:80px;line-height:24px;text-align:center;margin-left:5px;}
+textarea{width:100%;height:70px;}
+table .st{width:60px;}
+table .st span{width:60px;}
+#subadd input,#attr input{height:20px;width:186px;}
+#subadd table,#attr{width:100%;}
+
+#subadd table td{padding-top:15px;}
+#attr td{padding-top:15px;}
+
+.subnav .back{background:#A11212;}
+.clear{clear:both;}
+.editbtn,.editattr {display:inline-block; width:16px; height:16px; background:url(../../public/img/edit.jpg) no-repeat no-repeat; cursor:pointer;}
+#subadd table .fuck{width:140px; float:left;}
+#subadd table .fuck input.it{ width:50px; height:20px; float:left; line-height:20px; border:1px solid #aaa;}
+#subadd table .fuck i{ width:50px; line-height:30px; font-style:normal; float:left; vertical-align:middle;}
+.find-dialog{ width:203px; height:20px; border:1px solid #aaa; background:#fff; float: left; margin-top: 2px; line-height: 20px;position: absolute;right: 2px;}
+.find-dialog input{ width:180px; height:20px; line-height:20px; float:left; border:0; _line-height:23px; color: gray;}
+.find-dialog span{ width:20px; height:20px; float:left;  background:url(../img/search.gif) no-repeat center center; cursor:pointer;}

@@ -1,0 +1,94 @@
+<style>
+
+.ztree li a span{
+	color:#444;
+}
+
+</style>
+
+<div id='addrolefree'>
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span>
+		<span class='w90 w14090 hei30'>比较符</span>
+		<span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span>
+		<!-- gengqianfeng 20140926 添加删除样式修改 -->
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">添加行</span></span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">删除行</span></span>
+	</p>
+	<div id='contents'>
+		<!-- 1 -->
+		<?php 
+			for($fly=1;$fly<6;$fly++){
+		?>
+		<p class='contbox creatediv'  style="overflow:hidden;">
+			<select class='w140 w14090 hei20 filedname'>
+				<option value=''>请选择</option>
+				<option value='CODE'>借阅单编号</option>
+				<option value='READER'>借阅人</option>
+				<option value='DEPT'>单位</option>
+				<option value='TEL'>电话</option>
+				<option value='EMAIL'>邮箱</option>
+				<option value='USE_PURPOSE'>利用目的</option>
+				<option value='VALID_DATE'>催还提前天数</option>
+				<option value='REGISTER'>登记人</option>
+				<option value='REGIST_DATE'>登记日期</option>
+				<option value='STATUS'>状态</option>
+				<option value='IDENTITY'>身份证</option>
+				<option value='fileCount'>卷数</option>
+				<option value='innerFileCount'>件数</option>
+				<option value='DESCRIPTION'>备注</option>
+				 <?php 
+     				if(isset($data)){
+     					for($i =0 ;$i<count($data);$i++){
+     						if($data[$i]['type'] == "BOOLEAN"){
+     							echo   '<option value="c'.$data[$i]['id'].'|'.$data[$i]['type'].'">'.$data[$i]['field'].'</option>';
+     						}else{
+     							echo   '<option value="c'.$data[$i]['id'].'">'.$data[$i]['field'].'</option>';
+     						}
+     					}
+     				}
+     			?>
+			</select>
+			<select class='w90 w14090 hei20 comparison'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select>
+			<input type='text' class='w140 w14090 hei20 filedvalue' />
+			<select id='' class='w14090 w90 hei20 relationship'>
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select>
+			<!-- gengqianfeng 20140926 添加删除样式修改 -->
+			<a class='newfilter'></a><a class='delfilter'></a>
+		</p>
+		<?php }?>
+	</div>
+</div>
+<script>
+
+var _widget = {
+		change : function (that){
+					var html = null;
+					alert($(that).attr("value"));
+					if(that.optype == 'BOOLEAN'){
+						htm = '<select class="filter_Value long_area"><option value="1">是</option><option value="0">否</option></select>';
+					}else{
+						htm = "<input type='text' class='filter_Value long_area ext_long_area' />";
+					}
+
+					$(that).parent().parent().find('.filedvalue').html(htm);
+				}
+};
+	
+$('.filedname').die().live('change',function (){
+	//_widget.change(this); // 当前下拉框值和要替换的DIV内容
+});
+     			
+</script>

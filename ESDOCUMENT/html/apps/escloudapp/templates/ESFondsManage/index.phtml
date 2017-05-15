@@ -1,0 +1,36 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'全宗管理'));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+
+<div  >
+  <table id="flexme1">
+  </table>
+  <script type="text/javascript">
+    var uri="<?php echo url($this->getUrl($esaction->generateUrl(Array('ESFondsManage'=>'set_json'))));?>"
+    	function addfonds(name,grid)
+    {
+    	$.ajax({
+    	    url:"<?php echo url($this->getUrl($esaction->generateUrl(Array('ESFondsManage'=>'add'),'x')));?>",
+    	    success:function(data){
+    	    	$.dialog({
+    		    	title:'添加面板',
+    	    		width: '50%',
+    	    	    height: '50%',
+    	    	   	fixed:true,
+    	    	    resize: false,
+    		    	content:data,
+    		    });
+    	    	
+    		    },
+    		    cache:false
+    	});	
+    	}
+        </script>
+  <script type="text/javascript" src="<?php echo $tplPath;?>/ESFondsManage/js/template.js"></script>
+</div>

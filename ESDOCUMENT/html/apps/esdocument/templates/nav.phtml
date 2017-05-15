@@ -1,0 +1,109 @@
+<link rel="stylesheet"
+	href="<?php echo $tplPath;?>/public/css/esnav.css" type="text/css">
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.globalEx.js"></script>
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.estabs.js"></script>
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs();
+	$(".def-nav,.info-i").hover(function(){
+		$(this).find(".pulldown-nav").addClass("hover");
+		$(this).find(".pulldown").show();
+	},function(){
+		$(this).find(".pulldown").hide();
+		$(this).find(".pulldown-nav").removeClass("hover");
+	});
+});
+</script>
+
+<div class="esnav">
+	 <div class="docmenu" id = "allMenusContainer">
+     	<div class="all">
+        	<div class = "allFunsLogo"></div><div class="icon">所有功能</div><ul id = "menu" class = "menuUls"></ul>
+	    </div>
+	</div>
+	<div id="estabs" style = "background-color:#fff;text-algin:center;">
+	</div>
+	<div class = "seporateArea"></div>
+	<div class = "seporateLine"></div>
+</div>
+
+<div class="showList" id="showList">
+	<div class="box-rt">
+		<div class="box-lt">
+			<div class="box-rb">
+				<div class="box-lb" id="show">
+					<ul>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+/** 调整nav的居中效果  **/
+
+if(navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.match(/7./i)=="7.")
+{	
+	var paddingTitleLeft = $(window).width()*0.96/2-190;
+	$("#estabs").css("padding-left",paddingTitleLeft).css("width",$(window).width()*0.96-230-paddingTitleLeft);
+	$(".seporateLine").css("width",$(window).width()*0.96-230);
+	$(".seporateArea").css("width",$(window).width()*0.96-230);
+}else{
+	$("#estabs").css("padding-left",$(window).width()*0.96/2-190).css("width",$(window).width()*0.96-230-($(window).width()*0.96/2-190));
+	$(".seporateLine").css("width",$(window).width()*0.96-230);
+	$(".seporateArea").css("width",$(window).width()*0.96-230);
+}
+
+/** 添加导航条菜单的hover事件  **/
+$('.has-sub, #dropMenu').hover(function(){
+	$('.has-sub').addClass('dropitem');
+	$('#dropMenu').css({left:$(".has-sub").offset().left,top:$('.has-sub').height()});
+	$('#dropMenu').show();
+	if(dropMenuTimer != null) clearTimeout(dropMenuTimer);
+	dropMenuTimer = null;
+},function(){
+	dropMenuTimer = setTimeout(function(){
+		$('.has-sub').removeClass('dropitem');
+		$('#dropMenu').hide();
+	}, 200);
+});
+
+//窗口大小变动事件
+$(window).resize(function() {
+	//nav标头宽度自动调整
+	setResize();
+});
+//设置窗口宽度
+function setResize(){
+	var height = $(window).height()-110;	// 可见总高度 - 176为平台头部高度
+	if(navigator.userAgent.indexOf("MSIE 8.0")>0){
+		height = height-4;
+	}
+	var tblHeight = height - 138;
+	$(".flexigrid").parent("div").css({height: height});
+	$(".bDiv").css({height: tblHeight});
+	var flexW=$(".flexigrid").css("width");	
+	if(flexW != null && flexW != ""){
+		var treeW=$(".ztree").css("width");
+		var estabW=flexW.split("px")[0];
+		if(treeW==null||treeW==""){
+			var winW=$(window).width()*0.96;
+			if(estabW<winW){
+				estabW=winW;
+				$(".flexigrid").css({width:estabW});	
+			}
+			estabW=estabW-230;
+		}
+		$("#estabs").css("padding-left",estabW/2-54).css("width",estabW/2+54);
+		$(".seporateLine").css("width",estabW);
+		$(".seporateArea").css("width",estabW);
+	}
+}
+</script>

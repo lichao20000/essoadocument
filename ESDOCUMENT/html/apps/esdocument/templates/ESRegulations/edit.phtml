@@ -1,0 +1,42 @@
+<!-- xiewenda -->
+<form id="editRegulation" action="" method="post">
+	<div class="estransfer">
+		<ul>
+			<li><span>编号<font color="red" size="3">*</font></span><input
+				type="text" name="no" verify="desc/20/1/0" value="<?php echo $no;?>">
+				<input type="hidden" name="oldNo" id="oldNo" value="<?php echo isset($no)?$no:''; ?>"/>
+				<input type="hidden" name="id" value="<?php echo $id;?>"></li>
+			<li><span>中文名称<font color="red" size="3">*</font></span><input
+				type="text" name="chineseName" verify="china/100/1/0"
+				value="<?php echo $chineseName;?>"></li>
+			<li><span>英文名称</span><input type="text" name="englishName"
+				verify="englishname/100/0/0" value="<?php echo $englishName;?>"></li>
+			<li><span>发布时间<font color="red" size="3">*</font></span><input
+				type="text" name="publishTime" verify="date/10/1/0" class="Wdate"
+				value="<?php echo $publishTime;?>"></li>
+			<li><span>附件<font color="red" size="3">*</font></span><input
+				type="button" id="fileUp" value='附件上传' class='fileUpButton' style="height:25px"/>
+			</li>
+		</ul>
+	</div>
+	<div id="loadfile" style="margin-left: 150px"></div>
+</form>
+<script type="text/javascript">
+ $(function(){
+	 var  fileName='<?php echo $fileName;?>';
+	 var  filePath='<?php echo $filePath;?>';
+	 if(fileName && filePath){
+	 $('#loadfile').append('<div><a href="javascript:void(0)" title="点击下载附件">'+fileName+'</a><input type="hidden" name="filePath" value="'+filePath+'"/><input type="hidden" name="fileName" value="'+fileName+'"/></div>');	
+	 var NY_img = '<img style="cursor:pointer;" id="NI_img"  src="<?php echo $tplPath;?>/public/flexigrid/css/images/cross.png" alt="删除附件" title="删除附件" />';
+	 $('#loadfile div').hover(
+	 		function() {
+	 			$('#NI_img').remove();
+	 			$(this).find('a').after(NY_img);
+	 		} ,
+	 		function() {
+	 			$('#NI_img').remove();
+	 		}
+	 	);
+	 }
+ });
+ </script>

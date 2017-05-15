@@ -1,0 +1,47 @@
+<?php
+/*
+ * 同步配置
+ * @author wanghongchen 20140709
+ */
+class ProxyEssoaadminEscloud_syncConfigws extends AgentProxyAbstract {
+	
+	const SERVICE_NAME = "syncConfigWS";
+	
+	/**
+	 * 添加
+	 */
+	public function addOrEdit($params) {
+		return $this->post ( self::SERVICE_NAME, "addOrEdit", $params, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 删除
+	 */
+	public function deleteById($params) {
+		return $this->post ( self::SERVICE_NAME, "deleteById", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 获取列表
+	 */
+	public function getList($params) {
+		return $this->post ( self::SERVICE_NAME, "getList", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 根据机构中文名称和应用id获取rest全类名与方法
+	 */
+	public function getRest($params){
+		return $this->post ( self::SERVICE_NAME, "getRest", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 根据机构名称获取该机构注册应用
+	 */
+	public function getSupportSaasApps($params){
+		return $this->post ( self::SERVICE_NAME, "getSupportSaasApps", $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 向应用系统同步数据
+	 */
+	public function syncToAppSystem($params){
+		return $this->post ( self::SERVICE_NAME, "syncToAppSystem", $params, "application/json;charset=UTF-8" );
+	}
+}

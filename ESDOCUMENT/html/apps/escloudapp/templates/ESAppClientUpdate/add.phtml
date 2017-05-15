@@ -1,0 +1,189 @@
+<!-- yanghuiqiang 20140522 升级版本添加窗口-->
+
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<style type="text/css">
+.mydiv p {
+	margin: 0px;
+	padding: 0px;
+}
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="uploadForm" method="post" enctype="multipart/form-data">
+			<table id="table_detail" style="height: 200px;">
+				<tr>
+					<td><input type="hidden" name="operator" id="operator"
+						value="<?php echo $userId;?>" style="width: 380px; height: 0px;" />
+					</td>
+				</tr>
+				<tr>
+					<td><input type="hidden" name="apkFileId" id="apkFileId"
+						style="width: 380px; height: 0px;" /></td>
+				</tr>
+				<tr>
+					<td>APP名称：</td>
+					<td><input type="text" name="appName" id="appName"
+						value="<?php echo $update->appName;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>APP描述：</td>
+					<td><input type="text" name="appDescription" id="appDescription"
+						value="<?php echo $update->appDescription;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>APP包名：</td>
+					<td><input type="text" name="packageName" id="packageName"
+						readOnly=true value="<?php echo $update->packageName;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>内部版本号：</td>
+					<td><input type="text" name="versionCode" id="versionCode"
+						readOnly=true value="<?php echo ($update->versionCode + 1);?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>版本名称：</td>
+					<td><input type="text" name="versionName" id="versionName"
+						value="<?php echo $update->versionName;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+
+				<tr>
+					<td>是否强制更新：</td>
+
+					<td><select name="forceUpdate" id="forceUpdate"
+						style="width: 385px; height: 25px;">
+							<option value="0"
+							<?php echo $update->forceUpdate == 1 ? "":"selected=selected";?>>否</option>
+							<option value="1"
+							<?php echo $update->forceUpdate == 1 ? "selected=selected":"";?>>是</option>
+					</select></td>
+				</tr>
+
+				<tr>
+					<td>是否自动更新：</td>
+					<td><select name="autoUpdate" id="autoUpdate"
+						style="width: 385px; height: 25px;">
+							<option value="0"
+							<?php echo $update->autoUpdate == 1 ? "":"selected=selected";?>>否</option>
+							<option value="1"
+							<?php echo $update->autoUpdate == 1 ? "selected=selected":"";?>>是</option>
+					</select></td>
+				</tr>
+
+				<tr>
+					<td>APK文件：</td>
+					<td><input type="button" name="apkFile" id="apkFile"
+						value="添加APK文件" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><div id="apkFileInfo" class="apkFileInfo"></div></td>
+				</tr>
+
+				<tr>
+					<td>更新提示信息：</td>
+					<td><textarea name="updateTips" id="updateTips"
+							style="width: 380px; height: 100px;"></textarea>
+					</td>
+				</tr>
+
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#apkFile").click(function(){
+		$.dialog({
+			title:'上传文件',
+		    fixed:true,
+		    resize: false,
+		    padding:'0px 0px',
+			content:"<div class='fieldset flash' id='fsUploadProgress'></div>",
+			cancelVal: '关闭',
+			cancel: function (){
+				//$('#UploadAnnexBox').hide();
+			},
+			button: [
+	    		{id:'btnAdd', name: '添加文件'},
+	            {id:'btnCancel', name: '删除文件', disabled: true},
+	            {id:'btnStart', name: '开始上传', disabled: true, callback: function(){return false;}}
+			],
+			init:createSWFUpload
+		});	    	
+	});
+
+	function createSWFUpload(){
+
+		var addhtml = '';
+		var fileLimit="1048576";	// 100MB  longjunhao 20140905 修改为1024MB=1GB
+		var fileType="*.apk";
+		
+		var upload = new SWFUpload({
+			//提交路径
+			upload_url: "",
+			//向后台传递额外的参数
+			//提交到服务器的参数信息，这样就添加了一个param参数，值是uploadParams在服务器端用request.getParameter(“param”)就可以拿到值
+			//上传文件的名称
+			file_post_name: "file.txt",
+			file_size_limit : fileLimit,	// 100MB
+			file_types : fileType,
+			file_types_description : "文件类型",
+			file_upload_limit : "1",
+			file_queue_limit : "0",
+
+			// 事件处理
+			swfupload_loaded_handler : swfuploadLoaded,
+			file_dialog_start_handler : fileDialogStart,
+			file_queued_handler : fileQueued,
+			file_queue_error_handler : fileQueueError,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_start_handler : uploadStart,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : uploadError,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
+
+			// 按钮的处理
+			button_image_url : "<?php echo $tplPath?>/public/SWFUpload/img/ButtonUpload72.png",
+			button_placeholder_id : "btnAdd",
+			button_width: 72,
+			button_height: 28,
+			// Flash文件地址设置
+			flash_url : "<?php echo $tplPath?>/public/SWFUpload/js/swfupload.swf",
+			custom_settings : {
+				progressTarget : "fsUploadProgress",
+				cancelButtonId : "btnCancel",
+				startButtonId : "btnStart",
+				// 上传成功的回调函数
+				uploadSuccess : function(file, data){
+					var data = $.parseJSON(data);
+					if(data.success == 'false'){ return false;}
+					$('#apkFileId').val(data.filePath);
+					$('#apkFileInfo').text(data.filePath);						}
+			}
+		});
+		$("#btnCancel").click(function(){cancelQueue(upload);});
+		$("#btnStart").click(function(){
+			upload.setUploadURL($.appClient.generateUrl({ESAppClientUpdate:'uploadAPKFile'},'x'));
+			startQueue(upload);
+		});
+
+	};
+
+});
+
+</script>
+

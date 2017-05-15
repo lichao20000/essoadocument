@@ -1,0 +1,75 @@
+<style>
+<!--
+.button {cursor: pointer;padding: 5px;background-color: #6F6E81;color: #FFF;border: 0px none;outline: 0px none;}
+-->
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="addDataForm" method="post" enctype="multipart/form-data">
+		    <input type="hidden" name="level" id="level" value=""/>
+			<input type="hidden" name="pId" id="pId" value=""/>
+			<input type="hidden" name="id_seq" id="id_seq" value=""/>
+			<table id="table_detail" class="table_detail">
+				<tr>
+					<td>名称<font color="red" size="3">*</font></td>
+					<td><input type="text" name="name" id="name" verify="unspecial/200/1/0" value="" class="inputtext" /></td>
+				</tr>
+				<tr>
+					<td>分类代码<font color="red" size="3">*</font></td>
+					<td><input type="text" name="code" id="code" verify="english-num/50/1/0" value="" class="inputtext" /></td>
+				</tr>
+				<tr>
+					<td>是否节点<font color="red" size="3" >*</font></td>
+					<td>
+						<input type="radio" name="isnode" id="isnode1" checked="checked" value="1"/><label style="display: inline;" for="isnode1">节点</label>
+						<input type="radio" name="isnode" id="isnode0" value="0"/><label style="display: inline;" for="isnode0">文件</label>
+					</td>
+				</tr>
+				<tr>
+					<td>未来组卷方式<font color="red" size="3">*</font></td>
+					<td>
+						<select id="paperWay" name="paperWay" class="paperWay">
+						    <option value="0">---请选择---</option>
+							<option value="1">单项工程</option>
+							<option value="2">整体项目</option>
+						</select>
+					</td>						
+				</tr>
+				<tr>
+					<td>保管期限<font color="red" size="3">*</font></td>
+					<td>
+					 <div class="editSelect">
+						<div class="selectInputSpan">
+							<input type="text" name="period" id="period" class="inputtext2" value="" verify="unspecial/50/1/0" >
+						</div>
+						<div class="selectSpan">
+							<select id="beautySelect" onchange="javascript:$('#period').val($(this).val());$('#period').removeClass('invalid-text').attr('title','');">
+							<option value="">--请选择--</option>
+							<option value="3年">3年</option>
+							<option value="5年">5年</option>
+							<option value="10年">10年</option>
+							<option value="短期">短期</option>
+							<option value="长期">长期</option>
+							<option value="永久">永久</option>
+							</select>
+						</div>
+					</div>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#paperWay").val($("#treepaperWay").val());
+	$("input[name='isnode']").live("change",function(){
+		var check = $("#isnode0").attr("checked");
+		if(check=="checked"){
+			$("#paperWay").val("0");
+		}else{
+		$("#paperWay").val($("#treepaperWay").val());
+		}
+	});
+});
+</script>

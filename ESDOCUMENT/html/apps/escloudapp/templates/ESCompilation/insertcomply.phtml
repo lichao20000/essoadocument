@@ -1,0 +1,44 @@
+<div>
+<table id="complycontent"></table>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#complycontent").flexigrid({
+		//url:$.appClient.generateUrl({ESCompilation:'get_json'},'x'),
+		dataType: 'json',
+		colModel : [
+		    {display: '<input type="checkbox" name="id1" />', name : 'id2', width : 40, align: 'center'},
+		    {display: '路径', name : 'path', width : 100,  align: 'center',hide:true},
+			{display: '题名', name : 'c4', width : 100,  align: 'center'},
+			{display: '状态', name : 'c5', width : 70, align: 'center'},
+			{display: '编研类别', name : 'c6', width : 70,  align: 'center'},
+			{display: '摘要', name : 'c7', width : 70,  align: 'center'},
+			{display: '创建机构', name : 'c8', width : 70, align: 'center'},
+			{display: '创建人', name : 'c9', width : 70,  align: 'center'},
+			{display: '创建日期', name : 'c10', width : 100, align: 'center'},
+			{display: '提交日期', name : 'c11', width : 100,  align: 'center'},
+			{display: '发布日期', name : 'c12', width : 100,  align: 'center'}
+			],
+		usepager: true,
+		useRp: true,
+		rp: 20,
+		procmsg:"正在加载，请稍等",
+		nomsg:"没有数据",
+		resizable:false,
+		minColToggle:0,
+		showTableToggleBtn: false,
+		pagetext: '第',
+		outof: '页 /共',
+		width: 'auto',
+		height: 380,
+		width:800,
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+	});
+	var complyurl = $.appClient.generateUrl({ESCompilation:'get_json'},'x');
+	$('#complycontent').flexOptions({newp: 1,url:complyurl,query:{condition:'all'}}).flexReload();
+	$('#complycontent tr').die().live('click',function(){
+		$('input[name="id2"]').attr("checked",false);
+		$(this).find("input[name='id2']").attr("checked",true);
+	});
+});
+</script>

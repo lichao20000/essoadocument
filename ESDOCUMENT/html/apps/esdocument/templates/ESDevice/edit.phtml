@@ -1,0 +1,66 @@
+<style>
+<!--
+.button {cursor: pointer;padding: 5px;background-color: #6F6E81;color: #FFF;border: 0px none;outline: 0px none;}
+-->
+</style>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDevice/js/add.js"></script>
+	<div style="padding-top: 30px;">
+		<form id="editDeviceForm" method="post" enctype="multipart/form-data">
+		    <input type="hidden" name="level" id="level" value="<?php echo $level; ?>" />
+			<input type="hidden" name="pId" id="pId" value="<?php echo $pId; ?>" />
+			<input type="hidden" name="id" id="id" value="<?php echo $id; ?>" />
+			<div class="estransfer">
+			<ul>
+				<li>
+					<span>装置分类名称</span>
+					<input type="text" name="name" id="name" verify="text/50/1/0" value="<?php echo isset($name)?$name:''; ?>"  />
+				</li>
+				<li>
+					<span>主项号</span>
+					<input type="text" name="firstNo" id="firstNo" verify="number/10/0/0" value="<?php echo isset($firstNo)?$firstNo:''; ?>"  />
+				</li>
+				<li>
+					<span>子项号</span>
+					<input type="text" name="secondNo" id="secondNo" verify="number/10/0/0" value="<?php echo isset($secondNo)?$secondNo:''; ?>"  />
+				</li>
+				<li>
+					<span>装置单元号</span>
+					<input type="text" name="deviceNo" id="deviceNo" value="<?php echo isset($deviceNo)?$deviceNo:''; ?>" readonly="readonly" class="inputtextnoedit" />
+				</li>
+				<li>
+					<span>基础设计单位</span>
+						<input type="text" name="baseUnits" id="baseUnits" class="selectInput"
+							readonly="readonly" verify="text/200/0/0" value="<?php echo isset($baseUnits)?$baseUnits:''; ?>" />
+						<input type="hidden" name="baseUnitsCode" id="baseUnitsCode"  value="<?php echo isset($baseUnitsCode)?$baseUnitsCode:''; ?>" />
+				</li>
+				<li>
+					<span>详细设计单位</span>
+						<input type="text" name="detailUnits" id="detailUnits" class="selectInput"
+							readonly="readonly" verify="text/200/0/0" value="<?php echo isset($detailUnits)?$detailUnits:''; ?>">
+						<input type="hidden" name="detailUnitsCode" id="detailUnitsCode" value="<?php echo isset($detailUnitsCode)?$detailUnitsCode:''; ?>" />
+				</li>
+				<li>
+					<span>负责部门</span>
+					
+						<input type="text" name="mainPart" id="mainPart" class="selectInput"
+							readonly="readonly" verify="text/200/0/0" value="<?php echo isset($mainPart)?$mainPart:''; ?>" />
+						<input type="hidden" name="mainPartCode" id="mainPartCode"  value="<?php echo isset($mainPartCode)?$mainPartCode:''; ?>" />
+				</li>
+				<li>
+					<span>监理单位</span>
+				
+						<input type="text" name="supervisionUnits" id="supervisionUnits" class="selectInput"
+							readonly="readonly" verify="text/200/0/0" value="<?php echo isset($supervisionUnits)?$supervisionUnits:''; ?>" />
+						<input type="hidden" name="supervisionUnitsCode" id="supervisionUnitsCode" value="<?php echo isset($supervisionUnitsCode)?$supervisionUnitsCode:''; ?>" />
+					
+				</li>
+				<li style="width: 525px;">
+					<span>备注</span>
+					<textarea  name="remarks" id="remarks"   style="width:430px;background:#eee;" isSystem="0"><?php echo isset($remarks)?$remarks:''; ?></textarea>
+				</li>
+			</ul>
+		 </form>
+		</div>
+	</div>
+
+		

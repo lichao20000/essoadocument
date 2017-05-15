@@ -1,0 +1,73 @@
+<style type="text/css">
+.selectztree {
+	margin-top: 10px;
+	border: 1px solid #808080;
+	background: #f0f6e4;
+	width: 220px;
+	height: 250px;
+	overflow-y: scroll;
+	overflow-x: auto;
+}
+</style>
+<div class='i-estransfer'>
+<form id="osModel_init_formA" action=""	method="post" isValid="false">
+	<fieldset class='i-fieldset'>
+  		<legend>流程属性</legend>
+  		<div style='margin-bottom:12px'>
+			<div class="a-label">工作流名称：</div>
+			<input class="required" type="text" verify="unspecial/50/1/0" id="osModel_init_ES_MODEL_NAME" name="osModel_init_ES_MODEL_NAME" value="" style="width:184px;"/>
+		</div>
+		<div style='margin-bottom:12px'>
+			<div class="a-label">工作流描述：</div>
+			<input class="required" type="text" verify="text/100/1/0" id="osModel_init_ES_DESCRIPTION" name="osModel_init_ES_DESCRIPTION" value="" style="width:184px;"/>
+		</div>		
+	</fieldset>
+	
+	<fieldset class='i-fieldset'>
+  		<legend>选择收集范围</legend>
+		<div style='margin-bottom:12px'>
+			<div class="a-label">选择收集范围：</div>
+			<input class="required" type="text" name="selectBusiness" id="selectBusiness" readonly="readonly" verify="text/500/1/0" code="" value="" style="width:184px;" />
+			<div id="menuContent" class="menuContent" style="display: none; position: fixed;">
+				<ul id="treeDemo" class="ztree selectztree" style="margin-top: 0; width: 200px; height: 250px; color: #000"></ul>
+			</div>
+		</div>
+	</fieldset>
+</form> 
+</div>
+<script type="text/javascript">
+$(function(){
+	$("form :input.required").each(function(){
+        var $required = $("<strong class='high' style='color:red'> *</strong>"); //创建元素
+        $(this).parent().append($required); //然后将它追加到文档中
+    });
+
+	var Setting = {
+			chkStyle:"radio",
+			inputId:"selectBusiness",//触发事件的id
+			treeDIVId:"menuContent",
+			treeUlId:"treeDemo",
+			selectId:"beautySelect",//可选
+			url:$.appClient.generateUrl({ESDocumentStage : "getTree"}, 'x')
+		};
+	$.treeSelected._onCheck = function(e, treeId, treeNode) {
+		var zTree = $.fn.zTree.getZTreeObj(Setting.treeUlId);
+		nodes = zTree.getCheckedNodes(true);
+		var v = "";
+		var d = "";
+		for (var i=0, l=nodes.length; i<l; i++) {
+			v += nodes[i].name + ",";
+			d += nodes[i].id + ",";
+		}
+		if (v.length > 0 && d.length>0 ) {
+			v = v.substring(0, v.length-1);
+			d = d.substring(0, d.length-1);
+		}
+		$("#"+Setting.inputId).attr("value", v);
+		$("#"+Setting.inputId).attr("code", d);
+		$("#"+Setting.inputId).removeClass("invalid-text");
+		$("#"+Setting.inputId).attr('title',"");
+	};
+	$.treeSelected._init(Setting);
+});
+</script>

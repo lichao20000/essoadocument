@@ -1,0 +1,36 @@
+<link href='<?php echo $tplPath?>/ESInformationPublish/css/news.css' rel="stylesheet">
+    <div class="page">
+    	<div class="wrap">
+        	<div class="main">
+            	<div class="page_box">
+                	<div class="page_content">
+                        <div class="p_b">
+                        	<div class="p_t">文控新闻<a href="#" class="home"></a></div>
+                            <ul class="p_l" id="archivelist">
+                            	<?php echo $list;?>
+                            </ul>
+                          	<div class="paging" id='papernavigation'>
+                               	<!-- <li><a class='prev' href='javascript:void(0)' style="border:1px solid #e6e6e6; background-color:#fff; color:#333;">上一页</a></li> -->
+                                <!-- <li><a class='next' href='javascript:void(0)' style="border:1px solid #e6e6e6; background-color:#fff; color:#333;">下一页</a></li> -->
+                                <?php echo $btn;?>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESInformationPublish/js/news.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESInformationPublish/js/pagebtn.js"></script>
+<script type='text/javascript'>
+$(function(){
+	_global.boardId ='<?php echo $info['boardId'];?>';
+});
+<?php
+	if($info['total']) echo "_pageBtn.bind();";
+?>
+	
+</script>

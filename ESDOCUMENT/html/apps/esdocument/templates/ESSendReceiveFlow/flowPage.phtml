@@ -1,0 +1,92 @@
+<style type="text/css">
+.selectztree {
+	margin-top: 10px;
+	border: 1px solid #808080;
+	background: #f0f6e4;
+	width: 220px;
+	height: 250px;
+	overflow-y: scroll;
+	overflow-x: auto;
+}
+</style>
+<div class="sendReceiveFlow">
+	<form id="sendReceiveFlow">
+		<table id="table_detail"
+			style="height: 300px; padding: 20px 20px 0 20px;">
+			<tr>
+				<td>名称<font size="3px" color="red">*</font></td>
+				<td><input type="text" name="name" id="name"
+					verify="unspecial/50/1/0"
+					value="<?php echo isset($flow->name)?$flow->name:''; ?>"
+					style="width: 320px; height: 20px;" />
+					<input type="hidden" name="oldFlowName" id="oldFlowName" value="<?php echo isset($flow->name)?$flow->name:''; ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td>选择收集范围<font size="3px" color="red">*</font>&nbsp;&nbsp;
+				</td>
+				<td><input class="required" type="text" name="selectBusiness"
+					id="selectBusiness" readonly="readonly" verify="text/500/1/0"
+					code="" value="" style="width: 320px;" />
+					<div id="menuContent" class="menuContent"
+						style="display: none; position: fixed;">
+						<ul id="treeDemo" class="ztree selectztree"
+							style="margin-top: 0; width: 312px; height: 250px; color: #000"></ul>
+					</div></td>
+			</tr>
+			<tr>
+				<td>版本<font size="3px" color="red">*</font></td>
+				<td><input type="text" name="version" id="version"
+					verify="number/50/1/0"
+					value="<?php echo isset($flow->version)?$flow->version:''; ?>"
+					style="width: 320px; height: 20px;" /></td>
+			</tr>
+			<tr>
+				<td>描述</td>
+				<td><textarea cols="5" rows="5" name="describtion" id="describtion" value="" verify="unspecial/240/0/0"
+					style="width: 320px; height: 40px;overflow: auto; "><?php echo isset($flow->describtion)?$flow->describtion:''; ?></textarea></td>
+			</tr>
+		</table>
+	</form>
+</div>
+<script type="text/javascript">
+$(function(){
+	var Setting = {
+			chkStyle:"radio",
+			inputId:"selectBusiness",//触发事件的id
+			treeDIVId:"menuContent",
+			treeUlId:"treeDemo",
+			selectId:"beautySelect",//可选
+			url:$.appClient.generateUrl({ESDocumentsCollection : "getTree"}, 'x')
+		};
+	$.treeSelected._onCheck = function(e, treeId, treeNode) {
+		var zTree = $.fn.zTree.getZTreeObj(Setting.treeUlId);
+		nodes = zTree.getCheckedNodes(true);
+		var v = "";
+		var d = "";
+		for (var i=0, l=nodes.length; i<l; i++) {
+			v += nodes[i].name + ",";
+			d += nodes[i].code + ",";
+		}
+		if (v.length > 0 && d.length>0 ) {
+			v = v.substring(0, v.length-1);
+			d = d.substring(0, d.length-1);
+		}
+		$("#"+Setting.inputId).attr("value", v);
+		$("#"+Setting.inputId).attr("code", d);
+		$("#"+Setting.inputId).removeClass("invalid-text");
+		$("#"+Setting.inputId).attr('title',"");
+	};
+	$.treeSelected._init(Setting);
+
+	$("#selectBusiness").attr("code","<?php echo isset($flow->typeNo)?$flow->typeNo:''; ?>");
+	var code=$("#selectBusiness").attr("code");
+	if(code!=""){
+		$.post($.appClient.generateUrl({ESSendReceiveFlow : "getStageByCode"}, 'x'),{code:code},function(data){
+			if(data){
+				$("#selectBusiness").val(data.name);
+			}
+		},"json");
+	}	
+});
+</script>

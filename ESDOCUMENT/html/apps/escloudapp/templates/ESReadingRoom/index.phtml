@@ -1,0 +1,132 @@
+<link href="<?php echo $tplPath?>/ESReadingRoom/css/index.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/viewfile.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ckeditor/ckeditor.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"电子阅览室", content:".topss,.main"});
+	$(".esleft").css("height",esleftH);
+});
+</script>
+<div class="esmain">
+	<div style="float:left; width: 170px; padding-left:31px;">
+		<ul id="esleft" class="ztree">
+			<!--<li extra="a" class="turn"><a href="javascript:void(0)">电子档案阅览</a></li>
+			<li extra="b"><a href="javascript:void(0)">编研成果阅览</a></li>  -->
+		</ul>
+	
+	</div>
+  <div class="esright">
+   		<table id="readingroom"></table>
+  </div>
+
+</div>
+<script type="text/javascript">
+var requestServer = {
+	/**
+	 * 根据mainSite获取当前用户身份的档案类型
+	 */
+	getArchiveTypeByMainSite: function() {
+		var requsetUrl = $.appClient.generateUrl({ESReadingRoom:'getArchiveTypeByMainSite'},'x');
+		$.get(requsetUrl,function(data) {
+			$.fn.zTree.init($("#esleft"), setting, data);
+		});
+	},
+	/**
+	 * 查询工程和采购 案卷和卷内
+	 */
+	getProPurByIdStructure: function(event, treeId, treeNode) {
+		if(treeNode.idStructure != '0') {
+			var requsetUrl = $.appClient.generateUrl({ESReadingRoom:'getProPurByIdStructure',idStructure:treeNode.idStructure,id:treeNode.id},'x');
+			$.get(requsetUrl,function(data) {
+				$.fn.zTree.init(this.treeObj, setting, data);
+			});
+		}
+	},
+	/**
+	 * 获取电子阅览室的展示字段
+	 */
+	getPathColumnByIdStructure: function(event, treeId, treeNode) {
+		if(treeNode.isParent) {
+			var zTree = $.fn.zTree.getZTreeObj("esleft");
+			zTree.expandNode(treeNode);
+			return false;
+		}
+		var url = $.appClient.generateUrl({ESReadingRoom:'righttable',archiveType: encodeURI(treeNode.name),idStructure:treeNode.idStructure,archiveTypeEngLish:treeNode.archiveTypeEngLish},'x');
+		$('.esright').load(url);
+	}	
+};
+var setting = {
+	treeId: 'esleft',
+	view: {
+		dblClickExpand: false,
+		showLine: false,
+		selectedMulti: false
+	},
+	data: {
+		simpleData: {
+			enable:true,
+			idKey: "id",
+			pIdKey: "pId"
+		}
+	},
+	async:{
+		enable:true,
+		url:$.appClient.generateUrl({ESReadingRoom:'getProPurByIdStructure'},'x'),
+		autoParam:["id","idStructure","archiveType"]
+		//autoParam:["idStructure"]
+	},	
+	callback: {
+		onClick:  requestServer.getPathColumnByIdStructure
+		//onExpand: requestServer.getProPurByIdStructure
+	}
+};
+/*
+$('.esleft li').die().live('click',function(){
+	$('.esleft li').removeClass('trSelected');
+	$(this).addClass('trSelected');
+	//var tableurl = $.appClient.generateUrl({ESCollaborative:'myquery'},'x');
+	//$("#mylist").flexOptions({newp:1,url:tableurl}).flexReload();
+});*/
+
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".esleft").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".esmain").offset().top;
+var esleftH=winH-eslefttop-1;
+var height=winH-eslefttop-85;
+window.onresize=function()
+{
+	var winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".esleft").width()-5;
+	}
+	var winH=$(window).height();
+	var height=winH-eslefttop-85;
+	$(".flexigrid").css({width:width});	
+}
+// #modify#author:fangjixiang,date:2012/12/4 #modify #author:ldm,date:2013/03/04
+$(function(){
+	var url = $.appClient.generateUrl({ESReadingRoom:'righttable',archiveType:'initialization',idStructure:0},'x');
+	$('.esright').load(url);
+	/*$('.esleft li').die().click(function(){
+		$('.esleft li').removeClass('turn');
+		$(this).addClass('turn');
+		var extra = $(this).attr("extra");
+		var url = $.appClient.generateUrl({ESReadingRoom:'righttable'},'x');
+		$('.esright').load(url);
+	});*/	
+	requestServer.getArchiveTypeByMainSite();
+});
+
+</script>

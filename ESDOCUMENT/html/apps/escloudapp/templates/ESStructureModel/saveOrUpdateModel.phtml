@@ -1,0 +1,108 @@
+<form  id='modelForm'>
+<div class='model'>
+	<div class="l">
+		<div class="title">模板类型:</div>
+		<div class='input'>
+		<?php if ($isEdit) {?>
+			<select id='modelType' readonly="readonly" style="width: 200px;">
+				<option value=""><?php echo $modelType;?></option>
+			</select>
+		<?php } else {?>
+			<select id='modelType' style="width: 200px;">
+				<option value="file">案卷-卷内</option>
+				<option value="innerFile">卷内</option>
+			</select>
+		<?php }?>
+		</div>
+	</div>
+	<div class="c"></div>
+	<div class="l">
+		<div class="title">模版名称:</div>
+		<div class='input'>
+		<?php if($isEdit){?>
+			<input id='modelName' verify='text/50/1/0' style="width: 194px;" value="<?php echo $modelName;?>" />
+		<?php } else {?>
+			<input id='modelName' verify='text/50/1/0' style="width: 194px;" />
+		<?php }?>
+		</div>
+	</div>
+	<div class="c"></div>
+	<div class="l">
+		<div class="title">档案类型:</div>
+		<div class='input'>
+			<select class='input' id='modelClass' name="ESCLASS">
+			<!-- xiaoxiong 20140729 修改为动态获取 -->
+			</select>
+		</div>
+	</div>
+	<div class="c"></div>
+	<div class="l">
+		<div class="title">模版描述:</div>
+		<div class='textarea'>
+		<?php if($isEdit){?>
+			<input id="modelId" type="hidden" name="id" value="<?php echo $id;?>" />
+			<textarea id='modelDes' verify='text/250/0/0' style="width: 196px;height:40px;"><?php echo $modelDes;?></textarea>
+		<?php }else{?>
+			<textarea id='modelDes' verify='text/250/0/0' style="width: 196px;height:40px;"></textarea>
+		<?php }?>
+		</div>
+	</div>
+</div>
+</form>
+<script type="text/javascript">
+
+	var nameZZ= /^[\u4e00-\u9fa5a-zA-Z0-9_\-\*]+$/;
+	var lengthZZ= /.{51}|^\s*$/g;
+	var desclengthZZ= /.{251}|^\s*$/g;
+	$("#modelName").bind('blur',function(){
+	 	var modelName = $(this).val();
+	 	modelName=modelName.replace(/[ ]/g,"");
+	 	if(modelName==''){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","模版名称不能为空");
+	 		return false;
+	 	}
+	 	if(nameZZ.test(modelName)==false){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","模版名称只能输入汉字、英文字符、_、*、-");
+	 		return false;
+	 	}
+	 	if(lengthZZ.test(modelName)==true){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","模版名称长度不能超过50个字符");
+	 		return false;
+	 	}
+	 	$(this).removeClass("warnning");
+	});
+	$("#modelDes").bind('blur',function(){
+		var modelDes = $(this).val();
+		modelDes=modelDes.replace(/[ ]/g,"");
+	 	if(modelDes==''){
+	 		return false;
+	 	}
+	 	if(nameZZ.test(modelDes)==false){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","模版描述只能输入汉字、英文字符、_、*、-");
+	 		return false;
+	 	}
+	 	if(desclengthZZ.test(modelDes)==true){
+	 		$(this).addClass("warnning");
+	 		$(this).attr("title","模版描述长度不能超过250个字符");
+	 		return false;
+	 	}
+	 	$(this).removeClass("warnning");
+	});
+	$(document).ready(function(){
+		$("#modelClass").get(0).options.length =0;
+		<?php 
+		foreach ($archiveTypes as $list){
+		?>
+		  //默认选择第一行
+		$('#modelClass').append("<option value='<?php echo $list->SKUNumber?>' <?php echo ($list->className===$modelClass? 'selected':'')?>  ><?php echo $list->className;?></option>"); 
+		<?php
+      	}
+		?>
+	});
+</script>
+
+

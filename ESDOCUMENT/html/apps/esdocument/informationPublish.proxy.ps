@@ -1,0 +1,52 @@
+<?php
+/**
+ * 文控新闻
+ * @author xiewenda
+ *
+ */
+class ProxyEsdocumentInformationPublish extends AgentProxyAbstract {
+	const SERVICE_NAME = "informationPublish";
+	public function selectAllType() {
+		$urlParam = array (
+				'selectAllType' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	public function savePublishTopic($param) {
+		$urlParam = array (
+				'savePublishTopic' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+	}
+	
+	public function getPublishTopicList($param) {
+		$urlParam = array (
+				'getPublishTopicList' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+	}
+	public function GetPublishTopic($param) {
+		$urlParam = array (
+				'GetPublishTopic' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+	}
+	public function deletePublishTopic($param) {
+		$urlParam = array (
+				'deletePublishTopic' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+	}
+	public function updateTopicStatus($param) {
+		$urlParam = array (
+				'updateTopicStatus' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+	}
+}

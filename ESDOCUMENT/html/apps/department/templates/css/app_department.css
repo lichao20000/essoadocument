@@ -1,0 +1,10 @@
+@charset "utf-8";
+/* CSS Document */
+.appDepartmentL{ margin-right:20px; width:650px; float:left;}
+.appDepartmentR{  width:265px; float:right;}
+
+#org_tree li {
+  float: none;
+  line-height: 1em;
+  padding: 2px 0;
+}

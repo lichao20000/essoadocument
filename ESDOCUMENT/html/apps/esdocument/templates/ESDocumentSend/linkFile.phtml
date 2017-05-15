@@ -1,0 +1,29 @@
+<div class="linkFile">
+	<div id="h_search" style="width: 800px; height: 40px;" stageId="" ></div>
+	<div id="div_esFile" class="linkRight">
+		<table id="esFile"></table>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	//修改样式
+	var recHtmlDoc = '<div class="find-dialog" style="position:relative;margin:8px 10px 0 600px;"><input id="docKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="docKeyWord" value="请输入关键字" /><span onclick="sendFile.getDocQuery()"></span></div>';
+	$('#h_search').html(recHtmlDoc);
+
+	//回车搜索事件	
+	$(document).keydown(function(event){
+		var activeId = document.activeElement.id;
+		if(event.keyCode == 13 && activeId == 'docKeyWord') {
+			sendFile.getDocQuery();
+			return false;
+		}
+	});	
+});
+
+var sendFile = {
+	getDocQuery : function(){
+		var url=$.appClient.generateUrl({ESFiling: 'findDocumentList',code:$("#typeNo").val(),stageId:$("#h_search").attr("stageId"), keyWord:encodeURI($("#docKeyWord").val())}, 'x');
+		$("#esFile").flexOptions({url:url,newp: 1}).flexReload();
+	}
+};
+</script>

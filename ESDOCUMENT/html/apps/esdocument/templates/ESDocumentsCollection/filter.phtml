@@ -1,0 +1,100 @@
+
+<div id='filterContents' style='padding:20px;'>
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span>
+		<span class='w90 w14090 hei30'>比较符</span>
+		<span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">添加行</span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">删除行</span>
+	</p>
+	<div id='contents'>
+		<?php for($fly=1;$fly<6;$fly++){ ?>
+		<p class='contbox creatediv'  style="overflow:hidden;">
+			<select name="esfields" class='w140 w14090 hei20 filedname' id='esfields_<?php echo $fly ?>' onchange="filterControl(<?php echo $fly ?>)">
+				<option value=''>请选择</option>
+				<?php 
+				foreach($dataList as $value){
+					echo '<option value='.$value['code'].' type='.$value['type'].'>'.$value['name'].'</option>';
+				}
+				?>
+				<!-- rongying 20150508 修改为动态获取筛选列
+				<option value='itemName'>项目名称</option>
+				<option value='stageName'>收集范围</option>
+				<option value='deviceName'>装置名称</option>
+				<option value='participatoryName'>部门</option>
+				<option value='title'>文件标题</option>-->
+				<!-- lujixiang 20150407 去除《文件编码》筛选条件 -->
+				<!-- <option value='docNo'>文件编码</option> --> 
+				<!--<option value='person'>拟定人</option>
+				<option value='date'>拟定日期</option>-->
+			</select>
+			<select name="comparison" class='w90 w14090 hei20 comparison' id='comparison_<?php echo $fly ?>'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select>
+			<input type='text' class='w140 w14090 hei20 filedvalue'  name="esfieldvalue" id='esfieldvalue_<?php echo $fly ?>' />
+			<select id='' class='w14090 w90 hei20 relationship' name="relation">
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select>
+			<a class='newfilter'></a><a class='delfilter'></a>
+		</p>
+		<?php }?>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+/**  lujixiang 20150407 针对《拟定日期》筛选添加比较符控制和添加时间控件 **/
+
+function filterControl(i){
+	
+	var selectValue = $("#esfields_"+i).val();
+	var selectType = $("#esfields_"+i+" option:selected").attr('type');
+	if("DATE" == selectType || "TIME" == selectType){
+		
+		/** 清空比较符，只添加大于、小于、等于三种比较符 **/
+		$("#comparison_"+i + " option").remove();  
+		var comparison = $("#comparison_"+i) ;
+		comparison.append("<option value='equal' selected>等于</option>"); 
+		comparison.append("<option value='greaterThan'>大于</option>"); 
+		comparison.append("<option value='lessThan'>小于</option>"); 
+
+		/** 添加日期插件 **/
+		var esfieldvalueObj = $("#esfieldvalue_"+i) ;
+		esfieldvalueObj.val('');
+		esfieldvalueObj.addClass("Wdate");
+		esfieldvalueObj.bind("click",WdatePicker);
+		
+	}else{
+
+		/** 还原设置 **/
+		$("#comparison_"+i + " option").remove();  
+		var comparison = $("#comparison_"+i) ;
+		comparison.append("<option value='equal'>等于</option>"); 
+		comparison.append("<option value='greaterThan'>大于</option>"); 
+		comparison.append("<option value='lessThan'>小于</option>"); 
+		comparison.append("<option value='notEqual'>不等于</option>"); 
+		comparison.append("<option value='greaterEqual'>大于等于</option>"); 
+		comparison.append("<option value='lessEqual'>小于等于</option>"); 
+		comparison.append("<option value='like' selected>包含</option>"); 
+		comparison.append("<option value='notLike'>不包含</option>"); 
+
+		/** 添加日期插件 **/
+		var esfieldvalueObj = $("#esfieldvalue_"+i) ;
+		esfieldvalueObj.removeClass("Wdate");
+		esfieldvalueObj.unbind("click");
+		esfieldvalueObj.attr('readonly',false);
+		esfieldvalueObj.removeAttr('disabled');
+		esfieldvalueObj.val('');
+	}
+}
+</script>

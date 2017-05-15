@@ -1,0 +1,63 @@
+<div class='deskAppTreeCointainer'>
+	<div class='tree'>
+		<div id='zTree' class='ztree'><span class='loading'></span></div>
+	</div>
+</div>
+<style>
+.deskAppTreeCointainer{
+    height: 400px;
+    overflow: auto;
+    width: 298px;
+
+}
+.ztree li a span{
+	color:#444;
+}
+
+</style>
+<script>
+
+
+
+// 全局变量
+var g = {
+	roleId: undefined,
+	treeObj: undefined,
+	bussModelId: undefined
+};
+/** 在这里组装档案功能树  ***/
+var menuAuth = {
+		setting: { // 功能树,目录树
+			view: {
+				dblClickExpand: true,
+				showLine: false
+				},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			check: {
+				enable:true,
+				chkboxType: { "Y": "ps", "N": "ps" }
+			},
+			callback: {
+				onClick: function (e,treeId, treeNode){
+					g.treeObj.checkNode(treeNode, null, true);	//当单击节点时前面的复选框同时被选中
+				}
+			}
+		},getTree: function (){
+			var This = this;
+			$.post(
+					$.appClient.generateUrl({ESDefault:'getDeskMenuTree'},'x'),
+					{roleId: 1},
+					function (data){
+						g.treeObj = $.fn.zTree.init($("#zTree"), This.setting, data.nodes);
+					},
+					'json'
+				);
+		}
+};
+menuAuth.getTree();
+
+</script>

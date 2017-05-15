@@ -1,0 +1,69 @@
+<form id="editwarehouse" action=""	method="post">
+<div class="estransfer">
+<ul>
+<li><span>库房编号</span><input type="text" name="code" value="<?php echo $data->code;?>"></li>
+<li><span>负责人</span><input type="text" name="manager" value="<?php echo $data->manager;?>"></li>
+<li><span>所属机构</span><input type="text" id="position" class ="selectInput" name="position" value="<?php echo $data->position;?>"/><input type="hidden" id="orgId"  name="orgId" value="<?php echo $data->orgId;?>"/></li>
+<li><span>面积</span><input type="text" name="area" value="<?php echo $data->area;?>"></li>
+<li><span>消防设备</span><input type="text" name="fireequipment" value="<?php echo $data->fireequipment;?>"></li>
+<li><span>空调</span><input type="text"  name="aircondition"  value="<?php echo $data->aircondition;?>"></li>
+<li><span>监控设备</span><input type="text" name="monitorequipment" value="<?php echo $data->monitorequipment;?>"></li>
+<li><span>加湿/去湿器</span><input type="text" name="equipment" value="<?php echo $data->equipment;?>"></li>
+<li><span>排架数量</span><input type="text" name="framenumber" value="<?php echo $data->framenumber;?>"></li>
+<li><span>列</span><input type="text" name="col" value="<?php echo $data->col;?>"></li>
+<li><span>层</span><input type="text" name="layer" value="<?php echo $data->layer;?>"></li>
+<li><span>每格宽度(CM)</span><input type="text" name="gridwidth" value="<?php echo $data->gridwidth;?>"></li>
+<li style="width:520px"><span>库房描述</span><textarea name="description" style="width:425px;height:50px;float:left"><?php echo $data->description;?></textarea></li>
+</ul>
+</div>
+</form>
+<script type="text/javascript">
+$(function(){
+	if(state==0){
+		$('#editwarehouse input').attr("readonly","readonly");
+		$('#editwarehouse textarea').attr("readonly","readonly");
+		$('#housesave').hide();
+	}else{
+		$('#editwarehouse input').removeAttr("readonly");
+		$('#editwarehouse textarea').removeAttr("readonly");
+		$('#housesave').show();
+	}
+	$("#position[class='selectInput']").selectInput({
+	    url: $.appClient.generateUrl({ESOrgAndUser: "getOrgAllListTree"},'x'),
+	    chkStyle: "radio",
+	    treatNodes: treatNodes,
+	    onCheck: checkOrg,
+	    width: 300,
+	    height: 300
+	});
+
+	function treatNodes(zNodes) {
+		var arrays = $("#position").val() != null ? $("#position").val().split(',') : new Array();
+	    for (var i = 0; i < zNodes.length; i++) {
+	        if (zNodes[i].id != 'org') {
+	            if ($.inArray(zNodes[i].name, arrays) == -1) {
+	                zNodes[i].checked = false;
+	            } else {
+	                zNodes[i].checked = true;
+	            }
+	        }else{
+	        	zNodes[i].nocheck="true";
+		    }
+	        if (zNodes[i].id == 0 || zNodes[i].code == '') {
+	            zNodes[i].nocheck = true;
+	        }
+	    }
+	}
+	function checkOrg(event, treeId, treeNode) {
+	    $("#orgId").val(treeNode.id);
+	    $("#position").val(treeNode.name);
+	}
+});
+
+$("#editwarehouse input[name='position']").attr("readonly","true");
+$("#editwarehouse input[name='col']").attr("readonly","true");
+$("#editwarehouse input[name='layer']").attr("readonly","true");
+$("#editwarehouse input[name='framenumber']").attr("readonly","true");
+$("#editwarehouse input[name='gridwidth']").attr("readonly","true");
+
+</script>

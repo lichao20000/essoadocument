@@ -1,0 +1,43 @@
+<div class="dep_con">
+	<div class="controler">
+		<div style="float: left;width:100%; height: 33px; padding-top:7px;">
+			<div class="find-dialog">
+				<input type="text" id="controlerId" value="请输入关键字" style="color: silver;"/>
+				<span id="searchControler"></span>
+			</div>
+		</div>
+		<table id="esConList"></table>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#controlerId").focus(function(){
+		if($(this).val()=="请输入关键字"){
+			$(this).val("");
+		}
+	});
+	$("#controlerId").blur(function(){
+		if($(this).val()==""){
+			$(this).val("请输入关键字");
+		}
+	});
+
+	//回车事件
+	$(document).keypress(function(e) {  	
+		var activeId = document.activeElement.id;	   
+    	if(e.which == 13 && activeId == 'controlerId') {  
+    	   jQuery("#searchControler").click();  	       
+    	}  
+	}); 
+			
+	//搜索单击事件
+	$("#searchControler").die().live("click",function(){
+		var searchName=$("#controlerId").val();
+		var url=$.appClient.generateUrl({ESParticipatory: 'findControlerList'}, 'x');
+		if(searchName!="" && searchName!="请输入关键字"){
+			url = $.appClient.generateUrl({ESParticipatory: 'findControlerList',keyWord:encodeURI(searchName)}, 'x');
+		}
+		$("#esConList").flexOptions({newp: 1, url: url}).flexReload();
+	});
+});
+</script>

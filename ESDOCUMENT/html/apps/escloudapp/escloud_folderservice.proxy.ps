@@ -1,0 +1,248 @@
+<?php
+class ProxyEscloudappEscloud_folderservice extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_folderservice";
+  /**
+   * 根据文件夹的id获取文件夹下的文件信息（包含文件的信息列表，和文件夹的信息列表）
+   * @author ldm
+   * @param  FolderId 文件夹的id
+   * @return 返回该文件夹下的文件信息的列表
+   */
+  public function getFolderSub($FolderId,$page,$limit){
+  	$urlParam = array('getFolderSub',$FolderId,$page,$limit);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  public function getTitlePath($Path){
+  	$urlParam = array('getFileTitlePath',$Path);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  public function getlist($bigOrgId)
+  {
+    
+    $urlParam = array('getSubFolder',0,$bigOrgId);//liqiubo 20140618 支持saas 加入bigOrgId进行查询
+    $url = implode('/', $urlParam);
+    return $this->get(self::SERVICE_NAME, $url);
+    
+  }
+  /**
+   * 根据id获得子文件夹
+   * @param int $id
+   */
+  public function getSubFolder($id,$bigOrgId){
+  	$urlParam = array('getSubFolder',$id,$bigOrgId);//liqiubo 20140618 支持saas 加入bigOrgId进行查询
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 新建文件夹
+   * @param unknown_type $id
+   * @param unknown_type $param
+   */
+  public function addSubFolder($id,$param){
+  	$urlParam = array('addSubFolder',$id);
+  	$url = implode('/', $urlParam);
+  	//var_dump($url);
+  	return $this->post(self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 更改文件夹名称
+   * @param unknown_type $id
+   * @param unknown_type $param
+   */
+  public function editSubFolder($id,$param){
+  	$urlParam = array('editSubFolder',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 根据id信息获得parentid
+   */
+  public function getNowFolder($id){
+  	$urlParam = array('getNowFolder',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  
+  /**
+   * 根据文件夹Id获取文件数量
+   * @param unknown_type $folderId
+   */
+  public function getFileCountByFolderId($folderId)
+  {
+  	$urlParam = array('getFileCountByFolderId',$folderId);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 根据文件夹Id获取文件数量(未挂接的)
+   * @param unknown_type $folderId
+   */
+  public function getFileCountByFolderIdForNoLink($folderId,$list)
+  {
+  	$urlParam = array('getFileCountByFolderIdForNoLink',$folderId);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url,$list,'application/json;charset=UTF-8');
+  }
+  
+  /**
+   * 查找指定文件夹中的文件列表
+   * @author dengguoqi
+   * @param unknown_type $folderId
+   * @param unknown_type $pageNum
+   * @param unknown_type $pageSize
+   * @param unknown_type $keyword 检索关键词，空值不参与检索
+   */
+  public function selectFileByFolderId($folderId, $pageNum, $pageSize, $keyword)
+  {
+  	$urlParam = array('selectFileByFolderId',$folderId);
+  	if($keyword) $urlParam[] = $keyword;
+  	$urlParam[] = $pageNum;
+  	$urlParam[] = $pageSize;
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  } 
+  
+  /**
+   * 查找指定文件夹中的文件列表(未挂接的)
+   * @author 
+   * @param unknown_type $folderId
+   * @param unknown_type $pageNum
+   * @param unknown_type $pageSize
+   * @param unknown_type $keyword 检索关键词，空值不参与检索
+   */
+  public function selectFileByFolderIdForNoLink($folderId, $pageNum, $pageSize,$list)
+  {
+  	$urlParam = array('selectFileByFolderIdForNoLink',$folderId,$pageNum,$pageSize);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $list,'application/json;charset=UTF-8');
+  }
+  
+  /**
+   * 将指定的文件列表添加到文件夹中
+   * @author dengguoqi
+   * @param unknown_type $folderId
+   * @param unknown_type $files
+   */
+  public function saveFile($folderId, $files)
+  {
+  	$urlParam = array('saveFile',$folderId);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $files,'application/json;charset=UTF-8');
+  }
+  
+  /**
+   * 修改文件夹名称
+   * @author dengguoqi
+   * @param unknown_type $folder
+   */
+  public function modifyFolder($folder)
+  {
+  	return $this->post(self::SERVICE_NAME, 'modifyFolder', $folder,'application/json;charset=UTF-8');
+  } 
+  
+  /**
+   * 修改文件信息，关联转换后的pdf和swf文件
+   * @author dengguoqi
+   * @param unknown_type $file
+   */
+  public function modifyFile($file)
+  {
+  	return $this->post(self::SERVICE_NAME, 'modifyFile', $file,'application/json;charset=UTF-8');
+  }
+  
+  /**
+   * 上传挂接文件
+   * @author dengguoqi
+   * @param unknown_type $path 档案条目path
+   * @param unknown_type $files 文件列表
+   * @param unknown_type $flag 是否添加到es_file表里
+   */
+  public function addFile($path, $IdBusiModel, $files, $flag)
+  {
+  	$urlParam = array('addFile',$path, $IdBusiModel, $flag);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $files,'application/json;charset=UTF-8');
+  }
+  
+  /**
+   * 上传文件存到数据库，此时没有挂接
+   * @author liqiubo 20140530
+   * @param  $files 文件列表
+   * @param $floderid 文件夹ID
+   */
+  public function addNoLinkFile($floderid, $files)
+  {
+  	$urlParam = array('addNoLinkFile',$floderid);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME, $url, $files,'application/json;charset=UTF-8');
+  }
+  /**
+   * 指定原文Id获取浏览文件地址
+   * @param unknown_type $fileId 原文Id
+   * @param unknown_type $company 公司编码
+   * @param unknown_type $clientIp 客户端Ip
+   */
+  public function getViewUrl($path,$fileId, $company, $clientIp)
+  {
+  	$urlParam = array('getViewUrl', $path,$fileId, $company, $clientIp);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 根据文件夹的id 获得文件的信息
+   * @author ldm
+   */
+  public function getfile($id,$page,$rp){
+//   	$urlParam = array('selectFileByFolderId',$id,$page,$rp);
+  	$urlParam = array('selectFileByFolderIdForESFILE',$id,$page,$rp);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 根据文件夹id获得文件总数
+   * @author ldm
+   */
+  public function getTotalNum($id){
+  	$urlParam = array('getTotalNum',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 根据文件夹id获得未挂接文件信息
+   * @author ldm
+   */
+  public function getnothookfile($id,$page,$rp){
+  	$urlParam = array('selectNotHookFileByFolderId',$id,$page,$rp);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 根据文件夹id获得未挂接文件总数
+   * @author ldm
+   */
+  public function getNotHookNum($id){
+  	$urlParam = array('getNotHookFileNum',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  
+  /**
+   * 检查是否设置扫描规则
+   * @author longjunhao 20140725
+   */
+  public function checkFileScanPolicy($postData){
+  	$url = "checkFileScanPolicy";
+	return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+  }
+  
+  /**
+   * 检查是否存在swf文件
+   * @author longjunhao 20140922
+   */
+  public function checkSwfFile($postData){
+  	$url = "checkSwfFile";
+  	return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+  }
+}

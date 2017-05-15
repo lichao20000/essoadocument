@@ -1,0 +1,320 @@
+<script>
+// longjunhao 20140919 add 记录上一次筛选的信息
+var filterStr = "";
+
+var _autoSize = function (){
+	var width = document.documentElement.clientWidth*0.96;
+	var height = document.documentElement.clientHeight-110;	// 可见总高度 - 176为平台头部高度
+	var leftWidth = 220;
+	if(navigator.userAgent.indexOf("MSIE 6.0")>0){
+		
+		width = width-6;
+		
+	}else if(navigator.userAgent.indexOf("MSIE 8.0")>0){
+		width = width-4;
+		height = height-4;
+	}
+	
+	var rightWidth = width ;
+	var tblHeight = height - 147;
+	
+	_size = {
+		left: [leftWidth, height],
+		right: [rightWidth, height],
+		table: [rightWidth, tblHeight]
+	};
+};
+$(function(){
+	
+	$("#ESST").flexigrid({
+		  url: $.appClient.generateUrl({ESStoreroom :'monit_json',houid:selectid}, 'x'),
+		  dataType: 'json',
+		  colModel : [
+				{display: '<input type="checkbox" name="ids">', name : 'ids', width : 40, align: 'center'},
+				{display: 'id', name : 'id', metadata:'id',width : 50, align: 'center',hide:true},
+				{display: '操作', name : 'modify', width : 50, align: 'center'},
+				{display: '记录日期', name : 'c3', metadata:'date',width : 100, sortable : true, align: 'center'},
+				{display: '时间', name : 'c4', metadata:'time',width : 300, sortable : true, align: 'center'},
+				{display: '温度(℃)', name : 'c5', metadata:'temperature',width : 300, sortable : true, align: 'center'},
+				{display: '湿度(%)', name : 'c6', metadata:'humidity',width : 250, sortable : true, align: 'center'}
+				],
+		  buttons : [
+				{name: '添加记录', bclass: 'add',onpress:records},
+				{name: '删除', bclass: 'delete',onpress:delcord},
+				{name: '筛选', bclass: 'filter',onpress:filter},
+				{name: '所有数据', bclass: 'package',onpress:getall},
+				{name: '图形展示', bclass: 'report',onpress:line,id:'toogle',tooltip:'展示查询列表的数据'}
+				],
+			sortname: "c3",
+			sortorder: "asc",
+			usepager: true,
+			title: '',
+			useRp: true,
+			rp: 20,
+			nomsg:"没有数据",
+			showTableToggleBtn: true,
+			pagetext: '第',
+			outof: '页 /共',
+			width: _size.table[0],
+			height: _size.table[1],
+			pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+		});	
+		/*
+		*	@author ldm
+		*	添加记录
+		*/
+		var ext = /^(-)?([1-9]\d{0,3}|0)(\.\d{1,2})?$/;
+		function records(){
+		$.ajax({
+			url:"<?php echo $esaction->generateUrl(Array('ESStoreroom'=>'add_records'),'x');?>",
+		    success:function(data){
+		    	$.dialog({
+			    	title:'添加记录',
+		    	   	fixed:false,
+		    	    resize: false,
+		    	    okVal:'保存',
+				    ok:true,
+				    cancelVal: '取消',
+				    cancel: true,
+			    	content:data,
+			    	ok:function(){
+				    	if (!$('#myrecords').validate()) {return false;}
+				    	var s = $("input[name='temperature']").val();
+				    	var t = $("input[name='humidity']").val();
+				    	if(ext.test(s)==false||ext.test(t)==false){
+				    		$.dialog.notice({icon:'warning',content:'温度和湿度不能为空只能是整数或者含有小数',time:3});
+				    		return false;
+					    }
+						var form=$('#myrecords');
+						var data=form.serialize();
+						var url=$.appClient.generateUrl({ESStoreroom:'do_addrecords'},'x');
+							$.post(url,{houid:selectid,data:data},function(result){
+								if(result==1){
+									$.dialog.notice({icon:'succeed',content:'添加成功',time:2});
+									$('#ESST').flexOptions({newp: 1}).flexReload();
+								}
+								
+							});
+				    },
+				    init : function(){
+				    	$('#myrecords').autovalidate();
+				    }
+			    });
+		    	
+			    },
+			    cache:false
+			});
+		}	
+		//删除 @author ldm
+		function delcord(){
+			var id='';
+			var checkboxObj=$("input[name='id2']:checked");
+			if(checkboxObj.length =='0' || checkboxObj.length==='undefined')
+			{
+				
+				$.dialog.notice({icon:'warning',content:'请选择要删除的数据',time:3});
+				return false;
+			}else{
+				//遍历选中的数据
+				checkboxObj.each(function(i){
+					id+=$(this).val()+',';
+					});
+				}
+			
+			if(id=='' || id==='undefined' || id==0)
+			{
+				return false;
+			}	
+			$.dialog({
+					content:'确定要删除吗?',
+					ok:true,
+					okVal:'确定',
+					cancel:true,
+					cancelVal:'取消',
+					ok:function(){
+						var url=$.appClient.generateUrl({ESStoreroom:'delrecord'},'x');
+						
+						$.get(url,{id:id},function(data){
+							if(data==1){
+								$("input[name='ids2']").attr("checked",false);
+								$.dialog.notice({icon:'succeed',content:'数据删除成功',time:3,title:'3秒后自动关闭'});
+								$('#ESST').flexOptions({newp: 1}).flexReload();
+							}
+							});
+						
+					}
+				});
+		}
+		
+		/*
+			@author ldm
+			库房监控筛选
+		*/
+		function filter(){
+			$.ajax({
+			    url:$.appClient.generateUrl({ESStoreroom:'filter'},'x'),
+			    success:function(data){
+			    	$.dialog({
+				    	title:'筛选面板',
+				    	lock:true,
+			    	    resize:false,
+			    	    opacity:0.1,
+			    	    //这里调用的方法在filter.js页面里
+					    ok:function(){
+					    	var exg = /(\*)$/;
+					    	var sql_string = '';
+					    	//获取p标签
+					    	$('#contents p').each(function (f){
+					    		//字段值是否填写
+					    		var filedvalue = $('.filedvalue').eq(f).val();//字段值class='filedvalue'
+					    		if(filedvalue){
+					    			var filedname	=	$('.filedname').eq(f).val();	//字段名class='filedname'
+					    			
+					    			var comparison	=	$('.comparison').eq(f).val();	//比较符class='comparison'
+					    			
+					    			var relationship=	$('.relationship').eq(f).val();	//关系符class='relationship'
+					    			if(relationship=="AND"){
+					    				relationship='true';
+					    			}else{
+					    				relationship='false';
+					    			}
+					    			sql_string += filedname+","+comparison+","+filedvalue+","+relationship+"*";
+					    		}
+					    	});
+					    	
+					    	var str = sql_string.replace(exg,"");
+					    	if(str==""){
+					    		$.dialog.notice({icon:'warning', content:"查询条件不能为空", time:3});
+					    		return;
+					    	}
+					    	filterStr = str;
+					    	$('#ESST').flexOptions({newp:1,query:str}).flexReload();
+					    },
+			    	    cancel:true,
+				    	content:data,
+				    	okVal:'确定',
+				    	cancelVal:'取消'
+				    });
+				},
+				cache:false
+			});
+		}
+		function getall(){
+			filterStr = "";
+			var url = $.appClient.generateUrl({ESStoreroom :'monit_json',houid:selectid}, 'x');
+			$('#ESST').flexOptions({url:url,newp:1,query:""}).flexReload();
+		}
+		/*
+		@author ldm
+		图形展示
+	   */
+	   
+		function line(){
+			var code = '<?php echo $_GET['code']?>';
+		 $.ajax({
+			type:'post',
+			url:$.appClient.generateUrl({ESStoreroom:'line_show',houid:selectid, code:code},'x'),
+			data: {query:filterStr},
+		    success:function(data){
+		    	$.dialog({
+			    	title:'图形展示',
+		    	   	fixed:true,
+		    	    resize: false,
+// 		    	    okVal:'确定',
+// 				    ok:true,
+				    cancelVal: '关闭',
+				    cancel: true,
+			    	content:data
+			    });
+		    	
+			    },
+			    cache:false
+		});
+		}
+// 		sizeChanged($("#monitor"),$("#ESST"));
+		//全选
+		$("input[name='ids']").die().live('click',function(){
+			$("input[name='id2']").attr('checked',$(this).is(':checked'));
+		});
+		if(state==1){
+			$('.tDiv .tDiv2 .add').show();
+			$('.tDiv .tDiv2 .delete').show();
+		 }else{
+			 $('.tDiv .tDiv2 .add').hide();
+			$('.tDiv .tDiv2 .delete').hide();
+		}
+
+		$("span.editbtn").die().live('click',function(){
+			editRecord($(this).closest("tr"));
+		});
+
+		// 编辑记录 longjunhao 20140809 add
+		function editRecord(tr) {
+			var columns = ['id',"date",'time','temperature','humidity'];
+			var colValues = $("#ESST").flexGetColumnValue(tr,columns);
+			var colValuesArray = colValues.split("|");
+			var id = colValuesArray[0] ;
+			var date = colValuesArray[1] ;
+			var time = colValuesArray[2] ;
+			var temperature = colValuesArray[3] ;
+			var humidity = colValuesArray[4] ;
+			if(id != null && id != ''){
+				$.ajax({
+					url: $.appClient.generateUrl({ESStoreroom : 'edit_records' }, 'x'),
+					data:{id:id,date:date,time:time,temperature:temperature,humidity:humidity},
+					type:'post',
+				    success:function(data){
+				    	$.dialog({
+					    	title:'编辑记录',
+				    	   	fixed:false,
+				    	    resize: false,
+				    	    okVal:'保存',
+						    ok:true,
+						    cancelVal: '取消',
+						    cancel: true,
+					    	content:data,
+					    	ok:function(){
+					    		if (!$('#myrecords').validate()) {return false;}
+						    	var s = $("input[name='temperature']").val();
+						    	var t = $("input[name='humidity']").val();
+						    	if(ext.test(s)==false||ext.test(t)==false){
+						    		$.dialog.notice({icon:'warning',content:'温度和湿度不能为空只能是整数或者含有小数',time:3});
+						    		return false;
+							    }
+								var form=$('#myrecords');
+								var data=form.serialize();
+								var url=$.appClient.generateUrl({ESStoreroom:'do_editrecords'},'x');
+									$.post(url,{houid:selectid,data:data},function(result){
+										if(result==1){
+											$.dialog.notice({icon:'succeed',content:'编辑成功',time:2});
+											$('#ESST').flexOptions({newp: 1}).flexReload();
+										}
+										
+									});
+						    },
+						    init : function(){
+						    	$('#myrecords').autovalidate();
+						    }
+					    });
+				    	
+					    },
+					    cache:false
+					});
+			}
+		}
+
+// 		$('#monitor div[class="tDiv2"]').append('<div class="find-dialog"><input id="monitorQuery" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="keyWord" value="请输入关键字" /><span onclick="monitorQuery()"></span></div>');
+		// 库房监控检索 longjunhao 20140809 add 暂时注释
+		function monitorQuery(){
+			var keyword = $.trim($('#monitorQuery').val());
+			if(keyword == '' || keyword=='请输入关键字') {
+				keyword = '';
+			}
+			$("#ESST").flexOptions({query:keyword}).flexReload();
+			return false;
+		}
+});
+</script>
+<div id="monitor" >
+	<table id="ESST"></table> 
+</div>

@@ -1,0 +1,189 @@
+<<style>
+<!--
+.userDefinedPart{
+	width:750px;
+	heigth:350px;
+	margin: 0px;
+}
+
+.userDefinedPart .definedPart{
+	float:left;
+	width:199px;
+	height:349px;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	overflow: auto;
+}
+
+.userDefinedPart .definedUser{
+	float:left;
+	width:550px;
+	height:349px;
+	border-top: 1px solid #ccc;
+}
+-->
+</style>
+<div class="userDefinedPart">
+	<div class="definedPart">
+		<input type="hidden" name="partId" id="partId" value="" /> <input
+			type="hidden" name="stepId" id="stepId"
+			value="<?php echo isset($stepId)?$stepId:''; ?>" />
+		<ul id="definedPartTree" class="ztree"></ul>
+	</div>
+	<div class="definedUser">
+		<table id='definedUserGrid'></table>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var partSetting = {
+			isSimpleData : true,
+			showLine : true,
+			checkable : false,
+			data : {
+				simpleData : {
+					enable : true,
+				}
+			},
+			async : {
+				enable : true,
+				autoParam : [ 'id' ]
+			},
+			callback : {
+				onClick : getPartTree
+			}
+		};
+		$.ajax({
+			async : false,
+			cache : false,
+			type : 'POST',
+			dataType : "json",
+			url : $.appClient.generateUrl({	ESParticipatory : 'getTree'	}, 'x'),
+			error : function() {
+				alert('请求失败');
+			},
+			success : function(data) {
+				var partZTree = $.fn.zTree.init($("#definedPartTree"), partSetting,data);
+				var root = partZTree.getNodeByParam("id",1);
+				root.open = true;
+				partZTree.selectNode(root);
+				$("#partId").val(root.id);
+			}
+		});
+		
+		function getPartTree(event, treeId, treeNode) {
+			if(treeNode!=''){
+				$("#partId").val(treeNode.id);
+				$("#definedUserGrid").flexOptions({url:$.appClient.generateUrl({ESTransferFlow : 'getSelectUserList',key:'1',ids:treeNode.id,searchKeyword:''}, 'x'), newp:1}).flexReload();
+			}
+		}
+		
+		var colModelMember= [
+		 		   			{display: '序号', name : 'num', width : 20, align: 'center'}, 
+		 					{display: '<input type="checkbox" name="conPaths">', name : 'ids', width : 20, align: 'center'},
+		 					{display: '用户名', name : 'userid', width : 160, align: 'left'},
+		 					{display: '姓名', name : 'name', width : 100, align: 'left'},
+		 					{display: '邮箱', name : 'emailAddress', width : 160, align: 'left'},
+		 					{display: '手机', name : 'mobtel', width : 100, align: 'left'},
+		 					{display: '职位', name : 'office', width : 100, align: 'center'}
+		 				];
+		$("#definedUserGrid").flexigrid({
+			url: $.appClient.generateUrl({ESTransferFlow: 'getSelectUserList',key:'1',ids:'1',searchKeyword:''}, 'x'),
+			dataType: 'json',
+			colModel :colModelMember,
+			buttons : [{name: '选择', bclass: 'add',id:'selDefinedUsers', onpress:function(){selDefinedUsers();}}],
+			usepager: true,
+			title: '&nbsp;',
+			nomsg:"没有数据",
+			useRp: true,
+			width: 550,
+			height:236,
+			showTableToggleBtn: true,
+			pagetext: '第',
+			itemtext: '页',
+			outof: '页 /共',
+			pagestat:' 显示 {from} 到 {to}条 / 共{total} 条',
+			procmsg:'正在加载数据，请稍候...',
+			onSuccess:function(){
+				var vl=$(".definedUser .checkbox");			
+				if(vl.length>0){
+					$(vl[0]).attr('checked',"checked");
+				}
+			}
+		});
+
+		//全选
+		$("input[name='conPaths']:checkbox").die().live("click",function(){
+			$(".definedUser").find("input[type='checkbox']").attr('checked',$(this).is(':checked'));
+		});
+		
+		// 修改样式
+		var htDiv2HtmlUser = $('.definedUser .tDiv2').html();
+		var recHtmlUser =htDiv2HtmlUser+ '<div class="find-dialog" style="float:right;position:relative;margin-right:5px"><input id="userKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="userKeyWord" value="请输入关键字" /><span onclick="userDefinedPart.getUserQuery()"></span></div>';
+		$('.definedUser .tDiv2').css("width","547px");
+		$('.definedUser .tDiv2').html(recHtmlUser);				
+
+		//选择部门用户
+		$("#selDefinedUsers").die().live("click",function(){
+			var checks=$(".definedUser .checkbox:checked");
+			var treeObj = $.fn.zTree.getZTreeObj("definedPartTree");
+			var pNode=treeObj.getSelectedNodes();
+			if(checks.length>0 && pNode[0].id>0){				
+				var selUser="";
+				var userName="";
+	 			for(var i=0;i<checks.length;i++){
+	 				selUser=selUser+$(checks[i]).closest("tr").prop("id").substr(3)+";";
+	 				userName=userName+$(checks[i]).closest('tr').find("td[colname='name'] div").html()+",";
+	 			}
+	 			if(selUser.length>0){
+	 				selUser=selUser.substr(0,selUser.length-1);
+	 			}
+	 			if(userName.length>0){
+	 				userName=userName.substr(0,userName.length-1);
+	 			}
+	 			var content="<li name='" + selUser+ "'><span title='"+userName+"' style='float:left;width:auto;'>" + pNode[0].name
+	 			+ '</span><span class="delPart" style="float:right;width:20px;" title="删除"></span></li>';
+	 			userDefinedPart.checkIfExist(pNode[0].name);
+	 			$('#nextStepOwer').append(content);
+	 			$.dialog.notice({icon:"success",content:"选择成功",time:3});
+				return false;
+			}else{
+				$.dialog.notice({icon:"warning",content:"请选择部门或用户",time:3});
+				return false;
+			}
+		});
+		
+		//搜索回车事件
+		$(document).keydown(function(event){
+			var activeId = document.activeElement.id;
+			if (event.keyCode == 13 && activeId == 'userKeyWord') {
+				userDefinedPart.getUserQuery();
+				return false;
+			}
+		});
+});
+var userDefinedPart={	
+
+	//验证重复
+	checkIfExist:function(partName){
+		$("#nextStepOwer li").each(function(i){
+			if(partName==$(this).find("span:first").html()){
+				$(this).remove();
+				return true;//存在删除
+			}
+		});
+		return false;//不存在
+	},
+	
+	//搜索点击事件
+	getUserQuery:function(){
+		var keyWord=$("#userKeyWord").val();
+		if(keyWord=="请输入关键字"){
+			keyWord="";
+		}
+		var partId=$("#partId").val();
+		$("#definedUserGrid").flexOptions({url:$.appClient.generateUrl({ESTransferFlow : 'getSelectUserList',key:'1',ids:partId,searchKeyword:keyWord}, 'x'), newp:1}).flexReload();
+	}
+}
+</script>

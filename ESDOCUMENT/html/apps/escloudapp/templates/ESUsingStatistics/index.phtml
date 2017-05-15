@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link href="<?php echo $tplPath;?>/ESHoldingStatistics/css/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo $tplPath;?>/ESUsingStatistics/css/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'利用统计'));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>4));?>
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.excheck.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"利用统计"});
+});
+
+</script>
+<!-- 
+<div id='esmain'>
+  <div class="esright">
+    <table id="statistics"></table> 
+  </div>
+</div>
+ -->
+ <div id='usingStatic' class='usingStatic'>
+ 	<div class='titleStatic' id='titleStatic'>
+		<ul id="subnav" class="subnav">
+			<li id='formTitle'><span class='formTitle-show'
+				id="formTitle-show"> 利用单</span>
+			</li>
+			<li id='storeTitle'><span class='storeTitle-show'
+				id="storeTitle-show"> 利用库</span>
+			</li>
+		</ul>
+ 	</div>
+ 	<div class="usingFormContent" id='usingFormContent'>
+ 		<div class='formGrid'>
+ 			<table id='formTable'></table>
+ 		</div>
+ 		<div class='formStaticGrid'>
+ 			<table id='formStaticTable'></table>
+ 		</div>
+ 	</div>
+ 	<div id="usingStoreContent"  class='usingStoreContent' style="display: none;">
+ 		<div class='storeGrid'>
+ 			<table id='storeTable'></table>
+ 		</div>
+ 		<div class='storeStaticGrid'>
+ 			<table id='storeStaticTable'></table>
+ 		</div>
+ 	</div>
+ </div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESUsingStatistics/js/index.js"></script>
+
+

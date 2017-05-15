@@ -1,0 +1,76 @@
+<form id="esfilter">
+<table id="sift">
+	<tr>
+		<td>字段名</td>
+		<td>比较符</td>
+		<td>字段值</td>
+		<td width="120">关系符</td>
+		<td>增加行</td>
+		<td>删除行</td>
+	</tr>
+	<?php for($i=0;$i<5;$i++){?>
+	<tr>
+		<td> <select name="esfields">
+				<option value="">--请选择--</option>
+				<option value="fileBoxNumber">盒号</option>
+				<option value="boxname">盒名称</option>
+				<option value="boxthickness">盒厚度</option>
+				<option value="boxcapability">盒容量</option>
+				<option value="curcapability">当前容量</option>
+				<option value="repositorypath">库位号</option>
+				<?php 
+				foreach($BoxRuleRight as $key=>$val){
+					echo "<option value='".$val->name."'>$val->display</option>";
+		        }?>
+		
+		</select></td>
+		<td> <select style="width:120px" name="comparison">
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select></td>
+		<td><input type="text" value="" name="esfieldvalue" ></td>
+		<td><select style="width:120px" name="relation">
+				<option value="AND">并且</option>
+				<option value="OR">或者</option>
+				</select></td>
+		<td width="50px" align="center"><a href="javascript:void()" class ="esadd"><div class="es_add"></div></a></td>
+		<td align="center"><a href="javascript:void()" class ="esreduce"><div class="es_del"></div></a></td>
+	</tr>
+	
+	<?php }?>
+</table>
+</form>
+<script type="text/javascript">
+/*$('[name="esfields"]').die().live('change',function(){
+	var val=$(this).val();
+	var t=$('[value='+val+']',$(this)).html();
+	if(t!="保管期限"){
+		var sObj=$(this).parents().next().next().children('select');
+		if(sObj.length>0){
+			sObj.replaceWith('<input type="text" value="" name="esfieldvalue" >');
+		}
+	}
+	var obj=$(this).parents().next().next().children(':input');
+	if(t=="保管期限"){
+		var s=  '<select name="esfieldvalue" style="width:137px;height:20px;">';
+			s+=	'<option value = "永久">永久</option>';
+			s+=	'<option value = "长期">长期</option>';
+			s+=	'<option value = "短期">短期</option>';
+			s+=	'<option value = "3年">3年</option>';
+			s+=	'<option value = "5年">5年</option>';
+			s+=	'<option value = "10年">10年</option>';
+			s+=	'<option value = "15年">15年</option>';
+			s+=	'<option value = "25年">25年</option>';
+			s+=	'<option value = "30年">30年</option>';
+			s+=	'</select>';
+			obj.replaceWith(s)
+	}
+	
+})*/
+</script>

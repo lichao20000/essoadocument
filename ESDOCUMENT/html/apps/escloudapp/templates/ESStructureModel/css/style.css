@@ -1,0 +1,41 @@
+@CHARSET "UTF-8";
+body,html{ margin:0; overflow:hidden;}
+ol,ul {
+	list-style: none;
+}
+
+.init-style{ float:left; overflow:hidden;}
+/* 查看详细信息按钮样式 */
+.details{ width:16px; height:16px; background:url(../../public/flexigrid/css/images/report_go.png) no-repeat; border:0; cursor:pointer;}
+
+.link{ width:16px; height:16px; border:0; background:url(../img/link.png) no-repeat right center; cursor:pointer;}
+.ext-link{ width:16px; height:16px; border:0; background:none; cursor:default;}
+.ext-details{ margin-right:4px;}
+
+.format-xml{ width:700px; height:600px; float:left; font-size:14px; line-height:22px; overflow:auto; border:1px solid #ccc;}
+
+.format-list-box{ width:700px; height:400px; float:left; overflow:auto; padding-top:5px;}
+.format-list{ width:670px; height:auto; overflow:hidden; float:left; border:1px solid #aaa; background:#f5f5f5; margin:0 5px 5px;}
+.format-list li{ width:100px; height:20px; line-height:20px; text-indent:5px; float:left; border-bottom:1px solid #fff;}
+.format-list li.long{ width:565px; float:left; padding-left:5px;}
+.format-list li.odd{background:#eee;}
+.format-list li.event{background:#fff;}
+
+.model .l{margin-top:10px;}
+.model .l div{float:left;}
+.c{clear:both;}
+.model .l .title{width:80px;}
+.model .l .input{width:200px;}
+
+.edit2 {background: url(../img/edit.png) no-repeat center left;}
+
+.estransfer{width:310px;overflow-y:auto;overflow-x:hidden}
+.estransfer ul{width: 300px;text-align:center;}
+.estransfer ul li{width:270px;float:left;margin-top:10px;}
+.estransfer span{width:100px;height:30px;line-height:30px;text-align:left;float:left;}
+.estransfer ul li input{height:20px;float:left;line-height:20px;width:160px;}
+.estransfer ul li select{width:165px;height:25px;float:left;line-height:25px;}
+.estransfer .esbottom{width:100%;float:left;margin-top:20px;}
+.estransfer button{width:60px;height:30px;cursor:pointer}
+.warnning{border:solid 2px #f00;}
+

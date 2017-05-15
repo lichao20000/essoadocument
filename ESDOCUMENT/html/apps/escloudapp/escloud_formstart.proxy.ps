@@ -1,0 +1,179 @@
+<?php
+/**
+ * xiaoxiong 20140529
+ * 新建协同代理类
+ */
+class ProxyEscloudappEscloud_formstart extends AgentProxyAbstract{
+	
+	const SERVICE_NAME = "escloud_workflowws";
+	
+	/** 获取当前用户有权限发起的且为启用状态的表单列表 **/
+	public function getAccreditedFormBuilder($postData){
+		$url = "getAccreditedFormBuilder";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 在显示表单发起界面前，获取表单相关信息 **/
+	public function showMyForm($postData){
+		$url = "showMyForm";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 根据工作流ID+步骤ID获取流程处理动作展现字符串 **/
+	public function getActions($postData){
+		$url = "getActions";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取下一步处理人**/
+	public function getStepOwner($postData){
+		$url = "getStepOwner";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取下一步处理人**/
+	public function startWorkflow($postData){
+		$url = "startWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 保存待发方法 **/
+	public function saveWorkflow($postData){
+		$url = "saveWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	/** 查看流程图的方法 **/
+	public function showWfGraph($postData){
+		$url = "showWfGraph";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 判断当前流程当前步骤是否已经审批过 **/
+	public function wfIsApprovaled($postData){
+		$url = "wfIsApprovaled";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取进入审批界面前需要处理信息 **/
+	public function approvalForm($postData){
+		$url = "approvalForm";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 判断流程是否已经审批过 **/
+	public function isApprovalOver($postData){
+		$url = "isApprovalOver";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 判断当前步骤是否为最后一步 **/
+	public function isLastStep($postData){
+		$url = "isLastStep";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 提交审批意见 **/
+	public function commit_opinion($postData){
+		$url = "commit_opinion";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 流程审批 **/
+	public function auditingWorkflow($postData){
+		$url = "auditingWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取一个审批意见的文件附件展现字符串 **/
+	public function getOpinionFiles($postData){
+		$url = "getOpinionFiles";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	
+	/** guolanrui 20140617 获取所有有权限的利用表单  **/
+	public function showUsingWfList($postData){
+		$url = "showUsingWfList";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	
+	/** 获取机构树 **/
+	public function getOrganTreeNodes($postData){
+		$url = "getOrganTreeNodes";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取机构树 **/
+	public function getForwardToUsers($postData){
+		$url = "getForwardToUsers";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取可转发用户列表，供选择用户转发 **/
+	public function getUsersForForward($postData){
+		$url = "getUsersForForward";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 执行转发操作 **/
+	public function excuteWfForward($postData){
+		$url = "excuteWfForward";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 审批转发流程 **/
+	public function wfForwardAction($postData){
+		$url = "wfForwardAction";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 审批只会流程 **/
+	public function WfNoticeAction($postData){
+		$url = "WfNoticeAction";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	/** 修改数据附件的权限问题 **/
+	public function batchChangeFileReadOrDownLoadRight($postData){
+		$url = "batchChangeFileReadOrDownLoadRight";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取数据附件的方法，走后台为了将数据存入缓存中，后续分页显示和修改权限使用 **/
+	public function getAttachDataList($postData){
+		$url = "getAttachDataList";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+
+	/** 审批过程中删除上传的文件附件 **/
+	public function deleteWfFile($postData){
+		$url = "deleteWfFile";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 审批过程上传新文件 **/
+	public function addWfFile($postData){
+		$url = "addWfFile";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 查看文件附件 **/
+	public function myFormModelShowPkg($postData){
+		$url = "myFormModelShowPkg";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	/** 获取子数据 **/
+	public function getAttachDataChildDataList($postData){
+		$url = "getAttachDataChildDataList";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	/** 获取临时权限 **/
+	public function getTempRightByPath($postData){
+		$url = "getTempRightByPath";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+
+}

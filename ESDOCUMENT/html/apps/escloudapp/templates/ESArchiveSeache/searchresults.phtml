@@ -1,0 +1,477 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<link type="text/css" rel="stylesheet" href="<?php echo $tplPath?>/ESArchiveSeache/css/searchresults.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/viewfile.css" />
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<div class="esmain">
+	<div class="search_bar">
+		<!-- 搜索框 -->
+		<div class="main">
+		<form id="myform" name="myform" onsubmit="return CheckForm();" action="<?php echo $esaction->generateUrl(array('ESArchiveSeache'=>'searchresults'));?>" method="POST" >
+			<textarea name="condition" rows="10" cols="6" style="display: none;"></textarea>
+			<div class='searchBox2'>
+				<span class='leftbg2'></span>
+				<div class='middlebg2'>
+					<?php if($searchWord == "np046"){$searchWord = "";}?>
+					<input id="onword" type="text" class="searchText2" value="<?php echo $searchWord; ?>" maxlength="100" name="key" placeholder="关键字" />
+					<input type="submit" class="searchSubmit2" value="搜索" />
+				</div>
+				<span class='rightbg2'></span>
+			</div>
+			<div style="float: left; padding-top: 40px; padding-left: 20px;"><a class="cl" href="<?php echo $esaction->generateUrl(array('ESArchiveSeache'=>'advancesearch'));?>?key=<?php echo urlencode($searchWord);?>">高级检索</a></div>
+		</form>
+		</div>
+		<!-- /搜索框 -->
+		<!-- 档案车 -->
+		<div class="application" >
+			<div class="front_sck">
+				<img style="position:relative;top:7px;padding-left:10px;"alt="" src="<?php echo $tplPath?>/ESArchiveSeache/img/app.gif"  />
+				<img style="position:absolute; left:20px;top:-10px;" src="<?php echo $tplPath?>/ESArchiveSeache/img/triangle.gif" alt="" />
+				<img style="position:absolute;left:20px;top:-15px;" src="<?php echo $tplPath?>/ESArchiveSeache/img/square.gif" alt="" />
+				<span class="num"><?php if(isset($_SESSION['shopcar'])){ echo count($_SESSION['shopcar']);} else { echo 0;} ?></span>
+				<span style="line-height:30px;">去提交审批申请</span>
+				<img alt="" src="<?php echo $tplPath?>/ESArchiveSeache/img/u120_original.gif"  />
+			</div>
+			
+			<div class="bot_content" style="display:none;">
+				<div class="cr1"><span style="position:relative;left:10px;">您所申请的档案</span></div>
+				
+				<div id="to" class="">
+					<?php if(isset($_SESSION['shopcar'])){foreach($_SESSION['shopcar'] as $key=>$val){?>
+					<div id="<?php echo $val['id']?>" class="cr2">
+						<span><img src="<?php echo $tplPath?>/ESArchiveSeache/img/c2_file.gif" width="50" height="50" style="float:left" /></span>
+						<div style="height: 50px; line-height: 20px;padding-top: 5px;padding-right: 2px; ">
+							<span><a class="dl" href="#" title="<?php echo $val['name'];?>"><?php echo $val['name'];?></a><span style=" margin-left: 10px;"></span><a class="bl" href="javascript:delcar('<?php echo $val['id']?>');">删除</a></span>
+						</div>
+					</div>
+					<?php }} ?>
+				</div>
+				
+				<div class="cr3">
+					<div style="padding-top:10px;padding-right:30px;"><span>共计<em class="bottnum"><?php if(isset($_SESSION['shopcar'])){ echo count($_SESSION['shopcar']);} else { echo 0;} ?></em>份档案</span></div>
+					<div style="text-align:center;float:right;line-height:36px;background:url(<?php echo $tplPath?>/ESArchiveSeache/img/c3_bg.gif);height:38px;width:136px;">
+						<?php 
+						if(isset($_SESSION['shopcar'])){
+							if(count($_SESSION['shopcar']) == 0){
+								echo '<span class="submitapplication"><a id="cr3" href="javascript:void(0);">提交申请批准</a></span>';
+							} else {
+								echo '<span class="submitapplication"><a href="javascript:submitcar();">提交申请批准</a></span>';
+							}
+						} else {
+							echo '<span class="submitapplication"><a id="cr3" href="javascript:void(0);">提交申请批准</a></span>';
+						}
+						?>
+					</div>
+				</div>
+				
+			</div>
+			
+			<div class="tog"></div>
+		</div>
+		<!-- /档案车 -->
+		<div class="clear"></div>
+	</div>
+	
+	<div class="clear"></div>
+	<!-- 总数 -->
+	<div class="s_param">
+		<div class="s_name">搜索</div>
+		<div class="s_count">找到约 <?php echo $numFound; ?> 条结果 （用时<?php echo $elapsedTime; ?> 毫秒）</div>
+		<div class="clear"></div>
+	</div>
+	<!-- /总数 -->
+	<!-- 左侧NAV -->
+	<?php 
+	$jsclass = json_decode($condition,true);
+	$clas = $jsclass['class']['ectval'];
+	if($clas != ""){
+		echo '<div class="leftnav"><dl>';
+		if(array_key_exists($clas,$conclass)){
+			echo '<dt class="param"><a href="javascript:void(0)">'.$conclass[$clas].'</a></dt>';
+		};
+		echo '</dl></div>';
+	} else {
+		echo '<div class="leftnav"><ul>';
+		echo '<li id="all" class="param"><a href="javascript:void(0)">所有结果</a></li>';
+		echo '<li id="document"><a href="javascript:void(0)">文书档案</a></li>';
+		echo '<li id="purchase"><a href="javascript:void(0)">采购档案</a></li>';
+		echo '<li id="accounting"><a href="javascript:void(0)">会计档案</a></li>';
+		echo '<li id="project"><a href="javascript:void(0)">工程档案</a></li>';
+		echo '<li id="contract"><a href="javascript:void(0)">合同档案</a></li>';
+		echo '</ul></div>';
+	}
+	?>
+	<!-- /左侧NAV -->
+	<!-- 内容搜索结果 -->
+	<div class="right_content">
+		<ul>
+		<?php
+		$searchWord = explode(" ",$searchWord);
+		$result = replace($result, $searchWord);
+		foreach ($result as $key=>$val){
+		?>
+		<li>
+		<div class="result">
+			<div class="">
+				<div style="width:550px; float: left; line-height: 18px;">
+					<?php $entity_id = str_replace('<span class="allred">', '', isset($val['entity_id']) ? $val['entity_id'] : "");$entity_id= str_replace('</span>', '', $entity_id); ?>
+					<span class="title"><a class="cl" href='javascript:show_file(0)'><?php echo isset($val['label']) ? $val['label'] : "" ;?></a></span>
+				</div>
+				<div style="float: right;">
+					<span class="time"><?php echo date('Y-m-d',strtotime($val['created'])); ?></span>
+					<span class="padin"></span>
+					<!-- 将<span></span>替换回空申请时加入档案车 -->
+					<?php $find = str_replace('<span class="allred">', '', isset($val['label']) ? $val['label'] : "" ); $find = str_replace('</span>', '', $find);  ?>
+					<?php $number = str_replace('<span class="allred">', '', isset($val['档号']) ? $val['档号'] : "空");$number= str_replace('</span>', '', $number); ?>
+					<span><a class="cl" href="javascript:addcar('<?php echo $entity_id; ?>','<?php echo $find;?>','<?php echo $number; ?>')">申请</a></span>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+			<div class="d_title">
+			<?php 
+			foreach ($val as $k=>$v){
+				if(!in_array($k, $preg)){
+					echo '<span class="span1">'.$k.'</span>:<span class="span2">'.$v.'</span>';
+				}
+			}
+			?>
+			</div>
+		</div>
+		</li>
+		<?php
+		} 
+		?>	
+		</ul>
+		<div class="page"><?php echo $pageall;?></div>
+	</div>
+	<!-- /内容搜索结果 -->
+	<div class="clear"></div>
+	<!-- 记录档案类型值 -->
+	<div>
+		<input id="hidden" type="hidden" value="<?php echo $scope; ?>">
+		<textarea id="condition" name="condi" rows="10" cols="6" style="display: none;"><?php echo $condition; ?></textarea>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var hidd = $("#hidden").val();
+	$(".leftnav li").each(function(){
+		$(this).removeClass("param");
+		if($(this).attr("id") == hidd){
+			$(this).addClass("param");
+		} 
+	});
+	
+	//左侧NAV导航事件
+	$(".leftnav li").click(function(){
+		var scope = $(this).attr("id");
+		var searc = $(".searchText2").val();
+		var condition = $("#condition").val();
+		var url=$.appClient.generateUrl({ESArchiveSeache:'searchresults'},'x');
+		$.ajax({
+			type:'post',
+		    url:url,
+		    data:"scope=" + scope + "&key=" + searc + "&condition=" + condition,
+		    success:function(html){
+			    $(".esmain").html(html);
+				var hidd = $("#hidden").val();
+				$(".leftnav li").each(function(){
+					$(this).removeClass("param");
+					if($(this).attr("id") == hidd){
+						$(this).addClass("param");
+					} 
+				});
+		    	return false;
+			}
+		});
+	});
+	
+	//显示档案车
+	$(".front_sck").mouseover(function(){
+		$(this).css({background:"url('<?php echo $tplPath?>/ESArchiveSeache/img/application.gif')"});
+		$(".bot_content").css({display:"block"});
+	});
+	$(".bot_content").mouseover(function(){
+		$(".front_sck").css({background:"url('<?php echo $tplPath?>/ESArchiveSeache/img/or_bg.gif')"});
+		$(this).css({display:"block"});
+		$(".front_sck").css({background:"url('<?php echo $tplPath?>/ESArchiveSeache/img/application.gif')"});
+	});
+	$(".bot_content").mouseout(function(){
+		$(".front_sck").css({background:"url('<?php echo $tplPath?>/ESArchiveSeache/img/or_bg.gif')"});
+		$(this).css({display:"none"});
+	});
+
+});
+//查看电子文件
+function show_file(path){
+$.dialog.notice({content:'您没有权限查看!',icon:'warning',time:3});
+return;
+var url = $.appClient.generateUrl({ESIdentify:'file_view',path:path},'x');
+	$.ajax({
+		url:url,
+		cache:false,
+		success:function(data){
+			$.dialog({
+		    	title:'浏览电子文件',
+    			width: '960px',
+   	    	   	fixed: false,
+	    	    resize: false,
+	    	    padding: 0,
+		    	content:data
+		    });
+		}
+	});
+}
+//添加到档案车
+function addcar(id,title,file_no){
+	/*
+	var num = $(".num").html();
+	if(num > 5){
+		$.dialog({content:'您一次的借阅比较多，请分批借阅.',time:3});
+		return;
+	}
+	*/
+	var url = $.appClient.generateUrl({ESArchiveSeache:'addcart'},'x');
+	var dde = "<div id=d_"+id+" class='cr2'><span><img src='<?php echo $tplPath?>/ESArchiveSeache/img/c2_file.gif' width='50' height='50' style='float:left' /></span><div style='height: 50px; line-height: 20px;padding-top: 5px;padding-right: 2px;'><span><a class='dl' href='#' title='"+title+"'>"+title+"</a><span style='margin-left: 10px;'></span></span><a class='bl' href='javascript:delcar(\""+id+"\");'>删除</a></span></div></div>";
+	$.ajax({
+		url:url,
+		type:'post',
+		data:"id=" + id + "&title=" + title + "&num=1" + "&file_no=" + file_no,
+		success:function(html){
+			if(html != ""){
+				$(".application").html();
+				$("#to").append(dde);
+				$("#cr3").attr("href","javascript:submitcar();");
+				$(".num").html(html);
+				$(".bottnum").html(html);
+			}
+		},
+		cache:false
+	});
+}
+//档案删除
+function delcar(id){
+	var url = $.appClient.generateUrl({ESArchiveSeache:'delcart'},'x');
+	$.ajax({
+		url:url,
+		type:'post',
+		data:"id=" + id,
+		cache: false,
+		success:function(html){
+			if(html != ""){
+				$(".application").html(html);
+			}
+		},
+		cache:false
+	});
+}
+
+//提交档案车
+function submitcar()
+{
+	var url = $.appClient.generateUrl({ESArchiveLending:'apply'},'x');
+	$.ajax({
+		url:url,
+    	success:function(data){
+    		$.dialog({
+	    		title:'借阅申请审批单',
+    			width: '55%',
+    	   		fixed:true,
+    	    	resize: true,
+    	    	okVal:'提交',
+			    ok:true,
+			    cancelVal: '取消',
+			    cancel: true,
+	    		content:data,
+	    		ok:function(){
+	    			var form=$("#form");
+	    			var thisDialog=this;
+	    			var data=form.serialize();
+	    			var checkboxObj=$("input[name='path']:checked",$('#readingList'));
+			    	var val='';
+			    	var path=[];
+			    	var checkBoxLen=checkboxObj.length;
+			    	//判断是否选择数据
+			    	if(checkBoxLen==0){
+			    		$.dialog.notice({content:'请选择装盒的数据',icon:'warning',time:3});
+						return false;
+			    	}
+			    	var daylength = $("input[name='jysc_f6']").val();
+			    	if(daylength == ""){
+			    		$("input[name='jysc_f6']").css({ border: "1px solid red" });
+			    		$.dialog.notice({content:'请输入催还提前天数',icon:'warning',time:3});
+						return false;
+				    }
+			    	if(daylength > 30){
+			    		$("input[name='jysc_f6']").css({ border: "1px solid red" });
+			    		$.dialog.notice({content:'很抱歉,借出天数不能超过30天',icon:'warning',time:3});
+						return false;
+				    }
+			    	var rstr = isString(daylength);
+			    	if(rstr == 0){
+			    		$("input[name='jysc_f6']").css({ border: "1px solid red" });
+						return false;
+				    } else {
+				    	$("input[name='jysc_f6']").css({ border: "" });
+					}
+		    		var checkfun = checkboxObj.each(function(i){
+		    			var type = "";
+			    		var trObj=$(this).closest('tr');
+				    	var mark = $("input[name='remark']",trObj).val();
+				    	if(mark == ""){
+							mark = "&nbsp;";
+					    }
+				    	type = $("input:radio:checked",trObj).val();
+			    		val=$("#readingList").flexGetColumnValue(trObj,['a']);
+			    		if(val == ""){
+							val = "&nbsp;";
+				    	}
+			    		valt=$("#readingList").flexGetColumnValue(trObj,['b']);
+			    		if(valt == ""){
+							valt = "&nbsp;";
+				    	}
+						/** 验证实体借阅 
+			    		if(type == '实体借出'){
+							if(mark == "&nbsp;"){
+								$("input[name='remark']").each(function(i){
+									$("input[name='remark']").css({ border: "" });
+								});
+								$("input[name='remark']",trObj).css({ border: "1px solid red" });
+								$.dialog('请填写实体借出原因');
+								exit;
+								return false;
+								
+							}
+				    	}
+				    	**/
+			    		if(val){
+			    			path.push( val + '|' + valt + '|' + type + '|' + mark + '|' + '借阅明细' + '|' + $(this).val());
+			    		}
+				    });
+				    //20130731添加的------------------------------------
+				    $.post(
+						$.appClient.generateUrl({ESInformationPublish:'findLeaderByuserId'},'x'),
+						function (htm){
+							if(htm === 'false'){
+								$.dialog.notice({ icon: 'warning', content: '对不起，没找到领导!'});
+								return;
+							}
+							$.dialog({
+								title: '选择审批领导',
+								content: htm,
+								okVal: '确定',
+								cancelVal: '取消',
+								cancel: true,
+								ok:function(){
+									var forms = document.getElementById('check_approval_list').elements,fl=forms.length;
+									var approveUserId='';
+									for(var f=0; f<fl; f++)
+									{
+										if(forms[f].checked){
+											approveUserId = forms[f].id;
+											break;
+										}
+									}
+									if(approveUserId ==''){
+										return false;
+									}
+									var url=$.appClient.generateUrl({ESArchiveSeache:'submitborrowbykey'},'x');
+									$.post(url,{data:data,path:path,approveUserId:approveUserId},function(result){
+										if(result){
+											thisDialog.close();
+											$.dialog.notice({width: 150,content: '提交成功',icon: 'success',time: 3});
+											$(".num").html(0);
+											$(".bottnum").html(0);
+											$("#to div").remove();
+										}else{
+											$.dialog.notice({width: 150,content: '提交失败',icon: 'error',time: 3});
+										}
+									});
+								}
+							});
+						}
+					);
+					//20130731添加的------------------------------------
+	    			/*var url=$.appClient.generateUrl({ESArchiveSeache:'submitborrowbykey'},'x');
+					$.post(url,{data:data,path:path},function(result){
+						//alert(result);return false;
+						if(result){
+							thisDialog.close();
+							$.dialog.notice({width: 150,content: '提交成功',icon: 'face-smile',time: 3});
+							$(".num").html(0);
+							$(".bottnum").html(0);
+							$("#to div").remove();
+							//$('#flexme1').flexReload();
+						}else{
+							$.dialog.notice({width: 150,content: '提交失败',icon: 'face-sad',time: 3});
+						}
+					});*/
+	    			return false;
+	    		}
+	    	});
+	    },
+	    	cache:false
+	});
+}
+
+//去掉最后一个逗号
+function deleteLastChar(str,c){
+	var reg = new RegExp(c+"([^"+c+"]*?)$");
+	return str.replace(reg,function(w){
+		if(w.length>1){
+			return w.substring(1);
+		}else{
+			return "";
+		}
+	});
+}
+function isString(obj){  
+	var reg = /^[0-9]*$/;  
+    if(!reg.test(obj)){
+    	$.dialog.notice({content:'催还提前天数只能输入数字!',icon:'warning',time:3});
+		return 0;
+    	//exit;
+    }else{
+        return 1;
+    }   
+}   
+
+function CheckForm(){  
+if ($("#onword").val().length  ==  0)  {  
+	$.dialog.notice({content:'请输入关键字!',icon:'warning',time:3})
+	$("#onword").focus();
+	return false;
+}
+return  true;
+}
+
+</script>
+
+<?php 
+function array_falk(&$v, $k, $kname) {
+	$v = array_combine($kname, $v);
+}
+//递归标红函数
+function replace($action = array(), $str = array()) {
+	if (!is_array($action) && !is_array($str)) {
+		return 'error!';
+	}
+	$str_rep = $str;
+	array_walk_recursive($str_rep, 'replace_str');
+	$str = array($str, $str_rep);
+	array_walk_recursive($action, 'replace_action', $str);
+	return $action;
+}
+function replace_str(&$value, $key) {
+	return $value = '<span class="allred">'.$value.'</span>';
+}
+function replace_action(&$value, $key, $str=array()) {
+	return $value = str_replace($str[0], $str[1], $value);
+}
+?>
+

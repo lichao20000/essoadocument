@@ -1,0 +1,225 @@
+<style type="text/css">
+.formTitle {
+	float: left;
+	height: 15px;
+	width: 90px;
+}
+
+.formInput {
+	float: left;
+	height: 15px;
+	width: 200px;
+	margin-top: 7px;
+}
+
+.formArea {
+	float: left;
+	height: 30px;
+	width: 544px;
+}
+</style>
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.input.ztree.js"></script>
+<div style="width: 100%; margin: 15px 0px 20px 50px;">
+	<form id="formIndex">
+<?php foreach ($formList as $form){ ?>
+	<div style="float: left; width: 45%; height: 30px; line-height: 30px;">
+			<span class="formTitle"><?php echo $form->name; ?></span>
+		<?php if($form->type=='TEXT' && $form->length>200){ ?>
+			<textarea rows="" cols="" class="formArea"
+				id="<?php echo $form->code; ?>"
+				metaType="<?php echo $form->type; ?>"
+				name="<?php echo $form->code; ?>"
+				length="<?php echo $form->length; ?>"
+				dotLength="<?php echo $form->dotLength; ?>"
+				isSystem="<?php echo $form->isSystem; ?>"
+				isNull="<?php echo $form->isNull; ?>"
+				isEdit="<?php echo $form->is_edit; ?>"
+				verify="<?php echo 'text/'.$form->length.'/'.$form->isNull.'/0'; ?>"><?php echo ($form->new_value=='')?$form->defaultValue:$form->new_value; ?></textarea>
+		<?php }else if($form->type=='TIME'){?>
+		<input type="text" class="formInput Wdate"
+				id="<?php echo $form->code; ?>"
+				metaType="<?php echo $form->type; ?>"
+				name="<?php echo $form->code; ?>"
+				length="<?php echo $form->length; ?>"
+				dotLength="<?php echo $form->dotLength; ?>"
+				isSystem="<?php echo $form->isSystem; ?>"
+				isNull="<?php echo $form->isNull; ?>"
+				isEdit="<?php echo $form->is_edit; ?>"
+				verify="<?php echo 'time/'.$form->length.'/'.$form->isNull.'/0'; ?>"
+				value="<?php echo ($form->new_value=='')?$form->defaultValue:$form->new_value; ?>"
+				onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly />
+		<?php }else if($form->type=='DATE'){?>
+		<input type="text" class="formInput Wdate"
+				id="<?php echo $form->code; ?>"
+				metaType="<?php echo $form->type; ?>"
+				name="<?php echo $form->code; ?>"
+				length="<?php echo $form->length; ?>"
+				dotLength="<?php echo $form->dotLength; ?>"
+				isSystem="<?php echo $form->isSystem; ?>"
+				isNull="<?php echo $form->isNull; ?>"
+				isEdit="<?php echo $form->is_edit; ?>"
+				verify="<?php echo 'date/'.$form->length.'/'.$form->isNull.'/0'; ?>"
+				value="<?php echo ($form->new_value=='')?$form->defaultValue:$form->new_value; ?>"
+				onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly />
+		<?php }else if($form->type=='NUMBER'){?>
+		<input type="text" class="formInput" id="<?php echo $form->code; ?>"
+				metaType="<?php echo $form->type; ?>"
+				name="<?php echo $form->code; ?>"
+				length="<?php echo $form->length; ?>"
+				dotLength="<?php echo $form->dotLength; ?>"
+				isSystem="<?php echo $form->isSystem; ?>"
+				isNull="<?php echo $form->isNull; ?>"
+				isEdit="<?php echo $form->is_edit; ?>"
+				verify="<?php echo 'number/'.$form->length.'/'.$form->isNull.'/0'; ?>"
+				value="<?php echo ($form->new_value=='')?$form->defaultValue:$form->new_value; ?>" />
+		<?php }else if($form->type=='FLOAT'){?>
+		<input type="text" class="formInput" id="<?php echo $form->code; ?>"
+				metaType="<?php echo $form->type; ?>"
+				name="<?php echo $form->code; ?>"
+				length="<?php echo $form->length; ?>"
+				dotLength="<?php echo $form->dotLength; ?>"
+				isSystem="<?php echo $form->isSystem; ?>"
+				isNull="<?php echo $form->isNull; ?>"
+				isEdit="<?php echo $form->is_edit; ?>"
+				verify="<?php echo 'float/'.$form->length.'/'.$form->isNull.'/'.$form->dotLength; ?>"
+				value="<?php echo ($form->new_value=='')?$form->defaultValue:$form->new_value; ?>" />
+		<?php }else if($form->type=='BOOL'){ $flag=($form->new_value=='')?$form->defaultValue:$form->new_value; ?>
+		<select class="formInput" id="<?php echo $form->code; ?>"
+				metaType="<?php echo $form->type; ?>"
+				name="<?php echo $form->code; ?>"
+				length="<?php echo $form->length; ?>"
+				dotLength="<?php echo $form->dotLength; ?>"
+				isSystem="<?php echo $form->isSystem; ?>"
+				isNull="<?php echo $form->isNull; ?>"
+				isEdit="<?php echo $form->is_edit; ?>"
+				verify="<?php echo 'bool/0/'.$form->isNull.'/0'; ?>"
+				value="<?php echo $flag; ?>">
+				<?php if($flag=="1" || $flag=="2"){?>
+					<option value="1">是</option>
+				<option value="2" <?php echo $flag=='2'?'selected':''; ?>>否</option>
+				<?php }else{?>
+					<option value="true">是</option>
+				<option value="false" <?php echo $flag=='false'?'selected':''; ?>>否</option>
+				<?php }?>
+		</select>
+		<?php }else{?>
+		<input type="text" class="formInput" id="<?php echo $form->code; ?>"
+				metaType="<?php echo $form->type; ?>"
+				name="<?php echo $form->code; ?>"
+				length="<?php echo $form->length; ?>"
+				dotLength="<?php echo $form->dotLength; ?>"
+				isSystem="<?php echo $form->isSystem; ?>"
+				isNull="<?php echo $form->isNull; ?>"
+				isEdit="<?php echo $form->is_edit; ?>"
+				verify="<?php echo 'text/'.$form->length.'/'.$form->isNull.'/0'; ?>"
+				value="<?php echo ($form->new_value=='')?$form->defaultValue:$form->new_value; ?>" />
+		<?php }?>
+		&nbsp;<font
+			color="red" size="3" style="display: <?php echo ($form->isNull==0)?'none':'inline'; ?>;" >*</font>
+		</div>
+<?php }?>
+	</form>
+	<div id="menuContent" class="menuContent"
+		style="display: none; position: fixed;">
+		<ul id="treeDemo" class="ztree selectztree"></ul>
+	</div>
+	<div style="float: left; width: 650px; margin-left: -10px;margin-top: 15px;">
+		<?php foreach ($opinionList as $opinion){?>
+		<fieldset
+			style="float: left; width: 650px; border: solid 1px #CCCCCC; background-color: #F2F5F8; padding: 10px;">
+			<div
+				style="float: left; width: 650px; height: 40px; line-height: 40px;">
+				步骤：<span name="opinion_time"><?php echo $opinion->stepName; ?></span>&nbsp;&nbsp;&nbsp;
+				用户名：<span name="opinion_name" style="height: 20px; width: 200px;"><?php echo $opinion->userName; ?></span>&nbsp;&nbsp;&nbsp;
+				时间：<span name="opinion_time"><?php echo $opinion->createTime; ?></span>
+				<?php if(isset($opinion->forwardName)){echo '&nbsp;&nbsp;&nbsp;转发给：'.$opinion->forwardName; } ?>
+			</div>
+			<div
+				style="float: left; width: 650px; height: 100px; line-height: 100px;">
+				<div
+					style="float: left; width: 290px; height: 100px; line-height: 100px; margin-right: 20px;">
+					<div
+						style="float: left; width: 290px; height: 20px; line-height: 20px;">回复意见：</div>
+					<textarea
+						style="float: left; width: 288px; height: 78px; overflow: auto; border: 1px solid #ccc; background-color: white;"
+						readonly><?php echo $opinion->content; ?></textarea>
+				</div>
+				<div
+					style="float: left; width: 330px; height: 100px; line-height: 100px;">
+					<div
+						style="float: left; width: 330px; height: 20px; line-height: 20px;">附件：</div>
+					<div
+						style="float: left; width: 328px; height: 78px; overflow: auto; border: 1px dashed #CCCCCC;">
+						<ul>
+							<?php  if($opinion->appendixList!='' && isset($opinion->appendixList)){ foreach ($opinion->appendixList as $appendix){?>
+							<li><span class='fileicon'></span><span title="点击下载"
+								onclick="collaborativeHandle.downloadFile('<?php echo $appendix->dataId;?>')"
+								style="margin-left: 5px; color: 0000ff; text-decoration: underline; cursor: pointer;"><?php echo $appendix->fileName; ?></span></li>
+								<?php }}?>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		<br />&nbsp;
+		<?php } ?>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".formArea").each(function(){
+		$(this).closest("div").css({"width":"90%","line-height":"20px"});
+		if($(this).attr("isEdit")=="0"){
+			$(this).attr("readonly",true);			
+		}
+	});
+	$(".formInput").each(function(){		
+		var idEdit=$(this).attr("isEdit");
+		if(idEdit=="0"){
+			$(this).attr("readonly",true);
+			if($(this).hasClass("Wdate")){
+				$(this).attr("disabled","disabled");
+			}
+		}else{
+			var code=$(this).attr("name");
+			var url="";
+			switch(code){
+				case "stageCode"://收集范围
+					url=$.appClient.generateUrl({ESDocumentsCollection: "getTree"},'x');
+					break;
+				case "participatoryCode"://单位部门
+					url=$.appClient.generateUrl({ESParticipatory: "getTree"},'x');	
+					break;
+				case "deviceCode"://装置
+					url=$.appClient.generateUrl({ESDevice: "getTree", maxLevel: 3},'x');					
+					break;
+				default:
+					break;
+			}
+			if(url!="" && code!=""){
+				showTree(code,url);
+			}
+		}		
+	});
+
+	function showTree(code,url){
+		$("#"+code).attr("readonly",true);
+		$("#"+code).selectInput({
+	        url: url,
+	        chkStyle: "radio",
+	        onCheck:function(event, treeId, treeNode){        	
+	        	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+	    		nodes = zTree.getCheckedNodes(true);
+	    		if(nodes.length==1){
+		    		var value=nodes[0].code;
+	    			$("#"+code).attr("value", value);
+	    			$("#"+code).attr("code", value);
+		    	}
+			},
+			width: 300,
+	        height: 300
+	 	});
+	}
+});
+</script>

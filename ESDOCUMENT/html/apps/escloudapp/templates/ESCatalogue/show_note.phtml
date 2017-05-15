@@ -1,0 +1,28 @@
+<div style="width:600px;height:60px;">
+<div style="width: 600px;height:30px;"><span style="width:70px;float:left;">文号</span> <input type="text" name="" value="签报[2012]100号" style="width:300px;display:block;"></div>
+<div style="width: 600px;height:30px;"><span style="width:70px;float:left;">文件标题</span><input type="text" name="" value="关于开展学习贯彻《工作规划》宣传教育活动的通知" style="width:400px;display:block;"></div>
+</div>
+<table id="flexme1">		
+		</table>  
+	          <script type="text/javascript">
+	         // var uri="<?php echo url($this->getUrl($esaction->generateUrl(Array('ESCollect'=>'set_json'))));?>";
+		$("#flexme1").flexigrid({
+	//url: uri,
+	//dataType: 'json',
+	colModel : [
+		{display: '序号', name : 'num', width : 60, align: 'center'}, 
+		{display: '操作', name : 'c3', width : 200, sortable : true, align: 'center'},
+		{display: '操作人', name : 'c6', width : 140, sortable : true, align: 'center'},
+		{display: '操作日期', name : 'c7', width : 160, sortable : true, align: 'center'}
+		],
+	usepager: true,
+	useRp: true,
+	rp: 20,
+	nomsg:"没有数据",
+	pagetext: '第',
+	outof: '页 /共',
+	width: 600,
+	height: 230,
+	pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+});
+	</script>

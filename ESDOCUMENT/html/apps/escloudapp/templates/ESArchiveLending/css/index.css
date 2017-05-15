@@ -1,0 +1,105 @@
+@CHARSET "UTF-8";
+
+body{ margin:0 auto; padding:0;} /**/
+body,html{ overflow:hidden;}
+input{ margin:0; padding:0;}
+select{_font-size:12px;}
+ul{ margin:0; padding:0; list-style-type:none;}
+h2,p,form,table{ margin:0; padding:0; font-weight:normal;}
+/*档案著录筛选文本样式*/
+.inputOperate{ float:left; height:26px; width:210px;}
+.formForStatus{height: 25px;width:215px;border-bottom: 1px solid #ccc;margin-top:10px;color:#fff;}
+.usingTreeDemo{width:100%;  float:left; overflow:auto; padding:0px;width:220px;}
+.fill{background:url(../../public/flexigrid/css/images/zoom_in.png) no-repeat 2px center;}
+.searchIn{height:18px; line-height:18px; width:140px; float:left; margin:3px 3px 0 0;}
+.inputOperate div{ float:left; _width:auto; margin-top:2px; border:1px solid transparent; _border-color:tomato; _filter:chroma(color=tomato); cursor:pointer;}
+.inputOperate span{ float:left; height:20px; line-height:20px; padding:0 5px 0 20px; border-top:1px solid transparent; border-left:1px solid transparent; _border-top-color:tomato; _border-left-color:tomato; _filter:chroma(color=tomato);}
+.search{cursor:pointer;}
+.inputOperate .extbtncssdiv{ border:1px solid #ccc;}
+.inputOperate .extbtncsspan{ border-top:1px solid #fff; border-left:1px solid #fff;}
+/* form style start*/
+.clear:after{content:',';height:0px;visibility:hidden;display:block;clear:both;}
+.contentDiv{width:580px;height:220px;}
+.leftTv{width:80px;height:23px;line-height:23px;}
+.rightTv{width:118px;height:23px;margin-left:10px;text-align:left;line-height:23px;}
+.contentDiv ul,li{list-style:none;}
+.contentDiv ul{float:left;margin-top:7px;}
+.contentDiv ul li{float:left;}
+.contentDiv ul li input{width:180px;height:19px;line-height:19px;}
+#selectSty{_height:25px;_font-size:13px;}
+
+/*#leftIn{width:156px;height:19px;line-height:19px;}*/
+/*#select{position:absolute;width:184px;height:23px;line-height:23px; margin-left: 2px; margin-left: 0px\9;}*/
+/*#rightPut{position:absolute;width:162px;height:19px;*height:18px;_height:17px;}*/
+
+#btnIn{position:relative;}/*width:184px;*/
+#btnIn span{width:40px;}
+#btn{position:absolute;right:2px;top:3px;_margin-top:2px;cursor:pointer;}
+*+html .bottom{margin-top:10px;}
+.bottom{_margin-top:10px;}
+/* form style end*/
+html,body{overflow:hidden;}
+.editbtn{display:inline-block; width:16px; height:16px; background:url(../../public/img/edit.jpg) no-repeat no-repeat; cursor:pointer;}
+#sift tr{height:30px;}
+td .es_add{width:22px;height:22px;background:url('../images/add.gif') no-repeat}
+td .es_del{width:22px;height:22px;background:url('../images/close.png') no-repeat}
+/* 报表打印样式 */
+.borrowWrap{ width:500px; height:auto; overflow:hidden; float:left;}
+.borrowWrap h2{ width:100%; line-height:25px; font-weight:normal; text-indent:15px; float:left; background:#eee; border-bottom:1px solid #ccc;}
+.borrowSelect{ width:100%; height:auto;overflow:hidden; float:left;}
+.borrowSelect p{ width:100%; height:30px; float:left; cursor:default;}
+.borrowSelect p input{ float:left; margin:8px 0 0 15px; _margin-top:5px;}
+.borrowSelect p span{ float:left; margin:8px 0 0 10px;}
+/* end */
+/* 筛选功能通用样式 */
+.h2{ width:100%;  line-height:25px; text-indent:25px; color:#555; border-bottom:1px solid #f3f3f3; float:left; margin:5px 0; background:#f9f9f9 url(../../public/img/mess.png) no-repeat 5px 5px;}
+#addrolefree{ width:600px; height:auto; overflow:hidden; float:left;}
+#contents{ width:630px; height:auto; overflow:auto; marign-left:5px; _dispaly:inline;}
+.contbox{ width:610px; height:30px; float:left; margin-left:5px; _display:inline;}
+/* gengqianfeng 20140926 文本框样式修改  */
+.contbox input{ height:20px; padding:0; border:1px solid #ccc;}
+.contbox input:hover{border:1px solid #5599ff; }
+.w14090{ font-size:13px; color:#555; float:left; margin-right:10px; display:block;}
+.hei30{ line-height:30px;}
+.w140{ width:130px; padding-left:2px;}
+/* gengqianfeng 20140926 宽度样式修改  */
+.w90{ width:70px;}
+.hei20{ height:20px; line-height:20px; margin-top:4px; border:1px solid #aaa;}
+
+/*分类号的目录树start*/
+.escatagory{height:220px;width:162px;background:#fff;border:1px solid #aaa;display:none;z-index:888;position:absolute;overflow:auto;}
+/*分类号的目录树end*/
+
+/* 添加行删除行按钮样式 */
+/* gengqianfeng 20140926 添加删除样式修改  */
+.newfilter,.delfilter{margin-left:17px;margin-right:20px; width:22px;height:22px; line-height:22px; text-indent:22px; color:#555; float:left; margin-top:3px;cursor:pointer;}
+.newfilter{ background:url(../../public/img/add.png) no-repeat 4px 4px;}
+.delfilter{ background:url(../../public/img/del.gif) no-repeat 4px 4px;}
+.newfilter:hover,.delfilter:hover{ width:22px; line-height:22px; text-indent:22px;}
+/* .newfilter:hover,.delfilter:hover{ width:68px; line-height:22px; text-indent:23px; border:1px solid #e3e3e3;}
+.newfilter:hover{ background:#f3f3f3 url(../../public/img/add.png) no-repeat 3px 3px;cursor:pointer;}
+.delfilter:hover{ background:#f3f3f3 url(../../public/img/del.gif) no-repeat 3px 3px;cursor:pointer;}
+*/
+.leftDiv1{width:220px; float: left;background-color:#133959;border-radius:5px;}
+.orderUsingPath{width:450px; float: left;}
+.orderUsingForm{width:450px; float: left;}
+/* 筛选功能通用样式结束 */
+
+/* form validate */
+textarea.invalid-text,input.invalid-text,select.invalid-text{border:2px #DD0000 solid;}
+textarea.valid-text,input.valid-text,select.valid-text{border:2px #06AC87 solid;}
+span.invalid-msg,label.invalid-msg{color:#DD0000;padding:3px 0px 3px 25px;background:url(images/error_msg_icon.gif) no-repeat 6px;}
+span.valid-msg,label.valid-msg{color:#06AC87;padding:3px 0px 3px 25px;background:url(images/success_msg_icon.gif) no-repeat 6px;}
+#deadline{width:95px;background:#fff;display:none;position:absolute;z-index:901;text-align:left;border:1px #aaa solid}
+#deadline ul li{padding-left:5px;width:90px;height:18px;float:left;cursor:pointer;line-height:18px}
+#deadline ul li:hover{background:#eee;padding: 0px 2px;border-left: 1px solid #fff;border-top: 1px solid #fff;border-right: 1px solid #eee;border-bottom: 1px solid #eee;}
+.wf_delete {
+	background: url("../images/chart_organisation_delete.png") no-repeat center left;
+}
+.order {
+	background: url("../images/handIdentify.png") no-repeat center left;
+}
+.spliteLine{
+	width:220px;
+	height:10px;
+}

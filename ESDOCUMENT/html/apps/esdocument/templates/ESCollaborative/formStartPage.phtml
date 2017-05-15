@@ -1,0 +1,183 @@
+<link rel="stylesheet" type="text/css"
+	href="<?php echo $tplPath;?>/public/ext/resources/css/ext-all.css" />
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/ext/adapter/ext/ext-base.js"></script>
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/ext/ext-all.js"></script>
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/ext/source/locale/ext-lang-zh_CN.js"></script>
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/ext/Utils.js"></script>
+<link rel="stylesheet"
+	href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css"
+	type="text/css">
+<link rel="stylesheet"
+	href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeTbar.css"
+	type="text/css">
+<link rel="stylesheet"
+	href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css"
+	type="text/css" />
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript"
+	src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<link rel="stylesheet"
+	href="<?php echo $tplPath ?>/ESCollaborative/css/formStartPage.css"
+	type="text/css">
+<div id="formStartPage" class="formStartPage"
+	tplPath="<?php echo $tplPath; ?>"
+	flowId="<?php echo $data['flowId']; ?>"
+	formId="<?php echo $data['formId']; ?>"
+	wfId="<?php echo $data['wfId']; ?>"
+	stepId="<?php echo $data['stepId']; ?>"
+	dataId="<?php echo $data['dataId']; ?>"
+	status="<?php echo $data['status']; ?>"
+	userFormNo="<?php echo $data['userFormNo']; ?>"
+	formUserId="<?php echo $data['formUserId']; ?>"
+	fileUploadType="file" >
+	<div class="tabpanel">
+		<ul id="subnav" class="subnav">
+			<li id='FORM_TAB' class="defalutTagOpen"><span>基本表单</span></li>
+			<li id='DATA_TAB'><span>数据附件</span></li>
+			<li id='FILE_TAB'><span>文件附件</span></li>
+		</ul>
+	</div>
+	<div id='FORM_TAB_DIV' class="formBuilderDiv Tags" >
+		<div id='formBuilderPanelDiv' class="formBuilderPanelDiv"></div>
+	</div>
+	<div id='DATA_TAB_DIV' class="formBuilderDatas Tags">
+		<div class='buttoncss' style="border-bottom:0px;">
+			<div id='addAttachDataBtn'>
+				<span class="add" style="padding-left:20px;">添加数据附件</span>
+			</div>
+			<div id='deleteAttachDataBtn'>
+				<span class="delete" style="padding-left:20px;">删除</span>
+			</div>
+		</div>
+		<div id='addAttachDataGridDiv' class='formStart_grid'>
+			<table id='attachDataTable'></table>
+		</div>
+	</div>
+	<div id='FILE_TAB_DIV' class="formBuilderFiles Tags">
+		<div class='buttoncss' style="border-bottom:0px;">
+			<div id='addAttachFileBtn'>
+				<span class="add" style="padding-left:20px;">添加文件附件</span>
+			</div>
+			<div id='deleteAttachFileBtn'>
+				<span class="delete" style="padding-left:20px;">删除</span>
+			</div>
+		</div>
+		<div class='filesDiv'>
+			<table id="attachFileTable" filePaths="" fileNames=""></table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function() {	
+	$(".tabpanel").find("li").each(function(i){
+		$(this).click(function(){
+	    	displayTag($(this).attr('id')+'_DIV', i);
+		});
+	});
+
+	function displayTag(id, t) {
+		$('.Tags').hide();
+		$('#' + id).show();
+		$('#subnav li').removeClass('defalutTagOpen');
+		$('#subnav li:eq(' + t + ')').addClass('defalutTagOpen');
+	}
+
+	showFormIndex();//表单数据
+	
+	function showFormIndex() {
+		var formId=$("#formStartPage").attr("formId");
+		var flowId=$("#formStartPage").attr("flowId");
+		var stepId=$("#formStartPage").attr("stepId");
+		var dataId=$("#formStartPage").attr("dataId");
+		var wfId=$("#formStartPage").attr("wfId");
+		var url = $.appClient.generateUrl({ESCollaborative : 'formIndex'}, 'x');
+		$.post(url, {formId : formId,flowId : flowId,stepId : stepId,dataId : dataId,wfId : wfId}, function(data) {
+			$("#formBuilderPanelDiv").html(data);
+		});
+	}
+
+	loadAttachTable("attachDataTable","data");//数据附件
+	loadAttachTable("attachFileTable","file");//文件附件
+	
+	function loadAttachTable(id,type){	
+		var wfId=$("#formStartPage").attr("wfId");
+		var stepId=$("#formStartPage").attr("stepId");	
+		$("#"+id).flexigrid({
+			url: $.appClient.generateUrl({ ESCollaborative: 'getAppendixList', wfId: wfId, stepId: stepId, type:type},'x'),
+			dataType: 'json',
+			colModel: [
+				{display: '', name: 'num', width: 30, sortable: true, align: 'center'},
+			    {display : '<input id="attach'+type+'" type="checkbox" >', name : 'ids', width : 25,align : 'center'}, 		    
+				{display: 'ID', name: 'ID', hide: true, width: 80, sortable: true, align: 'right'},
+				{display: '附件名称', name: 'fileName', width: 150, sortable: true, align: 'left'},					
+				{display: '附件大小', name: 'fileSize', width: 100, sortable: true, align: 'right'},
+				{display: '关联附件ID', name: 'dataId', width: 100, sortable: true, align: 'left'},
+				{display: '用户名称', name: 'userName',width: 100, sortable: true, align: 'left'}			
+			],
+			singleSelect:true,
+			usepager: false,
+			title: '表单附件',
+			useRp: true,
+			width: 760,
+			height: 333,
+			showTableToggleBtn: true
+		});
+
+		attachCheckAll(id,type);//全选
+	}
+
+	//全选
+	function attachCheckAll(id,type){
+		$(document).on('click', '#attach'+type, function() {
+			$('#'+id).find("input[type='checkbox']").attr('checked',$(this).is(':checked'));
+		});
+	}
+
+	//添加数据附件
+	$("#addAttachDataBtn").die().live("click",function(){
+		var dataIds=[];
+		$("#attachDataTable tr").each(function(){
+			dataIds.push($(this).find("td[colname='dataId'] div").html());
+		});
+		collaborativeHandle.addAttachDataPage(dataIds);
+	});
+
+	//删除数据附件
+	$("#deleteAttachDataBtn").die().live("click",function(){
+		deleteAttach("attachDataTable","data");
+	});
+
+	//添加文件附件
+	$("#addAttachFileBtn").die().live("click",function(){
+		collaborativeHandle.createMsgFileUploadWin("file");
+	});	
+
+	//删除文件附件
+	$("#deleteAttachFileBtn").die().live("click",function(){		
+		deleteAttach("attachFileTable","file");
+	});
+
+	//删除附件
+	function deleteAttach(idTab,type){
+		var ids=[];
+		$("#"+idTab+" tr").find("input[type='checkbox']:checked").each(function(){
+			ids.push($(this).closest("tr").prop("id").substr(3));
+		});
+		if(ids!=null && ids!=[] && ids.length>0){
+			collaborativeHandle.deleteAttachDataPage(ids,idTab,type);
+		}else{
+			$.dialog.notice({icon : 'warning',content : "请选择要删除的数据！",title : '3秒后自动关闭',time : 3});
+			return false;
+		}
+	}
+});
+</script>

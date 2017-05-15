@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>联通云门户-控制台</title>
+<link type="text/css" href="<?php echo $tplPath ?>/css/console.css" rel="stylesheet"/>
+<link type="text/css" href="<?php echo url('css/form.css') ?>" rel="stylesheet"/>
+<link type="text/css" href="<?php echo url('css/global.css') ?>" rel="stylesheet"/>
+<link type="text/css" href="<?php echo url('css/font.css') ?>" rel="stylesheet"/>
+<link type="text/css" href="<?php echo url('css/APP_global.css') ?>" rel="stylesheet"/>
+<script type="text/javascript" src="<?php echo url('js/jquery.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath?>/js/console.js?<?php echo time();?>"></script>
+<script type="text/javascript" src="<?php echo url('js/jquery-ui.js')?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath?>/js/jquery.form.js"></script>
+</head>
+<body bgcolor="#f8fafd">
+  <div class="header">
+    <div style="width:960px;margin:0 auto;">
+      <div class="logo"></div>
+    </div>
+
+  </div>
+<div class="container">
+  <div class="">
+		<div class="leftSide">
+  			<ul id="console_list">
+
+  		  <?php foreach($list as $app_id=>$app_info):?>
+  		 	<li>
+                	<a href="<?php echo '#'.$app_id;//echo url('console/webapp/'.$app_id)?>"  target="_parent"><?php echo $app_info['name'];?>
+                	</a>
+
+                	<ol>
+<?php foreach($app_info['menu'] as $key=>$menu):?>
+                		<li><a href="<?php echo '#'.$app_id.'/'.$key;//echo url('console/webapp/'.$app_id)?>"  target="_parent"><?php echo $menu['title']?></a></li>
+<?php endforeach;?>
+                	</ol>
+
+           	</li>
+          <?php endforeach;?>
+
+  			</ul>
+		</div>
+		<div class="rightSide">
+			<div id="main">&nbsp;
+			</div>
+
+		</div>
+	</div>
+
+  </div>
+<div id="fullbg">&nbsp;</div>
+<script>
+$().ready(function(){
+  operator.init({
+    baseUrl : '/console/app',
+    loadImage: '<?php echo $tplPath?>/images/ajax-loader.gif'
+    });
+  $('#console_list').find('a').click(function(e){
+    e.preventDefault();
+    operator.loadConsoleByDom($(this));
+  });
+
+});
+function checkimg(here){  
+ var filename = $(here).val();
+ var ext = filename.substring(filename.lastIndexOf(".")+1,filename.length).toLowerCase();
+ if(ext !="jpg" && ext != "gif" && ext != "png"){
+   alert("上传图片格式错误.");
+   $(here).val("");
+ }
+}
+</script>
+</body>
+</html>

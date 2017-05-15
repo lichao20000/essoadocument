@@ -1,0 +1,158 @@
+<style>
+.ztree li a span{
+	color:#444;
+}
+</style>
+<script type="text/javascript">
+</script>
+<form id="esfilter">
+	<table style="width: 600px;" id="sift">
+		<tr>
+			<td>字段名</td>
+			<td>比较符</td>
+			<td>字段值</td>
+			<td>关系符</td>
+			<td>增加行</td>
+			<td>删除行</td>
+		</tr>
+	<?php for($i=0;$i<$trlength;$i++){?>
+	<tr>
+			<td><select name="esfields" style="width: 105px;">
+					<option value="">--请选择--</option>
+		<?php
+		foreach ( $list as $value ) {
+			echo '<option value="'.$value->code.'">'.$value->name.'</option>';
+		}
+		?></select></td>
+			<td><select name="comparison" style="width: 75px;">
+					<option value="equal">等于</option>
+					<option value="greaterThan">大于</option>
+					<option value="lessThan">小于</option>
+					<option value="notEqual">不等于</option>
+					<option value="greaterEqual">大于等于</option>
+					<option value="lessEqual">小于等于</option>
+					<option value="like">包含</option>
+					<option value="notLike">不包含</option>
+			</select></td>
+			<td><input type="text" value="" name="esfieldvalue"></td>
+			<td><select name="relation" style="width: 60px;">
+					<option value="AND">并且</option>
+					<option value="OR">或者</option>
+			</select></td>
+			<td align="center"><a href="javascript:void()" class="esadd"><div
+						class="es_add"></div></a></td>
+			<td align="center"><a href="javascript:void()" class="esreduce"><div
+						class="es_del"></div></a></td>
+		</tr>
+	
+	<?php }?>
+</table>
+</form>
+<!-- <div class="escatagory" id='catagory'> -->
+<!-- 	<ul id="fication" class="ztree"></ul> -->
+<!-- </div> -->
+<!-- <div id="deadline"> -->
+	<!-- wanghongchen 20140918 保管期限下拉项改为动态获取 bug1066 
+	<ul style="padding-left: 0px;">-->
+	
+<!-- 	</ul> -->
+<!-- </div> -->
+<script type="text/javascript"> 
+var setting = {
+			view: {
+				dblClickExpand: false,
+				showLine: false,
+				selectedMulti: false
+				
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			edit:{
+				enable:true
+			},
+			callback: {
+				onClick: ClickNode
+			}
+		};
+
+// 设置统计条件是增加回显
+var enconditions = $("#hcond").val();
+if(enconditions != ""){
+	var conds = enconditions.substring(0,enconditions.length-1).split('@');
+	for(var j = 0; j < conds.length; j++){
+		var n = j + 1;
+		var cond = conds[j].split(",");
+		var condtr = $("#sift tr:eq("+n+")");
+		condtr.find("select[name='esfields']").val(cond[0]);
+		condtr.find("select[name='comparison']").val(cond[1]);
+		condtr.find("input[name='esfieldvalue']").val(cond[2]);
+		if(cond[3]=='true'){
+			condtr.find("select[name='relation']").val("AND");
+		}else{
+			condtr.find("select[name='relation']").val("OR");
+		}
+	}
+}
+function ClickNode(e,treeId, treeNode) {
+	if(treeNode.pId!=0){
+		$('input[name="esfieldvalue"]').attr("estext",treeNode.name);
+		var esField=$('[name="esfieldvalue"]',$('#esfilter'));
+		if(esField.length>0){
+			esField.eq(index-1).val(treeNode.classCode);
+			return false;
+		}
+	}
+}
+//筛选增加、减少行 packing 
+//xiewenda 20140920 条件检索框
+$('.esadd').die().live('click',function (){
+	var t = $($('#sift tr:last').clone()).insertAfter($(this).closest('tr'));
+	//shiyangtao 修改以前添加一行下一行会被该行参数填充 20140820
+	var i=0;
+	var tds=t.find('td');
+	tds.each(function(){
+		if(i==0){
+			$(this).find('select').val('');
+		}
+		if(i==1){
+			$(this).find('select').val('equal');
+		}
+		if(i==2){
+			$(this).find('input').val('');
+		}
+		if(i==3){
+			$(this).find('select').val('AND');
+		}
+		i++;
+	});
+	
+});
+
+$('.esreduce').die().live('click',function (){
+	if($('#sift tr').length > 7){
+		$(this).closest('tr').remove();
+	}else{
+		var tds = $(this).closest('tr').find('td');
+		var i= 0 ;
+		tds.each(function(){
+			if(i==0){
+				$(this).find('select').val('');
+			}
+			if(i==1){
+				$(this).find('select').val('equal');
+			}
+			if(i==2){
+				$(this).find('input').val('');
+			}
+			if(i==3){
+				$(this).find('select').val('AND');
+			}
+			i++;
+		});
+	}
+});
+
+</script>

@@ -1,0 +1,314 @@
+@CHARSET "UTF-8";
+
+html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
+	pre, a, address, big, cite, code, del, em, font, img, ins, small,
+	strong, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form,
+	label, legend {
+	margin: 0;
+	padding: 0;
+}
+
+.estransfer {
+	width: 600px;
+	height: auto !important;
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+
+.estransfer ul {
+	width: 580px;
+	height: auto;
+	overflow: hidden;
+	text-align: center;
+}
+
+.estransfer ul li {
+	width: 260px;
+	height: 50;
+	margin-left: 20px;
+	float: left;
+	margin-top: 10px;
+	_display: inline
+}
+
+.estransfer span {
+	width: 90px;
+	height: 50px;
+	line-height: 30px;
+	text-align: left;
+	float: left;
+}
+
+.estransfer ul li input, .estransfer ul li select {
+	height: 20px;
+	float: left;
+	line-height: 20px;
+	width: 160px;
+}
+
+.estransfer ul li .select-acc-range {
+	width: 168px;
+	padding: 0;
+}
+
+.estransfer ul li select {
+	width: 162px;
+	height: 22px;
+	float: left;
+}
+
+.estransfer ul li textarea {
+	width: 430px;
+	height: 50px;
+	line-height: 18px;
+	font-size: 13px;
+	float: left
+}
+
+textarea {
+	resize: none;
+}
+
+input, textarea {
+	outline: 0;
+}
+
+select {
+	_font-size: 12px;
+}
+
+html, body {
+	overflow: hidden;
+}
+
+a {
+	text-decoration: none;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+.esmain {
+	width: 96%;
+	margin-left: 2%;
+}
+
+.esmain .eshead {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #ccc;
+	text-align: center;
+}
+
+.esmain .eshead input {
+	width: 55px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	border-radius: 3px;
+}
+
+.esmain .esleft {
+	background: #fff;
+	width: 220px;
+	float: left;
+	overflow: auto;
+	/* border-left: 1px solid #ccc; */
+	background-color: #133959;
+	margin-right: 10px;
+	border-radius: 5px;
+	padding-top: 12px;
+}
+
+.contbox {
+	width: 610px;
+	height: 30px;
+	float: left;
+	margin-left: 5px;
+	_display: inline;
+}
+
+.contbox input {
+	height: 20px;
+	padding: 0;
+	border: 1px solid #ccc;
+}
+
+.contbox input:hover {
+	border: 1px solid #5599ff;
+}
+
+.w14090 {
+	font-size: 13px;
+	color: #555;
+	float: left;
+	margin-right: 10px;
+	display: block;
+}
+
+.hei30 {
+	line-height: 30px;
+}
+
+.w140 {
+	width: 130px;
+	padding-left: 2px;
+}
+
+.w90 {
+	width: 70px;
+}
+
+.hei20 {
+	height: 20px;
+	line-height: 20px;
+	margin-top: 4px;
+	border: 1px solid #aaa;
+}
+
+.newfilter, .delfilter {
+	margin-left: 17px;
+	margin-right: 20px;
+	width: 22px;
+	height: 22px;
+	line-height: 22px;
+	text-indent: 22px;
+	color: #555;
+	float: left;
+	margin-top: 3px;
+	cursor: pointer;
+}
+
+.newfilter {
+	background: url(../../public/img/add.png) no-repeat 4px 4px;
+}
+
+.delfilter {
+	background: url(../../public/img/del.gif) no-repeat 4px 4px;
+}
+
+.newfilter:hover, .delfilter:hover {
+	width: 22px;
+	line-height: 22px;
+	text-indent: 22px;
+}
+
+.documentStyle {
+	padding-top: 30px;
+	width: 590px;
+	height: 350px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	position: relative;
+}
+/**
+20141030 xuekun 添加可编辑下拉框
+*/
+.editSelect {
+	margin-left: 0px;
+}
+
+.editSelect font {
+	font-size: 9pt;
+}
+
+.editSelect .selectSpan {
+	border-top-style: inset;
+	border-right-style: inset;
+	border-bottom-style: inset;
+	border-top: 1pt solid #c1c1c1;
+	border-right: 1pt solid #c1c1c1;
+	border-bottom: 1pt solid #c1c1c1;
+	overflow: hidden;
+	width: 17px;
+	height: 26px;
+	float: left;
+	clip: rect(-1px, 384px, 384px, 364px);
+}
+
+.editSelect .selectSpan select {
+	width: 384px;
+	height: 26px;
+	border: 0pt;
+	margin: 0px 0px 0px -364px;
+}
+
+.editSelect .selectInputSpan {
+	outline-color: #000;
+	border-top-style: inset;
+	border-left-style: inset;
+	border-bottom-style: inset;
+	border-top: 1pt solid #c1c1c1;
+	border-left: 1pt solid #c1c1c1;
+	border-bottom: 1pt solid #c1c1c1;
+	width: 364px;
+	height: 26px;
+	padding: 0px;
+	border: false;
+	padding: 0px;
+	float: left;
+}
+
+.editSelect .selectInputSpan .selectInput {
+	width: 364px;
+	height: 26px;
+	float: left;
+	border: 0pt;
+	font-size: 9pt;
+	padding: 0px;
+	margin: 0px;
+	background-color: white;
+}
+
+.inputtextnoedit {
+	width: 380px;
+	height: 20px;
+	border: 1px solid #ccc;
+}
+/**
+20141030 xuekun 添加可编辑下拉框
+*/
+.selectInput {
+	height: 20px;
+	border: 1px solid #ccc;
+	background-image: url('../../public/img/drop_down_tab.gif');
+	background-repeat: no-repeat;
+	background-position: 99% 50%;
+	background-size: 20px20px;
+}
+
+.linkFile {
+	width: 600px;
+	height: 300px;
+}
+
+.linkFile .linkLeft {
+	float: left;
+	width: 30%;
+	height: 100%;
+	overflow: auto;
+	border-right: 1px solid gainsboro;
+}
+
+.linkFile .linkRight {
+	float: right;
+	width: 65%;
+	height: 100%;
+}
+
+.linkFile .linkRight table {
+	height: 150px;
+	width: 400px;
+	padding: 10px 0px 10px 20px;
+}
+.warnning{border:2px #DD0000 solid;}
+
+.part_left{float:left;width:310px;height:50px;line-height:50px; text-align: center;margin-top: 0px;}
+.part_left .sp1{float:left; height:100%; width:100px; background-color: #6699FF;}
+.part_left .sp2{float:left; height:2px; width:80px; background-color: #6699FF; margin-top:24px;}
+.confirmPart{float:left; height:40px; width:200px; background-color: #6699FF; padding:0px 10px 0 10px;}
+.delPart{margin-left: 20px;cursor:pointer;}
+
+li img.clickImg{ width:16px; height:16px; position:relative; top:-20px; right:-70px; background:url(../../public/img/edit.jpg) no-repeat center center; cursor:pointer;}
+

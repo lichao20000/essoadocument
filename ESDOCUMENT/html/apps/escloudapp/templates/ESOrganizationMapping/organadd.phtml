@@ -1,0 +1,52 @@
+<form id="addorgan" >
+<div class="estransfer">
+<ul>
+
+<li><span>保管期限</span>
+<select id="retention" name="retention" class="retention">
+<?php foreach ($list as $k=>$val){?>
+<option value=<?php echo $val->ESIDENTIFIER;?>><?php echo $val->ESIDENTIFIER;?></option>
+<?php } ?>
+</select>
+</li>
+<li><span>档案类型</span><select id="select" name="selectmodel" class="selectype">
+<?php 
+	if($oaList){
+		foreach ($oaList as $key=>$val){
+			if ($key==0){
+				echo '<option selected="selected" value="'.$val->system.'">'.$val->sysName.'</option>';
+			}else{
+				echo '<option value="'.$val->system.'">'.$val->sysName.'</option>';
+			}
+		}
+	}else{
+		echo '<option>请添加业务系统</option>';//请到业务系统设置中添加数据
+	}
+?>
+<!-- <option value="OA">OA</option>
+<option value="EAS">EAS</option>
+<option value="ECM">ECM</option>
+<option value="ERP">ERP</option>
+<option value="HFM">HFM</option>
+<option value="PMS">PMS</option>
+<option value="PUR">PUR</option>
+<option value="TMS">TMS</option> -->
+</select></li>
+<li><span>分类号</span><input class="classic" type="text" name="classic" value="" readonly="readonly"></li>
+<li style="width:520px"><span>备注</span><textarea name="remark" style="width:425px;height:80px;float:left"></textarea></li>
+</ul>
+</div>
+</form>
+<script type="text/javascript">
+	$(".classic").die().live('click',function(){
+		var offset = $(this).offset();
+		
+		$('#catagory').show().offset({top:offset.top+22,left:offset.left});
+		$("body").bind("mousedown", clickBodyDown);
+	});
+	function clickBodyDown(event) {
+		if (!(event.target.id == "catagory" || event.target.id == "fication"||$(event.target).parents("#catagory").length>0)) {
+			$("#catagory").fadeOut("fast");
+		}
+	}
+</script>

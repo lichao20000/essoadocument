@@ -1,0 +1,151 @@
+<div style="width: 800px;">
+	<div style="height: 365px;" id="eslayout">
+		<table id="showRule"></table>
+	</div>
+</div>
+<script type="text/javascript">
+(function($){	
+	$("#showRule").flexigrid({
+		url: false,
+		dataType: 'json',
+		colModel : [			
+			{display: '序号', name : 'num', width : 30, align: 'center'},
+			{display: '字段排序', name : 'colNo', width : 60, align: 'right'},
+			{display: '字段名称', name : 'colName', width : 120, align: 'left'},
+			{display: '字段代码', name : 'ruleField',hide:true, width : 80, align: 'left'},
+			{display: '列标题', name : 'title', width : 120, align: 'left'},
+			{display: '统计规则', name : 'ruleMethod', width : 100, align: 'left'},
+			{display: '统计标识', name : 'collIdentifier', width : 200, align: 'left'},		
+			],
+		buttons : [
+			{name: '<input id="isSummary" type="checkbox" style="float:left;" name="isSummary" value="1" >&nbsp;<label style="float:left;" for="isSummary">汇总统计</label>'},
+			{name: '<select id="pic" name="pic" style="width:80px;"><option value="none">无图</option><option value="2pie">2D饼图</option><option value="2line">2D折线图</option><option value="2bar">2D条形图</option><option value="3pie">3D饼图</option><option value="3line">3D折线图</option><option value="3bar">3D条形图</option></select>'}
+			],
+		usepager: false,
+		title: '统计方案列表',
+		useRp: true,
+		width: 800,
+		height: 283,
+		onSuccess:function(){
+			setRuleMethod();
+			bindEditTitle();	
+		}
+	});	
+
+	function setRuleMethod(){
+		var ruleMethod_sel='<select class="countType" name="countType"><option value="sum">合计</option><option value="count">计数</option><option value="distinct">唯一计数</option><option value="avg">平均值</option></select>';		
+		$("#showRule").find("td[colname='ruleMethod'] div").each(function(index){
+			var value=$(this).html();
+			$(this).html(ruleMethod_sel);			
+			$("#showRule .countType").css("width",$(this).css("width"));
+			$(this).find("select").val(value);
+		});
+
+		//统计规则下拉框change事件
+		$("#showRule .countType").die().live('change',function(){
+			var url=$.appClient.generateUrl({ESStatistics : 'updateStatisticsFieldCount'}, 'x');
+			var itemId=$(this).closest("tr").prop("id").substr(3);
+			var ruleMethod=$(this).val();
+			var ruleMethodName=$(this).find("option[value='"+ruleMethod+"']").html();
+			var collIdentifier=getGroupFieldsValue()+"("+$(this).closest("tr").find("td[colname='colName'] div").html()+"-"+ruleMethodName+")";
+			$.post(url,{itemId:itemId,ruleMethod:ruleMethod,collIdentifier:collIdentifier},function(data){
+				if(data){
+					$.dialog.notice({
+						content : data,
+						time : 3,
+						icon : 'error'
+					});
+					return false;
+				}
+				$("#showRule").flexReload();
+			});
+		});
+	}
+
+	function getGroupFieldsValue(){
+		var value="";
+		$("#g_fieldList2 li").each(function(index){
+			value=value+"&"+$(this).find("span").html();
+		});
+		return value.length>0?value.substr(1):'';
+	}
+
+	var oldTitle="";
+	
+	//绑定事件
+	function bindEditTitle(){
+		//标题点击编辑事件
+		$("#showRule").find("td[colname='title'] div").die().live('click',function(){
+			if(jQuery.isEmptyObject($("#colTitle").val())){
+				oldTitle=$(this).html();
+				$(this).html('<input type="text" id="colTitle" value="'+oldTitle+'" />');	
+				$(this).find("input").css("width",$(this).css("width")).focus();
+			}				
+		});
+
+		colTitleFocusout();
+		
+		//回车事件
+		$(document).keypress(function(e) {  	
+			var activeId = document.activeElement.id;	   
+	    	if(e.which == 13 && activeId == 'colTitle') {  
+	    	   jQuery("#colTitle").focusout();  	       
+	    	}  
+		});
+	}
+
+	//编辑框失去光标事件
+	function colTitleFocusout(){
+		$("#colTitle").die().live('focusout',function(){			
+			var title=$(this).val().trim();
+			if(title==""){
+				$(this).focus();
+				$.dialog.notice({
+					content : "标题不能为空！",
+					time : 3,
+					icon : 'warning'
+				});
+				return false;
+			}else if(title.replace(/[^\x00-\xff]/g,'aa').length>20){
+				$(this).focus();
+				$.dialog.notice({
+					content : "标题长度不能超过20个字符（10个汉字）！",
+					time : 3,
+					icon : 'warning'
+				});
+				return false;
+			}else if(oldTitle!=title){				
+				var titles="";
+				var flag=false;				
+				$("#showRule").find("td[colname='title'] div").each(function(index){					
+					if(jQuery.isEmptyObject($(this).find("input").val())){
+						if(title==$(this).html()){
+							flag=true;
+						}else{
+							titles=titles+";"+$(this).html();
+						}
+					}else{
+						titles=titles+";"+title;
+					} 					
+				});
+				if(flag){
+					$(this).focus();
+					$.dialog.notice({
+						content : "标题名称已存在！",
+						time : 3,
+						icon : 'warning'
+					});
+					return false;
+				}
+				titles=titles.length>0?titles.substr(1):'';
+				$(this).closest("div").html($(this).val());
+				groupStatistics.saveColTitleAndColCount(titles);
+				return true;
+			}else{
+				$(this).closest("div").html($(this).val());
+				return true;
+			}
+		});
+	}
+})(jQuery);
+</script>

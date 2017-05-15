@@ -1,0 +1,37 @@
+<!-- wangbo 20140424-->
+<form id="addRole" action=""	method="post">
+<div class="estransfer">
+<ul>
+<li><span>角色标识<font color="red" size="3">*</font></span><input  type="text" name="roleCode"   title="例如:flyingsoft"   value=""><input type="hidden" name="roleId"    value="-1"  ><input type="hidden" name="appId"    value= "<?php echo $appId[0];?>"  ><input type="hidden" name="isSystem"    value= "0"  ></li>
+<li><span>角色名称<font color="red" size="3">*</font></span><input type="text" name="roleName"     value=""></li>
+<li style="width:600px"><span>角色描述</span><textarea name="roleRemark" style="width:445px;height:50px;float:left"></textarea></li>
+</ul>
+</div>
+</form>
+<script type="text/javascript">
+var roleCodeZZ =/^[A-Za-z]+$/;
+ $("#addRole input[name='roleCode']").bind('blur',function(){
+ 	var roleCode = $(this).val();
+ 	roleCode=roleCode.replace(/[ ]/g,"");
+ 	if(roleCode==''){
+ 		$(this).addClass("warnning");
+ 		return false;
+ 	}
+ 	if(roleCodeZZ.test(roleCode)==false){
+		$(this).addClass("warnning");
+		return false;
+	}
+ 	$(this).removeClass("warnning");
+ });
+ $("#addRole input[name='roleName']").bind('blur',function(){
+	 	var roleName = $(this).val();
+	 	roleName=roleName.replace(/[ ]/g,"");
+	 	if(roleName==''){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+	 	$(this).removeClass("warnning");
+	 });
+ </script>
+ 
+ 

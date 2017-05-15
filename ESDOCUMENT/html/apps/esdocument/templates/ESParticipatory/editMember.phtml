@@ -1,0 +1,37 @@
+<form id="editMemberForm">
+	<div style="width: 500px; height: 150px; margin: 20px 5px 10px 5px;">
+		<div style="float: left; width: 490px; height: 33%;">
+			<div
+				style="float: left; width: 40%; height: 100%; text-align: center;">部门&nbsp;&nbsp;</div>
+			<div style="float: left; width: 60%; height: 100%;">
+				<input type="text" id="partName" name="partName" readonly="readonly" value="<?php echo isset ($member['partName'])?$member['partName']:"未知"; ?>" style="width: 200px;" />
+				<input type="hidden" id="id" name="id" value="<?php echo $member['id']; ?>" />
+			</div>
+		</div>
+		<div style="float: left; width: 490px; height: 33%;">
+			<div style="float: left; width: 40%; height: 100%; text-align: center;">
+				员工<font color="red" size="3">*</font>
+			</div>
+			<div style="float: left; width: 60%; height: 100%;">
+				<input type="text" id="userName" name="userName" readonly="readonly" value="<?php echo isset ($member['userName'])?$member['userName']:"未知";?>" verify="text/100/1/0" style="width: 200px;" />
+			</div>
+		</div>
+		<div style="float: left; width: 490px; height: 33%;">
+			<div
+				style="float: left; width: 40%; height: 100%; text-align: center;">
+				职位<font color="red" size="3">*</font>
+			</div>
+			<div style="float: left; width: 60%; height: 100%;">
+				<input type="radio" name="officeType" id="officeType1"
+					<?php echo $member['office']=="1" ? 'checked':''; ?> value="1" /><label style="display: inline;"
+					for="officeType1">领导</label> <input type="radio" name="officeType"
+					<?php echo $member['office']=="2" ? 'checked':''; ?> id="officeType2" value="2" /><label style="display: inline;"
+					for="officeType2">高级工程师</label> <input type="radio" name="officeType"
+					<?php echo $member['office']=="3" ? 'checked':''; ?> id="officeType3" value="3" /><label style="display: inline;"
+					for="officeType3">文控人员</label><input type="radio" name="officeType"
+					<?php echo $member['office']=="4" ? 'checked':''; ?> id="officeType4" value="4" /><label style="display: inline;"
+					for="officeType4">普通员工</label>
+			</div>
+		</div>
+	</div>
+</form>

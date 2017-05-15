@@ -1,0 +1,1470 @@
+<?php
+class ProxyEscloudappEscloud_businesseditws extends AgentProxyAbstract
+{
+	const SERVICE_NAME="escloud_businesseditws";
+	/**
+	 * @author wangtao
+	 * 获取业务字段
+	 * @param string $path 节点路径
+	 * @return mixed
+	 */
+	public function getFields($path)
+	{
+		$urlParam=array('getColumnModel',$path);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * 获取全部列表字段，获取回来的格式与getFields方法返回的相同
+	 * @param unknown_type $path
+	 */
+	public function getAllFields($path)
+	{
+		$urlParam=array('getAllColumnModel',$path);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	public function getBoxColumns($nodePath)
+	{
+		$urlParam=array('getBoxColumns',$nodePath);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	public function getBoxForm($nodePath)
+	{
+		$urlParam=array('getBoxForm',$nodePath);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	public function getBoxFormForUpdate($nodePath)
+	{
+		$urlParam=array('getBoxFormForUpdate',$nodePath);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * @author xiaoxiong 20140807
+	 * 获取业务字段 可编辑的
+	 * @param string $path 节点路径
+	 * @return mixed
+	 */
+	public function getColumnModelForEditor($path)
+	{
+		$urlParam=array('getColumnModelForEditor',$path);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * 验证是否有列模型
+	 * liqiubo 20140723
+	 * @param unknown_type $path
+	 */
+	public function isHaveColumnModel($path)
+	{
+		$urlParam=array('isHaveColumnModel',$path);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	
+	/**
+	 * @author wangtao
+	 * 获取数据
+	 * @param string $path 节点路径
+	 * @param int $start 每页显示数据的起始位置
+	 * @param int $limit 每页显示的条数
+	 * @param mixed $condition 条件
+	 * @param string $uid 用户ID
+	 * @param mixed $list 字段值(系统根据字段值找对应的数据)
+	 * @return mixed
+	 */
+	public function getDataList($path,$start,$limit,$uid,$list)
+	{
+		$urlParam=array('getDataList',$path,$start,$limit,$uid,$_SERVER['REMOTE_ADDR']);
+		$url=implode('/', $urlParam);
+		//return $url;
+		return $this->post(self::SERVICE_NAME,$url,$list,'application/json;charset=UTF-8');
+	}
+	/*
+	 * 批量生成档号
+	 * @author 倪阳
+	 * @param string $path 节点路径
+	 * @param string $uid 用户ID	  
+	 * @param mixed $map 条件
+	 */
+	public function generateCombinValueByBatch($path,$uid,$ip,$map)
+	{
+		$urlParam=array('generateCombinValueByBatch',$path,$uid,$ip);
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+	}	
+	/**
+	 * @author yzh
+	 * 依据BoxID获取盒内数据的列表
+	 */
+	public function getDataListByBoxID($boxId,$path,$start,$limit,$userid,$keyword){
+		$postData['boxId'] = $boxId ;
+		$postData['path'] = $path ;
+		$postData['start'] = $start ;
+		$postData['limit'] = $limit ;
+		$postData['userid'] = $userid ;
+		$postData['keyword'] = $keyword ;
+// 		$urlParam=array('getInfoByBoxID',$boxId,$path,$start,$limit);
+// 		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,"getInfoByBoxID",json_encode($postData),'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author yzh
+	 * @param string $path 节点路径
+	 * @param int $start 每页显示数据的起始位置
+	 * @param int $limit 每页显示的条数
+	 * @param mixed $condition 条件
+	 * @param string $uid 用户ID
+	 * @param mixed $list 字段值(系统根据字段值找对应的数据)
+	 * @return mixed
+	 */
+	public function getDataListByWord($path,$start,$limit,$userId,$list){
+		$urlParam=array('getDataListByKeyword',$path,$start,$limit,$userId);
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 获取表单著录项
+	 * @param string  $path 节点路径
+	 * @return mixed
+	 */
+	public function getForm($path)
+	{
+		$urlParam=array('addForm',$path);
+		$url=implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * @author wangtao
+	 * 添加档案
+	 * @param string $path 节点路径
+	 * @param string $userID 当前用户ID
+	 * @param mixed $items 用户提交的条目信息
+	 * @return string
+	 */
+	public function addItems($path,$items)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$appID=$this->getAppId();
+		$items['platformId']=$appID;
+		$jsonData=json_encode($items);
+		$urlParam=array('saveData',$path,$ip);
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$jsonData,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 删除数据
+	 * @param mixed $itemID 数据ID集合
+	 * @param string $userID 当前用户信息
+	 * @return bool
+	 */
+	public function delItems($itemID)
+	{
+		$urlParam=array('removeData');
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$itemID,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 编辑数据
+	 * @param string $pkgPath 数据Path
+	 * @return mixed
+	 */
+	public function editItem($pkgPath)
+	{
+		$urlParam=array('editForm',$pkgPath);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * @author wangtao
+	 * 执行不归档动作
+	 * @param mixed $itemID 数据ID集合
+	 * @param string $endStatus 目标状态
+	 * @param int $nodeStatus 日志记录状态
+	 * @param string $appid 应用ID
+	 * @param string $userid 用户ID
+	 * @return bool
+	 */
+	public function doNotFiling($itemID,$endStatus,$nodeStatus,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];//add @author ldm
+		$urlParam=array('setBusiModel',$endStatus,$nodeStatus,$this->getAppId(),$userid,$ip);
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$itemID,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 设置分组
+	 * @param mixed $list
+	 */
+	public function setGroupColumn($list)
+	{
+	    //$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam=array('setGroupColumn');
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 排序设置
+	 * @param mixed $list
+	 */
+	public function setOrderColumn($list)
+	{
+		$urlParam=array('setOrderColumn');
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 获取分组字段
+	 * @param string $contentPath 当前树节点PATH
+	 * @param string $userId 用户ID
+	 */
+	public function getGroupColumn($contentPath,$userId)
+	{
+		$urlParam=array('getGroupColumn',$contentPath);
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$userId,'application/json;charset=UTF-8');
+	}
+	/**
+	 * @author wangtao
+	 * 查看日志
+	 * @param string $path
+	 * @param int $start
+	 * @param int $limit
+	 */
+	public function getLog($path,$start,$limit)
+	{
+		$urlParam=array('getLog',$path,$start,$limit);
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * @author wangtao
+	 * 获取日志的标题
+	 * @param  string $path
+	 */
+	public function getTitle($path)
+	{
+		$urlParam=array('getTitle',$path);
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * @author wangtao
+	 * 生成档号
+	 * @param mixed $itemID 数据ID集合
+	 * @param string $userID 当前用户信息
+	 * @return boolean
+	 */
+	public function createFileNum($itemID,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam=array('generateCombinValue',$userid,$ip);
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$itemID,'application/json;charset=UTF-8');
+	}
+	/**
+	 * 生成档号之前判断是否设置组合字段
+	 * xuekun  added in  2014-9-24 
+	 * @param unknown_type $itemID
+	 */
+	public function judgeCombinValues($itemID)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam=array('judgeCombinValues');
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$itemID,'application/json;charset=UTF-8');
+	}
+	/**
+	 * liqiubo 20140521
+	 * 执行批量生成档号功能之前的验证
+	 * 验证关联规则，档号组合字段是否都已经设置
+	 */
+	public function createFileNumBatchVerification($status,$strucID){
+		$urlParam = array('createFileNumBatchVerification',$status,$strucID);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	/**
+	 * author fangjixiang
+	 * 获取清册列表左侧树
+	 */
+	public function getTransferTree($nodePath,$userid)
+	{
+		$urlParam = array('getTransferTree',$nodePath,$userid);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * author fangjixiang
+	 * 根据移交日期分页显示清册列表
+	 */
+	public function getTransferList($userid,$businessid,$strucid,$date,$pageNow,$pageSize)
+	{
+		$urlParam = array('getTransferList',$userid,$businessid,$strucid,$date,$pageNow,$pageSize);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * author fangjixiang
+	 * 保存清册列表
+	 */
+	public function saveTransfer($geturl,$params)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('saveTransfer',$geturl,$ip);//add ldm
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * author fangjixiang
+	 * 根据ID删除清册数据
+	 */
+	public function deleteTransfer($ids,$path,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];//add ldm
+		$urlParam = array('deleteTransfer',$path,$userid,$ip);
+		$url = implode('/', $urlParam);
+		//return $url.$ids;
+		return $this->post(self::SERVICE_NAME,$url,$ids,"application/json;charset=UTF-8");
+	}
+	
+	
+	/**
+	 * author fangjixiang
+	 * 根据ID删除清册详细
+	 */
+	public function deleteBatchTransferReference($id,$ids,$path,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteBatchTransferReference',$id,$path,$userid,$ip);
+		$url = implode('/', $urlParam);
+		//return $url.$ids;
+		return $this->post(self::SERVICE_NAME,$url,$ids,"application/json;charset=UTF-8");
+	}
+	
+	
+	/**
+	 * author fangjixiang
+	 * 根据日期获得总条数
+	 */
+	public function countAll($userid,$businessid,$strucid,$params)
+	{
+		$urlParam = array('countAll',$userid,$businessid,$strucid,$params);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	
+	
+	
+	/**
+	 * author fangjixiang
+	 * 生成档案的列
+	 */
+	public function getTransferdetailColumns($nodePath)
+	{
+		$urlParam = array('getTransferdetailColumns',$nodePath);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	
+	/**
+	 * author fangjixiang
+	 * 生成档案的列
+	 */
+	public function getDisplayFieldOfFormEntityList($nodePath)
+	{
+		$urlParam = array('getDisplayFieldOfFormEntityList',$nodePath);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	/**
+	 * author fangjixiang
+	 * 获取对应字段数据(卷)
+	 */
+	public function getFiles($userid,$nodePath,$id,$page,$rp,$columns)
+	{
+		$urlParam = array('getFiles',$userid,$nodePath,$id,$page,$rp);
+		$url = implode('/', $urlParam);
+		//return $url;
+		return $this->post(self::SERVICE_NAME,$url,$columns,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * author fangjixiang
+	 * 获取对应字段数据(卷内)
+	 */
+	public function getTransferdetail($userid,$nodePath,$page,$rp,$columns)
+	{
+		$urlParam = array('getTransferdetail',$userid,$nodePath,$page,$rp);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$columns,"application/json;charset=UTF-8");
+	}
+	
+	
+	/*
+	 * author fangjixiang
+	 * 根据筛选条件筛选移交清册并分页
+	 */
+	public function getTransferListByCondition($pageNow,$limit,$businessid,$strucid,$params)
+	{
+		$urlParam = array('getTransferListByCondition',$pageNow,$limit,$businessid,$strucid);
+		$url = implode('/', $urlParam);
+		// return $url.'******'.$params;
+		return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @author fangjixiang
+	 * 钩选数据后导出
+	 */
+	public function exportSelData($nodePath,$ids,$userid,$exportType,$resource)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('exportSelData',$nodePath,$userid,$ip,$exportType,$resource);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$ids,"application/json;charset=UTF-8");
+	}
+	
+	
+	/**
+	 * @author fangjixiang
+	 * 筛选数据后导出
+	 */
+	public function exportDate($nodePath,$userid,$params,$exportType,$resource)
+	{
+		//wanghongchen 添加resource参数
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('exportDate',$nodePath,$userid,$ip,$exportType,$resource);
+		$url = implode('/', $urlParam);
+		//return $url.'******'.$params;
+		return $this->post(self::SERVICE_NAME,$url,$params,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @author fangjixiang
+	 * 获取服务器地址
+	 */
+	public function getServiceIP()
+	{
+		$urlParam = array('getServiceIP');
+		$url = implode('/', $urlParam);
+		//return $url.$setparam;
+	  	return $this->get(self::SERVICE_NAME,$url);
+	}
+	
+	
+	
+	/**
+	 * 根据档案条目的path获取文件列表
+	 * @author dengguoqi
+	 * @param unknown_type $path
+	 */
+	public function getFileInfoByPath($path, $user)
+	{
+		/** xiaoxiong 20140910 修改为POST方式，并添加user的传递 **/
+		$datas['path']=$path;
+		$datas['userId']=$user;
+		$jsonData=json_encode($datas);
+	  	return $this->post(self::SERVICE_NAME, 'getFileInfoByPath', $jsonData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 指定档案条目path，挂接文件
+	 * @author dengguoqi
+	 * @param unknown_type $path
+	 * @param unknown_type $files
+	 */
+	public function linkFile($path, $files)
+	{
+		$urlParam = array('getFileInfoByPath',$path);
+		$url = implode('/', $urlParam);
+	  	return $this->post(self::SERVICE_NAME,$url,$files,"application/json;charset=UTF-8");
+	}
+	
+	public function isHasFileReadRight($param){
+	 	return $this->post(self::SERVICE_NAME,'isHasFileReadRight',$param,"application/json;charset=UTF-8");
+	 }
+/**
+	 * @author wangtao
+	 * 添加盒信息
+	 * @param mixed $packetInfo 盒信息
+	 * @param int $path 当前结构path
+	 * @return bool
+	 */
+	public function addPacketInfo($packetInfo,$path,$userid,$ip)
+	{
+		$urlParam = array('stortBox',$path,$userid,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$packetInfo,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 删除盒
+	 * @param mixed $packetId 盒ID
+	 * @param int $strucId 当前结构的ID
+	 * @return bool
+	 */
+	public function delPacketInfo($packetId,$strucId,$path,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('deleteBoxInfo',$strucId,$path,$userid,$ip);//modify ldm
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$packetId,"application/json;charset=UTF-8");
+	}
+	/**
+	 * yzh  201307  modify
+	 * @author wangtao
+	 * @param int $path 当前结构的path
+	 * @param int $start 
+	 * @param int $end
+	 * @param mixed $condition 筛选条件
+	 * 获得盒列表
+	 * @return mixed
+	 */
+	public function getPacketList($path,$start,$end,$condition,$userId,$isAll='true',$treeNodeId)
+	{
+		$urlParam = array('getBoxInfo',$path,$start,$end,$userId,$isAll,$treeNodeId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$condition,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 执行装盒动作
+	 * @param int $strucID 结构ID
+	 * @param int $boxID 盒ID
+	 * @param $itemID 条目ID集合
+	 * @return bool
+	 */
+	public function doPacking($strucID,$boxID,$itemID,$userid,$type)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('addInfoToBox',$strucID,$boxID,$userid,$ip,$type);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$itemID,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 修改挂接文件
+	 * @author dengguoqi
+	 * @param unknown_type $path
+	 * @param unknown_type $files
+	 */
+	public function modifyFileInfo($path, $files) 
+	{
+		$urlParam = array('modifyFileInfo',$path);
+		$url = implode('/', $urlParam);
+	  	return $this->post(self::SERVICE_NAME,$url,$files,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 组卷
+	 * @param mixed $path 组卷数据集合
+	 */
+	public function generateFiling($path)
+	{
+		$urlParam = array('generateFiling');
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$path,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * xiaoxiong 20140809
+	 * 组卷界面点击案卷，获取下面的卷内数据方法
+	 * @param unknown $where
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getGeneratePagerInnerData($where){
+		return $this->post(self::SERVICE_NAME,'getGeneratePagerInnerData',$where,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * xiaoxiong 20140809
+	 * 组卷保存处理方法
+	 * @return string
+	 */
+	public function doGeneratePaper($jsonData)
+	{
+		$appID=$this->getAppId();
+		$jsonData['platformId']=$appID;
+		return $this->post(self::SERVICE_NAME,"doGeneratePaper",json_encode($jsonData),"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @author wangtao
+	 * 插件
+	 * @param string $path 案卷节点path
+	 * @param mixed $data 组卷数据
+	 * @return string
+	 */
+	public function saveFilingData($path,$data)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];//add ldm
+		$appID=$this->getAppId();
+		$data['platformId']=$appID;
+		$jsonData=json_encode($data);
+//guolanrui 20140925 将插件的方法替换为新的方法
+// 		$urlParam = array('saveFilingData',$path,$ip);
+		$urlParam = array('saveFilingDataNewFun',$path,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$jsonData,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 撤件
+	 * @param mixed $path 撤件数据path集合
+	 */
+	public function cancelCombinValue($path,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('cancelCombinValue',$userid,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$path,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 去除选择的已挂接的文体
+	 * @author dengguoqi
+	 * @param unknown_type $path
+	 * @param unknown_type $ids
+	 */
+	public function deleteFileInfo($path, $ids)
+	{
+		$urlParam = array('deleteFileInfo',$path);
+		$url = implode('/', $urlParam);
+	  	return $this->post(self::SERVICE_NAME,$url,$ids,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 批量删除
+	 * @param string $userID 用户ID
+	 * @param string $nodePath 节点path
+	 * @param mixed $conditon
+	 */
+	public function batchDelete($userID,$nodePath,$condition)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];//add @author ldm
+		$urlParam = array('getBatchDeleteCondition',$userID,$ip,$nodePath);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$condition,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 编辑数据前对数据权限及正确性进行简单校验
+	 * @param string $userID 用户ID
+	 * @param string $nodePath 节点path
+	 * @param mixed $list 修改内容
+	 * @return string
+	 */
+	public function preBatchEdit($userID,$nodePath,$list)
+	{
+		$urlParam = array('preBatchEdit',$userID,$nodePath);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author shiyangtao
+	 * 根据组合字段编辑数据前对数据权限及正确性进行简单校验
+	 * @param string $userID 用户ID
+	 * @param string $nodePath 节点path
+	 * @param mixed $list 修改内容
+	 * @return string
+	 */
+	public function preBatchCombinationEdit($userID,$nodePath,$list)
+	{
+		$urlParam = array('preBatchCombinationEdit',$userID,$nodePath);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 执行批量修改
+	 * @param string $userID 用户ID
+	 * @param string $nodePath 节点path
+	 * @param string $condStr 验证权限返回值
+	 * @param mixed $list 修改内容
+	 */
+	public function excuteBatchEdit($userID,$clientIp,$nodePath,$condStr,$list)
+	{
+		$urlParam = array('excuteBatchEdit',$userID,$clientIp,$nodePath,$condStr);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+		/**
+	 * @author shiyangtao
+	 * 执行批量修改
+	 * @param string $userID 用户ID
+	 * @param string $nodePath 节点path
+	 * @param string $condStr 验证权限返回值
+	 * @param mixed $list 修改内容
+	 */
+	public function excuteBatchCombinationEdit($userID,$clientIp,$nodePath,$condStr,$list)
+	{
+		$urlParam = array('excuteBatchCombinationEdit',$userID,$clientIp,$nodePath,$condStr);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 勾选数据进行编辑前进行权限及正确性简单判断
+	 * @param string $userID 用户ID
+	 * @param string $list 
+	 * @return string
+	 */
+	public function preSelectBatchEdit($userID,$list)
+	{
+		$urlParam = array('preSelectBatchEdit',$userID);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 执行选择数据的批量修改
+	 * @param string $userID 用户ID
+	 * @param string $nodePath 节点path
+	 * @param string $list 
+	 * @return
+	 */
+	public function excuteSelectBatchEdit($userID,$clientIp,$nodePath,$list)
+	{
+		$urlParam = array('excuteSelectBatchEdit',$userID,$clientIp,$nodePath);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+		/**
+	 * @author shiyangtao
+	 * 勾选数据进行组合字段编辑前进行权限及正确性简单判断
+	 * @param string $userID 用户ID
+	 * @param string $list 
+	 * @return string
+	 */
+	public function preSelectBatchCombinationEdit($userID,$list)
+	{
+		$urlParam = array('preSelectBatchCombinationEdit',$userID);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author shiyangtao
+	 * 执行组合字段选择数据的批量修改
+	 * @param string $userID 用户ID
+	 * @param string $nodePath 节点path
+	 * @param string $list 
+	 * @return
+	 */
+	public function excuteSelectBatchCombinationEdit($userID,$clientIp,$nodePath,$list)
+	{
+		$urlParam = array('excuteSelectBatchCombinationEdit',$userID,$clientIp,$nodePath);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @auhtor wangtao
+	 * 上架
+	 * @param int $strucID 结构ID
+	 * @param string $strucPath 库房树path
+	 * @param mixed $boxIdList 盒信息
+	 * @return bool
+	 */
+	public function packetUpToStore($path,$bussID,$strucPath,$boxIdList,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];//add ldm
+		$urlParam = array('setBussModelAddCloseBox',$path,$bussID,urlencode($strucPath),$userid,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$boxIdList,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 下架
+	 * @auhtor longjunhao 20140916
+	 * @param int $strucID 结构ID
+	 * @param string $strucPath 库房树path
+	 * @param mixed $boxIdList 盒信息
+	 * @return bool
+	 */
+	public function packetDownToStore($path,$bussID,$strucPath,$boxIdList,$userid)
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];//add ldm
+		$urlParam = array('setBussModelCloseBox',$path,$bussID,urlencode($strucPath),$userid,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$boxIdList,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 封盒
+	 * @param int $strucID 结构ID
+	 * @param mixed $boxId 盒ID 
+	 * @return boolean
+	 * 
+	 */
+	public function packageBox($strucID,$boxId)
+	{
+		$urlParam = array('closeBox',$strucID);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$boxId,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 修改盒信息
+	 * @param int $strucID 结构ID
+	 * @param int $boxId 盒ID 
+	 * @return mixed
+	 */
+	public function getBoxInfo($strucID,$boxId)
+	{
+		$urlParam = array('selectBoxInfoById',$strucID,$boxId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 更行盒信息
+	 * @param int $strucID 结构ID
+	 * @param mixed $boxInfo 盒信息
+	 * @return bool
+	 */
+	public function updateBoxInfo($strucID,$boxInfo)
+	{
+		$urlParam = array('updateBoxInfo',$strucID);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$boxInfo,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 更行盒信息
+	 * @param int $strucID 结构ID
+	 * @param mixed $boxInfo 盒信息
+	 * @return bool
+	 */
+	public function updateBoxInfoByPath($path,$boxInfo)
+	{
+		$urlParam = array('updateBoxInfoByPath',$path);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$boxInfo,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 将盒中的数据退回
+	 * @param int $strucID 结构ID
+	 * @param mixed $pkgPathList
+	 */
+	public function removeOutPacket($strucID,$pkgPathList,$packetId,$type)
+	{
+		$urlParam = array('BackBox',$strucID,$packetId,$type);
+		$url = implode('/', $urlParam);		
+		return $this->post(self::SERVICE_NAME,$url,$pkgPathList,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 回收站数据清空
+	 * @param string $path 节点path
+	 * @param string $userId 用户ID
+	 * @return boolean 
+	 */
+	public function removeRecycleBinData($path,$userId)
+	{
+		$urlParam = array('removeRecycleBinData',$path,$userId);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * @author wangtao
+	 * 文件整理功能撤件
+	 */
+	public function unwindInnerFile($path,$userid)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam = array('cancelRelationValue',$userid,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$path,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 数据回收站退回功能
+	 */
+	public function setBackForRecycle($userID,$list)
+	{
+		$urlParam = array('setBackForRecycle',$this->getAppId(),$userID);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$list,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 验证盒号的唯一性
+	 * 
+	 */
+	public function checkBoxFileNum($path,$fileBoxNumber)
+	{
+		$urlParam = array('checkBoxFileNum',$path,urlencode($fileBoxNumber));
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url);
+	}
+	/**
+	 * @author wangtao
+	 * 移交盒
+	 * @param string $path 树节点path
+	 * @param mixed $boxID 盒ID
+	 * @return bool
+	 */
+	public function sendPacket($path,$userId,$boxID)
+	{
+	    $ip = $_SERVER['REMOTE_ADDR'];//add ldm
+		$urlParam = array('handBox',$path,'-5',$userId,$ip);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$boxID,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author yuanzhonghua
+	 * 批量挂接文件（通过扫描规则）
+	 * @return boolean
+	 */
+	public function execMassHanging($userId,$struId,$busiModelId,$treeNodeId,$allOrPart,$conditionJson){//liqiubo 20140919 传入userid，后台好拿权限，修复bug 889
+		$urlParam = array('batchLink',$userId,$struId,$busiModelId,$treeNodeId,$allOrPart);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$conditionJson,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author yuanzhonghua
+	 * 上传本地文件后的批量挂接
+	 * @return boolean
+	 */
+	public function batchAfterUpload($userId,$struId,$busiModelId,$matchFile,$param,$isScan,$treeNodeId,$allOrPart){//liqiubo 20140919 传入userid，后台好拿权限，修复bug 889
+		$urlParam = array('batchAfterUploadlink',$userId,$struId,$busiModelId,$matchFile,$isScan,$treeNodeId,$allOrPart);
+		$url = implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author yuanzhonghua
+	 * 自动生成盒号的字段值
+	 * @return string
+	 */
+	public function autoGenerationCode($path,$pursuantField,$year,$userId){
+		$urlParam=array('autogenerationFileBoxNum',$path,$pursuantField,$year,$userId);
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	}
+
+	/**
+	 * 获取保管期限的代码值（未设置规则会获取元数据中的）
+	 * @param unknown_type $struId
+	 * @param unknown_type $modelId
+	 */
+	public function getRetentionPeriodVal($struId,$modelId){
+		$urlParam=array('getRetentionPeriodVal',$struId,$modelId);
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	}
+	/**
+	 * 获取筛选条件
+	 * @author shiyangtao
+	 * @param unknown_type $userid
+	 * @param unknown_type $path
+	 */
+	public function searchCondition($userid,$path){
+		$urlParam=array('searchCondition',$userid,$path);
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,'',"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * @author wangtao
+	 * 生成二维码
+	 * @date 2013-03-14
+	 * @param mixed $param
+	 * @return string
+	 */
+	public function createCode($param)
+	{
+		return $this->post(self::SERVICE_NAME,'getTwobarCodePrintData',json_encode($param),"application/json;charset=UTF-8");
+	}
+	/**
+	 * @author wangtao
+	 * 生成盒二维码
+	 */
+	 public function createPacketCode($param)
+	 {
+	 	return $this->post(self::SERVICE_NAME,'getBoxTwobarCodePrintData',json_encode($param),"application/json;charset=UTF-8");
+	 }
+	 /**
+	  * 获取关联数据的列表字段
+	  * Enter description here ...
+	  */
+	 public function getLinkColumn($param)
+	 {
+	 	return $this->post(self::SERVICE_NAME,'getColumnModelForm',$param,"application/json;charset=UTF-8");
+	 
+	 	
+	 }
+	 /**
+	  * 
+	  * 获取关联数据的列表
+	  * @param unknown_type $path
+	  * @param unknown_type $page
+	  * @param unknown_type $size
+	  * @param unknown_type $userId
+	  * @param unknown_type $param
+	  */
+	 public function getLinkFileList($path,$page,$size,$userId,$param)
+	 {
+	 
+	 	$urlParam=array('getDataListForm',$path,$page,$size,$userId);
+		$url=implode('/',$urlParam);
+		return $this->post(self::SERVICE_NAME,$url,$param,"application/json;charset=UTF-8");
+	 
+	 }
+	 /**
+	  * 会计档案获取移交清册移交盒列表
+	  * Enter description here ...
+	  * @param unknown_type $transterId
+	  * @param unknown_type $page
+	  * @param unknown_type $limit
+	  */
+	 public function getTransterBox($transterId,$page,$limit){
+	 	$urlParam=array('getBoxList',$transterId,$page,$limit);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	 
+	 }
+	 /**
+	  * @GET
+	  * @Path("getRecordIDByaccount/{path}/{classificationName}/{accountingPeriod}/{userId}")
+	  * 会计档案装盒获取最小的凭证编号
+	  * @param unknown_type $path
+	  * @param unknown_type $classificationName
+	  * @param unknown_type $accountingPeriod
+	  * @param unknown_type $userId
+	  */
+	 public function getRecordCode($path,$classificationName,$accountingPeriod,$userId)
+	 {
+	 	$urlParam=array('getRecordIDByaccount',$path,$classificationName,$accountingPeriod,$userId);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 /**
+	  * 
+	  * 会计档案装盒根据用户输入的装盒数据规则进行批量装盒
+	  * @param unknown_type $param
+	  */
+	 public function addInfoAccountToBox($path,$userId,$boxID,$ip,$param)
+	 {
+		$urlParam=array('addInfoAccountToBox',$path,$boxID,$userId,$ip);
+		$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$param,"application/json;charset=UTF-8");
+	 }
+	 /**
+	  * 根据凭证类型获取会计期间列表
+	  * @author wangtao
+	  * Enter description here ...
+	  * @param unknown_type $path
+	  * @param unknown_type $classificationName
+	  * @param unknown_type $userId
+	  */
+	 public function getAccountingPeriod($path,$classificationName,$userId)
+	 {
+	 	$urlParam=array('getAccountingPeriod',$path,$classificationName,$userId);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 /**
+	  * 根据年度月份获取会计期间列表
+	  * @yuanzhonghua   20130805
+	  */
+	 public function getAccountingPeriodByDate($userId,$yearMonthVal){
+	 	$urlParam=array('getAccountingPeriodByDate',$userId,$yearMonthVal);
+		$url=implode('/',$urlParam);
+		return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 /**
+	  * @yuanzhonghua   20130805
+	  * 会计档案文件校验
+	  */
+	 public function fileVerifi($param){
+	 	$urlParam=array('fileVerification');
+		$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$param,"application/json;charset=UTF-8");
+	 }
+	 /**
+	  *
+	  * @desc：移交档案库 会计档案
+	  * @author: fangjixiang 2013-8-5
+	  * @param boxId
+	  * @param busiModelId
+	  * @return
+	  */
+	 
+	 public function setBusiModelForBox($data)
+	 {
+	 	$urlParam=array('setBusiModelForBox');
+	 	$url=implode('/',$urlParam);
+	 	
+	 	return $this->post(self::SERVICE_NAME, $url, $data, "application/json;charset=UTF-8");
+	 }
+	 /**
+	  * @yuanzhonghua
+	  * 20130903
+	  * 根据元数据名获取著录项
+	  */
+	 public function getTagNameByMetadata($mainsite,$arType,$param){
+	 	$urlParam=array('getEssTagByMetadata',$mainsite,$arType);
+		$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$param,"application/json;charset=UTF-8");
+	 }
+	
+	 /**
+	  * @desc根据报账单号查询凭证
+	  * @倪阳
+	  */
+	 public function getPidByAttachRecordId($path,$number) {
+	 	$urlParam=array('getPidByAttachRecordId',$path,$number);
+	 	$url=implode('/',$urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 /**
+	  * 获取浏览电子文件的条目信息和条目挂接的电子文件的信息
+	  * @author yuanzhonghua
+	  * @date   20131120
+	  */
+	 public function getDataInfoWhenOnlineView($param){
+	 	$urlParam=array('getDataInfoWhenOnlineView');
+		$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$param,"application/json;charset=UTF-8");
+	 }
+	 /**
+	  * 获取文种种类
+	  * @author niyang
+	  * @date 2013-12-03
+	  */
+	 public function getOADocumentTypeList($path) {
+	 	$urlParam=array('getOADocumentTypeList',$path);
+	 	$url=implode('/',$urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 
+	 /**
+	  * 获取字段长度
+	  * @author wanghongchen
+	  * @date 2014-03-14
+	  */
+	 public function getColumnLen($col) {
+	 	$urlParam=array('getColumnLength',$col);
+	 	$url=implode('/',$urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 
+	 /**
+	  * 得到当前结构下的所有子结构的相关信息
+	  * @author wanghongchen 20140428
+	  */
+	 public function getChirldStructure($nodePath){
+	 	$urlParam=array('getChirldStructure',$nodePath);
+	 	$url=implode('/',$urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 
+	 /**
+	  * 获取上传文件的结构信息,导入数据第二步标签页用到.
+	  */
+	 public function getImportStructures($userId){
+	 	$urlParam=array('getImportStructures',$userId);
+	 	$url=implode('/',$urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 
+	 /**
+	  * 
+// 	  */
+// 	 public function importUpload(){
+// 	 	$urlParam=array('importUpload');
+// 	 	$urlp=implode('/',$urlParam);
+// 	 	$url = $this->getUri(self::SERVICE_NAME, $urlp);
+// 	 	echo $url;
+// // 	 	return $this->post(self::SERVICE_NAME,$url,$request);
+// 	 }
+	 
+	 /**
+	  * 获取导入上传功能rest服务地址
+	  * wanghongchen 20140430
+	  */
+	 public function getImportUrl(){
+	 	$urlParam=array('importUpload');
+	 	$url=implode('/',$urlParam);
+	 	$restUrl = $this->getUri(self::SERVICE_NAME, $url);
+	 	return $restUrl;
+	 }
+	 
+	 /**
+	  * 获取文件头信息
+	  * wanghongchen 20140506
+	  */
+	 public function showFileColumn($map){
+	 	$urlParam=array('showFileColumn');
+	 	$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8");
+	 }
+
+	 /**
+	  * 获取结构信息
+	  * wanghongchen 20140506
+	  */
+	 public function showStructureColumn($map){
+	 	$urlParam=array('showStructureColumn');
+	 	$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  * 获取结构信息
+	  * wanghongchen 20140506
+	  */
+	 public function getFileColumnModel($map){
+	 	$urlParam=array('getFileColumnModel');
+	 	$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  * 获取文件前20条数据，提供预览
+	  * @author wanghongchen 20140506
+	  */
+	 public function getPreFileData($map){
+	 	$urlParam=array('getPreFileData');
+	 	$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  * 向数据库写入导入数据
+	  * @author wanghongchen 20140508
+	  */
+	 public function realImport($userId, $map){
+	 	$urlParam=array('realImport',$userId);
+	 	$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  * 获取导入上传功能rest服务地址
+	  * wanghongchen 20140430
+	  */
+	 public function getZipImportUrl(){
+	 	$urlParam=array('zipImport');
+	 	$url=implode('/',$urlParam);
+	 	$restUrl = $this->getUri(self::SERVICE_NAME, $url);
+	 	return $restUrl;
+	 }
+	 /**
+	  * 数据鉴定销毁前对数据进行验证，检查是否存在正在鉴定销毁的数据
+	  * @author wanghongchen 20140516
+	  */
+	 public function checkIdentify($param){
+	 	return $this->post(self::SERVICE_NAME, 'checkIdentify', $param, "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  * 获取创建销毁单时销毁单中的数据
+	  * @author wanghongchen 20140516
+	  */
+	 public function getDestroyBillInfo($param){
+	 	return $this->post(self::SERVICE_NAME, 'getDestroyBillInfo', $param, "application/json;charset=UTF-8");
+	 }
+	 
+	 /**
+	  * xiaoxiong 20140521 
+	  * 添加获取上传URL方法
+	  */
+	 public function getUploadUrl(){
+	 	$urlParam=array('getUploadUrl');
+	 	$url=implode('/',$urlParam);
+	 	return $this->get("mainFileServer",$url);
+	 }
+	 /**
+	  * guolanrui 20141213 添加网段设置后，增加的新方法
+	  * 添加获取上传URL方法
+	  */
+	 public function getNewUploadUrl($postData){
+	 	$urlParam=array('getNewUploadUrl');
+	 	$url=implode('/',$urlParam);
+// 	 	return $this->get("mainFileServer",$url);
+	 	return $this->post("mainFileServer", $url, $postData, "application/json;charset=UTF-8");
+	 }
+	 /**
+	  * @author shimiao 20140528 
+	  * 获取业务字段
+	  * @param string $path 节点路径
+	  * @return mixed
+	  */
+	 public function getNewFields($map)
+	 {
+	 	$urlParam=array('getNewColumnModel');
+	 	$url=implode('/', $urlParam);
+	 	return $this->post(self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8");
+	 }
+	 /**
+	  * @author shimiao 20140528
+	  * 获取业务字段
+	  * @param string $path 节点路径
+	  * @return mixed
+	  */
+	 public function getDataListByKeyword($param){ 
+	 	$urlParam=array('getDataListByKeywordNew');
+	 	$url=implode('/', $urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	 }
+	 /**
+	  * shimiao 20140617 保存数据
+	  * @param unknown_type $param
+	  */
+	 public function getDataListNew($param){ 
+	 	$urlParam=array('getDataListNew');
+	 	$url=implode('/', $urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+	 }
+	 
+	 /**
+	  * 电子阅览室调用方法查询可借阅的path
+	  * wanghongchen 20140618 add
+	  */
+	 public function findPathList($param){
+	 	return $this->post(self::SERVICE_NAME,"findPathList",$param,'application/json;charset=UTF-8');
+	 }
+	 
+	 /**
+	  * 返回字段值规则的值
+	  * @param unknown_type $strId
+	  * @param unknown_type $busiId
+	  * @param unknown_type $data
+	  */
+	 public function getComputeFieldRuleVal($strId,$busiId,$data,$treeNodeId,$path)
+	 {
+	 	$urlParam=array('getComputeFieldRuleVal',$strId,$busiId,$treeNodeId,$path);
+	 	$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$data,'application/json;charset=UTF-8');
+	 }
+	 
+	 /** 
+	  * 根据结构id获取树节点名称
+	  * wanghongchen 20140808
+	  * @param unknown $param
+	  * @return Ambigous <return_type, mixed, string>
+	  */
+	 public function getTreeNodeTitlesByStructureId($param){
+	 	return $this->post(self::SERVICE_NAME,"getTreeNodeTitlesByStructureId",$param,'application/json;charset=UTF-8');
+	 }
+	
+	 /**
+	  * 将缓存数据也保存到数据库
+	  */
+	 public  function setGroupValue($params){
+	 	return $this->post(self::SERVICE_NAME, 'setBusinessGroup',$params,'application/json;charset=UTF-8');
+	 }
+	 /**
+	  * 获取分组信息
+	  */
+	 public  function getGroupValue($key){
+	 	return $this->get(self::SERVICE_NAME, 'getBusinessGroup/'.$key);
+	 }
+	 /**
+	  * 删除分组信息
+	  * xuekun  added in  2014-9-13 
+	  * @param unknown_type $key
+	  */
+	 public  function delBusinessGroup($key){
+	 	return $this->get(self::SERVICE_NAME, 'delBusinessGroup/'.$key);
+	 }
+	 public function getBoxNoVal($strId,$busiId,$boxNoLength,$data)
+	 {
+	 	$urlParam=array('getBoxNoVal',$strId,$busiId,$boxNoLength);
+	 	$url=implode('/',$urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$data,'application/json;charset=UTF-8');
+	 }
+
+	 
+	 public function getToSetStatusPathForCond($param){
+	 	return $this->post(self::SERVICE_NAME,"getToSetStatusPathForCond",$param,'application/json;charset=UTF-8');
+	 }
+
+	 
+	 /**
+	  * 校验选择的数据是否可以上架
+	  * @author longjunhao 20140826
+	  * @param unknown $postData
+	  */
+	 public function validateOnShelfIsOk($postData){
+	 	$url='validateOnShelfIsOk';
+	 	return $this->post(self::SERVICE_NAME,$url,$postData,'application/json;charset=UTF-8');
+	 }
+	 /**
+	  * 
+	  * xuekun  added in  2014-9-1 
+	  * @param unknown_type $path
+	  */
+	 public function getMenuInfo($path){
+	 	return  $this->get(self::SERVICE_NAME, 'getMenuInfo/'.$path);
+	 }
+	 /** xiaoxiong 20140904 获取数据权限方法 **/
+	 public function getRight($path, $userId, $right){
+	 	$data['path']=$path;
+	 	$data['right']=$right;
+	 	$data['userId']=$userId;
+	 	$postData=json_encode($data);
+	 	return  $this->post(self::SERVICE_NAME, "getRight", $postData, 'application/json;charset=UTF-8');
+	 }
+	 
+	 /** xiaoxiong 20140917 根据盒ID集合获取其下的所有卷内数据 **/
+	 public function getPathsByBoxIds($param){
+	 	return  $this->post(self::SERVICE_NAME, "getPathsByBoxIds", $param, 'application/json;charset=UTF-8');
+	 }
+	 
+	 /**
+	  * wanghongchen 20140928 获取字段下列表值 
+	  */
+	 public function getTagProperty($param){
+	 	return  $this->post(self::SERVICE_NAME, "getTagProperty", $param, 'application/json;charset=UTF-8');
+	 }
+	 /**
+	  * 验证要保存的库位号是否大于标的库位号字段的长度
+	  */
+	 public function checkPacketUpToStore($struId,$repositoryPath){
+	 	$urlParam=array('checkPacketUpToStore',$struId,$repositoryPath);
+	 	$url=implode('/',$urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 /**
+	  * 根据path获取子结构id，如果没有子结构，返回0
+	  */
+	 public function getChildStruIdByPath($path)
+	 {
+	 	$urlParam=array('getChildStruIdByPath',$path);
+	 	$url=implode('/', $urlParam);
+	 	return $this->get(self::SERVICE_NAME,$url);
+	 }
+	 /**
+	  * 自动组卷
+	  */
+	 public function generatingAutomatic($path)
+	 {
+	 	$urlParam=array('generatingAutomatic');
+	 	$url=implode('/', $urlParam);
+	 	return $this->post(self::SERVICE_NAME,$url,$path,'application/json;charset=UTF-8');
+	 }
+}

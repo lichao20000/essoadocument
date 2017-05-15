@@ -1,0 +1,17 @@
+<style type="text/css">
+<!--
+img{vertical-align: middle;}
+-->
+</style>
+<form id="form_add" action="<?php echo $esaction->generateUrl(array('ESKeywords'=>'do_add'))?>" method="post">
+<div style="width:500px;height:300px;">
+  <div style="background:#E0E0E0;padding:5px;"><p><img src="<?php  echo $tplPath?>/ESKeywords/img/key.gif" />条目概览</p></div>
+  <div style="width:500px;height:30px;margin-top:10px;">
+    <input type="submit" id="save" value="保存" />
+    <input type="button" value="上一条" />
+    <input type="button" value="下一条" />
+    <input type="button" value="保存追加" />
+  </div>
+  <div style="width:500px;height:200px;margin-top:10px;"><span>主题词</span> <input name="addkeyword" type="text" value="" style="margin-left:20px;height: 24px;width:400px;"/></div>
+</div>
+</form>

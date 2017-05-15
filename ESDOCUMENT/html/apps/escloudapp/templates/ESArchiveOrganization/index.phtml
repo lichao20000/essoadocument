@@ -1,0 +1,64 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESArchiveOrganization/css/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'归档机构设置'));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESArchiveOrganization/js/index.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ztree/js/jquery.ztree.excheck.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"归档机构设置", content:".esmain"});
+	$(".esleft").css("height",esleftH);//设置左侧菜单
+});
+</script>
+<div id="esmain">
+<div id="esleft" class="esleft">
+<ul id="organtree" class="ztree"></ul>
+</div>
+<div class="esshowtree" id='catagory'>
+<ul id="fication" class="ztree"></ul>
+</div>
+
+<div id="esright" class="esright">
+<table id="organtable"></table>
+</div>
+
+</div>
+<div id="extraSystem" class="extraSystem">
+<select id="extraSelect" name="extraSelect" class="extraSelect">
+<?php
+	if($oaList){
+		foreach ($oaList as $key=>$val){
+			echo '<option value="'.$val->system.'">'.$val->sysName.'</option>';
+		}
+	}
+?>
+</select>
+</div>
+<script type="text/javascript">
+
+var winW=$(window).width();
+var width='auto';
+if($.browser.msie && $.browser.version==='6.0'){
+	width=winW-$(".esleft").width()-5;
+}
+var height='';
+var winH=$(window).height();
+var eslefttop=$(".esleft").offset().top;
+var esleftH=winH-eslefttop-1;
+var height=winH-eslefttop-115;
+window.onresize=function()
+{
+	var winW=$(window).width();
+	if($.browser.msie && $.browser.version==='6.0'){
+		width=winW-$(".esleft").width()-5;
+	}
+	var winH=$(window).height();
+	var height=winH-eslefttop-115;
+	$(".flexigrid").css({width:width});	
+}
+
+</script>

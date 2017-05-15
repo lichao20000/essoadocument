@@ -1,0 +1,128 @@
+<!-- caojian 20140512-->
+
+ <form id="editApp" action=""	method="post" accept-charset="utf-8"  >
+<div class="estransfer" >
+<ul id="config">
+<li><span>配置名称<font color="red" size="3">*</font></span><input type="text" name="title"   readonly="readonly" title="例如:flyingsoft"     value="<?php echo $data[1];?>"><input name="id"  type="hidden"  value="<?php echo $data[0];?>"  ></li>
+<li><span>配置键值<font color="red" size="3">*</font></span><input type="text" name="appConfigKey"  readonly="readonly" value="<?php echo $data[2];?>"></li>
+<li><span>配置描述<font color="red" size="3"></font></span><textarea  name="description"  value="<?php echo $data[4];?>"><?php echo $data[4];?></textarea></li>
+<li><span>配置类型<font color="red" size="3">*</font></span>
+        <select id="valueTypeSelect" name="valueType">
+		     <option <?php echo  $data[5]=="APP_DIRECTORY"?'selected':'' ; ?>  value='APP_DIRECTORY'>文件目录</option>
+		     <option <?php echo  $data[5]=="APP_TEXT"?'selected':'' ; ?>  value='APP_TEXT'>文本类型</option>
+			 <option <?php echo  $data[5]=="APP_BOOL"?'selected':'' ; ?>  value='APP_BOOL'>布尔类型</option>
+			 <option <?php echo  $data[5]=="APP_NUMBER"?'selected':'' ; ?>  value='APP_NUMBER'>数值类型</option>
+			 <option <?php echo  $data[5]=="APP_URL"?'selected':'' ; ?>  value='APP_URL'>URL路径</option>
+			 <option <?php echo  $data[5]=="APP_FTP"?'selected':'' ; ?>  value='APP_FTP'>FTP路径</option>
+			 <option <?php echo  $data[5]=="APP_DATE"?'selected':'' ; ?>  value='APP_DATE'>日期类型</option>
+		</select></li>
+		
+<li id='iii'><span>配置值<font color="red" size="3">*</font></span><input type="text" name="appConfigValue"   value="<?php echo $data[3];?>"></li>
+</ul>
+</div>
+<div class='datepicker'></div>
+</form>
+<script type="text/javascript">
+var valUrl=new RegExp('[a-zA-z]+://[^\s]*');
+var numberval=/^[-]?\d+$/;
+var valDir=/^[a-zA-Z]:(([a-zA-Z]*)||([a-zA-Z]*\\))*/;
+var valFtp=/ftp:\/\/((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)/;
+var valDate=/^\d{4}\-\d{2}\-\d{2}$/;
+var initValue=$("#valueTypeSelect option:selected").val();
+$("#editApp select[name='valueType']").change(function(){
+	//null++;
+	 var valueType = $(this).val();
+	// alert(valueType);
+	 if(valueType=='APP_BOOL'){
+		 $("#editApp li[id='iii']").remove();
+		 $("#editApp ul[id='config']").append('<li id="configli"><span>配置值<font color="red" size="3">*</font></span><select name="appConfigValue">'+
+			     "<option <?php echo  $data[3]=="YES"?'selected':'' ; ?>  value='YES'>YES</option>"+
+			     "<option <?php echo  $data[3]=="NO"?'selected':'' ; ?>  value='NO'>NO</option>"+
+			'</select></li>'); 
+		}else if(valueType=='APP_DATE'){
+		 $("#editApp li[id='configli']").remove();
+		 $("#editApp li[id='iii']").remove();
+		 $("#editApp ul[id='config']").append('<li id="iii"><span>配置值<font color="red" size="3">*</font></span><input type="text" id="datepicker"  readonly="readonly" name="appConfigValue"  value=""></li>');
+		 //$("#editApp input[name='appConfigValue']").addClass("warnning");
+		 //reBind();
+		 $("#datepicker").datepicker({
+			 changeYear : true,
+			 changeMonth : true,
+			 numberOfMonths : 1,
+			 showButtonPanel: true
+			 });
+		 $("#datepicker]").removeClass("warnning");
+			 //reBind();
+			// dateSelect();
+		}else{
+		 $("#editApp li[id='configli']").remove();
+		 $("#editApp li[id='iii']").remove();
+		 $("#editApp ul[id='config']").append('<li id="iii"><span>配置值<font color="red" size="3">*</font></span><input type="text" id="appConfigValue" name="appConfigValue" value="<?php echo $data[3];?>"></li>');
+		 if(valueType!=initValue){
+		   $("#editApp input[name='appConfigValue']").addClass("warnning");
+		 }
+		 reBind();
+	    };
+	 });
+
+		reBind();
+		//dateSelect();
+		//function onSelect(){
+		//	alert(55);
+		//}
+		function dateSelect(){
+			$("#editApp input[id='datepicker']").bind('click',function(){
+				$(".datepicker").datePicker({
+					inline:true,
+					selectMultiple:false
+				});
+				});
+		}	 
+		function reBind(){
+			$("#editApp input[name='appConfigValue']").bind('blur',function(){
+				//null++;
+				var valueType = $("#editApp select[name='valueType']").val();
+				var appConfigValue=$("#editApp input[name='appConfigValue']").val();
+				if(valueType=='APP_DIRECTORY'){
+					if(valDir.test(appConfigValue)==false){
+						$(this).addClass("warnning");
+						return;
+					}
+					$(this).removeClass("warnning");
+				}
+			
+				if(valueType=='APP_NUMBER'){
+					if(numberval.test(appConfigValue)==false){
+						$(this).addClass("warnning");
+						return;
+					}
+					$(this).removeClass("warnning");
+				}
+				if(valueType=='APP_URL'){
+					if(valUrl.test(appConfigValue)==false){
+						$(this).addClass("warnning");
+						return;
+					}
+					$(this).removeClass("warnning");
+				}
+				if(valueType=='APP_FTP'){
+					if(valFtp.test(appConfigValue)==false){
+						$(this).addClass("warnning");
+						return;
+					}
+					$(this).removeClass("warnning");
+				}
+				if(valueType=='APP_DATE'){
+					if(valDate.test(appConfigValue)==false){
+						$(this).addClass("warnning");
+						return;
+					}
+					$(this).removeClass("warnning");
+				}
+				if(valueType=='APP_TEXT'){
+					$(this).removeClass("warnning");
+				}
+			});
+		}
+</script>
+ 

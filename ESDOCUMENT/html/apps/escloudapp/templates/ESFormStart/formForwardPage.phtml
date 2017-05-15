@@ -1,0 +1,230 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<div id="formForwardSetDiv" class="formForwordSet" wfId="<?php echo $data[0];?>" userFormId="<?php echo $data[1];?>" tplPath="<?php echo $tplPath;?>">
+	<div class="formForwardMain">
+			<!-- <dl style="margin-top:0px;">
+				<input type='radio' name='showUserType' id='showUserByOrgan' checked onclick='showFormForwardRolesObj(false)'></input><label for="showUserByOrgan">按机构选择</label>
+	        	<input type='radio' name='showUserType' id='showUserByRole' onclick='showFormForwardRolesObj(true)'></input><label for="showUserByRole">按角色选择</label>
+			</dl> -->
+			<dl class="selectForwardUsers">
+				<div id="forwardToUsersDiv" userIds="" style = "width:100%;height:200px;overflow:auto;border:0px;">
+					<table id="forwardToUsers" style="width:100%;border:0px;">
+					</table>
+				</div>
+			</dl>
+			<dl style="margin-bottom:10px;">
+			    	<table width="100%" style="border:1px solid #CCCCCC;" bgcolor="#F2F5F8" cellspacing="0" cellpadding="5">
+					    <tr>
+					    	<td width="250">
+					    		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+								    <tr>
+								    	<td style="float:left">
+								    		可选常见意见（单击下列短语即可用）
+								    	</td>
+								    </tr>
+								    <tr>
+								    	<td style="margin-top:5px;margin-left:10px;margin-right:8px;width:210px;border:1px solid #CCCCCC;padding-left:9px;background-color:#FFF;float:left;text-align:left;">
+								    		<a style="margin-right:9px;" onclick="JavaScript:formApprovalHandle.addInitMsg('请办理');">请办理</a>
+								    		<a style="margin-right:9px;" onclick="JavaScript:formApprovalHandle.addInitMsg('请签约');">请签约</a>
+								    		<a style="margin-right:10px;" onclick="JavaScript:formApprovalHandle.addInitMsg('请阅示');">请阅示</a>
+										</td>
+									</tr>
+								    	<td>
+											<span>转发意见<font color="red" size="3">*</font></span>
+											<textarea name="msgTextArea" id="msgTextArea" style='width:220px;height:60px;margin-left:10px;margin-right:8px;margin-bottom:5px;' onkeyup="formApprovalHandle.changeCurrFieldStyle(this)" value=''/>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td style = "border-left:1px solid #CCCCCC;padding:0px;">
+								<table width="100%" border="0" cellspacing="1" cellpadding="2">
+									<tr>
+										<td  style="float:left">上传的附件 </td>
+								    </tr>
+									<tr>
+										<td style="border:1px dashed #CCCCCC;">
+											<table width="100%" border="0" cellspacing="1" cellpadding="2">
+												<tr>
+													<td>
+														<div style="height: 120px;overflow:auto;" >
+													  		<table id="formForwardFileDataTable" fileNames='' filePaths='' width="100%" border="0" cellspacing="0" cellpadding="5" align="left">
+															</table>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</td>
+								    </tr>
+							    </table>
+						   	</td>
+						 </tr>
+					</table>
+		    	</dl>
+	</div>
+</div>
+<script type="text/javascript">
+var formForwardSet = {
+		showMsg: function(msg, type){
+			if(type == '1'){
+				$.dialog.notice({icon : 'succeed',content : msg,title : '3秒后自动关闭',time : 3});
+			} else if(type == '2'){
+				$.dialog.notice({icon : 'error',content : msg,title : '3秒后自动关闭',time : 3});
+			} else {
+				$.dialog.notice({icon : 'warning',content : msg,title : '3秒后自动关闭',time : 3});
+			}
+		},
+		fromOrg: function(){
+			$.ajax({
+				type:'POST',
+		        url : $.appClient.generateUrl({ESFormStart : 'userFromOrgPage'},'x'),
+			    success:function(data){
+				    	$.dialog({
+				    		id:'fromOrgDialog',
+					    	title:'按机构选择',
+					    	modal:true, //蒙层（弹出会影响页面大小） 
+				    	   	fixed:false,
+				    	   	stack: true ,
+				    	    resize: false,
+				    	    lock : true,
+							opacity : 0.1,
+							padding: '0px',
+							width:700,
+						    content:data,
+						    ok : false,
+							cancelVal : '关闭',
+							cancel : true
+					    });
+			    },
+			    cache:false
+			});
+		},
+		fromRole: function(){
+			$.ajax({
+				type:'POST',
+		        url : $.appClient.generateUrl({ESFormStart : 'userFromRolePage'},'x'),
+			    success:function(data){
+				    	$.dialog({
+				    		id:'fromRoleDialog',
+					    	title:'按角色选择',
+					    	modal:true, //蒙层（弹出会影响页面大小） 
+				    	   	fixed:false,
+				    	   	stack: true ,
+				    	    resize: false,
+				    	    lock : true,
+							opacity : 0.1,
+							padding: '0px',
+							width:500,
+						    content:data,
+						    ok : false,
+							cancelVal : '关闭',
+							cancel : true
+					    });
+			    },
+			    cache:false
+			});
+		},
+		removeUser: function(){
+			var checkboxs = $('#forwardToUsers input:checked') ;
+			var checkboxlength = checkboxs.length;
+			if (checkboxlength == 0) {
+				formForwardSet.showMsg('请先选择数据，再进行此操作！','3') ;
+				return;
+			}
+			var userIds = $("#forwardToUsersDiv").attr('userIds');
+			var ids = userIds.split("|");
+			checkboxs.each(function(i) {
+				var columns = ['id'];
+				var id = $("#forwardToUsers").flexGetColumnValue($(this).closest("tr"),columns);
+				for(var i=0;i<ids.length;i++){
+					if(ids[i]==id){
+						ids[i] = "" ;
+					}
+				}
+				$(this).closest("tr").remove();
+			});
+			userIds = "" ;
+			for(var i=0;i<ids.length;i++){
+				if(ids[i]!=""){
+					userIds += "|"+ids[i] ;
+				}
+			}
+			if(userIds!=""){
+				userIds += "|" ;
+			}
+			var userIds = $("#forwardToUsersDiv").attr('userIds', userIds);
+		}
+};
+$(document).ready(function() {
+	$("#forwardToUsers").flexigrid({url :false,
+		dataType : 'json',
+		colModel : [ 
+			{display : '<input type="checkbox" id="tousers">',name : 'ids',width : 15,align : 'center'}, 
+		    {
+				display : 'id',
+				name : 'id',
+				metadata:'id',
+				hide:true,
+				sortable : false,
+				align : 'left'
+			},{
+				display : '用户名',
+				name : 'userid',
+				metadata : 'userid',
+				width : 152,
+				sortable : true,
+				align : 'left'
+			},{
+				display : '中文名',
+				name : 'username',
+				metadata : 'username',
+				width : 275,
+				sortable : true,
+				align : 'left'
+			}
+		],
+		buttons:[{
+					name : '按机构选择',
+					bclass : 'add',
+					onpress : function(){formForwardSet.fromOrg();}
+				}, {
+					name : '按角色选择',
+					bclass : 'add',
+					onpress : function(){formForwardSet.fromRole();}
+				}, {
+					name : '删除',
+					bclass : 'delete',
+					onpress : function(){formForwardSet.removeUser();}
+		}],
+		singleSelect:true,
+		usepager : false,
+		useRp : true,
+		width : 'auto',
+		height : 'auto'
+	});
+	
+	function sizeChanged(tabelName, h){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var flex = $("#"+tabelName).closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    bDiv.height(126);
+		flex.height(h);
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	$('#forwardToUsersDiv div[class="tDiv"]').css("border-top","1px solid #ccc");
+	sizeChanged('forwardToUsers', 200);
+
+	//全选
+	$("#tousers").die().live('click',function(){
+		$("#forwardToUsers input[name='checkbox']").attr('checked',$(this).is(':checked'));
+		$("#tousers").attr('checked',$(this).is(':checked'));
+	});
+});
+</script>

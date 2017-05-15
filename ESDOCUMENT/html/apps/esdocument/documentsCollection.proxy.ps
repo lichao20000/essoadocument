@@ -1,0 +1,483 @@
+<?php
+
+/**
+ * 文件收集
+ * @author xuekun
+ *
+ */
+class ProxyEsdocumentDocumentsCollection extends AgentProxyAbstract {
+	const SERVICE_NAME = "documentsCollection";
+	/**
+	 *
+	 *
+	 * xuekun
+	 *
+	 * @param unknown $params        	
+	 */
+	public function addData($params) {
+		$urlParam = array (
+				'add' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 *
+	 *
+	 * xuekun
+	 *
+	 * @param
+	 *        	unknown ids
+	 */
+	public function deleteData($ids) {
+		$userId = $this->getUserId ();
+		$ip = $_SERVER ['REMOTE_ADDR'];
+		$urlParam = array (
+				'delete',
+				$userId,
+				$ip 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $ids, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 *
+	 *
+	 * xuekun
+	 *
+	 * @param
+	 *        	unknown params
+	 * @return return_type
+	 */
+	public function updateData($params) {
+		$urlParam = array (
+				'update' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 分页获取 文件收集列表
+	 * xuekun
+	 *
+	 * @param unknown $params        	
+	 * @return return_type
+	 */
+	public function getDataList($page, $rp, $params) {
+		$urlParam = array (
+				'list',
+				$page,
+				$rp 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 *
+	 *
+	 * xuekun 2014年11月25日
+	 *
+	 * @return return_type
+	 */
+	public function getTree() {
+		$urlParam = array (
+				'getTree' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 *
+	 * @param unknown $params        	
+	 */
+	public function getCount($params) {
+		$urlParam = array (
+				'count' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 *
+	 *
+	 * xuekun 2014年11月28日
+	 *
+	 * @param unknown $id        	
+	 * @return return_type
+	 */
+	public function getData($id) {
+		$urlParam = array (
+				'get',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 *
+	 *
+	 * xuekun 2014年11月25日
+	 *
+	 * @param unknown $path        	
+	 * @return return_type
+	 */
+	public function getForm($stageId = 0) {
+		$urlParam = array (
+				'addForm',
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 获取某节点的数据字段值
+	 * 
+	 * @author xuekun 2015年3月23日 下午2:43:11
+	 * @param unknown $stageId        	
+	 * @return return_type
+	 */
+	public function getStageField($stageId) {
+		$urlParam = array (
+				'getStageField',
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	public function getStageData($stageId, $id) {
+		$urlParam = array (
+				'getStageData',
+				$stageId,
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	public function getStageId($id) {
+		$urlParam = array (
+				'getStageId',
+				$id 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 添加获取上传URL方法
+	 */
+	public function getUploadUrl() {
+		$urlParam = array (
+				'getUploadUrl' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( "mainFileServer", $url );
+	}
+	 /**
+	  * guolanrui 20141213 添加网段设置后，增加的新方法
+	  * 添加获取上传URL方法
+	  */
+	 public function getNewUploadUrl($postData){
+	 	$urlParam=array('getNewUploadUrl');
+	 	$url=implode('/',$urlParam);
+	 	return $this->post("mainFileServer", $url, $postData, "application/json;charset=UTF-8");
+	 }
+	/**
+	 * 根据档案条目的path获取文件列表
+	 */
+	public function getFileInfoByPath($id) {
+		return $this->get ( self::SERVICE_NAME, 'getFileInfoByPath/' . $id );
+	}
+	
+	/**
+	 * 获取节点数据
+	 *
+	 * @param unknown $page        	
+	 * @param unknown $rp        	
+	 * @param unknown $stageId        	
+	 * @param unknown $params        	
+	 * @return return_type
+	 */
+	public function getStageDataList($page, $rp, $stageId,$ids, $params) {
+		$urlParam = array (
+				'getStageDataList',
+				$page,
+				$rp,
+				$stageId,
+				$ids
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 节点数据数
+	 * xuekun 2014年12月9日 add
+	 *
+	 * @param unknown $stageId        	
+	 * @param unknown $params        	
+	 * @return return_type
+	 */
+	public function getStageDataCount($stageId,$ids, $params) {
+		$urlParam = array (
+				'getStageDataCount',
+				$stageId,
+				$ids
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 *
+	 * @param unknown $stageId        	
+	 * @return return_type
+	 */
+	public function getMetaData($stageId) {
+		$urlParam = array (
+				'getMetaData',
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 获取文件编码规则
+	 * xuekun 2014年12月22日 add
+	 *
+	 * @param unknown $stageId        	
+	 * @return return_type
+	 */
+	public function getDocRuleTteration($stageId) {
+		$urlParam = array (
+				'getDocRuleTteration',
+				$stageId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	public function printReport($params) {
+		$urlParam = array (
+				'printReport' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	// -----------------导入导出-----------------------
+	public function exportSelData($params) {
+		$urlParam = array (
+				'exportSelData' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	public function getFieldsByTreetype($params) {
+		$urlParam = array (
+				'getFieldsByTreetype' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	public function exportFilterData($params) {
+		$urlParam = array (
+				'exportFilterData' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 获取导入上传功能rest服务地址
+	 * wanghongchen 20140430
+	 */
+	public function getImportUrl() {
+		$urlParam = array (
+				'importUpload' 
+		);
+		$url = implode ( '/', $urlParam );
+		$restUrl = $this->getUri ( self::SERVICE_NAME, $url );
+		return $restUrl;
+	}
+	/**
+	 * 获取文件头信息
+	 * wanghongchen 20140506
+	 */
+	public function showFileColumn($map) {
+		$urlParam = array (
+				'showFileColumn' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取上传文件的结构信息,导入数据第二步标签页用到.
+	 */
+	public function getImportStructures($userId) {
+		$urlParam = array (
+				'getImportStructures',
+				$userId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	
+	/**
+	 * 获取结构信息
+	 * wanghongchen 20140506
+	 */
+	public function showStructureColumn($map) {
+		$urlParam = array (
+				'showStructureColumn' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取结构信息
+	 * wanghongchen 20140506
+	 */
+	public function getFileColumnModel($map) {
+		$urlParam = array (
+				'getFileColumnModel' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 获取文件前20条数据，提供预览
+	 *
+	 * @author wanghongchen 20140506
+	 */
+	public function getPreFileData($map) {
+		$urlParam = array (
+				'getPreFileData' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 向数据库写入导入数据
+	 *
+	 * @author wanghongchen 20140508
+	 */
+	public function realImport($userId, $map) {
+		$urlParam = array (
+				'realImport',
+				$userId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $map, "application/json;charset=UTF-8" );
+	}
+	// -------------导入导出 end-------------------------------------------------
+	// 在线浏览
+	public function getDataInfoWhenOnlineView($params) {
+		$urlParam = array (
+				'getDataInfoWhenOnlineView' 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8" );
+	}
+	
+	
+	/** lujixiang 20150402   查看文件详情  **/
+	public function collectionDataShowPkg($postData){
+		$url = "showDataInfo";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** lujixiang 201504010  查看电子文件浏览权限  **/
+	public function getFileViewRight($dataId){
+		$urlParam = array (
+				'getFileViewRight',
+				$dataId 
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 获取文件编码
+	 *
+	 * @param unknown $stageId
+	 * @param unknown $params
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getFileCode($params) {
+		$urlParam = array (
+				'getFileCode'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, "application/json;charset=UTF-8" );
+	}
+	/**
+	 * 判断文件编码是否重复，重置编码流水号
+	 * @param unknown $params
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function judegIsRepeatBydocNoRule($params) {
+		$urlParam = array (
+				'judegIsRepeatBydocNoRule'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 获取筛选页面的系统字段值
+	 */
+	public function getMetaDataField($stageId) {
+		$urlParam = array (
+				'getMetaDataField',
+				$stageId
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url );
+	}
+	/**
+	 * 判断手动输入的类型代码，及专业代码
+	 * @param unknown $params
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function checkInputCode($params) {
+		$urlParam = array (
+				'checkInputCode'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	/**
+	 * 根据部门代码获取id
+	 * @param unknown $params
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getPartIdByCode($params) {
+		$urlParam = array (
+				'getPartIdByCode'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	public function checkDataIsSend($params) {
+		$urlParam = array (
+				'checkDataIsSend'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $params, 'application/json;charset=UTF-8' );
+	}
+	
+	/**
+	 * 通过文件id获取文件收集（id，pId）
+	 * @param unknown $docId
+	 */
+	public function getStageIdsByDocId($docId){
+		$urlParam = array (
+				'getStageIdsByDocId',
+				$docId
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->get ( self::SERVICE_NAME, $url);
+	}
+}

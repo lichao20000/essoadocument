@@ -1,0 +1,75 @@
+<div class='boxs' id='boxs'>
+	<div class='content_box' id='first_list'>
+		<h2 class='title'><span>自动累加字段</span></h2>
+		<div class='list_box'>
+			<div class='search_box'><input type='text' onKeyUp="findAll(this.value,'FIELD_RULE_TAG_LIST')"/><span></span></div>
+			<ul id='FIELD_RULE_TAG_LIST' class='lists'>
+				<?php
+				$leftTags = $list->left?$list->left:array();
+				foreach ($leftTags as $tag)
+				{
+					echo "<li id='".$tag->tagId."'>".$tag->display."</li>";
+				}
+				?>
+			</ul>
+		</div>
+		<div class='move_btn'>
+			<div class='exts'></div>
+			<ul class='buttons'>
+				<li id="TO_TOP" class='tofirst'></li>
+				<li id="TO_UP" class='toup'></li>
+				<li id="TO_LEFT" class='toleft'></li>
+				<li id="TO_RIGHT" class='toright'></li>
+				<li id="TO_DOWN" class='todown'></li>
+				<li id="TO_BOTTOM" class='tolast'></li>
+			</ul>
+		</div>
+		<div class='list_box'>
+			<div class='search_box'><input type='text' onKeyUp="findAll(this.value,'FIELD_RULE_TAG')"/><span></span></div>
+			<ul id='FIELD_RULE_TAG' class='lists'>
+				<?php 
+				$rightTags = $list->right?$list->right:array();
+				foreach ($rightTags as $tag)
+				{
+					echo "<li id='".$tag->tagId."'>".$tag->display."</li>";
+				}
+				?>
+			</ul>
+		</div>
+	
+	</div>
+	
+	<div class='content_box' id='second_list'>
+		<h2 class='title'><span>自动累加参照字段</span></h2>
+		<div class='list_box'>
+			<div class='search_box'><input type='text' onKeyUp="findAll(this.value,'FIELD_RULE_TAGS_LIST')" /><span></span></div>
+			<ul id='FIELD_RULE_TAGS_LIST' class='lists'></ul>
+		</div>
+		<div class='move_btn'>
+			<div class='exts'></div>
+			<ul class='buttons'>
+				<li id="TO_TOP2" class='tofirst'></li>
+				<li id="TO_UP2" class='toup'></li>
+				<li id="TO_LEFT2" class='toleft'></li>
+				<li id="TO_RIGHT2" class='toright'></li>
+				<li id="TO_DOWN2" class='todown'></li>
+				<li id="TO_BOTTOM2" class='tolast'></li>
+			</ul>
+		</div>
+		<div class='list_box'>
+			<div class='search_box'><input type='text' onKeyUp="findAll(this.value,'FIELD_RULE_TAGS')"/><span></span></div>
+			<ul id='FIELD_RULE_TAGS' class='lists'></ul>
+		</div>
+	
+	</div>
+</div>
+<script type='text/javascript'>
+// 按钮样式
+$('.buttons li').live('mouseover',function (){$(this).addClass('btnhover');});
+$('.buttons li').live('mouseout',function (){$(this).removeClass('btnhover');});
+// 列表样式
+//$('.lists li').hover(function (){$(this).addClass('lihover');},function (){$(this).removeClass('lihover');});
+
+//$('.lists li').click(function (){$(this).parent().find('li').removeClass('esselected');$(this).addClass('esselected');});
+
+</script>

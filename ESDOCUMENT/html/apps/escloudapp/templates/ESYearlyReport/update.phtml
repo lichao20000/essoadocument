@@ -1,0 +1,189 @@
+<link href="<?php echo $tplPath;?>/ESYearlyReport/css/yewutree.css" rel="stylesheet" type="text/css">
+<SCRIPT type="text/javascript">
+		<!--
+		var settingFiling = {
+				view: {
+					dblClickExpand: false,
+					showLine: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				callback: {
+					onClick: onClick
+				},
+		
+		};
+		
+		function onClick(e,treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("ESArchiveEditing");
+			zTree.expandNode(treeNode);
+		}
+		$(document).ready(function(){
+			$aa = $.fn.zTree.init($("#ESArchiveEditing"), settingFiling, zNodesFiling);
+
+		});
+		//-->
+	</SCRIPT>
+<div class="main">
+  <div>
+	<span><font>目录树类别:</font></span>
+    <select>
+	  <option>档案管理</option>
+	  <option>收集整理</option>
+	  <option>档案编研管理</option>
+	  <option>档案保管管理</option>
+	  <option>档案库房实体管理</option>
+	  <option>档案出入管理</option>
+	  <option>全文检索</option>
+	</select>
+ </div>
+ <div style="height:300px;overflow-x:auto;">
+ 	<ul id="ESArchiveEditing" class="ztree"></ul>
+ </div>
+ 
+ 
+<div style="background-color:#E0E0E0">
+	<span>统计条件设置</span>
+</div>
+<div>
+	<table style="width:800px;height:200px" id="panle">
+	<tr>
+		<td>字段名</td>
+		<td>比较符</td>
+		<td>字段值</td>
+		<td>关系符</td>
+		<td>增加行</td>
+		<td>删除行</td>
+	</tr>
+	<tr>
+		<td> <select name="" style="width:70px">
+				<option value="0"></option>
+				<option value="1"></option>
+				<option value="2"></option>
+				<option value="3"></option>
+				<option value="4"></option>
+				<option value="5"></option>
+			</select></td>
+		<td> <select name="" style="width:70px">
+				<option value="">等于</option>
+				<option value="">大于</option>
+				<option value="">小于</option>
+				<option value="">不等于</option>
+				<option value="">大于等于</option>
+				<option value="">小于等于</option>
+				<option value="">包含</option>
+				<option value="">不包含</option>
+			</select></td>
+		<td><input type="text" value="" name=""></td>
+		<td><select name="" style="width:70px">
+				<option value="">并且</option>
+				<option value="">或者</option>
+				</select></td>
+		<td><a href="javascript:void()" class ="add"><img src='<?php echo $tplPath;?>/ESInOut/img/add.jpg'></a></td>
+		<td><a href="javascript:void()" class ="delete"><img src='<?php echo $tplPath;?>/ESInOut/img/del.jpg'></a></td>
+	</tr>
+	<tr>
+		<td> <select name="" style="width:70px">
+				<option value="0"></option>
+				<option value="1"></option>
+				<option value="2"></option>
+				<option value="3"></option>
+				<option value="4"></option>
+				<option value="5"></option>
+			</select></td>
+		<td> <select name="" style="width:70px">
+				<option value="">等于</option>
+				<option value="">大于</option>
+				<option value="">小于</option>
+				<option value="">不等于</option>
+				<option value="">大于等于</option>
+				<option value="">小于等于</option>
+				<option value="">包含</option>
+				<option value="">不包含</option>
+			</select></td>
+		<td><input type="text" value="" name=""></td>
+		<td><select name="" style="width:70px">
+				<option value="">并且</option>
+				<option value="">或者</option>
+				</select></td>
+		<td><a href="javascript:void()" class ="add"><img src='<?php echo $tplPath;?>/ESInOut/img/add.jpg'></a></td>
+		<td><a href="javascript:void()" class ="delete"><img src='<?php echo $tplPath;?>/ESInOut/img/del.jpg'></a></td>
+	</tr>
+	<tr>
+		<td> <select name="" style="width:70px">
+				<option value="0"></option>
+				<option value="1"></option>
+				<option value="2"></option>
+				<option value="3"></option>
+				<option value="4"></option>
+				<option value="5"></option>
+			</select></td>
+		<td> <select name="" style="width:70px">
+				<option value="">等于</option>
+				<option value="">大于</option>
+				<option value="">小于</option>
+				<option value="">不等于</option>
+				<option value="">大于等于</option>
+				<option value="">小于等于</option>
+				<option value="">包含</option>
+				<option value="">不包含</option>
+			</select></td>
+		<td><input type="text" value="" name=""></td>
+		<td><select name="" style="width:70px">
+				<option value="">并且</option>
+				<option value="">或者</option>
+				</select></td>
+		<td><a href="javascript:void()" class ="add"><img src='<?php echo $tplPath;?>/ESInOut/img/add.jpg'></a></td>
+		<td><a href="javascript:void()" class ="delete"><img src='<?php echo $tplPath;?>/ESInOut/img/del.jpg'></a></td>
+	</tr>
+</table>
+<hr>
+<div style="height:100px;text-align:center">
+	<input style="width:70px;height:30px;" type="button" name="" value="确定" />
+	<input style="width:70px;height:30px;" type="button" name="" value="取消" /> 
+</div>
+<script>
+$(function(){
+	var i=1;
+var html='<tr><td> <select name="" style="width:70px">';
+	html+='<option value=""></option>';
+	html+='<option value=""></option>';
+	html+='<option value=""></option>';
+	html+='<option value=""></option>';
+	html+='<option value=""></option>';
+	html+='<option value=""></option>';
+	html+='</select></td>';
+	html+='<td> <select name="" style="width:70px">';
+	html+='<option value="">等于</option>';
+	html+='<option value="">大于</option>';
+	html+='<option value="">小于</option>';
+	html+='<option value="">不等于</option>';
+	html+='<option value="">大于等于</option>';
+	html+='<option value="">小于等于</option>';
+	html+='<option value="">包含</option>';
+	html+='<option value="">不包含</option>';
+	html+='</select></td>';
+	html+='<td><input type="text" value="" name=""></td>';
+	html+='<td><select name="" style="width:70px">';
+	html+='<option value="">并且</option>';
+	html+='<option value="">或者</option>';
+	html+='</select></td>';
+	html+='<td><a href="javascript:void()" class ="add"><img src="<?php echo $tplPath;?>/ESInOut/img/add.jpg"></a></td>';
+	html+='<td><a href="javascript:void()" class ="delete"><img src="<?php echo $tplPath;?>/ESInOut/img/del.jpg"></a></td>';
+	html+='</tr>';
+$('.add').bind('click',function(){
+	i++;
+	$('#panle tr:last').after(html);
+});
+$(".delete").live('click',function(){
+	i--;
+	$(this).parent().parent().remove();
+	alert(i);
+});
+});
+</script>
+</div>
+</div>

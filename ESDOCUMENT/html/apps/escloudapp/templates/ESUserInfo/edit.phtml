@@ -1,0 +1,95 @@
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<div style="">
+	<div
+		style="margin-top: 10px; font-size: 24px; font-weight: bold; border-bottom: 1px solid #CCC;">用户信息</div>
+	<div style="padding-top: 30px;">
+		<form id="editUserInfo" method="post" enctype="multipart/form-data">
+			<table style="height: 100px;">
+				<tr>
+					<td><input type="hidden" name="id" id="id" value="<?php echo $userinfo->id;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>姓名：</td>
+					<td><input type="text" name="name" id="name" value="<?php echo $userinfo->name;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>年龄：</td>
+					<td><input type="text" name="age" id="age" value="<?php echo $userinfo->age;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>地址：</td>
+					<td><input type="text" name="address" id="address" value="<?php echo $userinfo->address;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>email：</td>
+					<td><input type="text" name="email" id="email" value="<?php echo $userinfo->email;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+				<tr>
+					<td>部门：</td>
+					<td><input type="text" name="department" id="department" value="<?php echo $userinfo->department;?>"
+						style="width: 380px; height: 20px;" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+
+//去左空格; 
+function ltrim(s){
+	return s.replace( /^\s*/, ""); 
+} 
+//去右空格; 
+function rtrim(s){ 
+	return s.replace( /\s*$/, ""); 
+} 
+//去左右空格; 
+function trim(s){
+	return rtrim(ltrim(s)); 
+}
+$(document).ready(function(){
+	$("#btnCancel").click(function(){cancelQueue();});
+});
+$("#btnStart").click(function(){
+	var name = $("#editUserInfo input[name='name']").val();
+	var rtitle = trim(name);
+	if(rtitle==""){
+		$.dialog.notice({icon:'warning', content:"姓名不能为空!", time:1});
+		return;
+	}
+	url = "<?php echo $esaction->generateUrl(Array('ESUserInfo'=>'do_edit'),'x');?>";
+	var form=$('#editUserInfo');
+	var data=form.serialize();
+	$.ajax({
+		url:url,
+		type: "POST",
+		data:{
+			param:data
+		},
+		dataType:"json",
+		error:function(){
+			$.dialog.notice({icon:'error',content:'编辑失败，请重试！',time:3});
+		},
+		success:function(datas){	
+			if(datas!=null){
+				$('#userInfo').flexOptions({newp: 1}).flexReload();
+				$.dialog.notice({icon:'succeed',content:'编辑成功！',time:3});
+			}else{
+				$.dialog.notice({icon:'error',content:'编辑失败，请重试！',time:3});
+			}
+			
+		}
+	});
+});
+</script>

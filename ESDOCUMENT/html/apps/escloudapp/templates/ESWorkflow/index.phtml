@@ -1,0 +1,54 @@
+<!-- guolanrui 20140430 add -->
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<link href="<?php echo $tplPath?>/ESWorkflow/css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeTbar.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESTemplate/js/jumpwindow.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>2));?>
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/template.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/workFlowManager.js"></script>
+
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESWorkflow/js/autovalidate/style.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/autovalidate/validate.js"></script>
+
+<script>
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"工作流管理", content:"#workflow_model_type,#workflowDataGridDiv,#modelTypeTree"});
+// 	document.namespaces.add("v", "urn:schemas-microsoft-com:vml");
+// 	document.namespaces.add("o", "urn:schemas-microsoft-com:office:office");
+});
+</script>
+<div class='wf_manager_main'>
+	<div id='workflow_model_type' class='workflow_model_tree'>
+		<div id='modelTypeTreeTBar' class='treeTbar'>
+			<div class="tbarDiv" style = "margin-left:12px;">
+				<div class="tbarButton">
+					<div>
+						<span class="add" style="padding-left:20px;" hander="addFun()">添加</span>
+					</div>
+				</div>
+				<div class="tbarButton">
+					<div>
+						<span class="edit" style="padding-left:20px;" hander="editFun()">编辑</span>
+					</div>
+				</div>
+				<div class="tbarButton">
+					<div>
+						<span class="delete" style="padding-left:20px;" hander="deleteFun()">删除</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id='modelTypeTree' class='ztree' style='overflow: auto;'></div>
+	</div>
+	<div id='workflowDataGridDiv' tplPath="<?php echo $tplPath;?>" class='workflow_model_grid'>
+		<table id='modelDataGrid'></table>
+	</div>
+</div>

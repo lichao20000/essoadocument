@@ -1,0 +1,89 @@
+<?php
+/**
+ * 文件接收模块
+ * @author gengqianfeng
+ *
+ */
+class ProxyEsdocumentDocumentReceive extends AgentProxyAbstract{
+	
+	const SERVICE_NAME="documentReceive";
+	
+	/**
+	 * 获取接收列表总条数
+	 * @param unknown $param
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getCount($param){
+		$urlParam=array('count');
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,json_encode($param),"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取接收列表
+	 * @param unknown $param
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function findDocumentReceiveList($param){
+		$urlParam=array('list');
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,json_encode($param),"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 通过id获取接收单记录
+	 * @param unknown $receiveId
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getReceiveById($receiveId){
+		$urlParam=array('getReceiveById',$receiveId);
+		$url=implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 * 接收处理
+	 * @param unknown $receive
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function editReceive($receive){
+		$urlParam=array('editReceive');
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,json_encode($receive),"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 删除
+	 * @param unknown $ids
+	 */
+	public function delReceive($ids){
+		$userId = $this->getUserId();
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$urlParam=array('delReceive',$userId,$ip);
+		$url=implode('/', $urlParam);
+		return $this->post(self::SERVICE_NAME, $url,json_encode($ids),"application/json;charset=UTF-8");
+	}
+	/**
+	 * 删除接收文件中的签字单 修改接收状态
+	 * @param unknown $param
+	 */
+	public function deleteFile($param) {
+		$urlParam = array (
+				'deleteFile'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+	
+	/**
+	 * 根据发放单id和接受状态 获得接受单数量
+	 * @param unknown $param
+	 */
+	public function getReceiveBySendId($param) {
+		$urlParam = array (
+				'getReceiveBySendId'
+		);
+		$url = implode ( '/', $urlParam );
+		return $this->post ( self::SERVICE_NAME, $url, $param, "application/json;charset=UTF-8" );
+	}
+}

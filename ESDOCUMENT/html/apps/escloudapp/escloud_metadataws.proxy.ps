@@ -1,0 +1,174 @@
+<?php
+/**
+ * 元数据及元数据集的代理
+ * @author ldm
+ *
+ */
+class ProxyEscloudappEscloud_metadataws extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_metadataws";
+  //获取全部元数据集
+  public function getlist()
+  {
+    //return self::SERVICE_NAME;exit;
+    $urlParam = array('getAllNamespace');
+    $url = implode('/', $urlParam);
+    //print_r( $url);exit;
+    //采用GET方式访问
+    return $this->get(self::SERVICE_NAME, $url);
+    //var_dump($this->get(self::SERVICE_NAME, $url));
+    
+  }
+  public function getone($id){
+  	$urlParam = array('getNamespace',$id);
+  	$url = implode('/', $urlParam);
+  	//采用GET方式访问
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  /***
+   * xiaoxiong 20140819 
+   * 获取一个元数据的代码值列表
+   */
+  public function getOneMetadataAttrs($metadata){
+  	$urlParam = array('getOneMetadataAttrs',$metadata);
+  	$url = implode('/', $urlParam);
+  	//采用GET方式访问
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  //添加元数据集
+  public function addname($param){
+  	$urlParam = array('addNamespace');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  //元数据集的修改
+  public function setname($param){
+  	$urlParam = array('setNamespace');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  //元数据集的删除
+  public function delspace($id)
+  {
+  	$urlParam = array('dropNamespace',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->remove(self::SERVICE_NAME, $url);
+  }
+  //元数据子集获取
+  public function getsub($id)
+  {
+  	$urlParam = array('getAllMetadataN',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  
+  // 元数据子集获取带分页#fangjixiang
+  public function getAllMetadata($id,$page,$pagesize)
+  {
+  
+  	$urlParam = array('getAllMetadata',$id,$page,$pagesize);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME,$url);
+  
+  }
+  
+  //添加一条元数据
+  public function addsub($id,$param,$userId,$userIp){
+  	$urlParam = array('addMetadateByNameSpaceId',$id,$userId,$userIp);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  //一条元数据列表
+  public function sublist($id){
+  	$urlParam = array('getMetadata',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  //修改元数据
+  public function subset($param,$userId,$userIp){
+  	$urlParam = array('setMetadata',$userId,$userIp);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  //删除元数据
+  public function delsub($id,$userId,$userIp)
+  {
+  	$urlParam = array('dropMetadata',$id,$userId,$userIp);
+  	$url = implode('/', $urlParam);
+  	return $this->remove(self::SERVICE_NAME, $url);
+  }
+  //查询一个元数据所有属性
+  public function atrlist($id){
+  	$urlParam = array('findPropertyListByMetadataID',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  //查询一条属性
+  public function atrone($id){
+  	$urlParam = array('getPropertyValue',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  
+  //元数据属性添加
+  public function atradd($id,$param,$userId,$userIp){
+  	$urlParam = array('addProperty',$id,$userId,$userIp);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  //元数据属性的修改
+  public function atrset($param,$userId,$userIp){
+  	$urlParam = array('setPropertyValue',$userId,$userIp);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  //元数据属性删除
+  public function delattr($id,$userId,$userIp)
+  {
+  	$urlParam = array('dropPropertyValue',$id,$userId,$userIp);
+  	$url = implode('/', $urlParam);
+  	return $this->remove(self::SERVICE_NAME, $url);
+  }
+  /**
+   * 元数据唯一标识判断
+   * @author ldm
+   */
+  public function checkName($namespaceid,$identy){
+  	$urlParam = array('checkName',$namespaceid,$identy);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  
+  //一条元数据列表
+  public function getMetadata($id,$page,$pagesize){
+  	$urlParam = array('getMetadata',$id,$page,$pagesize);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  public function getMetadataFilter($structureId,$id,$page,$pagesize){
+  	$urlParam = array('getMetadataFilter',$structureId,$id,$page,$pagesize);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+  public function getMetadataByKeyword($map){
+  	$urlParam = array('getMetadataByKeyword');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+  }
+  
+  public function checkMetaIsUsed($id){
+  	$urlParam = array('checkMetaIsUsed',$id);
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+   public function getPropvalueByEstitle($params){
+   	return $this->post(self::SERVICE_NAME, 'getPropvalueByEstitle',$params,'application/json;charset=UTF-8');
+   }
+   public function checkMetaIsUnique($map){
+   	$urlParam = array('checkMetaIsUnique');
+   	$url = implode('/', $urlParam);
+   	return $this->post(self::SERVICE_NAME,$url,$map,'application/json;charset=UTF-8');
+   }
+   
+   
+}

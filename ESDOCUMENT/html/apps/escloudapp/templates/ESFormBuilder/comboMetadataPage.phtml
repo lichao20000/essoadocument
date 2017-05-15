@@ -1,0 +1,16 @@
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormBuilder/js/comboMetadataInit.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormBuilder/js/comboMetadata.js"></script>
+<div id='comboMetadataMainDiv' isForm="<?php echo $data[0];?>">
+	<div id="comboMetadataTitleDiv" class='comboMetadataTitleDiv'>
+		<table id='comboMetadataTitleDataGrid'></table>
+	</div>
+	<div id="comboMetadataDataDiv" class='comboMetadataDataDiv'>
+		<table id='comboMetadataDataGrid'></table>
+	</div>
+</div>
+<script>
+/** 创建数据字典时，不显示选择按钮，当为关联数据字典时则显示此按钮 **/
+if('<?php echo $data[0];?>' == 'create'){
+	$('#selectButton').css("display","none");
+}
+</script>

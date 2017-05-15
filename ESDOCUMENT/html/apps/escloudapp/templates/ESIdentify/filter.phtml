@@ -1,0 +1,222 @@
+
+<style>
+
+.ztree li a span{
+	color:#444;
+}
+
+</style>
+<form id="esfilter">
+<table style="width:600px;" id="sift">
+	<tr>
+		<td>字段名</td>
+		<td>比较符</td>
+		<td>字段值</td>
+		<td>关系符</td>
+		<td>增加行</td>
+		<td>删除行</td>
+	</tr>
+	<?php 
+	if(isset($condition) && $condition!=""){
+		$arrycond= explode('★■◆●',$condition);  
+		$size= count($arrycond)>4?count($arrycond):5;
+		$lengh=count($arrycond);
+		for($i=0;$i<$size;$i++){
+			if($i<$lengh){		
+				//按第1个、第2个和最后1个逗号分隔 shiyangtao add 20140821
+				$cond=$arrycond[$i];
+				$condArray=array();
+				$separator1 = strpos($arrycond[$i],",");
+				$separator3 = strripos($arrycond[$i],",");
+				$field = substr($arrycond[$i],0, $separator1);
+				$relation = substr($arrycond[$i],$separator3 + 1);
+				$tempCond = substr($arrycond[$i],$separator1 + 1, $separator3-$separator1-1);
+				$newSeparator2 = strpos($tempCond,",");
+				$compare =substr( $tempCond,0, $newSeparator2);
+				$text =substr($tempCond,$newSeparator2 + 1);
+				$condArray[0] = $field;
+				$condArray[1] = $compare;
+				$condArray[2] = $text;
+				$condArray[3] = $relation;
+    ?>
+			<tr>
+				<td> <select  name="esfields" style="width: 120px;">
+						<option value="">--请选择--</option>
+				<?php 
+				foreach($searchField as $key=>$val){
+					if($condArray[0]==$val->name){
+						echo "<option  selected value=".$val->name.">$val->display</option>";
+					}else{
+						echo "<option  value=".$val->name.">$val->display</option>";
+					}	
+		        }?>
+		             </select></td>
+				<td> <select name="comparison"  style="width: 70px;">
+						<option  value="equal"  <?php if('equal'==$condArray[1]) echo "selected";?>>等于</option>
+						<option value="greaterThan" <?php if('greaterThan'==$condArray[1]) echo "selected";?>>大于</option>
+						<option value="lessThan" <?php if('lessThan'==$condArray[1]) echo "selected";?>>小于</option>
+						<option value="notEqual" <?php if('notEqual'==$condArray[1]) echo "selected";?>>不等于</option>
+						<option value="greaterEqual" <?php if('greaterEqual'==$condArray[1]) echo "selected";?>>大于等于</option>
+						<option value="lessEqual" <?php if('lessEqual'==$condArray[1]) echo "selected";?>>小于等于</option>
+						<option value="like" <?php if('like'==$condArray[1]) echo "selected";?>>包含</option>
+						<option value="notLike" <?php if('notLike'==$condArray[1]) echo "selected";?>>不包含</option>
+					</select></td>
+				<td><input type="text" value="<?php if(''!=$condArray[2]) echo $condArray[2]?>" name="esfieldvalue" ></td>
+				<td><select name="relation"  style="width: 60px;">
+						<option value="AND" <?php if('true'==$condArray[3]) echo "selected";?>>并且</option>
+						<option value="OR" <?php if('false'==$condArray[3]) echo "selected";?>>或者</option>
+						</select></td>
+				<td align="center"><a href="javascript:void(0)" class ="esadd"><div class="es_add"></div></a></td>
+				<td align="center"><a href="javascript:void(0)" class ="esreduce"><div class="es_del"></div></a></td>
+			</tr>
+			
+		<?php }else{?>
+			<tr>
+				<td> <select name="esfields" style="width: 120px;">
+						<option value="">--请选择--</option>
+				<?php 
+				foreach($searchField as $key=>$val){
+						echo "<option value=".$val->name.">$val->display</option>";
+		        }?>
+		             </select></td>
+				<td> <select name="comparison"  style="width: 70px;">
+						<option value="equal">等于</option>
+						<option value="greaterThan">大于</option>
+						<option value="lessThan">小于</option>
+						<option value="notEqual">不等于</option>
+						<option value="greaterEqual">大于等于</option>
+						<option value="lessEqual">小于等于</option>
+						<option value="like" selected>包含</option>
+						<option value="notLike">不包含</option>
+					</select></td>
+				<td><input type="text" value="" name="esfieldvalue" ></td>
+				<td><select name="relation"  style="width: 60px;">
+						<option value="AND">并且</option>
+						<option value="OR">或者</option>
+						</select></td>
+				<td align="center"><a href="javascript:void(0)" class ="esadd"><div class="es_add"></div></a></td>
+				<td align="center"><a href="javascript:void(0)" class ="esreduce"><div class="es_del"></div></a></td>
+			</tr>
+			
+			<?php 
+
+				
+			}
+}
+	}else{
+	
+	      for($i=0;$i<5;$i++){?>
+	<tr>
+		<td> <select name="esfields" style="width: 120px;">
+				<option value="">--请选择--</option>
+		<?php 
+		foreach($searchField as $key=>$val){
+				echo "<option value=".$val->name.">$val->display</option>";
+        }?>
+             </select></td>
+		<td> <select name="comparison"  style="width: 70px;">
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select></td>
+		<td><input type="text" value="" name="esfieldvalue" ></td>
+		<td><select name="relation"  style="width: 60px;">
+				<option value="AND">并且</option>
+				<option value="OR">或者</option>
+				</select></td>
+		<td align="center"><a href="javascript:void(0)" class ="esadd"><div class="es_add"></div></a></td>
+		<td align="center"><a href="javascript:void(0)" class ="esreduce"><div class="es_del"></div></a></td>
+	</tr>
+	
+	<?php }}?>
+</table>
+</form>
+<div class="escatagory" id='catagory'>
+<ul id="fication" class="ztree"></ul>
+</div>
+<div id="deadline">
+<ul>
+
+</ul>
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/catagory.js"></script>
+<script type="text/javascript">
+
+	var jsonData=<?php echo $string;?>;
+	var index;//用于判断将分类号显示在第几个输入框
+	$('[name="esfields"]').die().live('change',function(){
+			var val=$(this).val();
+			var t=$('[value='+val+']',$(this)).html();
+			if(t!="保管期限"){
+				$('#deadline').hide();
+			}
+			var obj=$(this).parent().next().next().children(':input');
+			index=$(this).closest('tr').index();
+			obj.attr('readonly',false);
+			obj.unbind('click');
+			//liqiubo 20140904 文本类型不加验证，允许输入空值，修复bug 921
+			if(jsonData[val] && (jsonData[val]+'').substring(0,4)!='text'){
+				obj.attr('verify',jsonData[val]);
+			}else{
+				obj.removeAttr('verify');
+			}
+			//如果是时间格式，修改为数字类型的验证
+		/*	if(jsonData[val].search(reg)!=-1){
+				var reg=/date/g;
+				obj.attr('verify',jsonData[val].replace(reg,'number'));
+			}*/
+			//如果是分类号，需要见分类树显示
+			if(t=="分类号"){
+				obj.click(function(){
+				var offset=obj.offset();
+				$('#catagory').show().offset({top:offset.top+20,left:offset.left});
+				
+				});
+			}
+			
+			if(t!="分类号"){
+				//liqiubo 20140930 这原来是对保管期限字段进行的处理，现在改为对所有字段，修复bug 492
+				var selected = $(this).val();
+				var that = $(this);
+				if(selected != ''){ 
+					var tagId = selected.substring(1);
+					$.ajax({
+						url:$.appClient.generateUrl({ESIdentify : "getTagProperty"}, 'x'),
+						data:{structureId:<?php echo $struId;?>,modelId:<?php echo $modelId;?>,tagId:tagId},
+						type:'post',
+						success:function(opt){
+							if(opt.length > 0){
+								$("#deadline ul").html(opt);
+								obj.click(function(){
+									var offset=obj.offset();
+									$('#deadline').show().offset({top:offset.top+16,left:offset.left});//保管期限列表
+									//gengqianfeng 20140916  解除下拉框级联事件
+									$("#deadline li").unbind('click');
+									$("#deadline li").click(function(){
+										obj.val($(this).html());
+									});
+								});
+							}
+						}
+					});
+				}
+			}
+			
+		});
+		/*shiyangtao add 20140820 赋值完成后调用下change事件*/
+		$('[name="esfields"]').each(function (i){
+			var val=$(this).val();
+			var t=$('[value='+val+']',$(this)).html();
+			if(t=="分类号"||t=="保管期限"){
+				$(this).change();
+				}
+			});
+$("body").bind("mousedown", clickBodyDown);
+	 
+</script>
+

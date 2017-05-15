@@ -1,0 +1,23 @@
+
+.workflowControl_main {
+	width:96%;
+	margin-left:2%;
+}
+
+.workflowControl_main .workflowControl_tree{
+	width:220px;
+	height:100%;
+	float:left;
+	overflow: auto;
+	margin-right:10px;
+	background-color:#133959;
+	border-radius:5px;
+}
+
+.workflowControl_main .workflowControl_grid{
+	width:100%;
+}
+
+a .showGraph {
+	display:inline-block; width:16px; height:16px; background:url(../img/lookWFPicture.png) no-repeat no-repeat; cursor:pointer;
+}

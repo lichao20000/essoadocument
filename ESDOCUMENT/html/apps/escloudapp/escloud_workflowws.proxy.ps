@@ -1,0 +1,464 @@
+<?php
+/*
+ *工作流表单管理
+* @author guolanrui 20140504
+*/
+class ProxyEscloudappEscloud_workflowws extends AgentProxyAbstract{
+	const SERVICE_NAME = "escloud_workflowws";
+	
+	/**
+	 * guolanrui 20140504
+	 * 返回工作流类型树数据
+	 * @throws Exception
+	 */
+	public function showModelTypeTree()
+	{
+		$url = "showModelTypeTree";
+		return $this->post(self::SERVICE_NAME,$url,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取所有工作流信息
+	 */
+	public function getWfModelDataList($postData)
+	{
+		$url = "getWfModelDataList";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140513 分类树添加处理方法 **/
+	public function addModelType($postData){
+		$url = "addWorkFlowType";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140513 分类树编辑处理方法 **/
+	public function editModelType($postData){
+		$url = "updateWorkFlowType";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140513 分类树删除处理方法 **/
+	public function deleteModelType($postData){
+		$url = 'deleteWorkFlowType';
+		return $this->post(self::SERVICE_NAME, $url, $postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140515 根据工作流ID获取工作流初始化信息 **/
+	public function getModelInit($postData){
+		$url = "getModelInit";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140514 保存工作流初始化信息 **/
+	public function saveWFModelInit($postData){
+		$url = "saveWFModelInit";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140514 保存工作流方法 **/
+	public function saveWfModel($postData){
+		$url = "saveWfModel";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140514 根据工作流ID获取工作流XML值 **/
+	public function getWorkFlowXml($modelId){
+		$urlParam = array('getWorkFlowXml',$modelId);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	
+	/** xiaoxiong 20140515 删除工作流步骤 **/
+	public function deleteCellfromDB($postData){
+		$url = "deleteCellfromDB";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140515 判断待删除工作流步骤是否存在待办数据 **/
+	public function verificationIsHasNotDealWf($postData){
+		$url = "verificationIsHasNotDealWf";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140515 根据流程id删除工作流 **/
+	public function dropWfModel($postData){
+		$url = "dropWfModel";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140515 获取存储条件 **/
+	public function getConditionToShow($postData){
+		$url = "getConditionToShow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140515 根据工作流id和actionId获取动作信息 **/
+	public function actionCheckMethod($postData){
+		$url = "actionCheckMethod";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140515 获取关联表单的所有字段，用于字段权限设置 **/
+	public function getFormFields($postData){
+		$url = "getFormFields";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140515 用于专门获取流程中报表设置 **/
+	public function getSetPrints($postData){
+		$url = "getSetPrints";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140515 用于专门获取流程中报表设置 **/
+	public function getUserFromRole($postData){
+		$url = "getUserFromRole";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 通过机构ID获取该机构下所有的用户 **/
+	public function getUserFromOrgan($postData){
+		$url = "getUserFromOrgan";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 获取流程中的方法设置信息 **/
+	public function formCheckMethod($postData){
+		$url = "formCheckMethod";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 保存动作信息 **/
+	public function saveWfActionInit($postData){
+		$url = "saveWfActionInit";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 保存只会信息 **/
+	public function saveWfActionForNoticeInit($postData){
+		$url = "saveWfActionForNoticeInit";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 保存步骤信息 **/
+	public function saveWfStepInit($postData){
+		$url = "saveWfStepInit";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 保存分支条件 **/
+	public function saveSplitCondition($postData){
+		$url = "saveSplitCondition";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 分页获取角色列表 **/
+	public function getAllRoles($postData){
+		$url = "getAllRoles";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 获取步骤的审批人 **/
+	public function showCurrStepUsers($postData){
+		$url = "showCurrStepUsers";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 获取只会人员 **/
+	public function getNoticeUsers($postData){
+		$url = "getNoticeUsers";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 根据机构ID获取子机构实体集合 **/
+	public function getOrganTreeNodes4SetWf($postData){
+		$url = "getOrganTreeNodes4SetWf";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 获取工作流固定报表列表 **/
+	public function getReportDataList($postData){
+		$url = "getReportDataList";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140516 判断是否存在流转的数据**/
+	public function getFlowingWF($postData){
+		$url = "getFlowingWF";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140523  判断是否存在已经流转的数据  **/
+	public function isHavedWFData($postData){
+		$url = "isHavedWFData";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140523  发布工作流  **/
+	public function publicWorkFlow($postData){
+		$url = "publicWorkFlow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140523  删除工作流  **/
+	public function deleteWorkflow($postData){
+		$url = "deleteWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140523  赋值工作流  **/
+	public function copyWorkflow($postData){
+		$url = "copyWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** xiaoxiong 20140523  赋值工作流  **/
+	public function getAllDataList($postData){
+		$url = "getAllDataList";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+
+	/** guolanrui 20140528 获取我的待办数据 **/
+	public function getCollaborativeDataList($postData){
+		$url = "getCollaborativeDataList";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** guolanrui 20140528 获取我的待办对应表单的方法 **/
+	public function getManageredWorkflow($postData){
+		$url = "getManageredWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+
+	/**
+	 * 获取总记录数
+	 *
+	 */
+	public function getCountAll($wb)
+	{
+		$url = "getCountAll";
+		return $this->post(self::SERVICE_NAME,$url,$wb,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取所有方法信息
+	 */
+	public function getAllWorkFlowFun($canshu)
+	{
+		$url = "getAllWorkFlowFun";
+		return $this->post(self::SERVICE_NAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	/**
+	 * 新增工作流调用方法
+	 */
+	public function addWorkFlowFun($data){
+		$url = "addWorkFlowFun";
+		return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	
+	public function delWorkFlowFun($postData){
+		$url = "delWorkFlowFun";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	
+	}
+	
+	/**
+	 * 判断流程需不需要进行测试 
+	 * @author longjunhao 20140609
+	 */
+	public function stationWorkflow($postData) {
+		$url = "stationWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	
+	/**
+	 * 测试工作流流程走此方法
+	 * @author longjunhao 20140609
+	 */
+	public function detectionWorkflow($postData) {
+		$url = "detectionWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 导出工作流模版
+	 * @author longjunhao 20140610
+	 */
+	public function exportWorkflowModel($postData) {
+		$url = "exportWorkflowModel";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+/**
+	 * 获取表单导入的url
+	 * @return Ambigous <string, string>
+	 */
+	public function importWorkflow(){
+		$urlParam=array('importWorkflow');
+		$url=implode('/',$urlParam);
+		$restUrl = $this->getUri(self::SERVICE_NAME, $url);
+		return $restUrl;
+	}
+	
+	/**
+	 * 获取待发工作流的信息
+	 * @author longjunhao 20140616
+	 */
+	public function getSavedWorkflow($postData) {
+		$url = "getSavedWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 
+	 * 提交待发流程
+	 * @author longjunhao 20140617
+	 */
+	public function startSavedWorkflow($postData){
+		$url = "startSavedWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 保存待发方法 
+	 * @author longjunhao 20140617
+	 */
+	public function saveOldWorkflow($postData){
+		$url = "saveOldWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取已办
+	 * @author longjunhao 20140620
+	 * @param unknown $postData
+	 * @return Ambigous <return_type, mixed, string>
+	 */
+	public function getHaveTodoWorkflow($postData) {
+		$url = "getHaveTodoWorkflow";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 保存待批方法
+	 * @author longjunhao 20140619
+	 */
+	public function wfSaveNotExcuteManager($postData){
+		$url = "wfSaveNotExcuteManager";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 获取流程集合的方法（根据表单权限去获取，为发起流程使用）
+	 * @author wanghongchen 20140623
+	 */
+	public function getWfList($param){
+		return $this->post(self::SERVICE_NAME, "getWfList",$param,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取数据附件
+	 * @author longjunhao 20140623
+	 */
+	public function getSavedWfDataList($postData){
+		$url = "getSavedWfDataList";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 添加数据附件到数据库
+	 * @author longjunhao 20140624
+	 */
+	public function addDataDetail($postData){
+		$url = "addDataDetail";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 删除数据附件
+	 * @author longjunhao 20140624
+	 */
+	public function deleteDataDetail($postData){
+		$url = "deleteDataDetail";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 工作流打印表单
+	 * @author longjunhao 20140625
+	 */
+	public function workFlowPrint($postData) {
+		$url = "workFlowPrint";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 
+	 * 获取关联表单的所有字段，用于字段权限设置
+	 * @author longjunhao 20140708 
+	 */
+	public function getFormFieldsNew($postData){
+		$url = "getFormFieldsNew";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/** 
+	 * 用于专门获取流程中报表设置
+	 * @author longjunhao 20140708 
+	 */
+	public function getSetPrintsNew($postData){
+		$url = "getSetPrintsNew";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 根据工作流id和actionId获取动作信息 
+	 * @author longjunhao 20140710
+	 */
+	public function actionCheckMethodNew($postData){
+		$url = "actionCheckMethodNew";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取存储条件
+	 * @author longjunhao 20140712
+	 */
+	public function getConditionToShowNew($postData){
+		$url = "getConditionToShowNew";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 查询所有数据附件的dataList
+	 * @author longjunhao 20140731 
+	 */
+	public function getAllDataListStr($postData){
+		$url = "getAllDataListStr";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 获取所有待办条数
+	 * @author liuhezeng 20140712
+	 */
+	public function listWorkFlowAll($postData){
+		$url = "listWorkFlowAll";
+		return $this->post(self::SERVICE_NAME, $url,$postData,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 根据formId获取工作流信息
+	 * @author wanghongchen 20140916
+	 */
+	public function getWFModelByFormId($param)
+	{
+		return $this->post(self::SERVICE_NAME, 'getWFModelByFormId', $param, "application/json;charset=UTF-8");
+	}
+	
+	/**
+	 * 删除待发、已发数据，已发只能删除自己发起的且已完成的流程数据
+	 * @author longjunhao 20140925
+	 */
+	public function deleteUserformData($postData) {
+		return $this->post(self::SERVICE_NAME, 'deleteUserformData', $postData, "application/json;charset=UTF-8");
+	}
+}

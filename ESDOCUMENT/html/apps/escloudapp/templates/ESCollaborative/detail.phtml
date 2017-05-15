@@ -1,0 +1,304 @@
+<style type="text/css">
+
+</style>
+
+<div class='borrowing_message'>
+	<div class='positionbtn'>
+		<div id="jieyue" class='buttons'>
+			<input type='button' value='同意' class='basebtn basebtn_border btn agree' />
+			<input type='button' value='退回' class='basebtn basebtn_border btn back' />
+			<input type='button' value='转审批' class='basebtn basebtn_border btn approval' />
+			<input type='button' value='流程图' class='basebtn basebtn_border image process' />
+		</div>
+	</div>
+	
+	<div class='message_list'>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>借阅人：</span>
+				<input type='text' value="<?php echo $list->borrow_base->manager_reader==''?$list->borrow_base->display_name:$list->borrow_base->manager_reader;?>" readonly='readonly' />
+			</p>
+			<p class='like_input'>
+				<span>利用目的：</span>
+				<input type='text' value="<?php echo $list->borrow_base->lymd_f2;?>" readonly='readonly' />
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>单位：</span>
+				<input type='text' value="<?php echo $list->borrow_base->dw_f3;?>" readonly='readonly' />
+			</p>
+			<p class='like_input'>
+				<span>电话：</span>
+				<input type='text' value="<?php echo $list->borrow_base->dh_f4;?>" readonly='readonly' />
+			</p>
+		</div>
+		<div class='field_s'>
+			<p class='like_input'>
+				<span>邮箱：</span>
+				<input type='text' value="<?php echo $list->borrow_base->yx_f5;?>" readonly='readonly' />
+			</p>
+			<p class='like_input'>
+				<span>催还提前天数：</span>
+				<input type='text' value="<?php echo $list->borrow_base->jysc_f6;?>" readonly='readonly' />
+			</p>
+		</div>
+		<div class='like_textarea'>
+			<h2>借阅描述：</h2>
+			<textarea readonly='readonly' class='extextarea'><?php echo $list->borrow_base->jyms_f7;?></textarea>
+		</div>
+		<?php
+		$j=0;
+		$len = count($list->borrow_opinion);
+		if ($list->borrow_base->activity=="departmentApproval"){
+			echo '<script type="text/javascript">var nowuse = "departmentApprovalResult" ;</script>';
+		}
+		if($list->borrow_base->activity=="fileClerkConfirm"){
+			echo '<script type="text/javascript">nowuse = "fileClerkApprovalResult" ;</script>';
+			if($len>0){
+				if($list->borrow_opinion[$len-1]!="agree"){
+					$j=1;
+				}
+			}
+		}
+		foreach ($list->borrow_opinion as $val){
+?>
+		<div class='like_textarea'>
+			<h2><?php echo $val->opinion_user_name;?>审批意见：</h2>
+			<textarea readonly='readonly' class='extextarea'><?php echo $val->opinion_desc;?></textarea>
+		</div>
+<?php 
+		}
+		
+	
+	?>
+	<div class='like_textarea'>
+			<h2>请输入您的意见：</h2>
+			<textarea name="leaderidea"  class='extextarea'></textarea>
+	</div>
+	</div>
+	<input type="hidden" name="workid" value="<?php echo $list->borrow_base->workflowid;?>" />
+	<input type="hidden" name="taskid" value="<?php echo $list->borrow_base->task_id;?>" />
+	<div class='borrowing_detailed_tbl'><div class='borrowing_detailed_tbl_child'><table id="application"></table></div></div>
+</div>
+		
+		
+<script type="text/javascript">
+var operation ="";//操作
+var localvar = "false";//只在转审批时operation=delegate时传入true  其他传入false
+var letin = "";
+var workid="";
+$(document).ready(function(){
+	var typeArchive = "<?php echo $list->borrow_base->archiveType;?>";
+	var ACodeMeta='';
+	var titleMeta='';
+	if(typeArchive=='accounting'){
+		ACodeMeta='RecordID';
+		titleMeta='Summary';
+	}else if(typeArchive=='document'){
+		ACodeMeta='ArchivalCode';
+		titleMeta='Title';
+	}else if(typeArchive=='contract'){
+		ACodeMeta='RecordID';
+		titleMeta='Title';
+	}/*else if(typeArchive=='technical'){
+		ACodeMeta='RecordID';
+		titleMeta='Title';
+	}else if(typeArchive=='auditfiles'){
+		ACodeMeta='RecordID';
+		titleMeta='Title';
+	}*/
+	$.post($.appClient.generateUrl({ESAccountingArchive:'getTagByMetadata'},'x'),{arType:typeArchive,ACodeMeta:ACodeMeta,titleMeta:titleMeta},function(result){
+		result=jQuery.parseJSON(result);
+		if(result){
+			for(var i=0;i<result.length;i++){
+				if(result[i].esidentifier==ACodeMeta){
+					var ACodeName=result[i].tagChineseName;
+				}else if(result[i].esidentifier==titleMeta){
+					var titleName=result[i].tagChineseName;
+				}
+			}
+			var modelColum=[
+					{display: '序号', name : 'c3', width : 40, sortable : true, align: 'center'},
+					{display: ACodeName, name : 'c4', width : 150, sortable : true, align: 'center',metadata:ACodeMeta},
+					{display: titleName, name : 'c5', width : 160, sortable : true, align: 'center',metadata:titleMeta},
+					{display: '借阅类型', name : 'c6', width : 100, sortable : true, align: 'center'},
+					{display: '备注', name : 'c7', width : 180, sortable : true, align: 'center'}
+					];
+			$("#application").flexigrid({
+				dataType: 'json',
+				colModel : modelColum,
+				usepager: true,
+				title: '借阅明细',
+				useRp: true,
+				rp: 5,
+				procmsg:"正在加载，请稍等",
+				nomsg:"没有数据",
+				resizable:false,
+				minColToggle:0,
+				showTableToggleBtn: false,
+				pagetext: '第',
+				outof: '页 /共',
+				width: 665,
+				height: 160,
+				pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+			});
+			var tableurl = $.appClient.generateUrl({ESCollaborative:'get_json'},'x');
+			$("#application").flexOptions({newp:1,url:tableurl,query:query}).flexReload();
+		}
+	});
+	$("#jieyue .btn").die().live('click',function(){
+	workid = $("input[name='workid']").val();
+	var taskid = $("input[name='taskid']").val();
+	var operate  = $(this).val();
+	if(operate=="同意"){
+		letin = "mm";
+	}else{
+		letin = "Reject";
+	}
+	if(operate=="同意"||operate=="退回"){
+		operation = "complete";
+		localvar = "false";
+	}else{
+		operation = "delegate";
+		localvar = "true";
+	}
+	if(operate=="退回"){
+		var idea = $("textarea[name='leaderidea']").val();
+		if(idea==""){
+			idea="回退";
+		}
+		if(confirm("确定要退回么")){
+		 var url = $.appClient.generateUrl({ESCollaborative:'operate'},'x');
+		 $.post(url,{taskid:taskid,operation:operation,operate:operate,localvar:localvar,nowuse:nowuse,letin:letin,workid:workid,idea:idea},function(result){
+			   if(result=="1"){
+				   $.dialog.notice({icon:"succeed",content:"退回成功",time:2});
+				   dia.close();
+				   $("#mylist").flexOptions({newp:1}).flexReload();
+				}
+			});
+		}
+	}else if(operate=="转审批"){
+		var idea = $("textarea[name='leaderidea']").val();
+		if(idea==""){
+			idea="转审批";
+		}
+		var url = $.appClient.generateUrl({ESArchiveLending:'approveToUser'},'x');
+		$.ajax({
+			url:url,
+			type:"POST",
+			data:{workid:workid},
+			success:function(data){
+				$.dialog({
+			    	title:'下一级用户列表',
+			    	padding:0,
+		    	   	fixed:true,
+		    	    resize: false,
+			    	content:data,
+			    	okVal:'提交',
+			    	cancelVal:'取消',
+			    	ok:true,
+				    cancel: true,
+				    ok:function(){
+				    	
+				    	var perObj=$("#perList").find("input:checked");
+		  				if(perObj.length==0){
+			  				$.dialog.notice({content:'请选择审批人！',icon:'warning',time:3});
+						    return false;
+		  				}
+		  				var perId = $("#perList").find("input:checked").attr('id');
+						var listId=perId.split('|');
+						var opinionId=listId[0];
+						
+				    	//var username=$("#getuser input[name='id2']:checked").val();
+					    var url = $.appClient.generateUrl({ESCollaborative:'operate'},'x');
+					    $.post(url,{taskid:taskid,operation:operation,operate:operate,localvar:localvar,username:opinionId,nowuse:nowuse,letin:letin,workid:workid,idea:idea},function(result){
+					    	if(result=="1"){
+								   $.dialog.notice({icon:"succeed",content:"操作成功",time:3});
+								   dia.close();
+								   $("#mylist").flexOptions({newp:1}).flexReload();
+								}
+						});
+					}
+					
+			    });
+			},
+			cache:false
+		});
+	}
+	else{
+		var idea = $("textarea[name='leaderidea']").val();
+		if(idea==""){
+			idea="同意";
+		}
+		var mj = <?php echo $j;?>;
+		if(mj==1){
+			 var url = $.appClient.generateUrl({ESCollaborative:'agree'},'x');
+			    $.post(url,{taskid:taskid,operation:operation,operate:operate,localvar:localvar,nowuse:nowuse,letin:letin,workid:workid,idea:idea},function(result){
+			    	if(result=="1"){
+						   $.dialog.notice({icon:"succeed",content:"成功",time:2});
+						   dia.close();
+						   $("#mylist").flexOptions({newp:1}).flexReload();
+							  
+						}
+				});
+		}else{
+			var url = $.appClient.generateUrl({ESArchiveLending:'approveToUser'},'x');
+			$.ajax({
+				url:url,
+				type:"POST",
+				success:function(data){
+					$.dialog({
+				    	title:'下一级用户列表',
+				    	padding:0,
+			    	   	fixed:true,
+			    	    resize: false,
+				    	content:data,
+				    	okVal:'提交',
+				    	cancelVal:'取消',
+				    	ok:true,
+					    cancel: true,
+					    ok:function(){
+					    	
+						    var perObj=$("#perList").find("input:checked");
+			  				if(perObj.length==0){
+				  				$.dialog.notice({content:'请选择审批人！',icon:'warning',time:3});
+							    return false;
+			  				}
+			  				var perId = $("#perList").find("input:checked").attr('id');
+							var listId=perId.split('|');
+							var opinionId=listId[0];
+							
+						    //var username = $("#user input[name='id2']:checked").val();
+						    var url = $.appClient.generateUrl({ESCollaborative:'operate'},'x');
+						    $.post(url,{taskid:taskid,operation:operation,operate:operate,localvar:localvar,username:opinionId,nowuse:nowuse,letin:letin,workid:workid,idea:idea},function(result){
+						    	if(result=="1"){
+									   $.dialog.notice({icon:"succeed",content:"成功",time:2});
+									   dia.close();
+									   $("#mylist").flexOptions({newp:1}).flexReload();
+									}
+							});
+						}
+				    });
+				}
+			});
+		}
+	}
+	});
+	$(".image").die().live('click',function(){
+		var workid = $("input[name='workid']").val();
+		var url = $.appClient.generateUrl({ESCollaborative:'imgview', workid:workid},'x');
+		var html = '<img src = "'+url+'" />';
+		$.dialog({
+		    	title:'详细信息',
+		    	padding:0,
+	    	   	fixed:true,
+	    	   	width:580,
+	    	   	height:390,
+	    	    resize: false,
+		    	content:html
+		    });
+	});
+});
+$('.basebtn').hover(function (){$('.basebtn').removeClass('extbtnmouseover');$(this).addClass('extbtnmouseover');},function (){$('.basebtn').removeClass('extbtnmouseover');});
+</script>

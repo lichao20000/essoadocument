@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESLog/css/index.css" />
+<link rel='stylesheet' type='text/css' href='<?php echo $tplPath;?>/ESLog/css/filter.css' />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'日志管理'));?>
+<script type="text/javascript" charset="UTF-8" src="<?php echo $tplPath;?>/ESLog/js/template.js"></script>
+
+<div id="ESSystemIndex" >
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<div id='ztree' class='init-style' style = "margin-right:10px;">
+	<div id='log-tree' class='ztree' style = "margin-top:10px;"></div>
+</div>
+<div id='table' class='init-style'>
+	<table id='log-table'></table>
+</div>
+
+
+</div>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESAnnualInspection/js/highstock.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESAnnualInspection/js/exporting.js"></script>

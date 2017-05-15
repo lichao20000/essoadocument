@@ -1,0 +1,27 @@
+<!-- yanghuiqiang 20140523 异常解决窗口-->
+
+<style>
+<!--
+#addReport table tr {
+	height: 50px;
+}
+-->
+</style>
+<div style="">
+	<div style="padding-top: 30px;">
+		<form id="solveCrashReport" method="post" enctype="multipart/form-data">
+			<table style="height: 100px;">
+				<tr>
+					<td><input type="hidden" name="id" id="id" value="<?php echo $crashReport->id;?>"
+						style="width: 380px; height: 0px;" /></td>
+				</tr>
+				<tr>
+					<td>异常解决描述：</td>
+					<td><textarea name="solveContent" id="solveContent" value=""
+						style="width: 380px; height: 100px;"></textarea></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+

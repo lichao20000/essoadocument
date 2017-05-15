@@ -1,0 +1,151 @@
+<style type="text/css">
+	.clear:after{content:".";height:0px;visibility:hidden;display:block;clear:both;}
+	.inputw{width: 200px; height: 19px; line-height: 20px;}
+	.inputwt{width: 212px; height: 19px; line-height: 20px;}
+	.divtop{width: 650px; height: 190px;}
+	.divtop ul,li{list-style: none;}
+	.divtop ul{float: left; margin-top: 10px;}
+	.divtop ul li{float: left;}
+	.liwidtw{width: 66px; line-height: 25px;}
+	.liwidtwt{width: 140px; line-height: 25px; padding-right: 20px; text-align: right;}
+	.cle{clear: both;}
+	.sele{position:absolute; width: 215px; height: 22px; clip: rect(0 215 22 191); margin-left: 2px;margin-left: 0px\9;}
+	.sein{position:absolute; width: 191px; height: 18px; padding-left: 2px;}
+</style>
+<div>
+	<div><form id="form" method="post" action="" enctype="multipart/form-data">
+		<div class="divtop">
+			<ul>
+				<li class="liwidtw">借阅人</li>
+				<li>
+					<input type="hidden" value="<?php echo $userId;?>" name="jyr_f1" />
+					<input type="text" value="<?php echo $userName;?>" readonly="readonly" class="inputw"/>
+				</li>
+				<li class="liwidtwt">利用目的</li>
+				<li><select name="lymd_f2" style="width:216px;height:24px;line-height: 24px;padding:2px;">
+					<option>编史修志</option>
+					<option>工作查考</option>
+					<option>学术研究</option>
+					<option>经济建设</option>
+					<option>宣传教育</option>
+					<option>其他</option>
+					</select>
+				</li>
+			</ul>
+			<ul>
+				<li class="liwidtw">单位</li>
+				<li><input type="text" value="<?php echo $dept;?>" name="dw_f3" readonly="readonly" class="inputw"/></li>
+				<li class="liwidtwt">电话</li>
+				<li><input type="text" value="<?php echo $mobTel;?>" name="dh_f4" class="inputwt"/></li>
+			</ul>
+			<ul>
+				<li class="liwidtw">邮箱</li>
+				<li><input type="text" value="<?php echo $email?>" name="yx_f5" class="inputw"/></li>
+				<li class="liwidtwt">催还提前天数（天）&nbsp;<span style="color: red;">*</span></li>
+				<li>
+					<!-- <select name="select" id="select" class="sele" onchange="jysc_f6.value=select.options[select.selectedIndex].text;jysc_f6.select()">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3" selected="selected">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+					</select>
+					<input type="text" class="sein" name="jysc_f6" value="3" onfocus="this.select();"> -->
+					<input type="text" value="3" name="jysc_f6" class="inputwt"/>
+				</li>
+			</ul>
+			<ul>
+				<li class="liwidtw">描述</li>
+				<li><textarea name="jyms_f7" cols="3" rows="3" style="width:575px;"></textarea></li>
+			</ul>
+		</div>
+		<div class="cle"></div>
+	</form></div>
+	<div class="esbottom" >
+		<table id="readingList"></table>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	//表单验证开始
+	$("input[name='dh_f4']").keyup(function(){
+		var regTel=/^((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})$))$/g;
+		if((!regTel.test(this.value))&&(this.value!='')){
+			$("input[name='dh_f4']").addClass("invalid-text").attr("title","请输入合法的电话号码");
+			return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+	$("input[name='yx_f5']").keyup(function(){
+		var regEmail=/^[\w]+([-.][\w]+)*@[\w]+([-.]\w+)*\.[\w]+(\.[\w]+)?$/;
+		if((!regEmail.test(this.value))&&(this.value!='')){
+			$("input[name='yx_f5']").addClass("invalid-text").attr("title","请输入合法的邮箱");
+			return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+	$("input[name='jysc_f6']").keyup(function(){
+		var reg=/^[1-9]\d*$/;
+		if(!reg.test(this.value)){
+			$("input[name='jysc_f6']").addClass("invalid-text").attr("title","此项不能为空且只能输入大于零的数字");
+			return false;
+		}else if(this.value > 30){
+			$("input[name='jysc_f6']").addClass("invalid-text").attr("title","借出天数不能超过30天");
+			return false;
+		}
+		$(this).removeClass("invalid-text").attr("title","");
+	});
+	//表单验证结束
+	//列表
+	$("#readingList").flexigrid({
+			url: $.appClient.generateUrl({ESArchiveSeache:'session_list'}, 'x'),
+			dataType: 'json',
+			editable: false,
+			preProcess:function(data){
+				if(data.totalnum == 1){
+					$.dialog.notice({content:'部分数据已不存在，请联系系统管理员.',icon:'warning',time:3});
+				}
+				return data;
+			},
+			colModel : [
+				{display: '序号', name : 'num', width : 30, align: 'center'}, 
+				{display: '<input type="checkbox" id="linkFileSelectAll">', name : 'ids', width : 18, align: 'center',hide:'true'},
+				{display: '借阅类型',name: 'class',width : 180, align: 'center',metadata:'c'},
+				{display: '档号', name : 'donum', width : 100, align: 'center',metadata:'a'},
+				{display: '题名', name: 'label',width : 170, editable:true, dropdown:['正文','附件','表单'],align: 'center',metadata:'b'},
+				{display: '借阅原因', name: 'remark', width :140,editable: true,align: 'left',metadata:'d'}
+			],
+			usepager: true,
+			title: '借阅明细列表',
+			useRp: true,
+			width: 646,
+			height: 180
+	});
+	//判断实体借出
+	$(":radio",$("#readingList")).die().live('change',function(){
+		var arcid = $(this).attr("name");
+		var thisobj = $(this);
+		var url = $.appClient.generateUrl({ESArchiveSeache:'getState'},'x');
+		$.ajax({
+			url:url,
+			data:"arcid=" + arcid,
+			type:'post',
+			cache:false,
+			success:function(data){
+				if(data){
+					thisobj.attr({checked:"checked"});
+				} else {
+					thisobj.attr({checked:false,disabled:"disabled"});
+					thisobj.siblings().eq(1).attr({checked:false,disabled:"disabled"});
+					thisobj.siblings().eq(0).attr({checked:"checked"});
+					$.dialog.notice({content:'已经借出！',icon:'warning',time:3});
+				}
+			}
+		});
+	});
+	
+});
+</script>
+

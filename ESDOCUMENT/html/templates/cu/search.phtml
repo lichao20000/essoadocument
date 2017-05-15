@@ -1,0 +1,55 @@
+<style>
+.searchList em {font-style:normal;color:red;font-size:16px;}
+.searchList p em {font-size:12px;}
+</style>
+<div class="topNav" id="page-nav">
+  <div class="topNavL"><img src="<?php echo $tplPath?>/images/icons/search_icon1.gif" width="30" height="32" alt="搜索"/>搜索</div>
+  <div class="topNavC"><span class="color999" style=" line-height:23px;">找到相关结果 <?php echo isset($numfound) ? $numfound : 0;?> 个</span> </div>
+  <div class="topTabPage">
+  </div>
+</div>
+<div class="content" id="page-body">
+  <div class="left page-sidebar">
+    <ul>
+    <?php if(isset($filters) && count($filters) > 0):?>
+    <?php if(!isset($_GET['bundle_name'])){?>
+      <li class="leftOn bold">所有结果</li>
+      <?php }else{?>
+      <li><a href="<?php echo url("search/info?keywords=". urlencode($keywords). "&page=1".$queryString1)?>">所有结果</a></li>
+      <?php }?>
+
+      <?php foreach($filters as $key=>$value):?>
+      	<?php $fields = (array)$value; foreach ($fields as $field => $numcount):?>
+	      	<?php if(isset($_GET['bundle_name']) && $_GET['bundle_name'] == $field){?>
+	      	<li class="leftOn bold"><?php echo $field . '(' . $numcount .')'?></li>
+      	  <?php } else {?>
+      	  <li><a href="<?php echo url("search/info?keywords=". urlencode($keywords)."&{$key}=" . urlencode($field) . "&page=1".$queryString1)?>" title="<?php echo $field. '(' . $numcount .')';?>"><?php echo utf8_substr($field,0,12) . '(' . $numcount .')'?></a></li>
+      	  <?php }?>
+      	<?php endforeach;?>
+      <?php endforeach;?>
+    <?php endif;?>
+    </ul>
+  </div>
+  <div class="contentCenter page-content" style="padding:10px 0 0 10px">
+    <?php if (isset($spellword)) {?>
+    	<div class="centerTitle">
+      	<h1>您是不是要找：<a href="<?php echo url("search/info?keywords=".urlencode($spellword));?>" class="bold red font16"><?php echo $spellword?></a></h1>
+    	</div>
+    <?php }else{?>
+      <div class="centerTitle">
+      	<h1>显示以下查询字词的结果：<span class="bold red font16"><?php echo urldecode($keywords);?></span></h1>
+    	</div>
+    <?php }?>
+<?php if(isset($response)):?>
+<?php foreach($response as $v):?>
+    <div class="searchList"><?php echo $v ?></div>
+<?php endforeach;?>
+<?php endif;?>
+  <div class="searchPage"><?php echo $page;?></div>
+  </div>
+</div>
+
+<script>
+$('#seachKey').val('<?php echo $keywords?>');
+$('#searchArea').attr('value','info').html('信息');
+</script>

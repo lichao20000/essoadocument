@@ -1,0 +1,49 @@
+<!-- yanghuiqiang 20140523 档案预约主页-->
+<meta
+	http-equiv="content-type" content="text/html; charset=utf-8">
+<link
+	rel="stylesheet"
+	href="<?php echo $tplPath;?>/public/ztree/css/zTreeStyle/zTreeStyle.css"
+	type="text/css">
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link
+	rel="stylesheet" type="text/css"
+	href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<link
+	rel="stylesheet" type="text/css"
+	href="<?php echo $tplPath;?>/ESAppClientReserve/css/main.css" />
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/ESAppClientReserve/js/template.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app, 'title'=>'档案预约管理'));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>5));?>
+<!--<div id="ESAppClientReserve">
+  <table id="reserve"></table>
+</div>
+
+
+<div id="ESAppClientReserve" style="width: 600;">
+	<div class="reserveSearch">
+		<input id="reserveKeyWord"
+			onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')"
+			onfocus="alert('ss');if($(this).val()==\'请输入关键字\')$(this).val(\'\')"
+			type="text" name="roleKeyWord" value="请输入关键字" /><span
+			onclick="getRoleQuery()"></span>
+	</div>
+	<br>
+	<table id="reserve"></table>
+</div>
+-->
+<div id='ESAppClientReserve' class = "ESAppClientReserveContainer">
+	<div class='rightDiv' id='rightDiv'> 
+		 <table id="reserve"></table>
+	</div>
+</div>

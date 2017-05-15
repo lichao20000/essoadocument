@@ -1,0 +1,24 @@
+a img {border: 0 none;}
+a{text-decoration:none;}
+
+.topss1{border-bottom:1px solid #999999;}
+.topss1 .submit{width:1024px;margin:0 auto;text-align:left;padding-bottom:10px;padding-top:10px;}
+.topss1 .submit input{width:auto;height:30px;background:#E4E4E4;border:1px solid #CCCCCC;cursor:pointer;}
+.main1{position:relative;width:1024px;min-width:980px;overflow:hidden;margin:0 auto;font-family:Arial;font-size:14px;font-weight:bold;color:#333333;}
+.main1 .ldmleft{text-align:center;float:left;}
+.main1 .ldmleft .img{width:600px;height:600px;}
+.main1 .ldmleft .bg{background:#CCCCCC;width:600px;height:600px;padding:20px;}
+.main1 .ldmright{width:320px;float:left;height:640px;overflow-y:auto;}
+.main1 .ldmright .right_top{margin-top:10px;}
+.main1 .ldmright .right_top .title,.right_bottom .title,.right_center .title{border-bottom:1px solid #999999;padding-bottom:3px;padding-left:10px;}
+.main1 .ldmright .right_top .intro div,.right_center .intro div{margin-left:15px;margin-top:7px;}
+.main1 .ldmright .right_top .intro .extra,.right .right_center .intro  .extra{margin-left:10px;}
+.main1 .ldmright .right_top .intro label,.right_center .intro label{font-size:13px;font-weight:normal;color:#999999;}
+.main1 .ldmright .right_top .intro span,.right_center .intro span{font-size:13px;font-weight:normal;color:#333333;}
+.main1 .ldmright .right_center{margin-top:10px;}
+
+.main1 .right_bottom .title{margin-top:10px;}
+.main1 .right_bottom .word_img img{width:60px;height:60px;}
+.main1 .right_bottom .intro span{font-size:13px;font-weight:normal;font-style:normal;color:#333333;}
+.main1 .right_bottom .intro .total{width:65px;margin-left:10px;float:left;margin-top:5px;overflow:hidden;}
+.clear{clear:both;}

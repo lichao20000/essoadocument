@@ -1,0 +1,271 @@
+<link href="<?php echo $tplPath?>/ESArchiveSeache/css/search.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESArchiveSeache/js/catagory.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/DatePicker/WdatePicker.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>3));?>
+<div class="escatagory" id='catagory'>
+<ul id="fication" class="ztree"></ul>
+</div>
+<form name="form1" action="">
+<div class="remind"><a class="dl" href="<?php echo $esaction->generateUrl(array('ESArchiveSeache'=>'index'));?>?key=<?php echo urlencode($searchWord);?>">普通搜索</a></div>
+<!-- 提交 -->
+<div class='searchBox3'>
+	<span class='leftbg2'></span>
+	<div class='middlebg2'>
+		<input id="onword" type='text' class='searchText2' maxlength="100" name="key" placeholder='关键字' value="<?php echo $searchWord;?>" style="line-height: 30px;" />
+		<button class='searchSubmit3' type="button" style="font-size: 12px;">搜索</button>
+	</div>
+	<span class='rightbg2'></span>
+</div>
+<div style="clear: both;"></div>
+<!-- /提交 -->
+<div class="main"><div class="search">
+	<div class="showadvance">
+		<!-- 著录项筛选 -->
+		<div class="onshow">
+			<div class="advan">著录项筛选</div>
+			<div class="ance">
+			<select id="onclass">
+				<option value="all">请选择档案门类</option>
+				<option value="document">文书档案</option>
+				<option value="purchase">采购档案</option>
+				<option value="accounting">会计档案</option>
+				<option value="project">工程档案</option>
+				<option value="contract">合同档案</option>
+			</select>
+			</div>
+			<div id="oncha"></div>
+			<div class="clear"></div>
+		</div>
+		<!-- /著录项筛选 -->
+		<!-- 年度范围 -->
+		<div class="onshow">
+			<div class="screig">年度范围</div>
+			<div class="screige">
+				<span id="all" class="allselect">全选</span><span id="cle" class="allselect">清空</span>
+			</div>
+			<div class="clear"></div>
+			<div id="selall" class="sefl">
+				<span class="screfont">输入年份</span>
+				<span><input type="text" name="auyear" size="4" maxlength="4" value="" /></span>
+				<span id="ausess"></span>
+			</div>
+			<div class="yearpar">
+				<span class="screfont">年份筛选</span>
+				<span><input type="text" name="yearstart" size="4" maxlength="4" value="" /></span>
+				<span id="yearstart"></span>-
+				<span><input type="text" name="yearend" size="4" maxlength="4" value="" /></span>
+				<span id="yearend"></span>
+			</div>
+			<div class="clear"></div>
+			<div id="ckrand">
+				<div class="ckrd"><input type="checkbox" value="2012" /><span>2012</span></div>
+				<div><input type="checkbox" value="2011" /><span>2011</span></div>
+				<div><input type="checkbox" value="2010" /><span>2010</span></div>
+				<div><input type="checkbox" value="2009" /><span>2009</span></div>
+				<div><input type="checkbox" value="2008" /><span>2008</span></div>
+				<div><input type="checkbox" value="2007" /><span>2007</span></div>
+			</div>
+			<div class="clear" style="height: 10px;"></div>
+		</div>
+		<!-- /年度范围 -->
+		<!-- 所属单位 -->
+		<div class="onshow">
+			<div class="screig">所属单位</div>
+			<div class="screige">
+				<span id="alla" class="allselect">全选</span><span id="allb" class="allselect">清空</span><div class="morespan"><a class="dl" href="javascript:void(0)">显示更多</a></div>
+			</div>
+			<div class="clear"></div>
+			<div id="company"><?php echo $advan;?></div>
+			<div class="clear" style="height: 10px;"></div>
+		</div>
+		<!-- /所属单位 -->
+		<!-- 保管期限 -->
+		<div class="onshow">
+			<div class="screig">保管期限</div>
+			<div class="screige">
+				<span id="allc" class="allselect">全选</span><span id="alld" class="allselect">清空</span>
+			</div>
+			<div class="clear"></div>
+			<div id="timelimit">
+				<div><input type="checkbox" value="永久" /><span>永久</span></div>
+				<div><input type="checkbox" value="长期" /><span>长期</span></div>
+				<div><input type="checkbox" value="短期" /><span>短期</span></div>
+				<div><input type="checkbox" value="30年" /><span>30年</span></div>
+				<div><input type="checkbox" value="20年" /><span>20年</span></div>
+				<div><input type="checkbox" value="10年" /><span>10年</span></div>
+			</div>
+			<div class="clear" style="height: 10px;"></div>
+		</div>
+		<!-- /保管期限 -->
+	</div>
+</div></div></form>
+<div id="location" style="display: none;"></div>
+<script type="text/javascript">
+$(function(){
+	$("body").bind("mousedown", clickBodyDown);
+	$("#all").click(function(){
+		$("#ckrand :checkbox").attr("checked", true);
+	});
+	$("#cle").click(function(){
+		$("#ckrand :checkbox").attr("checked", false);
+	});
+	$("#alla").click(function(){
+		$("#company :checkbox").attr("checked", true);
+	});
+	$("#allb").click(function(){
+		$("#company :checkbox").attr("checked", false);
+	});
+	$("#allc").click(function(){
+		$("#timelimit :checkbox").attr("checked", true);
+	});
+	$("#alld").click(function(){
+		$("#timelimit :checkbox").attr("checked", false);
+	});
+	//select改变事件
+	$("#onclass").change(function(){
+		var ectval = $(this).children('option:selected').val(); 
+		var url=$.appClient.generateUrl({ESArchiveSeache:'changecontent'},'x');
+		$.ajax({
+			url:url,
+			type:'post',
+			data:"ectval="+ectval,
+			success:function(html){
+				$("#oncha").html(html);
+				$.getJSON($.appClient.generateUrl({ESIdentify : "getClassList",archiveType:ectval}, 'x'), function(zNodes) {
+						$.fn.zTree.init($("#fication"), setting, zNodes);
+						$("input[name='ClassificationCode']",$("#oncha")).focus(function(){
+							var offset=$(this).offset();
+							$('#catagory').show().offset({top:offset.top+20,left:offset.left});
+						})
+				});
+				
+			},
+			cache:false
+		});
+	});
+	//高级搜索提交表单
+	$(".searchSubmit3").click(function(){
+		//验证数字
+		var errnumber = '';
+		$("input[id='number']").each(function(){
+			var thisnumber = Stringnumber(this.value);
+			if(thisnumber != 200){
+				$("input[id='number']").css({ border: "" });
+				$(this).css({ border: "1px solid red" });
+				errnumber = '404';
+				return errnumber;
+			}
+		});
+		if(errnumber == '404'){
+			$.dialog.notice({content:'只能输入数字!',icon:'warning',time:3});
+			return false;
+		}
+		var ectval = $("#onclass").val();
+		var inputval = [];
+		$("#oncha input").each(function(){
+			inputval += $(this).attr('name')+'|'+$(this).val()+',';
+		});
+		$("#oncha select").each(function(){
+			inputval += $(this).attr('name')+'|'+$(this).val()+',';
+		});
+		var vrana = $("input[name='auyear']").val();
+		var vranaer = isString(vrana,"#ausess");
+		if(vranaer == '404'){return false;}
+		var ystart = $("input[name='yearstart']").val();
+		var ystarter = isString(ystart,"#yearstart");
+		if(ystarter == '404'){return false;}
+		var yrend = $("input[name='yearend']").val();
+		var yrender = isString(yrend,"#yearend");
+		if(yrender == '404'){return false;}
+		if(ystarter == '200' && yrender == '200'){
+			if(ystart > yrend){
+				$("#yearend").html("时间格式错误");
+				$("#yearend").css("color","red");
+				return false;
+			}
+		}
+		var ckren = "";
+		$("#ckrand input:checkbox:checked").each(function(){
+			ckren += $(this).val()+',';
+		});
+		var company = "";
+		$("#company input:checkbox:checked").each(function(){
+			company += $(this).val()+',';
+		});
+		var timelimit = "";
+		$("#timelimit input:checkbox:checked").each(function(){
+			timelimit += $(this).val()+',';
+		});
+		var key = $("input[name='key']").val();
+		var url=$.appClient.generateUrl({ESArchiveSeache:'adsearchall'},'x');
+		$.ajax({
+			url:url,
+			type:'post',
+			data:"inputval=" + deleteLastChar(inputval,',') + "&ectval=" + ectval + "&vrana=" + vrana + "&ystart=" + ystart + "&yrend=" + yrend + "&ckren=" + deleteLastChar(ckren,',') + "&company=" + deleteLastChar(company,',') + "&timelimit=" + deleteLastChar(timelimit,',') + "&key=" + key,
+			success:function(html){
+				//alert(html);return;
+				$("#location").html(html);
+			}
+		});
+	});
+	//更多所属单位
+	$(".morespan").click(function(){
+		var dis = $("#morespan").css("display");
+		if(dis == "none"){
+			$("#morespan").css({ display: "block" });
+			$(".morespan").html("<a class='dl' href='javascript:void(0)'>隐藏</a>");
+		} else {
+			$("#morespan").css({ display: "none" });
+			$(".morespan").html("<a class='dl' href='javascript:void(0)'>显示更多</a>");
+		}
+	});
+	
+});
+
+//去掉最后一个逗号
+function deleteLastChar(str,c){
+	if(str != ""){
+		var reg = new RegExp(c+"([^"+c+"]*?)$");
+		return str.replace(reg,function(w){
+			if(w.length>1){
+				return w.substring(1);
+			}else{
+				return "";
+			}
+		});
+	}
+}
+//验证年度范围时间
+function isString(obj,sess){
+	var reg = /^[0-9]*$/; 
+	if(obj == ""){
+		return true;
+	}
+    if(!reg.test(obj)){
+    	$(sess).css("color","red");
+    	$(sess).html("只能输入数字");
+    	return 404;
+    	
+    } else if(obj.length != 4) {
+        $(sess).css("color","red");
+        $(sess).html("请输入有效年份如:&nbsp;2012");
+        return 404;
+        
+    } else {
+        $(sess).css("color","green");
+        $(sess).html("输入正确");
+        return 200;
+    }
+}
+//验证数字
+function Stringnumber(obj){
+	var reg = /^[0-9]*$/; 
+    if(!reg.test(obj)){
+    	return 404;
+    } else {
+        return 200;
+    }
+}
+</script>

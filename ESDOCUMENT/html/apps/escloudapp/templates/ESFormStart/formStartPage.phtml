@@ -1,0 +1,605 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ext/resources/css/ext-all.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/ext-all.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/source/locale/ext-lang-zh_CN.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/Utils.js"></script>
+
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeTbar.css" type="text/css">
+
+<link rel="stylesheet" href="<?php echo $tplPath;?>/public/SWFUpload/css/swfupload.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/SWFUpload/js/handlers.js"></script>
+<link rel="stylesheet" href="<?php echo $tplPath ?>/ESFormStart/css/style.css" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/ESFormStart/css/formStartPage.css" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/formStartHandle.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESFormStart/js/addAttachData.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESCollaborative/js/collaborativeHandle.js"></script>
+
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/viewfile.css" />
+
+<div id="formStartPage" class="formStartPage" dataid='<?php echo $data[5];?>'
+	tplPath='<?php echo $tplPath;?>' 
+	formid='<?php echo $data[0];?>' 
+	wfmodelid='<?php echo $data[1];?>' 
+	actionid='<?php echo $data[2];?>' 
+	actionsize='<?php echo $data[3];?>'
+	wfId='<?php echo $data[6];?>' 
+	wfType='<?php echo $data[7];?>'
+	relationBusiness='<?php echo $data[8];?>'
+	startFrom='<?php echo $data[9];?>'
+	dataList='<?php echo $data[10];?>'
+	printStepId='<?php echo $data[11];?>'
+	userFormNo='<?php echo $data[12];?>'
+	fileNames='<?php echo $data[13];?>'
+	filePaths='<?php echo $data[14];?>'
+	comboIDs='<?php echo $data[15];?>'
+	gridComBoIDs='<?php echo $data[16];?>'
+	stepId='<?php echo $data[17];?>'
+	tempReadDate=''
+	dataHaveRight=''>
+	<div class="tabpanel">
+		<ul id="subnav" class="subnav">
+			<li id='FORM_TAB' class="defalutTagOpen"><span>基本表单</span></li>
+			<li id='DATA_TAB'><span>数据附件</span></li>
+			<li id='FILE_TAB'><span>文件附件</span></li>
+		</ul>
+	</div>
+	<div id='FORM_TAB_DIV' class="formBuilderDiv Tags">
+		<div id='formBuilderPanelDiv' class="formBuilderPanelDiv">
+		</div>
+	</div>
+	<div id='DATA_TAB_DIV' class="formBuilderDatas Tags">
+		<div class='buttoncss' style='border-bottom:0px;'>
+		 	<div id='addAttachDataBtn'><span class="add" style="padding-left:20px;">添加数据附件</span></div> 
+		 	<div id='deleteAttachDataBtn'><span class="delete" style="padding-left:20px;">删除</span></div> 
+		 	<div id='batchEditReadAttachDataBtn'><span class="edit" style="padding-left:20px;">批量设置浏览天数</span></div> 
+		 	<div id='batchEditDownAttachDataBtn'><span class="edit" style="padding-left:20px;">批量设置下载天数</span></div> 
+		 	<div id='batchEditPrintAttachDataBtn'><span class="edit" style="padding-left:20px;">批量设置打印天数</span></div> 
+		 	<div id='batchEditEntityAttachDataBtn'><span class="edit" style="padding-left:20px;">批量设置实体借阅</span></div> 
+		</div>
+		<div id='addAttachDataGridDiv' class='formStart_grid'>
+			<table id='borrowDetails'></table>
+		</div>
+	</div>
+	<div id='FILE_TAB_DIV' class="formBuilderFiles Tags">
+		<div class='buttoncss'>
+		 	<div id='addAttachFileBtn'><span class="add" style="padding-left:20px;">添加文件附件</span></div> 
+		</div>
+		<div class='filesDiv' >
+	  		<table id="attachFileDataTable" filePaths="<?php echo $data[14];?>" fileNames="<?php echo $data[13];?>" width="100%" border="0" cellspacing="0" cellpadding="5" align="left">
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function() {
+	/** 渲染中间formpanel **/
+	setTimeout(function(){
+		new Ext.Panel({
+			id:'formBuilderPanel',
+			width:744,
+			border:false,
+			items:eval([<?php echo $data[4];?>]),
+			renderTo:'formBuilderPanelDiv'
+		});
+
+		// longjunhao 20140928 add replace(/&#39;/g, '\'').replace(/&#34;/g, '\"').replace(/&#92;/g, '\\')
+		$('#formBuilderPanel').find("input:text.x-form-field,textarea").each(function(){
+			$(this).val($(this).val().replace(/&#39;/g, '\'').replace(/&#34;/g, '\"').replace(/&#92;/g, '\\'));
+		});
+		
+		/** guolanrui 201407010 用户信息数据字典 start **/
+		if('<?php echo $data[16];?>' != ''){
+			var gridComBoIDs = <?php echo $data[16];?>;
+			
+			for(var i=0;i<gridComBoIDs.length;i++){
+				var gridComboID = gridComBoIDs[i];
+// 				alert(gridComboID);
+				Ext.getCmp(gridComboID).on('expand',showUserTable);	
+// 				Ext.getCmp(gridComboID).on('collapse',showUserTable);	
+			}	
+		}
+
+		function showUserTable(){
+			var gridComboID = $(this).attr('id') ;
+			var tempGridComBoID = "#show"+gridComboID;
+			var tempGridComBoDivID = "#show"+gridComboID+"div";
+// 			var parentDIVId = $(tempGridComBoDivID).closest('div');
+// 			alert(parentDIVId.attr('id'));
+// 			alert($(tempGridComBoID).html()=="");
+// 			alert($(tempGridComBoDivID).html()=='<table id=\"show'+gridComboID+'\"></table>');
+			
+			if($(tempGridComBoID).html()!=''){return;
+// 				$(tempGridComBoID).html('');
+// 				$(tempGridComBoDivID).destroy();
+// 				$(tempGridComBoDivID).remove();
+// 				$(tempGridComBoID).destroy();
+// 				$(tempGridComBoDivID).html('<table id=\"show'+gridComboID+'\"></table>');
+			}
+			var __colModelForUser = [
+										{display: '序号', name : 'startNum', width : 20, align: 'center',metadata:'startNum'},
+										{display: 'userid', name : 'userid', width : 50,hide:true, align: 'left',metadata:'userid'},
+										{display: '用户名称', name : 'Name', width : 100, align: 'left',metadata:'Name'},
+										{display: '机构', name : 'orgName', width : 300, align: 'left',metadata:'orgName'}
+									];
+			var __urlForUserList = $.appClient.generateUrl({ESOrgAndUser:'findUserListAndOrgName',orgSeq:'',keyWord:''},'x');
+// 			alert(tempGridComBoID);
+			$(tempGridComBoID).flexigrid({
+				id:gridComboID+'_Grid',
+	    			url :__urlForUserList,
+					dataType : 'json',
+	    			colModel : __colModelForUser,
+	    			buttons : [],
+	    			singleSelect:true,
+	    			usepager : true,
+	    			useRp : true,
+	    			rp : 20,
+	    			nomsg : "没有数据",
+	    			showTableToggleBtn : false,
+	    			pagetext : '第',
+	    			outof : '页 /共',
+	    			width : 'auto',
+	    			height : 180,
+	    			pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条' 
+	    		});
+				$(tempGridComBoID).flexReload();
+				/** 搜索框 start **/
+				$(tempGridComBoDivID).find('div[class="tDiv2"]').html('');
+				$(tempGridComBoDivID).find('div[class="tDiv2"]').append('<span style="float:left;margin-bottom:5px;">&nbsp;</span><div class="find-dialog"><input id="userAndOrgQuery'+gridComboID+'" tempId="'+gridComboID+'" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="userAndOrgQuery'+gridComboID+'" value="请输入关键字" /><span id="userAndOrgQueryButton'+gridComboID+'" tempId="'+gridComboID+'"></span></div>');
+
+				$('#userAndOrgQueryButton'+gridComboID).click(function(e){
+// 					var tempId = $(this).attr('tempId');
+					userAndOrgQuery(gridComboID);
+				});
+					
+				/** 搜索框 end **/
+				/** 给flexigrid 增加行单击事件 start **/
+				$(tempGridComBoID).find("tr").die().live("click", function(){
+					var userName = $(tempGridComBoID).flexGetColumnValue($(this),['Name']);
+					Ext.getCmp(gridComboID).setValue(userName);
+					Ext.getCmp(gridComboID).collapse();
+				});	
+				/** 给flexigrid 增加行单击事件 end **/
+		}
+		
+		/** guolanrui 201407010 用户信息数据字典 end **/
+		/** guolanrui 201407010 机构信息数据字典 start **/
+		if('<?php echo $data[15];?>' != ''){
+			var comboIDs = <?php echo $data[15];?>;
+			for(var i=0;i<comboIDs.length;i++){
+				var comboID = comboIDs[i];
+				Ext.getCmp(comboID).on('expand',showOrgTreeUL);
+			}	
+		}
+		function showOrgTreeUL(){
+			var comboID = $(this).attr('id') ;
+			var tempComBoID = "#show"+comboID;
+//				alert(tempComBoID);
+			var orgZTree;
+			var orgTreeNodes;
+			var orgSetting = {
+				isSimpleData : true, // 数据是否采用简单 Array 格式，默认false
+				showLine : true, // 是否显示节点间的连线
+				checkable : false, // 每个节点上是否显示 CheckBox
+				data : {
+					simpleData : {
+						enable : true,
+					}
+				},
+				async : {
+					enable : true,
+					beforeSend:function(xhr) {},
+			        complete:function(){},
+					type : "get",
+					autoParam : [ 'id' ],
+					url : $.appClient.generateUrl({ESOrgAndUser : 'expandOrgListTree'}, 'x')
+				},
+				callback : {
+					onClick : function(event, treeId, treeNode){
+						Ext.getCmp(comboID).setValue(treeNode.name);
+						Ext.getCmp(comboID).collapse();
+					}
+				}
+			};
+			$.ajax({
+				async : false,
+				cache : false,
+				type : 'POST',
+				beforeSend:function(xhr) {},
+		        complete:function(){},
+				dataType : "json",
+				url : $.appClient.generateUrl({	ESOrgAndUser : 'getOrgListTreeNew'	}, 'x'),// 请求的action路径
+				error : function() {// 请求失败处理函数
+					alert('请求失败');
+				},
+				success : function(data) { // 请求成功后处理函数。
+					orgTreeNodes = data; // 把后台封装好的简单Json格式赋给treeNodes
+					orgZTree = $.fn.zTree.init($(tempComBoID), orgSetting,orgTreeNodes);
+					orgZTree.selectNode(orgZTree.getNodes()[0]);
+				}
+			});
+		}
+		/** guolanrui 201407010 机构信息数据字典 end **/
+		
+	},100);
+
+	$(".tabpanel").find("li").each(function(i){
+		$(this).click(function(){
+	    	formStartHandle.displayTag($(this).attr('id')+'_DIV', i);
+		});
+	});
+
+
+	//数据附件全选按钮
+	$("input[name='ids3']").die().live('click',
+		function(){
+			$("input[name='id3']").attr('checked',$(this).is(':checked'));
+		}
+	);
+	//添加借阅明细查看
+	var __colMol=[
+		
+		{display: '序号', name : 'num', width : 20, align: 'center',metadata:'num'}, 
+		{display: '<input type="checkbox" name="ids3" id="">', name : 'id3', width : 30, align: 'center'},
+		{display: 'documentFlag', name : 'documentFlag',hide:true,sortable : false, width : 160,align: 'left',metadata:'documentFlag'},
+		{display: '操作', name : 'handle',sortable : false, width : 30,align: 'center'},
+		<?php 
+			if($data[8]=='using'){//如果是利用流程，则添加数据权限这一列
+				echo '{display: \'数据名称\', name: \'title\',sortable : true,width : 230,align: \'left\',metadata:\'Title\'},';
+				echo '{display: \'文件浏览\', name: \'isRead\',sortable : true,width : 45,align: \'center\',metadata:\'isRead\'},';
+				echo '{display: \'浏览天数\', name: \'readDate\',sortable : true,width : 45,align: \'right\',editable:true,metadata:\'readDate\'},';
+				echo '{display: \'文件下载\', name: \'isDownload\',sortable : true,width : 45,align: \'center\',metadata:\'isDownload\'},';
+				echo '{display: \'下载天数\', name: \'downloadDate\',sortable : true,width : 45,align: \'right\',editable:true,metadata:\'downloadDate\'},';
+				echo '{display: \'文件打印\', name: \'isPrint\',sortable : true,width : 45,align: \'center\',metadata:\'isPrint\'},';
+				echo '{display: \'打印天数\', name: \'printDate\',sortable : true,width : 45,align: \'right\',editable:true,metadata:\'printDate\'},';
+				echo '{display: \'实体借阅\', name: \'useEntity\',sortable : true,width : 45,align: \'center\'},';
+			}else{
+				echo '{display: \'数据名称\', name: \'title\',sortable : true,width : 480,align: \'left\',metadata:\'Title\'},';
+			}
+		?>
+		{display: 'pkgPath', name : 'pkgPath',hide:true,sortable : false, width : 160,align: 'left',metadata:'pkgPath'}
+	];
+
+	if('<?php echo $data[9];?>'=='ESArchiveSeache'){//startFrom
+		$("#addAttachDataBtn").hide();
+		$("#deleteAttachDataBtn").hide();
+	}
+
+	if('<?php echo $data[8];?>'!='using'){//relationBusiness
+		$("#batchEditReadAttachDataBtn").hide();
+		$("#batchEditDownAttachDataBtn").hide();
+		$("#batchEditPrintAttachDataBtn").hide();
+		$("#batchEditEntityAttachDataBtn").hide();
+	}else{//如果是利用流程，给4个按钮绑定点击事件
+		$("#batchEditReadAttachDataBtn").die().live("click", function(){
+			addAttachData.batchEditReadDate('批量修改浏览天数','FileRead');
+		});
+		$("#batchEditDownAttachDataBtn").die().live("click", function(){
+			addAttachData.batchEditReadDate('批量修改下载天数','FileDownLoad');
+// 			addAttachData.batchEditDownDate();
+		});
+		$("#batchEditPrintAttachDataBtn").die().live("click", function(){
+			addAttachData.batchEditReadDate('批量修改打印天数','FilePrint');
+// 			addAttachData.batchEditPrintDate();
+		});
+		$("#batchEditEntityAttachDataBtn").die().live("click", function(){
+			addAttachData.batchEditEntityData();
+		});
+	}	
+	// 查询数据附件 longjunhao 20140623
+	if($('#formStartPage').attr('wfType')!=''){
+		collaborativeHandle.getSavedWfDataList($('#formStartPage').attr('dataId'),$('#formStartPage').attr('formId'),$('#formStartPage').attr('wfId'),__colMol);
+		collaborativeHandle.controlButton();
+	}
+	
+	function sizeChanged(){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var flex = $("#borrowDetails").closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    bDiv.height(299);
+		flex.height(374);
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	sizeChanged();
+	if('<?php echo $data[9];?>'=='ESArchiveSeache'){//从检索界面发起的流程 
+		addAttachData.getAttachDataList(__colMol);
+	}
+
+	/**********************************************************************************************************/
+	/******************************** 3个权限勾选框点击时候的处理 start **********************************************/
+	/**********************************************************************************************************/
+	if('<?php echo $data[8];?>'=='using'){//给权限列添加点击的监听事件
+		$("#borrowDetails").find("input[name='isReadChk']").die().live("click", function(){
+			var trObj=$(this).closest('tr');
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+				if($(this).is(':checked')){
+					$(this).attr('checked',null);
+				}
+				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return;
+			}
+			//添加对至少有一个权限的判断 start
+			var userEntityChk = trObj.find("input[name='useEntityChk']");
+			if(!userEntityChk.is(':checked')){
+				formStartHandle.showMsg('每条数据至少要申请一个权限,不能进行此操作！', '3');
+				$(this).attr('checked','checked');
+				return;
+			}	
+			//添加对至少有一个权限的判断 end
+				
+			var dateRight = '0';
+			if($(this).is(':checked')){//文件浏览选中事件
+				trObj.find("td[colname='readDate'] div").html(1);
+				dateRight = '1';
+			}else{//文件浏览不选事件
+				trObj.find("td[colname='readDate'] div").html(0);
+				dateRight = '0';
+			}	
+			var fileReadOrDownLoad = 'FileRead';
+			var isApp = '1';
+			var selectPath = $("#borrowDetails").flexGetColumnValue(trObj,['pkgPath']);
+// 			TODO 调用后台方法，去更新缓存，然后点下一步或者保存的时候去更新数据库
+			addAttachData.batchChangeFileReadOrDownLoadRight(fileReadOrDownLoad,isApp,selectPath,dateRight);
+		}); 	
+		$("#borrowDetails").find("input[name='isDownloadChk']").die().live("click", function(){
+			var trObj=$(this).closest('tr');
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+				if($(this).is(':checked')){
+					$(this).attr('checked',null);
+				}
+				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return;
+			}
+			var dateRight = '0';
+			if($(this).is(':checked')){//文件浏览选中事件
+				trObj.find("td[colname='downloadDate'] div").html(1);
+				dateRight = '1';
+			}else{//文件浏览不选事件
+				trObj.find("td[colname='downloadDate'] div").html(0);
+				dateRight = '0';
+			}	
+			var fileReadOrDownLoad = 'FileDownLoad';
+			var isApp = '1';
+			var selectPath = $("#borrowDetails").flexGetColumnValue(trObj,['pkgPath']);
+			
+// 			TODO 调用后台方法，去更新缓存，然后点下一步或者保存的时候去更新数据库
+			addAttachData.batchChangeFileReadOrDownLoadRight(fileReadOrDownLoad,isApp,selectPath,dateRight);
+		}); 	
+		$("#borrowDetails").find("input[name='isPrintChk']").die().live("click", function(){
+			var trObj=$(this).closest('tr');
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+				if($(this).is(':checked')){
+					$(this).attr('checked',null);
+				}
+				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return;
+			}
+			var dateRight = '0';
+			if($(this).is(':checked')){//文件浏览选中事件
+				trObj.find("td[colname='printDate'] div").html(1);
+				dateRight = '1';
+			}else{//文件浏览不选事件
+				trObj.find("td[colname='printDate'] div").html(0);
+				dateRight = '0';
+			}	
+			var fileReadOrDownLoad = 'FilePrint';
+			var isApp = '1';
+			var selectPath = $("#borrowDetails").flexGetColumnValue(trObj,['pkgPath']);
+// 			TODO 调用后台方法，去更新缓存，然后点下一步或者保存的时候去更新数据库
+			addAttachData.batchChangeFileReadOrDownLoadRight(fileReadOrDownLoad,isApp,selectPath,dateRight);
+		}); 	
+		$("#borrowDetails").find("input[name='useEntityChk']").die().live("click", function(){
+			
+			var trObj=$(this).closest('tr');
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+				if($(this).is(':checked')){
+				}else{
+					$(this).attr('checked','checked');
+				}	
+				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return;
+			}
+			//添加对至少有一个权限的判断 start
+			var isReadChk = trObj.find("input[name='isReadChk']");
+			if(!isReadChk.is(':checked')){
+				formStartHandle.showMsg('每条数据至少要申请一个权限,不能进行此操作！', '3');
+				$(this).attr('checked','checked');
+				return;
+			}	
+			//添加对至少有一个权限的判断 end
+			var dateRight = '0';
+			if($(this).is(':checked')){//文件浏览选中事件
+				dateRight = '1';
+			}else{//文件浏览不选事件
+				dateRight = '0';
+			}	
+			var fileReadOrDownLoad = 'FileLend';
+			var isApp = '1';
+			var selectPath = $("#borrowDetails").flexGetColumnValue(trObj,['pkgPath']);
+// 			TODO 调用后台方法，去更新缓存，然后点下一步或者保存的时候去更新数据库
+			addAttachData.batchChangeFileReadOrDownLoadRight(fileReadOrDownLoad,isApp,selectPath,dateRight);
+		}); 	
+		/**********************************************************************************************************/
+		/******************************** 3个权限勾选框点击时候的处理 end **********************************************/
+		/**********************************************************************************************************/
+		$("#borrowDetails").find("td[colname='readDate']").die().live("click", function(){
+			var trObj=$(this).closest('tr');
+			var tempReadDate = $("#borrowDetails").find("td[colname='readDate'] input:first").val();
+			$('#formStartPage').attr('tempReadDate',tempReadDate);
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return false;
+			}
+		});
+		$("#borrowDetails").find("td[colname='downloadDate']").die().live("click", function(){
+			var trObj=$(this).closest('tr');
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return false;
+			}
+		});
+		$("#borrowDetails").find("td[colname='printDate']").die().live("click", function(){
+			var trObj=$(this).closest('tr');
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return;
+			}
+		});
+		
+		$("#borrowDetails").find("td[colname='readDate'] input:first").die().live("blur", function(){//浏览天数
+			var readValue = $(this).val();
+			var trObj=$(this).closest('tr');
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+// 				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return;
+			}
+			
+			if(readValue=='' || readValue=='0'){
+				//添加对至少有一个权限的判断 start
+				var userEntityChk = trObj.find("input[name='useEntityChk']");
+				if(!userEntityChk.is(':checked')){
+					formStartHandle.showMsg('每条数据至少要申请一个权限,不能进行此操作！', '3');
+					readValue = $('#formStartPage').attr('tempReadDate');
+// 					alert(trObj.find("td[colname='readDate'] div").html());
+// 					trObj.find("td[colname='readDate'] div").html(tempReadDate);
+// 					return;
+					trObj.find("input[name='isReadChk']").attr('checked',true);
+				}else{
+					readValue='0';
+					trObj.find("input[name='isReadChk']").attr('checked',false);
+				}		
+				//添加对至少有一个权限的判断 end
+			}else{
+				trObj.find("input[name='isReadChk']").attr('checked',true);
+			}	
+			
+			var pkgPath = $("#borrowDetails").flexGetColumnValue(trObj,['pkgPath']);
+
+			var fileReadOrDownLoad = 'FileRead';
+			var isApp = '1';
+			var selectPath = pkgPath;
+			var dateRight = readValue;
+			//TODO 将这四个参数传到后台，然后组装权限，放到缓存中
+			addAttachData.batchChangeFileReadOrDownLoadRight(fileReadOrDownLoad,isApp,selectPath,dateRight);
+			
+		}); 
+		$("#borrowDetails").find("td[colname='downloadDate'] input:first").die().live("blur", function(){//下载天数
+			var readValue = $(this).val();
+			var trObj=$(this).closest('tr');
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+// 				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return;
+			}
+			if(readValue=='' || readValue=='0'){
+				readValue='0';
+				trObj.find("input[name='isDownloadChk']").attr('checked',false);
+			}else{
+				trObj.find("input[name='isDownloadChk']").attr('checked',true);
+			}	
+			var pkgPath = $("#borrowDetails").flexGetColumnValue(trObj,['pkgPath']);
+
+			var fileReadOrDownLoad = 'FileDownLoad';
+			var isApp = '1';
+			var selectPath = pkgPath;
+			var dateRight = readValue;
+			//TODO 将这四个参数传到后台，然后组装权限，放到缓存中
+			addAttachData.batchChangeFileReadOrDownLoadRight(fileReadOrDownLoad,isApp,selectPath,dateRight);
+		}); 
+		$("#borrowDetails").find("td[colname='printDate'] input:first").die().live("blur", function(){//打印天数
+			var readValue = $(this).val();
+			var trObj=$(this).closest('tr');
+			var documentFlag = $("#borrowDetails").flexGetColumnValue(trObj,['documentFlag']);
+			if(documentFlag != '1'){
+// 				formStartHandle.showMsg('数据没有电子文件,不能进行此操作！', '3');
+				return;
+			}
+			if(readValue=='' || readValue=='0'){
+				readValue='0';
+				trObj.find("input[name='isPrintChk']").attr('checked',false);
+			}else{
+				trObj.find("input[name='isPrintChk']").attr('checked',true);
+			}	
+			var pkgPath = $("#borrowDetails").flexGetColumnValue(trObj,['pkgPath']);
+
+			var fileReadOrDownLoad = 'FilePrint';
+			var isApp = '1';
+			var selectPath = pkgPath;
+			var dateRight = readValue;
+			//TODO 将这四个参数传到后台，然后组装权限，放到缓存中
+			addAttachData.batchChangeFileReadOrDownLoadRight(fileReadOrDownLoad,isApp,selectPath,dateRight);
+		}); 
+		
+	}
+	
+	/** 添加数据附件按钮处理方法 **/
+	$("#addAttachDataBtn").die().live("click", function(){
+		addAttachData.addEditDetails();
+	}); 
+	/** 删除数据附件按钮处理方法 **/
+	$("#deleteAttachDataBtn").die().live("click", function(){
+		addAttachData.delDetails();
+	}); 
+	
+	/** 添加文件附件按钮处理方法 **/
+	$("#addAttachFileBtn").die().live("click", function(){
+		addAttachData.createMsgFileUploadWin();
+	}); 
+
+	//显示文件附件
+	var fileNames = $('#formStartPage').attr('fileNames');
+	var filePaths = $('#formStartPage').attr('filePaths');
+	if(fileNames != ''){
+		var names = fileNames.split('|'); 
+		var paths = filePaths.split('|'); 
+		for(var i=0;i<names.length;i++){
+			var items = names[i].split('*') ;
+			var extName =items[0].substring(items[0].lastIndexOf("."),items[0].length);
+			formApprovalHandle.addWfUploadedFile('attachFileDataTable', paths[i], items[0], extName, items[1], items[2]);
+		}
+	}
+
+
+	$(document).keydown(function(event){
+		if(event.keyCode == 13) {
+			var id = document.activeElement.id ;
+			if(id.substring(0, 15) == 'userAndOrgQuery'){
+				var gridComboID = id.substring(15, id.length);
+				userAndOrgQuery(gridComboID);
+			}
+		}
+	});
+
+	function userAndOrgQuery(gridComboID){
+//		var keyword=$.trim($('input[name="userAndOrgQuery"]').val());
+//			alert(gridComboID1111);
+//			alert(gridComboID);
+		var keyword = $.trim($('#userAndOrgQuery'+gridComboID).val());
+// 		alert(keyword);
+		if(keyword == '' || keyword=='请输入关键字') {
+			keyword = '';
+		}
+		$("#show"+gridComboID).flexOptions({url:$.appClient.generateUrl({ESOrgAndUser:'findUserListAndOrgName',orgSeq:'',keyWord:encodeURI(keyword)})}).flexReload();
+	};
+
+});
+
+</script>

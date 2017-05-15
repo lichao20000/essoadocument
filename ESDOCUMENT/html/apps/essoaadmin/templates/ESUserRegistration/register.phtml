@@ -1,0 +1,58 @@
+<form id="registerForm" action="" method="post">
+	<div class="estransfer">
+		<ul>
+			<li class="merge">
+				<span>用户名<font color="red" size="3">*</font></span>
+				<input type="text" id="USERID" name="USERID" value="" verify="text/50/1/0" title="例如:fy@flyingsoft.cn">
+				<input type="text" name="ID" value="-1" hidden="true" style = "display:none;">
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>密码<font color="red" size="3">*</font></span>
+				<input id="PASSWORD" type="password" name="PASSWORD" verify="text/50/1/0">
+			</li>
+			<li>
+				<span>确认密码<font color="red" size="3">*</font></span>
+				<input id="confirmPassword" type="password" name="confirmPassword" verify="text/50/1/0" value="">
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>姓<font color="red" size="3">*</font></span>
+				<input type="text" name="LASTNAME" verify="text/50/1/0" value="">
+			</li>
+			<li>
+				<span>名<font color="red" size="3">*</font></span>
+				<input type="text" name="FIRSTNAME" verify="text/50/1/0" value="">
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>是否启用<font color="red" size="3">*</font></span>
+				<select id="USERSTATUS" name="USERSTATUS" ><option value='启用'>启用</option><option value='禁用'>禁用</option></select>
+			</li>
+			<li>
+				<span>手机</span>
+				<input type="text" name="MOBTEL" value="" verify="mobel/11/0/0">
+			</li>
+		</ul>
+	</div>
+</form>
+
+<script type="text/javascript">
+	 var emailaddressZZ = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	 $("#registerForm input[name='USERID']").bind('blur',function(){
+	 	var emailaddress = $(this).val();
+	 	emailaddress=emailaddress.replace(/[ ]/g,"");
+	 	if(emailaddress==''){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+	 	if(emailaddressZZ.test(emailaddress)==false){
+	 		$(this).addClass("warnning");
+	 		return false;
+	 	}
+	 	$(this).removeClass("warnning");
+	 });
+ </script>

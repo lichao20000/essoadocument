@@ -1,0 +1,160 @@
+<link rel='stylesheet' type='text/css' href='<?php echo $tplPath?>/ESDiscuss/css/index.css' />
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<div id="backtop" title="返回顶部"></div>
+<div id="ESSystemIndex" class='root-window'>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>0, "autoHide"=>true));?>
+<div class='arena-free-me center-bg'>
+	<div class='say-me'>
+		<div class='head'>
+			<h2>交流，是一种习惯！</h2>
+		</div>
+		<div class='cont' contenteditable='true' id="content"></div>
+		<div class='toolbar'>
+			<a href='javascript:;' class='insert-face' id='insert-face' pointid='0' title='插入表情' >表情</a>
+			<a href="javascript:void(0);" class="image-block">
+				<i class="image" id="image" title="只能上传jpeg,png,gif,bmp类型的图片"></i>&nbsp;图片
+				
+			</a>
+			<a href='javascript:;' class='submit-say' id="submit-say" title='发表'>发表</a>
+			<a href='javascript:;' class='clear-say' id="clear-say" title='清空'>清空</a>
+		</div>
+	</div>
+	<div style="width:700px;float:left;height:100px;display:none;margin-bottom:10px;" id="insertImage"></div>
+	<div class='arena-toolbar'>
+		<ul>
+			<li class='first'></li>
+			<li title=''><a href='javascript:;' class='loading'>最新动态</a></li>
+		</ul>
+	</div>
+	<div class='arena-main' id="lay_out">
+	<?php foreach ($result as $val){?>
+		<ul class='messages' >
+			<li class='face'>
+				<a href='javascript:;'>
+					<img src='<?php echo $tplPath?>/ESDiscuss/img/logo.png' title='' alt='' />
+				</a> 
+			</li>
+			<li class='message-box'>
+				<div class='messageContainerBox'>
+					<h2 class='title'><?php echo $val->authorName;?>：</h2>
+					<div class='text'>	
+					   <?php 
+					   $rep="<img src=$tplPath/ESDiscuss/img/miniblog/$1.gif >";
+					   echo htmlspecialchars_decode(preg_replace('/\[([a-zA-Z]+?)\]/i',$rep,$val->msg));
+						?>
+					</div>
+					<div class='info'>
+						
+						<a href='javascript:void(0);' class='re-list' reply-items="<?php echo !empty($val->replyCount) ?$val->replyCount :0?>"id='<?php echo $val->id;?>'>评论<?php echo $val->replyCount?"($val->replyCount)":''?></a>
+						<?php if($val->authorId==$userId){?>
+						<span>|</span>
+						<a href='javascript:void(0);' class="del-item" itemid="<?php echo $val->id;?>">删除</a>
+						<?php }?>
+						<i>
+							<?php 
+								$format = 'Y-m-d H:i:s';
+								$year=date('Y年',time());
+								$date = DateTime::createFromFormat($format, $val->createTime);
+								echo str_replace("$year", '', $date->format('Y年m月d日 H:i'));
+							?>
+						</i>
+					</div>
+					<div class='replys'>
+					</div>
+				</div>
+			</li>
+		</ul>
+		<?php }?>
+		
+	</div>
+	<div id='imageList'>
+		<div class="layer_arrow"></div>
+		<input type="hidden" value="0" name="commentid" />
+		<div class="tooolbar"><span class="common">常用表情</span><span class="close" title="关闭" onclick="closeList()">&nbsp;</span></div>
+		<div id="bigimg" style="display:none; background-color:white; position:absolute; left:368px; top:0px; z-index:999; width:50px; height:55px; border:1px #999999 solid;text-align: center;">
+			<img style="margin-top:5px;" border="0" src="/apps/esdocument/templates/ESDiscuss/img/miniblog/ku.gif" />
+			<div style="background-color:#ECECEC; margin-top:5px; height:20px; color:#5F5F5F; line-height: 20px;">傲慢</div>
+		</div>
+		<div>
+			<img style="display:none;" border="0" usemap="#bigblogMap" id="bigblog" src="/apps/esdocument/templates/ESDiscuss/img/bigblog.png" />
+				<map name="bigblogMap" id="bigblogMap">
+				<area shape="rect" coords="1,1,27,30" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="28,1,54,30" href="javascript:;" title="萌" name="meng" />
+				<area shape="rect" coords="54,2,82,29" href="javascript:;" title="足球" name="qiu" />
+				<area shape="rect" coords="82,1,110,29" href="javascript:;" title="大便" name="dabian" />
+				<area shape="rect" coords="110,1,138,28" href="javascript:;" title="咖啡" name="kafei" />
+				<area shape="rect" coords="138,1,165,27" href="javascript:;" title="流汗" name="liuhan" />
+				<area shape="rect" coords="164,1,193,28" href="javascript:;" title="折磨" name="zhemo" />
+				<area shape="rect" coords="193,0,221,28" href="javascript:;" title="流泪" name="liulei" />
+				<area shape="rect" coords="221,0,247,27" href="javascript:;" title="握手" name="woshou" />
+				<area shape="rect" coords="249,-1,275,29" href="javascript:;" title="害羞" name="haixiu" />
+				<area shape="rect" coords="278,1,306,28" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="307,1,336,31" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="336,2,361,30" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="363,2,390,29" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="390,1,418,30" href="javascript:;" title="飞吻" name="feiwen" />
+
+				<area shape="rect" coords="1,31,27,60" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="28,31,54,60" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="54,32,82,59" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="82,31,110,59" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="110,31,138,58" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="138,31,165,57" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="164,31,193,58" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="193,30,221,58" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="221,30,247,57" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="249,29,275,59" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="278,30,303,60" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="307,31,336,61" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="336,32,361,60" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="363,32,390,59" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="390,31,418,60" href="javascript:;" title="飞吻" name="feiwen" />
+
+				<area shape="rect" coords="1,61,23,92" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="28,61,50,93" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="54,62,82,93" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="82,61,108,93" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="110,61,140,94" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="138,61,164,91" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="164,61,190,93" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="193,60,221,94" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="221,60,249,93" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="249,62,277,91" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="278,60,303,90" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="307,61,336,91" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="336,62,361,90" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="363,62,390,89" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="390,61,418,90" href="javascript:;" title="飞吻" name="feiwen" />
+				
+				<area shape="rect" coords="1,97,26,126" href="javascript:;" title="飞吻" name="feiwen" />
+				<area shape="rect" coords="28,94,56,123" href="###" title="" name="" />
+				<area shape="rect" coords="56,96,86,126" href="###" title="" name="" />
+				<area shape="rect" coords="84,96,112,126" href="###" title="" name="" />
+				<area shape="rect" coords="113,95,141,126" href="###" title="" name="" />
+				<area shape="rect" coords="141,96,169,126" href="###" title="" name="" />
+				<area shape="rect" coords="169,96,197,126" href="###" title="" name="" />
+				<area shape="rect" coords="197,94,225,126" href="###" title="" name="" />
+				<area shape="rect" coords="225,94,251,127" href="###" title="" name="" />
+				<area shape="rect" coords="251,94,281,126" href="###" title="" name="" />
+				<area shape="rect" coords="281,95,309,125" href="###" title="" name="" />
+				<area shape="rect" coords="310,94,336,126" href="###" title="" name="" />
+				<area shape="rect" coords="336,95,363,127" href="###" title="" name="" />
+				<area shape="rect" coords="364,95,390,127" href="###" title="" name="" />
+				<area shape="rect" coords="390,95,418,128" href="###" title="" name="" />
+				<area shape="rect" coords="2,129,30,160" href="###" title="" name="" />
+				<area shape="rect" coords="30,129,58,162" href="###" title="" name="" />
+				<area shape="rect" coords="57,129,84,161" href="###" title="" name="" />
+				<area shape="rect" coords="83,130,112,162" href="###" title="" name="" />
+				<area shape="rect" coords="113,130,141,160" href="###" title="" name="" />
+				<area shape="rect" coords="141,129,168,160" href="###" title="" name="" />
+				<area shape="rect" coords="169,128,196,158" href="###" title="" name="" />
+				<area shape="rect" coords="197,129,225,158" href="###" title="" name="" />
+				<area shape="rect" coords="225,128,253,159" href="###" title="" name="" />
+				<area shape="rect" coords="253,128,281,159" href="###" title="" name="" />
+				<area shape="rect" coords="282,129,308,159" href="###" title="" name="" /><area shape="rect" coords="311,130,336,157" href="###" title="" name="" /><area shape="rect" coords="338,129,365,158" href="###" title="" name="" /><area shape="rect" coords="366,129,392,158" href="###" title="" name="" /><area shape="rect" coords="391,127,419,158" href="###" title="" name="" /><area shape="rect" coords="1,161,29,189" href="###" title="" name="" /><area shape="rect" coords="30,162,54,189" href="###" title="" name="" /><area shape="rect" coords="58,162,83,189" href="###" title="" name="" /><area shape="rect" coords="86,162,111,190" href="###" title="" name="" /><area shape="rect" coords="113,162,138,189" href="###" title="" name="" /><area shape="rect" coords="140,162,169,190" href="###" title="" name="" /><area shape="rect" coords="170,162,196,190" href="###" title="" name="" /><area shape="rect" coords="196,163,224,191" href="###" title="" name="" /><area shape="rect" coords="226,161,253,189" href="###" title="" name="" /><area shape="rect" coords="253,161,279,190" href="###" title="" name="" /><area shape="rect" coords="282,162,308,190" href="###" title="" name="" /><area shape="rect" coords="310,161,336,188" href="###" title="" name="" /><area shape="rect" coords="338,161,366,189" href="###" title="" name="" /><area shape="rect" coords="366,161,392,190" href="###" title="" name="" /><area shape="rect" coords="392,160,420,190" href="###" title="" name="" /><area shape="rect" coords="1,192,29,221" href="###" title="" name="" /><area shape="rect" coords="29,194,58,221" href="###" title="" name="" /><area shape="rect" coords="56,193,83,221" href="###" title="" name="" /><area shape="rect" coords="84,192,113,221" href="###" title="" name="" /><area shape="rect" coords="113,191,140,220" href="###" title="" name="" /><area shape="rect" coords="141,189,169,220" href="###" title="" name="" /><area shape="rect" coords="170,192,196,221" href="###" title="" name="" /><area shape="rect" coords="198,192,224,220" href="###" title="" name="" /><area shape="rect" coords="226,191,251,220" href="###" title="" name="" /><area shape="rect" coords="252,194,275,219" href="###" title="" name="" /><area shape="rect" coords="280,192,308,222" href="###" title="" name="" /><area shape="rect" coords="309,191,337,221" href="###" title="" name="" /><area shape="rect" coords="336,192,364,223" href="###" title="" name="" /><area shape="rect" coords="365,192,393,222" href="###" title="" name="" /><area shape="rect" coords="392,192,419,222" href="###" title="" name="" /><area shape="rect" coords="1,225,28,257" href="###" title="" name="" /><area shape="rect" coords="31,225,59,257" href="###" title="" name="" /><area shape="rect" coords="59,227,82,255" href="###" title="" name="" /><area shape="rect" coords="84,225,111,254" href="###" title="" name="" /><area shape="rect" coords="113,225,141,254" href="###" title="" name="" /><area shape="rect" coords="140,225,168,254" href="###" title="" name="" />			</map> 
+		</div>
+	</div>
+</div>
+</div>
+<script type="text/javascript" src='<?php echo $tplPath?>/ESDiscuss/js/index.js'></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>

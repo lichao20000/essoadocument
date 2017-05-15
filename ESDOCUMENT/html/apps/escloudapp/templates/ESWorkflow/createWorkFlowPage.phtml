@@ -1,0 +1,66 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/ext/resources/css/ext-all.css" />
+	
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/ext-all.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/source/locale/ext-lang-zh_CN.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/ext/Utils.js"></script>
+
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESWorkflow/css/workflow/grapheditor.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESWorkflow/css/workflow/common.css" />
+<link rel='stylesheet' type='text/css' href='<?php echo $tplPath;?>/ESWorkflow/css/workflow/info_css.css' />
+
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/workflow/GraphEditor.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/workflow/MainPanel.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/workflow/LibraryPanel.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESWorkflow/js/workflow/mxclient.js"></script>
+<!-- longjunhao 20140915 add 再引用一次，防止其它模块调用时找不到样式 -->
+<link href="<?php echo $tplPath?>/ESWorkflow/css/style.css" rel="stylesheet" type="text/css">
+		
+<div id="createWorkflowDiv" class="createWorkflowArea" 
+tplPath="<?php echo $tplPath;?>"  
+userName="<?php echo $data[4];?>">
+	<div id="wfModel_graph" onClick="hideMwnu()"/> <!-- xiaoxiong 20120213 添加onClick事件监听 将右键菜单隐藏 -->
+<!--     <iframe frameborder=1 name="workflowPageFrame" src="./workflowPage" width=500px height=400px>IFRAME</iframe> -->
+	<div id="wfModel_graph_hidden_form"/>
+</div>
+<script type="text/javascript">
+  
+//xiaoxiong 20120213 右键菜单全局变量 用于存储右键菜单
+var hideMwnuObject ;
+//xiaoxiong 20120213 添加onClick事件处理方法 将右键菜单隐藏
+function hideMwnu(){
+	if(hideMwnuObject){hideMwnuObject.hide();}
+}
+
+function showMsg(msg, type){
+	if(type == '1'){
+		$.dialog.notice({icon : 'succeed',content : msg,title : '3秒后自动关闭',time : 3});
+	} else {
+		$.dialog.notice({icon : 'error',content : msg,title : '3秒后自动关闭',time : 3});
+	}
+}
+
+//xiaoxiong 20120326 将右键菜单中存储复制组件对象制空
+//mxClipboard.cells = null ;
+
+var setworkfolowModelserachUserkeyword = '';
+var setworkfolowModelserachRolekeyword = '';
+
+try{
+ 	graphWorkflow('<?php echo $data[3];?>');//esGraphXml
+ 	Ext.getCmp('osWfModel_custom_form_init_hidden_Model_ID').setValue(<?php echo $data[1];?>);//modelId = "-1"
+ 	Ext.getCmp('osFormBuilder_custom_form_init_hidden_Form_ID').setValue(<?php echo $data[2];?>);//formId
+ 	Ext.getCmp('osWfModel_custom_form_init_hidden_Model_Type_ID').setValue(<?php echo $data[0];?>);//modelTypeID
+}catch(e){
+	//showMsg('<fmt:message key="os.workflow.graph.exception" />','2');
+}
+
+$(function(){
+	$(document).keydown(function(event){
+		if(event.keyCode == 13) {
+			// 过滤掉回车键，解决回车会关闭工作流编辑窗口的问题
+			return false;
+		}
+	});
+});
+</script>

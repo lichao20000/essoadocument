@@ -1,0 +1,110 @@
+<link href="<?php echo $tplPath?>/ESIdentify/css/main.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/artDialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/menu.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/common.js"></script>
+<?php echo $app->draw('nav',array('esaction'=>$esaction, 'app'=>$app));?>
+<?php echo $app->draw('appmenu',array('esaction'=>$esaction, 'app'=>$app, 'expand'=>1 ));?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs("open", {title:"整理编目", content:"#eslist"});
+	$("#estabs").esTabs("select", "整理编目");
+});
+</script>
+<div class='esmain'>
+	<div class="esleft">
+		<ul id="treeDemo" class="ztree"></ul>
+	</div>
+	<div class="esright">
+		<div id="eslist">
+			<table id="flexme1">		
+			</table>  
+<script type="text/javascript">
+	$(function(){
+		 var uri="<?php echo $esaction->generateUrl(Array('ESIdentify'=>'set_json'));?>";
+		    $("#flexme1").flexigrid({
+			url: uri,
+			dataType: 'json',
+			colModel : [
+				{display: '序号', name : 'num', width : 40, align: 'center'}, 
+				{display: '<input type="checkbox" name="ids">', name : 'ids', width : 40, align: 'center'},
+				{display: '操作', name : 'operate', width : 80, align: 'center'},
+				{display: '题名', name : 'c3', width : 420, sortable : true, align: 'center'},
+				{display: '文号', name : 'c4', width : 80, sortable : true, align: 'center'},
+				{display: '分类号', name : 'c5', width : 80, sortable : true, align: 'center'},
+				{display: '主题词', name : 'c6', width : 80, sortable : true, align: 'center'},
+				{display: '机构', name : 'c7', width : 100, sortable : true, align: 'center'},
+				{display: '责任人', name : 'c8', width : 60, sortable : true, align: 'center'}
+				],
+			buttons : [
+				{name: '查看日志', bclass: 'add',onpress:show_note},
+				{name: '目录报表', bclass: 'delete',onpress:print_reports},
+				{name: '筛选', bclass: 'modify',onpress:filter},
+				{name: '退回', bclass: 'back'},
+				{name: '移交清册', bclass: 'tranlist',onpress:show_transfer_list},
+				{name: '生成档号', bclass: 'code',onpress:createFileNum},
+				{name: '装盒', bclass: 'do_store',onpress:do_pack},
+				{name: '移入档案库', bclass: 'store'},
+				{name: '更多操作', bclass: 'more',id:"do_more"}
+				],
+			searchitems : [
+				{display: 'c3', name : 'c3'},
+				{display: 'c4', name : 'c4', isdefault: true}
+				],
+			sortname: "c3",
+			sortorder: "asc",
+			usepager: true,
+			title: '预归档案库',
+			useRp: true,
+			rp: 15,
+			nomsg:"没有数据",
+			showTableToggleBtn: true,
+			pagetext: '第',
+			outof: '页 /共',
+			width: 790,
+			height: 400,
+			pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+		});
+		
+		
+			
+			$("#do_more").toggle(
+					function ()
+					{
+						var off=$(this).offset();
+						$('#esmore_list ul').show().offset({top:off.top+26,left:off.left});
+					},
+					function ()
+					{
+						
+						$('#esmore_list ul').hide();
+					}
+					);
+					//绑定函数
+
+					$("#esgroup ").bind('click',set_group);
+					$("#essort ").bind('click',set_sort);
+					$("#esexport ").bind('click',export_data);
+					$("#esmodify ").bind('click',bulk_modify);
+					$("#esnofiling ").bind('click',notfiling);
+
+		});
+   
+			</script>
+</div>
+<div id="esfileview"></div>
+
+	</div>
+</div>
+<div id="esmore_list">
+	<ul>
+	<li><a href="javascript:void()" id = "esgroup">分组设置</a></li>
+	<li><a href="javascript:void()" id = "essort" >排序设置</a></li>
+	<li><a href="javascript:void()" id = "esexport" >数据导出</a></li>
+	<li><a href="javascript:void()" id = "esmodify" >批量修改</a></li>
+	<li><a href="javascript:void()" id = "esnofiling" >不归档库</a></li>
+	</ul>
+</div>
+

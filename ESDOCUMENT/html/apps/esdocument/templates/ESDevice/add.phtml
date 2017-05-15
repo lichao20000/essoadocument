@@ -1,0 +1,56 @@
+<style>
+<!--
+.button {cursor: pointer;padding: 5px;background-color: #6F6E81;color: #FFF;border: 0px none;outline: 0px none;}
+-->
+</style>
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESDevice/js/add.js"></script>
+<div  style="padding-top: 30px;">
+	<div class="estransfer" >
+		<form id="addDeviceForm" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="level" id="level" value=""/>
+			<input type="hidden" name="pId" id="pId" value=""/>
+			<ul>
+				<li>
+					<span>装置分类名称</span>
+					<input type="text" name="name" id="name" verify="text/50/1/0" value=""  />
+				</li>
+				<li>
+					<span>主项号</span>
+					<input type="text" name="firstNo" id="firstNo" verify="number/10/0/0" value=""  />
+				</li>
+				<li>
+					<span>子项号</span>
+					<input type="text" name="secondNo" id="secondNo" verify="number/10/0/0"  value=""  />
+				</li>
+				<li>
+					<span>装置单元号</span>
+					<input type="text" name="deviceNo" id="deviceNo" value=""  readonly class="inputtextnoedit" />
+				</li>
+				<li>
+					<span>基础设计单位</span>
+					<input type="text" name="baseUnits" id="baseUnits" class="selectInput" readonly="readonly" verify="text/200/0/0" value="">
+					<input type="hidden" name="baseUnitsCode" id="baseUnitsCode"  value="">
+				</li>
+				<li>
+					<span>详细设计单位</span>
+					<input type="text" name="detailUnits" id="detailUnits" class="selectInput" readonly="readonly" verify="text/200/0/0" value="">
+					<input type="hidden" name="detailUnitsCode" id="detailUnitsCode" value="">
+				</li>
+				<li>
+					<span>负责部门</span>
+					<input type="text" name="mainPart" id="mainPart" class="selectInput" readonly="readonly" verify="text/200/0/0" value="">
+					<input type="hidden" name="mainPartCode" id="mainPartCode" value="">
+				</li>
+				<li>
+					<span>监理单位</span>
+					<input type="text" name="supervisionUnits" id="supervisionUnits" class="selectInput" readonly="readonly" verify="text/200/0/0" value=""/>
+					<input type="hidden" name="supervisionUnitsCode" id="supervisionUnitsCode" />
+				</li>
+				<li style="width: 525px;">
+					<span>备注</span>
+					<textarea  name="remarks" id="remarks"   style="width:430px;background:#eee;" isSystem="0"></textarea>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>

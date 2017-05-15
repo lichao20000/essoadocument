@@ -1,0 +1,110 @@
+<div>
+<table id="report"></table>
+</div>
+ <script type="text/javascript">
+$(function(){
+	$("#report").flexigrid({
+		url:  $.appClient.generateUrl({ESTemplate:'report_json',moid:molid,stid:structureID},'x'),
+		dataType: 'json',
+
+
+		
+		colModel : [
+			{display: '<input type="checkbox" name="ids">', name : 'id', width : 40, align: 'center'},
+			{display: '输出格式', name : 'c3', width : 80, sortable : true, align: 'center'},
+			{display: '报表名称', name : 'c4', width : 300, sortable : true, align: 'center'}
+			],
+		buttons : [
+		   		{name: '添加', bclass: 'add',onpress:add},
+		   		{name: '删除', bclass: 'delete',onpress:del}
+		   		],
+		procmsg:'操作中，请稍候...',
+		nomsg:"没有数据",
+		width:500,
+		resizable:false,
+		sortname: "c3",
+		sortorder: "asc",
+		usepager: true,
+		useRp: true,
+		rp: 20,
+		pagetext: '第',
+		outof: '页 /共',
+		pagestat:' 显示 {from} 到 {to}条 / 共{total} 条'
+});
+	//全选
+	$("input[name='ids']").die().live('click',
+			function(){
+			$("input[name='id2']").attr('checked',$(this).is(':checked'));
+			}
+	);
+	//添加
+	function add(){
+    	var thiscontent = new Array();
+    	$('#report').find("tr").each(function(i){
+	    	thiscontent[i]=$(this).find("td").eq(2).text()+$(this).find("td").eq(1).text();
+	    });
+	    thiscontent = thiscontent.toString();
+		$.ajax({
+			    url:$.appClient.generateUrl({ESTemplate:'report'},'x'),
+			    success:function(data){
+			    	$.dialog({
+				    	title:'请选择报表',
+			    	   	fixed:false,
+			    	    resize: false,
+				    	content:data,
+					    padding:0,
+					    cancelVal: '关闭',
+					    cancel: true,
+					    content:data
+				
+				    });
+				    },
+				    cache:false
+			});	
+	}
+	//删除
+	function del(){
+			var id='';
+			var checkboxObj=$("input[name='id2']:checked");
+			if(checkboxObj.length =='0' || checkboxObj.length==='undefined')
+			{
+				
+				$.dialog.notice({icon:'warning',content:'请选择要删除的数据',time:2});
+				return false;
+			}else{
+				//遍历选中的数据
+				checkboxObj.each(function(i){
+					id+=$(this).val()+',';
+					});
+				}
+			if(id=='' || id==='undefined' || id==0)
+			{
+				return false;
+			}	
+			$.dialog({
+					content:'确定要删除吗?',
+					ok:true,
+					okVal:'确定',
+					cancel:true,
+					cancelVal:'取消',
+					ok:function(){
+						var url=$.appClient.generateUrl({ESTemplate:'delreport'},'x');
+						
+						$.post(url,{id:id,moid:molid,stid:structureID},function(data){
+							if(data=="true"){
+								$("input[name='ids']").attr("checked",false);
+								$.dialog.notice({icon:'succeed',content:'数据删除成功',time:3,title:'3秒后自动关闭'});
+								$("#report").flexOptions({newp:1}).flexReload();
+								/**liqiubo 20140313 刷新数据**/
+								$('#edit_rule_tbl').flexReload();
+							}
+							});
+						
+					}
+				});
+			
+	}
+ 
+});
+ 
+ </script>

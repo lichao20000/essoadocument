@@ -1,0 +1,59 @@
+<?php
+/**
+ * 出入库代理服务
+ * @author ldm
+ *
+ */
+class ProxyEscloudappEscloud_inoroutboundws extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_inoroutboundws";
+  /**
+   * 获取出入库数据
+   * @author ldm
+   */
+  public function getInorOutBoundList($states,$start,$limit)
+  {
+    $urlParam = array('getInorOutBoundList',$start,$limit);
+    $url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$states,'application/json;charset=UTF-8');
+  }
+  /**
+   * 根据id查找信息列表
+   * @author ldm
+   */
+  public function getlist($ids,$start,$limit){
+  	$urlParam = array('getInorOutBoundListById',$start,$limit);
+  	$url = implode('/', $urlParam);
+  	//return $this->get(self::SERVICE_NAME, $url);
+  	return $this->post(self::SERVICE_NAME,$url,$ids,'application/json;charset=UTF-8');
+  }
+  /**
+   * 保存变更
+   * @author ldm
+   */
+  public function updateStatus($param,$userid){
+    $ip = $_SERVER['REMOTE_ADDR'];
+  	$urlParam = array('updateStatus',$userid,$ip);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  /**
+   * 筛选
+   * @author ldm
+   */
+  public function filter($start,$limit,$condition,$status){
+  	$urlParam = array('getInorOutBoundListByCondition',$start,$limit,$status);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$condition,'application/json;charset=UTF-8');
+  }
+  /**
+   * 批量状态变更
+   * @author ldm
+   */
+  public function updateBatchStatus($param,$userid){
+    $ip = $_SERVER['REMOTE_ADDR'];
+  	$urlParam = array('updateBatchStatus',$userid,$ip);
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+}

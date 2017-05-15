@@ -1,0 +1,119 @@
+<div class='destroy_list'>
+	<div class='destroyed_tree_box'>
+		<div class='ztree' id='functionTree'></div>
+	</div>
+	<form class='destroy_cont_box hide' id="FORM">
+		<h2 id='like-title'></h2>
+		<div class='buttons'>
+		<?php
+			
+			// init
+			$readonly = $cla = null;
+			if($info->process == 2){ // 是退回
+				if($taskFlag == 'false'){
+					echo "<p class='red_prompt'>温馨提示：审批被退回，请回待办处理</p>";
+					$readonly = 'readonly="readonly"'; // 设置标签只读
+					$cla = 'not_allowed'; // 设置禁用CSS
+				}else{
+					// init button submit tag
+					echo "<div class='button'><div><span title='重新提交' class='submit' id='".$info->difference."_aginSubmit'>提交</span></div></div>";
+				}
+			}else{
+				
+				echo "<div class='button'><div><span title='保存表单' id='modifySubmit' class='save'>保存</span></div></div>";
+				echo "<div class='button'><div><span title='提交表单' class='submit' id='modifyProcess'>提交鉴定申请</span></div></div>";
+			}
+		?>
+			
+			<input type='hidden' name='EXAMINATION_RECORD' value='defalut' />
+			<input type='hidden' name='ID' id='formId' value='<?php echo $info->id ?>' />
+			<input type='hidden' id='identify_workId' value='<?php echo $info->workId; ?>' />
+		</div>
+		
+		<div class='rows'>
+			<p>
+				<span>编号：</span>
+				<input type='text' class='extendInput not_allowed' name='CODE' readonly='readonly' value=<?php echo $info->code; ?> />
+			</p>
+		</div>
+		<div class='rows'>
+			<p>
+			<span>标题：</span>
+			
+			<?php
+				echo '<input type="" class="extendInput '.$cla.'" name="TITLE" value="'.$info->title.'" '.$readonly.' />'
+			?>
+			</p>
+		</div>
+		
+		<div class='rows'>
+			<p>
+				<span>档案类别：</span>
+				<input name='ARCHIVE_TYPE' class='not_allowed' readonly='readonly' value="<?php echo $info->archiveType; ?>" />
+			</p>
+			<p>
+				<span>销毁数量：</span>
+				<input name='DESTROY_NUMBER' class='not_allowed' id='destroyNumber' readonly='readonly' value="<?php echo $info->destroyNumber; ?>" />
+			</p>
+			 
+			<?php
+				/*
+				if($info->difference == 'destroy'){
+					$htm = '<p><span>保留数量：</span>';
+					$htm .= "<input name='RETENTION_NUMBER' class='not_allowed' readonly='readonly' value='". $info->retentionNumber ."' /></p>";
+					echo $htm;
+				}
+				*/
+			?>
+		</div>
+		
+		<div class='rows'>
+			<p>
+				<span>报告内容：</span>
+				<?php
+					echo "<textarea class='main ".$cla."' name='REPORT_CONTENT' ".$readonly.">$info->reportContent</textarea>";
+				?>
+			</p>
+		</div>
+		<div class='rows'>
+			<p>
+				<span>销毁日期：</span>
+				<?php
+					$event = null;
+					if(!$readonly){
+						$event = 'E_DESTROY_DATE';
+					}
+					echo '<input type="text" class="Wdate '.$cla.'" name="DESTROY_DATE" value="'.$info->destroyDate.'" '.$readonly.' id="'.$event.'" />';
+					
+				?>
+			</p>
+			<p class='position'>
+				<span>销毁负责人：</span>
+				<?php
+					echo '<input type="text" name="LEADER" class="'.$cla.'" value="'.$info->leader.'" '.$readonly.' />';
+					if(!$readonly){
+						echo '<b id="fuzr" class="user_bg"></b>';
+					}
+				?>
+			</p>
+			<p class='position'>
+				<span>监销人：</span>
+				<?php
+					echo '<input type="text" name="SUPERINTENDENT" class="'.$cla.'" value="'.$info->superintendent.'" '.$readonly.' />';
+					if(!$readonly){
+						echo '<b id="jianxr" class="user_bg"></b>';
+					}
+				?>
+			</p>
+		</div>
+		<div class='rows'>
+			<p>
+				<span>备注：</span>
+				<?php
+					echo "<textarea class='remark ".$cla."' name='DESCRIPTION' ".$readonly.">".$info->description."</textarea>";
+				?>
+			</p>
+		</div>
+	</form>
+	<div class='destroy_cont_box removeBorder hide' id="TBL"></div>
+</div>

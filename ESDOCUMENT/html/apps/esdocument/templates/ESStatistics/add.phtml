@@ -1,0 +1,426 @@
+<style>
+.ztree li a span{
+	color:#444;
+}
+</style>
+<div id="mylist">
+	<div class="select">
+		<ul>
+			<li class="selected">基本信息设置</li>
+			<li>数据节点设置</li>
+			<li>统计规则设置</li>
+			<li>布局设置</li>
+		</ul>
+		<div class="clear"></div>
+		<div class="extra"></div>
+	</div>
+	<div class="mycontent">
+		<!-- 基本信息设置 start -->
+		<div class="list">
+			<div class="liscon1">
+			<!-- 添加from 包裹input 标签 方便表单遍历获取input 进行校验 -->
+			<form id="form_add">
+				<span>统计方案名称：</span>
+				<input type="text" name="title" verify="desc/30/1/0" value="<?php if(isset($name)){echo $name;}?>"/>
+				<input type="hidden" id="hidden" name="id" value="<?php if(isset($id)){echo $id;}?>">
+				<input type="hidden" id="oldTitle" name="oldTitle" value="<?php if(isset($name)){echo $name;}?>">
+			</form>
+			</div>
+		</div>
+		<!-- 基本信息设置 end -->
+		<!-- 档案库设置 start -->
+		<div id="nodeTree" class="list" style="display:none;" isHaveTreeNodes="">
+		<div id="treeButton"> 
+			<input type="button" onclick="changeTree(1);" value="按阶段" />
+			<input type="button" onclick="changeTree(2);" value="按部门" />
+			<input type="button" onclick="changeTree(3);" value="按装置" />
+			<input type="hidden" id="treeType" value="<?php if(isset($treeType)){echo $treeType;}else{echo 1;}?>" />
+		</div>
+			<ul id="archives" class="ztree">
+			</ul>
+		</div>
+		<!-- 档案库设置 end -->
+		<!-- 规则统计设置start -->
+		<div class="list" style="display:none;" id="esrules">
+			<table id="setRule"></table>
+		</div>
+		<!-- 规则统计设置end -->
+		<!-- 布局设置start -->
+		<div class="list" style="display:none;" id="eslayout">
+			<table id="showRule" ></table>
+		</div>
+		<!-- 布局设置end -->
+	</div>
+</div>
+
+<script type="text/javascript">
+var settingHolding = {
+		check: {
+			enable: true
+		},
+	
+		data: {
+			simpleData: {
+				enable: true
+			}
+		},
+		callback: {
+				onClick: onClick
+		}
+};
+function onClick(e,treeId, treeNode) {
+		var zTree = $.fn.zTree.getZTreeObj("archives");
+		zTree.expandNode(treeNode);
+	}
+$(document).ready(function(){
+	var id=$("#hidden:hidden").val();
+	var treeType=$("#treeType").val();
+	if(!id)id=-1;
+		$.getJSON($.appClient.generateUrl({ESStatistics : "getTree",id:id,treeType:treeType}, 'x'), function(zNodes) {
+			if(zNodes.length==0){
+				$("#nodeTree").attr("nodeTree","noHave");
+			}
+		 $.fn.zTree.init($("#archives"), settingHolding, zNodes);
+		});
+	$("#setRule").flexigrid({
+		url: false,
+		dataType: 'json',
+		colModel : [
+			{display: '文件分类', name : 'execute', width : 245, align: 'center'}
+			],
+		buttons : [
+			{name: '添加一列', bclass: 'add',onpress:addColumn},
+			{name: '删除一列', bclass: 'delete',onpress:reduceColumn},
+			{name: '删除选中列', bclass: 'delete',onpress:deletecheck}
+			],
+		usepager: false,
+		title: '统计方案列表',
+		useRp: true,
+		width: 800,
+		height: 258
+	});	
+	$("#showRule").flexigrid({
+		url: false,
+		dataType: 'json',
+		colModel : [
+			
+			{display: '文件类型', name : 'execute', width : 245, align: 'center'}
+		
+			],
+		buttons : [ //wanghongchen 20140717 增加联动设置
+			{name: '<input id="classNode" type="checkbox" style="float:left;" name="classNode" value="1" class="分类节点" checked>&nbsp;<label style="float:left;" for="classNode">分类节点</label>'},
+			{name: '<input id="dataNode" type="checkbox" style="float:left;" name="dataNode" value="1" class="数据节点" checked>&nbsp;<label style="float:left;" for="dataNode">数据节点</label>'},
+			{name: '<input id="isLayout" type="checkbox" onclick="updateOption()" style="float:left;" name="isLayout" value="1" class="缩进" >&nbsp;<label style="float:left;" for="isLayout">缩进</label>'},
+			{name: '<input id="isSummary" type="checkbox" style="float:left;" name="isSummary" value="1" class="汇总统计" >&nbsp;<label style="float:left;" for="isSummary">汇总统计</label>'},
+			//wanghongchen 20140828 增加统计图选项
+			{name: '<select id="pic" name="pic" style="width:80px;"><option value="none" selected>无图</option><option value="2pie">2D饼图</option><option value="2line">2D折线图</option><option value="2bar">2D条形图</option><option value="3pie">3D饼图</option><option value="3line">3D折线图</option><option value="3bar">3D条形图</option></select>'}
+			],
+		usepager: false,
+		title: '统计方案列表',
+		useRp: true,
+		width: 800,
+		height: 258
+	});	
+	$("#classNode").live('click',function(){
+		if(!$("#dataNode").attr("checked")){
+			$(this).attr("checked",true);
+		}
+		if(!$("#classNode").attr("checked")){
+			$("#dataNode").attr("disabled",true);
+		}else{
+			$("#dataNode").attr("disabled",false);
+		}
+	});
+	$("#dataNode").live('click',function(){
+		if(!$("#classNode").attr("checked")){
+			$(this).attr("checked",true);
+		}
+		if(!$("#dataNode").attr("checked")){
+			$("#classNode").attr("disabled",true);
+		}else{
+			$("#classNode").attr("disabled",false);
+		}
+	});
+});
+//删除选中行
+function deletecheck(){
+	var checkcol = $("#esrules").find("input[name='checkbox']:checked");
+	var nocheckcol = $("#esrules").find("input[name='checkbox']").not("input:checked");
+	if(checkcol.length<1){
+		$.dialog({icon:'warning',content:'请选择要删除的列！',time:3});
+		return;	
+	}
+	var col = [];
+	$(checkcol).each(function(){
+	col.push($(this).val());
+	});
+	titles=[];
+	var temp=$('#setRule').find('tr:eq(0) td').eq(1).text().replace(/\;/g,'');
+	titles.push(temp);
+	$(nocheckcol).each(function(){
+		var temp=$('#setRule').find('tr:eq(0) td').eq($(this).val()).text().replace(/\;/g,'');
+		titles.push(temp);
+	})
+    var title=titles.join(';');
+	var tObjs=$('#setRule').find('tr');
+	var tdLen=tObjs.eq(0).find('td').length;
+	var id=$("#hidden:hidden").val();
+	if(tdLen-checkcol.length>1){
+		var url=$.appClient.generateUrl({ESStatistics:'deleteCheckColumn'},'x');
+		$.get(url,{id:id,colNo:col.join(','),title:title},function(msg){
+			if(msg=="success"){
+				initsetRuleHtml(id);
+			}else{
+			$.dialog.notice({icon:'error',content:msg,time:3}); 
+			}
+		})
+	}else{
+	$.dialog({icon:'warning',content:'不能删除所有数据列',time:3});	
+	}
+}
+
+//减少一列
+function reduceColumn(){
+	var tObj=$("#esrules table:eq(1)");
+	var tObj=$(tObj).children('thead').children('tr');
+	var tObjs=$('#setRule').find('tr');
+	var tdLen=tObjs.eq(0).find('td').length;
+	var id=$("#hidden:hidden").val();
+	
+	titles=[];
+	for(var n=1;n<tdLen-1;n++){
+		var temp=$('#setRule').find('tr:eq(0) td').eq(n).text().replace(/\;/g,'');
+		titles.push(temp);
+	}
+    var title=titles.join(';');
+	if(tdLen>2){
+	var url=$.appClient.generateUrl({ESStatistics:'delColumnByColNo'},'x');
+			$.get(url,{id:id,colNo:tdLen-1,title:title},function(msg){
+				if(msg=="success"){
+					/* var tObj=$("#esrules table:eq(1)");
+					var tObj=$(tObj).children('thead').children('tr');
+					$('th:last',tObj).remove();
+					tObjs.each(function(i){
+					$('td:last',$(this)).remove();
+					}) */
+					initsetRuleHtml(id);
+				}else{
+				$.dialog.notice({icon:'error',content:msg,time:3}); 
+				}
+			})
+		
+	}else{
+		$.dialog({content:'最后一列不能删除',time:2});
+	} 
+}
+
+//增加一列
+function addColumn(){
+	var zTree = $.fn.zTree.getZTreeObj("archives");//获取树对象
+	 var nodes= zTree.getCheckedNodes();//获取选中的节点
+	 var data=[];
+	for(var j=0;j<nodes.length;j++){//循环遍历选中的树节点，取到每个节点的Path和isParent属性值 //每个节点加入所属树类型
+	var string={tree_id:nodes[j].id};
+	data.push(string);
+	}
+	var treeType = $('#treeType').val();
+	var id=$("#hidden:hidden").val();
+	var tObjs=$('#setRule').find('tr:eq(0) td');
+	var count=tObjs.length;
+	titles=[];
+	for(var n=1;n<count;n++){
+		var temp=tObjs.eq(n).text().replace(/\;/g,'');
+		titles.push(temp);
+	}
+	titles.push('列'+count);
+	var title=titles.join(';');
+	var data={id:id,treeType:treeType,title:title,count:count,data:data};
+	$.post($.appClient.generateUrl({ESStatistics:'addColItems'},'x'),data,function(msg){
+	if(msg=="success"){
+		initsetRuleHtml(id);
+	}else{
+	$.dialog.notice({icon:'error',content:msg,time:3}); 
+	  }	
+	  
+	});	
+}
+
+function initsetRuleHtml(id){
+	var url=$.appClient.generateUrl({ESStatistics:'getStatisticItems'},'x');
+	var treeType = $("#treeType").val();
+	$.post(url,{id:id},function(result){
+		$("#setRule").html('');
+		var tObj=$(".hDivBox table:eq(0)",$('#esrules'));
+		var trObj=$(tObj).children('thead').children('tr');
+			trObj.html('');
+		var str='<th axis="col0" align="center"><div style="width: 245px; text-align: center;">文件类型</div></th>';
+	    var html='<tbody>';
+	    	html+='<tr><td><div style="width: 200px; text-align: left;">列名称</div></td>';
+			for(var m=1;m<=result.count;m++){
+				if(m==1){
+				str+='<th axis="col'+m+'" align="center"><div style="width: 200px; text-align: center;">列'+m+'</div></th>';
+				}else{
+				str+='<th axis="col'+m+'" align="center"><div style="width: 200px; text-align: center;"><input type="checkbox" name="checkbox" value='+m+' />列'+m+'</div></th>';
+				}
+				if(result.head.length>0){
+					html+='<td><div style="width: 200px; text-align: left;" class="editTitle" >'+result.head[m-1]+'</div></td>';
+				}else{
+					html+='<td><div style="width: 200px; text-align: left;" class="editTitle" >列'+m+'</div></td>';
+				}
+			}
+				html+='<tr>';
+			trObj.append(str);
+		for(var j=0; j < result.data.length;j++){
+			var t=result.data[j];
+			if((j+1)%2==0){
+				html+='<tr>';
+			}else{
+				html+='<tr class="erow">';
+			}
+			html+='<td align="center"><div style="width: 245px; text-align: " >'+t.c0.name+'</div></td>';
+			for(var m=1;m<=result.count;m++){
+				if(t.c0.isnode!="1"){
+						if(t['c'+m].nodeType){
+							if(!t['c'+m].text){var text='未设置';}else{ var text=t['c'+m].text;}
+							var itemId=t['c'+m].id
+							var nodeType = t['c'+m].nodeType;
+						}else{
+							var text='未设置';
+							var itemId=-1;
+							var nodeType=treeType;
+						}
+						html+='<td align="center"><div style="width: 200px; text-align: left;cursor:pointer" treeId="'+t.c0.id+'" treeType="'+nodeType+'" itemId="'+itemId+'" onclick=javascript:getColumnShow(this);>'+text+'</div></td>';
+				}else{
+					html+='<td align="center"><div style="width: 200px; text-align: left;"></div></td>';
+				}
+			}
+			html+='</tr>';
+		}
+		html+='</tbody>';
+		$("#setRule").append(html);
+		//列标题修改或添加时，鼠标划上加入标题显示整个列全值，避免文本太长，查看不全
+		var tObjs=$('#setRule').find('tr td div');
+		    tObjs.live('mouseover',function(){
+			var text = $(this).text();
+			$(this).attr('title',text);
+		});
+
+	},'json')
+}
+//在页面显示添加的列
+function addColumnView(){
+	  var tObj=$("#esrules table:eq(1)");
+		var tObj=$(tObj).children('thead').children('tr');
+		var count=$("th",tObj).length;
+		var th='<th align="center"><div style="width: 200px; text-align: center;"><input type="checkbox" name="checkbox" value='+count+' />列'+count+'</div></th>';
+		tObj.append(th);
+		var tObjs=$('#setRule').find('tr');
+		var td='<td align="center"><div style="width: 200px; text-align: left;" class="editTitle">列'+count+'</div></td>';
+		tObjs.each(function(i){
+			if(i==0){
+				$(this).append(td);
+			}else{
+				var copyTd=$('td:last',$(this)).clone();
+				if(copyTd.text()!=''){
+					$('div',copyTd).text('未设置').attr('itemId','-1');;
+					$(this).append(copyTd);
+				}else{
+					$(this).append(copyTd);
+				}
+			}
+		})
+
+}
+//在单元格中添加输入框
+function addInput(obj){
+	obj.innerHTML='<input type="text" name="" >';
+
+}
+//wanghongchen 20140822 更新分类节点、数据节点、缩进
+function updateOption(){
+ 	var isLayout = 0;
+	var dataNode = 0;
+	var classNode = 0;
+	var id=$("#hidden:hidden").val();
+	if($("#isLayout").attr("checked")){
+		isLayout = 1;
+	}
+	if($("#dataNode").attr("checked")){
+		dataNode = 1;
+	}
+	if($("#classNode").attr("checked")){
+		classNode = 1;
+	}
+	$.ajax({
+		url:$.appClient.generateUrl({ESStatistics:'updateOption'},'x'),
+		type:'post',
+		data:{isLayout:isLayout,dataNode:dataNode,classNode:classNode,id:id},
+		success:function(){
+			var tObjs=$('#setRule').find('tr:eq(0) td');
+			var count=tObjs.length;
+			var liObj = $("#mylist li");
+			var listObj = $(".list");
+	    	var url=$.appClient.generateUrl({ESStatistics:'getStatisticItems'},'x');
+			$.post(url,{id:id},function(result){
+				liObj.removeClass("selected");
+				listObj.hide();
+				liObj.eq(3).addClass("selected");
+				listObj.eq(3).show();
+				$("#showRule").html('');
+			    var tObj=$("#eslayout table:eq(1)");
+					var trObj=$(tObj).children('thead').children('tr');
+						trObj.html('');
+					var str='<th axis="col0" align="center"><div style="width: 245px; text-align: center;">文件类型</div></th>';
+				    var html='<tbody>';
+				    	html+='<tr><td><div style="width: 245px; text-align: left;">列名称</div></td>';
+						for(var m=1;m<count;m++){
+							str+='<th axis="col'+m+'" align="center"><div style="width: 200px; text-align: center;">列'+m+'</div></th>';
+							html+='<td><div style="width: 200px; text-align: left;">'+result.head[m-1]+'</div></td>';
+						
+						}
+				trObj.append(str);
+				html+='</tr>';
+				for(var j=0; j < result.data.length;j++){
+					var t=result.data[j];
+					if((j+1)%2==0){
+						html+='<tr>';
+					}else{
+						html+='<tr class="erow">';
+					}
+					html+='<td align="center"><div style="width: 245px; text-align: " >'+t.c0.name+'</div></td>';
+					
+					for(var m=1;m<count;m++){
+						if(t['c'+m]){
+						if(!t['c'+m].text){var text='';}else var text=t['c'+m].text;
+							html+='<td align="center"><div style="width: 200px; text-align: left;">'+text+'</div></td>';
+						}else{
+							html+='<td align="center"><div style="width: 200px; text-align: left;"></div></td>';
+						}
+					}
+					html+='</tr>';
+				}
+				html+='</tbody>';
+				$("#showRule").append(html);
+				//列标题修改或添加时，鼠标划上加入标题显示整个列全值，避免文本太长，查看不全
+				var tObjs=$('#showRule').find('tr td div');
+				    tObjs.live('mouseover',function(){
+					var text = $(this).text();
+					$(this).attr('title',text);
+				    });
+				$("#classNode").attr("checked",result.classNode == 1 ? true :false);
+				$("#dataNode").attr("checked",result.dataNode == 1 ? true :false);
+				$("#isLayout").attr("checked",result.isLayout == 1 ? true :false);
+				$("#isSummary").attr("checked",result.isSummary == 1 ? true :false);
+			},'json')
+		}
+	});
+}
+//切换树
+function changeTree(treeType){
+	var id=$("#hidden:hidden").val();
+	$.getJSON($.appClient.generateUrl({ESStatistics : "getTree"}, 'x'),{id:id,treeType:treeType}, function(zNodes) {
+		$.fn.zTree.init($("#archives"), settingHolding, zNodes);
+		$("#treeType").val(treeType);
+	});
+}
+</script>

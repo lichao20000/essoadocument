@@ -1,0 +1,219 @@
+<link rel="stylesheet"
+	href="<?php echo $tplPath;?>/public/css/esnav.css" type="text/css">
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.globalEx.js"></script>
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.estabs.js"></script>
+<script
+	type="text/javascript"
+	src="<?php echo $tplPath;?>/public/js/jquery.appclient.js?baseurl=<?php echo $esaction->generateUrl(array());?>"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#estabs").esTabs();
+});
+
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$(".def-nav,.info-i").hover(function(){
+		$(this).find(".pulldown-nav").addClass("hover");
+		$(this).find(".pulldown").show();
+	},function(){
+		$(this).find(".pulldown").hide();
+		$(this).find(".pulldown-nav").removeClass("hover");
+	});
+	
+});
+</script>
+
+<div class="esnav">
+	<!--  注释掉比较杂乱的div标签
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td style="width:220px;">
+			       <div class="menu" id = "allMenusContainer">
+		        		<div class="all">
+		            		<div class = "allFunsLogo"></div><div class="icon">所有功能</div>
+		                	<ul id = "menu" class = "menuUls">
+			                </ul>
+			            </div>
+		        	</div>
+		           
+				</td>
+				<td class = "navSeprator" >
+				
+				</td>
+				<td class='esnav_left'><div id="topToggle" class="topToggle"
+						title="<?php echo $esaction->getText("隐藏顶部导航");?>">&nbsp;</div>
+					<div class="logo">
+					</div>
+					<div class="projectName">数字档案馆</div>
+					<div id = "seporateLine" class = "seporateLine"></div>
+					</td>
+				<td>
+					<ul id="estabs" style = "background-color:#fff"></ul>
+					<div id = "seporateLine" class = "seporateLine"></div>
+				</td>
+				<td width="120" style="display: none;"><div id='downBtn'>报表下载</div></td>
+			</tr>
+		</table>
+	 -->
+	 <div class="menu" id = "allMenusContainer">
+		        		<div class="all">
+		            		<div class = "allFunsLogo"></div><div class="icon">所有功能</div>
+		                	<ul id = "menu" class = "menuUls">
+			                </ul>
+			            </div>
+	</div>
+	<div id="estabs" style = "background-color:#fff;text-algin:center;">
+	</div>
+	<div class = "seporateArea"></div>
+	<div class = "seporateLine"></div>
+</div>
+
+<div class="showList" id="showList">
+	<div class="box-rt">
+		<div class="box-lt">
+			<div class="box-rb">
+				<div class="box-lb" id="show">
+					<ul>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+/** 调整nav的居中效果  **/
+
+if(navigator.appName == "Microsoft Internet Explorer" && navigator.appVersion.match(/7./i)=="7.")
+{	
+	var paddingTitleLeft = $(window).width()*0.96/2-190;
+	$("#estabs").css("padding-left",paddingTitleLeft).css("width",$(window).width()*0.96-230-paddingTitleLeft);
+	$(".seporateLine").css("width",$(window).width()*0.96-230);
+	$(".seporateArea").css("width",$(window).width()*0.96-230);
+}else{
+	$("#estabs").css("padding-left",$(window).width()*0.96/2-190).css("width",$(window).width()*0.96-230-($(window).width()*0.96/2-190));
+	$(".seporateLine").css("width",$(window).width()*0.96-230);
+	$(".seporateArea").css("width",$(window).width()*0.96-230);
+}
+
+/** 添加导航条菜单的hover事件  **/
+$('.has-sub, #dropMenu').hover(function(){
+	$('.has-sub').addClass('dropitem');
+	$('#dropMenu').css({left:$(".has-sub").offset().left,top:$('.has-sub').height()});
+	$('#dropMenu').show();
+	if(dropMenuTimer != null) clearTimeout(dropMenuTimer);
+	dropMenuTimer = null;
+},function(){
+	dropMenuTimer = setTimeout(function(){
+		$('.has-sub').removeClass('dropitem');
+		$('#dropMenu').hide();
+	}, 200);
+});
+
+$('#downBtn').click(function(){
+	var url=$.appClient.generateUrl({ESReport:'getReportList'});
+	 $('#show').createList({url:url});
+	var offset=$(this).offset();
+	$('#showList').css({ top: offset.top+33, left: offset.left-240 }).toggle();
+	
+});
+(function($){
+	$.init=function(setting){
+		var s={
+			url:'',
+			page:1,
+			size:5,
+			total:0
+			};
+		s=$.extend(s,setting);
+		var g={
+				getReportList:function(){
+					$.getJSON(s.url,{page:s.page,size:s.size},function(result){
+						g.parseByJson(result);
+						});
+					},
+				parseByJson:function(result){
+						var list=[],temp='';s.total=result.total;
+						if(result.list.length>0){
+							for(var j=0;j<result.list.length;j++){
+								temp=result.list[j];
+								var url=$.appClient.generateUrl({ESIdentify:'fileDown',fileId:temp.id});
+								list.push('<li><a class="common" href="'+url+'">'+temp.infoName+'</a><em>'+temp.creat_date+'</em></li>');
+							}
+							$('#show ul').html('').prepend(list.join(''));
+							g.bulidPage();
+						}else{
+							$('#show ul').html('无报表记录');
+						}
+						
+					},
+				bulidPage:function(){
+					var totalPage=1;
+					var pageHtml='<li class="lastone">';
+						pageHtml+='<a href="#" class="clearBtn">清空所有</a><div class="page">';
+						if(s.page==1){
+							pageHtml+='<span class="disabled" title="上一页"><</span>';
+						}else{
+							pageHtml+='<a href="#" title="上一页" class="pre" ><</span>';
+						}
+						totalPage=Math.ceil(s.total/s.size);//计算总页数
+						totalPage=(totalPage <= 0)?1:totalPage;
+						for(var i=1;i<=totalPage;i++){
+							if(i==s.page){
+								pageHtml+='<span class="current">'+i+'</span>';
+							}else{
+								pageHtml+='<a href="#">'+i+'</a>';
+							}
+						}
+					if(s.page==totalPage){
+						pageHtml+='<span class="disabled" title="下一页">></span>';
+					}else{
+						pageHtml+='<a href="#" title="下一页" class="next" >></a>';
+					}
+					pageHtml+='</div></li>';
+					$('#show ul').append(pageHtml);
+					}
+				
+
+				};
+				if(s.url){
+					g.getReportList();
+
+				}
+				$('#show').on('click','.page a',function(){
+					if(this.className=='pre'){
+							s.page-=1;
+					}else if(this.className=='next'){
+							s.page+=1;
+
+					}else{
+						 s.page=parseInt(this.innerHTML);
+					}
+						g.getReportList();
+
+				});
+				$('#show').on('click','.common',function(){
+					$('#showList').hide();
+
+				});
+				//点击情况按钮隐藏下载列表
+				$('#show').on('click','.clearBtn',function(){
+					if($('#show li').length<1)return;
+					var url=$.appClient.generateUrl({ESReport:'delReportFile'});
+					$.get(url,function(){
+						$('#showList').hide();
+						});
+					
+				});
+
+	};
+	$.fn.createList=function(setting){
+			$.init(setting);
+		};
+})(jQuery);
+</script>

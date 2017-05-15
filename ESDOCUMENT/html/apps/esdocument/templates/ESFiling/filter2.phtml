@@ -1,0 +1,189 @@
+<style type="text/css">
+<!--
+.button {cursor: pointer;padding: 5px;background-color: #6F6E81;color: #FFF;border: 0px none;outline: 0px none;}
+-->
+</style>
+<div id="choiceContents">
+	<span style="padding-left:20px">归档文件:&nbsp;&nbsp;</span>
+	<label style="display: inline;" id="cbycon"><input type="radio" name="identity" class="choice" value="one"/>根据条件选择</label>
+	<label style="display: inline;" id="yixuan"><input type="radio" name="identity" class="choice" value="two"/>已选</label>
+</div>
+<div id='filterContents' style='padding:20px;float:left;width:600px;border-top: 1px solid silver;'>
+	<p class='contbox'>
+		<span class='w140 w14090 hei30'>字段名</span>
+		<span class='w90 w14090 hei30'>比较符</span>
+		<span class='w140 w14090 hei30'>字段值</span>
+		<span class='w90 w14090 hei30'>关系符</span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">添加行</span></span>
+		<span class='w90 w14090 hei30' style="text-align: center; margin-right: 0px; width: 60px;">删除行</span></span>
+	</p>
+	<div id='contents'>
+		<?php for($fly=1;$fly<6;$fly++){ ?>
+		<p class='contbox creatediv'  style="overflow:hidden;">
+			<select class='w140 w14090 hei20 filedname'>
+				<option value=''>请选择</option>
+				<option value='itemName'>项目名称</option>
+				<option value='stageName'>收集范围名称</option>
+				<option value='device'>装置分类名称</option>
+				<option value='part'>拟定部门名称</option>
+				<option value='title'>文件标题</option>
+				<option value='docNo'>文件编码</option>
+				<option value='documentTypeName'>文件类型名称</option>
+				<option value='engineeringName'>文件专业名称</option>
+				<option value='person'>拟定人</option>
+				<option value='date'>拟定日期</option>
+			</select>
+			<select class='w90 w14090 hei20 comparison'>
+				<option value="equal">等于</option>
+				<option value="greaterThan">大于</option>
+				<option value="lessThan">小于</option>
+				<option value="notEqual">不等于</option>
+				<option value="greaterEqual">大于等于</option>
+				<option value="lessEqual">小于等于</option>
+				<option value="like" selected>包含</option>
+				<option value="notLike">不包含</option>
+			</select>
+			<input type='text' class='w140 w14090 hei20 filedvalue' />
+			<select id='' class='w14090 w90 hei20 relationship'>
+				<option value="AND" selected="selected">并且</option>
+				<option value="OR">或者</option>
+			</select>
+			<a class='newfilter'></a><a class='delfilter'></a>
+		</p>
+		<?php }?>
+	</div>
+</div>
+<div id="dis" style="float:left;width:640px;height: 240px;">
+	<table id="choiced"></table>
+</div>
+<div id="bus_tree" style="display:none;width:640px; height:100px;">
+	<div style="padding-top: 50px; text-align: center;">
+		归档目标目录<font color="red" size="3">*</font>&nbsp;&nbsp;<input type="text" name="d_goal"  id="d_goal" readonly="readonly" value="" code="" style="width:250px; height:20px;"/>
+	</div>
+	<div id="menuContent" class="menuContent" style="display: none;position: fixed;">
+	 	<ul id="treeDemo" class="ztree selectztree"></ul>
+	</div>
+</div>
+<div id="adjustField" style="display:none; width: 840px; height: 350px;">
+	<div
+		class="divSpace">
+		<div class="space">&nbsp;</div>
+		<div style="float:left; width:98px; height:29px;line-height:29px; border: 1px solid #ccc;  border-bottom: 0px; background-color: #F5F5F5; text-align: center;">
+			归档文件字段
+		</div>
+		<div class="space" style="width: 720px;">&nbsp;</div>
+	</div>
+	<div class="divSpace" style="width:820px;padding-left:20px; background-color: #F5F5F5;">
+			<span class="button" id="autoAdjust">自动对应</span>&nbsp;&nbsp;
+			<span class="button" id="returnAdjust" style="padding-left: 20px; padding-right: 20px;">复位</span>
+	</div>
+	<div class="tableDiv" style="width: 840px;">
+		<div class="tableDiv">
+			<table id="fillFront"></table>
+		</div>
+		<div class="tableDiv">
+			<table id="fillBack"></table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var BZ=1;
+$(document).ready(function(){
+	$("#d_goal").selectInput({
+        url: $.appClient.generateUrl({ESFiling: "getDtree",status:1},'x'),
+        chkStyle: "radio",
+        treatNodes:treatNodes,
+        onCheck:function(event, treeId, treeNode){        	
+        	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+    		nodes = zTree.getCheckedNodes(true);
+    		if(nodes.length==1){
+    			$("#d_goal").attr("value", nodes[0].name);
+    			$("#d_goal").attr("code", nodes[0].path);
+	    	}
+		}
+ 	});
+	 function treatNodes(zNodes) {
+		 //如果节点不是叶子节点去掉选的框
+        for (var i = 0; i < zNodes.length; i++) {
+            if (zNodes[i].isLeaf != '0') {
+            	zNodes[i].nocheck = true;
+            }
+        }
+	};
+	var ids = "";
+	$("#esDataList input[type='checkbox']:checked").each(function(index) {
+		ids = ids + $(this).attr("docId") + ",";
+	});
+	
+	if(ids==="" || ids===null){
+		$("#cbycon input[type='radio']").attr("checked","checked");
+		switchView("one","");
+	}else{
+		$("#yixuan input[type='radio']").attr("checked","checked");
+		switchView("two",ids.substring(0,ids.length-1));
+	}
+	if(BZ==1){
+		$("#pre").css("display","none");	
+		$("#finish").css("display","none");
+	}
+	$(".choice").die().live("change",function(){
+		if($(this).val()=="one"){
+			$("#filterContents").css("display","");
+			$("#dis").css("display","none");
+		}else{
+			$("#filterContents").css("display","none");
+			$("#dis").css("display","");
+		}
+	});
+
+	function switchView(v,ids){
+		if(v=="one"){
+			$("#filterContents").css("display","");
+			$("#dis").css("display","none");
+		}else{
+			$("#filterContents").css("display","none");
+			$("#dis").css("display","");
+		}
+		var colModel= [{display : '序号',name : 'num',width : 20,align : 'center'}, 
+			             {display : '项目名称',name : 'itemName',width : 180,align : 'center'}, 
+			             {display : '收集范围名称',name: 'stageName', width: 150,align: 'left'},
+			             {display : '装置分类名称',name: 'device',width: 150, align: 'left'},
+			             {display : '文件标题',name : 'title',width : 180,align : 'left'}, 
+			             {display : '文件编码',name : 'docNo',width : 120,align : 'left'}, 
+			             {display : '拟定部门名称',name: 'part',width: 150,align: 'left'},
+			             {display : '文件类型名称',name: 'documentTypeName',width: 100,align: 'left'},
+			             {display : '文件专业名称',name: 'engineeringName',width: 100,align: 'left'},
+			             {display : '拟定人',name : 'person',width : 60,align : 'center'}, 
+			             {display : '拟定日期',name : 'date',width : 80,align : 'center'}
+			             ];
+		loadGrid(ids,colModel,$("#stageId").val());
+	}
+	
+	function loadGrid(ids,colModel,stageId){
+		$.post($.appClient.generateUrl({ESFiling : "findMoveCols"}, 'x'),{stageId:stageId},function(data){
+			if(data){
+				for(var i=0;i<data.length;i++){
+					colModel.push({display : data[i].name,name : data[i].code, width : 80, align : 'center'});
+				}
+			}
+			$("#choiced").flexigrid({
+				url : $.appClient.generateUrl({ESFiling : "findDocumentById",ids:ids,stageId:stageId}, 'x'),
+				dataType : 'json',
+				colModel : colModel,
+				usepager: true,
+				title: '&nbsp;',
+				nomsg:"没有数据",
+				useRp: true,
+				width: 640,
+				height:168,
+				showTableToggleBtn: true,
+				pagetext: '第',
+				itemtext: '页',
+				outof: '页 /共',
+				pagestat:' 显示 {from} 到 {to}条 / 共{total} 条',
+				procmsg:'正在加载数据，请稍候...'
+			});
+		},"json");
+	}
+});
+</script>

@@ -1,0 +1,79 @@
+<?php
+/*
+ *文件存储设备服务
+* @author wangbo 20140318
+*/
+class ProxyEscloudappEscloud_fileEquipmentws extends AgentProxyAbstract
+{
+	const SERVICE_NAME = "mainFileServer";
+	 /**
+	 * 获取总记录数
+	 * 
+	 */
+	public function getCountAll($wb)
+	{
+		$url = "getStorageCount";
+		return $this->post(self::SERVICE_NAME,$url,$wb,"application/json;charset=UTF-8");
+	}
+	
+	/**
+	* 获取所有文件存储设备信息
+	*/
+	public function getAllFileEquip($canshu)
+	{
+		$url = "getStorageList";
+		return $this->post(self::SERVICE_NAME, $url,$canshu,"application/json;charset=UTF-8");
+	}
+	/**
+	* 添加文件存储设备
+	*/
+	public function addFileEquipment($data){
+	     $url = "saveStorage";
+	     return $this->post(self::SERVICE_NAME, $url,$data,"application/json;charset=UTF-8");
+	}
+	/**
+	* 删除文件存储设备
+	*/
+	public function deleteFileEquipment($id,$priority){
+		 $urlParam = array('dropStorage',$id,$priority);
+		 $url = implode('/', $urlParam);
+	     return $this->post(self::SERVICE_NAME, $url);
+	}
+ 
+	/**
+	*启用或者禁用某个文件存储设备
+	*/
+	public function startOrStopFileEquipment($id,$mark){
+	      $urlParam = array('setStorageEnable',$id,$mark);
+		  $url = implode('/', $urlParam);
+		  return $this->post(self::SERVICE_NAME, $url);
+	}
+	/**
+	*将某个文件存储设备设为最优
+	*/
+	public function setFirstFileEquipment($id,$priority){
+	      $urlParam = array('setFirstFileStorage',$id,$priority);
+		  $url = implode('/', $urlParam);
+		  return $this->post(self::SERVICE_NAME, $url);
+	}
+	
+	/**
+	 *获取应用列表
+	 */
+	public function getAppList($canshu){
+		$url = "getAppList";
+		return $this->post("consoleServer", $url,$canshu,"application/json;charset=UTF-8");
+	}
+	
+	public function getUploadURL() {
+		$url = "getUploadURL";
+		return $this->post(self::SERVICE_NAME, $url);
+	}
+	
+	public function getFileDownLoadUrl($id){
+		$urlParam = array('getFileDownLoadUrl',$id);
+		$url = implode('/', $urlParam);
+		return $this->get(self::SERVICE_NAME, $url);
+	}
+	 
+}

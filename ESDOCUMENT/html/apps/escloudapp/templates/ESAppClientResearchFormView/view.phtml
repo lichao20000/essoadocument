@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="http://jquerymobile.com/demos/1.1.0/docs/_assets/css/jqm-docs.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESAppClientPublishView/css/main.css" />
+<style>
+.ui-body-f
+{
+	background-color:white;
+	color:black;
+	font-size:100%; 
+}
+</style>
+
+<div data-role="page" id="pageone" data-theme="f">
+
+	<div data-role="content" >
+		<p><ptitle> <?php echo $researchform->tm;?> </ptitle></p>
+		<pinfo><?php echo $researchform->displayName;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $researchform->createDate;?> </pinfo>
+		<hr style="height:1px; border-width:0;color:#e8e8e8;background-color:#e8e8e8;"/><br />
+		<?php 
+			if($researchform->summary != "") {
+				echo "<div class=\"summary\"><summary><summary-type>摘要</summary-type>&nbsp;&nbsp;&nbsp;".$researchform->summary."</summary></div><br />";
+				echo "<hr style=\"height:1px; border-width:0;color:#e8e8e8;background-color:#e8e8e8;\"/><br />";
+			}
+		?>
+		<ptext><?php echo $researchform->content;?></ptext>
+
+	</div>
+
+</div>
+
+
+
+
+
+
+
+

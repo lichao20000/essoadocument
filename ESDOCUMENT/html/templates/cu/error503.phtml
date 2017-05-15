@@ -1,0 +1,21 @@
+<div class="content">
+  <div class="calendarBox" style="width:1000px;">
+    <div class="left">&nbsp; </div>
+    <div class="calendar" style="width:780px;">
+      <!-- <div class="errorText2">503</div>  -->
+      <div class="errorText1" style="padding-top:25px;"><img src="<?php echo $tplPath;?>/images/warn.gif" width="32" height="32" alt="搜索"  align="absmiddle" style="margin-left:10px;"/><span class="font16 bold">非常抱歉，服务暂时不可用</span>
+        <!-- <p>您可以尝试以下方式寻求帮助</p>  -->
+<!--         <p><a href="">webmaster@chinaunicom.com.cn</a></p> -->
+      </div>
+<?php if (AopConfig::get('debug', false)): ?>
+      <div style="clear:both;margin-top:20px;font-size:14px;color:red;font-family:'Bitstream Vera Sans Mono','Courier New',Courier,monospace">
+        Error: <?php echo $exception->getMessage() ?>
+<?php if ($exception instanceof AopDbException): ?>
+        <br/><br/>
+        SQL: <?php echo $exception->getQuery() ?>
+<?php endif ?>
+      </div>
+<?php endif ?>
+    </div>
+  </div>
+</div>

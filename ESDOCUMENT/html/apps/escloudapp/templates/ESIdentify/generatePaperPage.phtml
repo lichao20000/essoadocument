@@ -1,0 +1,161 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/js/autovalidate/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/ESIdentify/css/foldertree.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/ESIdentify/js/catagory.js"></script>
+<div id = "generatePaperDiv" style="width: 800px;">
+	<table id="generatePaperGrid" style="width:780px;"></table>
+</div>
+<div id = "innerFileDataDiv" style="width: 800px;">
+	<table id="innerFileDataGrid" style="width:780px;"></table>
+</div>
+<script type="text/javascript">
+(function(){
+	var nowwhere ;
+	$("#generatePaperGrid").flexigrid({
+			url: false,
+			editable : true,
+			dataType: 'json',
+			colModel : [
+				{display: '序号', name : 'num', width : 20, align: 'center'}, 
+				{display: '操作', name : 'operate', width : 30, align: 'center'}, 
+				{display: '获取下级数据条件', name : 'where', metadata:'where', width : 200, align: 'left',hide:true}, 
+				<?php echo $fields;?>
+			],
+			useRp: true,
+			query:'',
+			width: 800,
+			height:200,
+			showTableToggleBtn:true,
+			dblClickResize:true
+	});
+	$('#generatePaperGrid').flexExtendData(<?php echo $data;?>);
+	$('#generatePaperGrid tr').die().live('click',function(){
+		var trObj=$(this).closest('tr');
+		var where=$('#generatePaperGrid').flexGetColumnValue(trObj,['where']);
+		if(nowwhere == where){
+			return ;
+		}
+		nowwhere = where ;
+		$("#innerFileDataGrid").flexOptions({query:where,url:$.appClient.generateUrl({ESIdentify:'getGeneratePagerInnerData',childPath:'<?php echo $childPath;?>'})}).flexReload();
+	});
+	
+	$("#innerFileDataGrid").flexigrid({
+		url: false,
+		dataType: 'json',
+		colModel : [
+			{display: '序号', name : 'num', width : 20, align: 'center'}, 
+			<?php echo $childFields;?>
+		],
+		query:'',
+		width: 800,
+		height:200,
+		showTableToggleBtn:true,
+		dblClickResize:true
+	});
+	$('#generatePaperGrid .editbtn').die().live('click',function(){
+		var trObj = $(this).closest("tr");
+		var trData = trObj.prop("data").cell;
+		createEditDataPage(trObj, trData) ;
+	});
+
+	function createEditDataPage(trObj, trdata){
+		var pkgPath=nodePath.substring(0, nodePath.lastIndexOf('-@'));
+		var url=$.appClient.generateUrl({ESIdentify:'add',path:pkgPath},'x');
+		$.ajax({
+		    url:url,
+		    success:function(data){
+		    	$.dialog({
+		    		id: 'artAddPanel',
+			    	title:'数据编辑',
+			    	width: '550px',
+		    	   	fixed:false,
+		    	   	padding:'0px',
+		    	    resize: false,
+		    	    okVal:'保存',
+				    ok:true,
+				    cancelVal: '取消',
+				    cancel: true,
+			    	content:data,
+			    	ok:function()
+			    	{
+						var form=$('#form_add');
+						var data=form.serialize();
+						var flag=form.validate();
+						if(flag){
+							var newData = {"cell":{}} ;
+							var formData = {} ;
+							$('#form_add input').each(function(i){
+								var key = $(this).attr('name') ;
+								key = key + '';
+								if(key.substring(0,1)=='C'){
+									newData["cell"][key] = $(this).val() ;
+								}
+							});
+							$('#form_add select').each(function(i){
+								var key = $(this).attr('name') ;
+								key = key+'';
+								if(key.substring(0,1)=='C'){
+									newData["cell"][key] = $(this).val() ;
+								}
+							});
+							//xiewenda 20140923 添加对textarea组件的数据添加
+							$('#form_add textarea').each(function(i){
+								var key = $(this).attr('name') ;
+								key = key+'';
+								if(key.substring(0,1)=='C'){
+									newData["cell"][key] = $(this).val();
+								}
+							});
+							for (var key in trdata) {
+								key = key + '';
+								if(key.substring(0,1)!='C'){
+									newData["cell"][key] = trdata[key] ;
+								}
+							}
+							$('#generatePaperGrid').reloadOneTrData(trObj, newData);
+							//xiewenda 20140923 添加保存成功过的提示信息
+							$.dialog.notice({width: 200,content: '保存成功！',icon: 'succeed',time: 3});
+						} else {
+							//xiewenda 20140923 字段有效的提示信息
+							$.dialog.notice({width: 200,content: '请正确填写信息！',icon: 'warning',time: 3});
+							return false;
+						}
+					 },
+		    		init:function(){
+		    			var form=$('#form_add');
+						form.autovalidate();
+						$('#form_add input').each(function(i){
+							var key = $(this).attr('name') ;
+							key = key + '';
+							if(key.substring(0,1)=='C' && trdata[key]!=null){
+								$(this).val(trdata[key]) ;
+							}
+						});
+						//xiewenda 20140923 添加对textarea组件的数据添加
+						$('#form_add textarea').each(function(i){
+							var key = $(this).attr('name') ;
+							key = key + '';
+							if(key.substring(0,1)=='C' && trdata[key]!=null){
+								$(this).val(trdata[key]) ;
+							}
+						});
+						$('#form_add select').each(function(i){
+							var key = $(this).attr('name') ;
+							key = key + '';
+							if(key.substring(0,1)=='C' && trdata[key]!=null){
+								var t = document.getElementsByName(key)[0]; 
+					  		  	for(var i=0;i<t.length;i++){//给select赋值
+					  			  	if(trdata[key]==t.options[i].value){
+					  				  	t.options[i].selected=true;
+					  			  	}
+					  		  	}
+							}
+						}); 
+						
+		    		}
+			    });
+		    },
+		    cache:false
+		});
+	}
+})();
+</script>

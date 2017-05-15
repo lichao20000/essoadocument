@@ -1,0 +1,32 @@
+<?php
+/**
+ * 表单数据的代理
+ * @author yuanzhonghua
+ *
+ */
+class ProxyEscloudappEscloud_formws extends AgentProxyAbstract
+{
+  const SERVICE_NAME = "escloud_formws";
+  //添加表单
+  public function addform($param)
+  {
+  	$urlParam = array('saveFormXml');
+  	$url = implode('/', $urlParam);
+  	//return $param;
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+  //获取表单列表
+  public function getlist()
+  {
+  	$urlParam = array('getListFormAll');
+  	$url = implode('/', $urlParam);
+  	return $this->get(self::SERVICE_NAME, $url);
+  }
+ //表单的删除
+  public function delform($param)
+  {
+  	$urlParam = array('deleteBatchForm');
+  	$url = implode('/', $urlParam);
+  	return $this->post(self::SERVICE_NAME,$url,$param,'application/json;charset=UTF-8');
+  }
+}

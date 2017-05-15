@@ -1,0 +1,59 @@
+<link href="<?php echo $tplPath?>/ESArchiveStorage/css/storage.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo $tplPath ?>/public/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="<?php echo url('js/jquery.js')?>"></script>
+<script type="text/javascript" src="<?php echo $tplPath ?>/public/ztree/js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $tplPath;?>/public/flexigrid/css/flexigrid.css" />
+<script type="text/javascript" src="<?php echo $tplPath;?>/public/flexigrid/js/flexigrid.js"></script>
+<SCRIPT type="text/javascript">
+		<!--
+		var settingFiling = {
+				view: {
+					dblClickExpand: false,
+					showLine: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				callback: {
+					onClick: onClick
+				},
+		};
+		var zNodesFiling =[
+			{ id:1, pId:0, name:"档案保管管理", open:true},
+			{ id:11, pId:1, name:"档案损坏"},
+				{ id:111, pId:11, name:"文书档案"},
+			{ id:12, pId:1, name:"档案丢失"},
+				{ id:112, pId:12, name:"文书档案"},
+		];
+		function onClick(e,treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("ESArchiveEditing");
+			zTree.expandNode(treeNode);
+		}
+		$(document).ready(function(){
+			$.fn.zTree.init($("#ESArchiveEditing"), settingFiling, zNodesFiling);
+
+		});
+		//-->
+	</SCRIPT>
+<hr>
+<div class='main'>
+	<div class="left">
+	<div style="background-color:#CCCCCC;">
+		<span>档案保管管理树</span>
+	</div>
+		<ul id="ESArchiveEditing" class="ztree"></ul>
+	</div>
+	<div class="right">
+		<table id="flexme1"></table>
+		<script type="text/javascript">
+		var uri="<?php echo $esaction->generateUrl(Array('ESCollect'=>'set_json'));?>";
+		</script>  
+		<script type="text/javascript" src="<?php echo $tplPath;?>/ESArchiveStorage/js/ESArchiveStorage.js"></script>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,179 @@
+<div class='userFromRole'>
+	<div id='roleGridDiv' class='topGrid'>
+		<input type="hidden" id="roleId" value="" />
+		<table id='roleGrid'></table>
+	</div>
+	<div id='userGridDiv' userIds="" class='bottomGrid'>
+		<table id='userGrid'></table>
+	</div>
+</div>
+<script type="text/javascript">
+var userFromRole = {
+		showMsg: function(msg, type){
+			if(type == '1'){
+				$.dialog.notice({icon : 'succeed',content : msg,title : '3秒后自动关闭',time : 3});
+			} else if(type == '2'){
+				$.dialog.notice({icon : 'error',content : msg,title : '3秒后自动关闭',time : 3});
+			} else {
+				$.dialog.notice({icon : 'warning',content : msg,title : '3秒后自动关闭',time : 3});
+			}
+		},
+		roleQuery: function(){
+			var keyword = $.trim($('#roleQuery').val());
+			if(keyword == '' || keyword=='请输入关键字') {
+				keyword = '';
+			}
+			$("#roleGrid").flexOptions({url:$.appClient.generateUrl({ESTransferFlow: 'findRoleList',searchKeyword:keyword}, 'x')}).flexReload();
+		},
+		userQuery: function(){
+			var keyword = $.trim($('#userQuery').val());
+			if(keyword == '' || keyword=='请输入关键字') {
+				keyword = '';
+			}
+			var roleId=$("#roleId").val();
+			$("#userGrid").flexOptions({url:$.appClient.generateUrl({ESTransferFlow: 'getSelectUserList',key:'2',ids:roleId,searchKeyword:keyword},'x')}).flexReload();
+		},
+		addUsers: function(){
+			var checkboxs = $('#userGrid input:checked') ;
+			var checkboxlength = checkboxs.length;
+			if (checkboxlength == 0) {
+				userFromRole.showMsg('请先选择数据，再进行此操作！','3') ;
+				return;
+			}
+			var userIds = $("#forwardToUsersDiv").attr('userIds');
+			var hasedUsers = "" ;
+			var newAdd = false ;
+			checkboxs.each(function(i) {
+				var columns = ['ID', 'userid', 'name'];
+				var colValues = $("#userGrid").flexGetColumnValue($(this).closest("tr"),columns);
+				var colValuesArray = colValues.split("|");
+				if(userIds.indexOf('|'+colValuesArray[0]+"|")==-1){
+					if(userIds == ""){
+						userIds = "|"+colValuesArray[0]+"|"
+					} else {
+						userIds += colValuesArray[0]+"|"
+					}
+					$("#forwardToUsers").flexExtendData([{
+						'cell':{
+								'ids':'<input type="checkbox" name="checkbox" id="" value="'+colValuesArray[0]+'"/>',
+								'id':colValuesArray[0],
+								'userid':colValuesArray[1],
+								'username':colValuesArray[2]
+							   }
+					}]);
+					newAdd = true ;
+				} else {
+					if(hasedUsers == ""){
+						hasedUsers = colValuesArray[1] ;
+					} else {
+						hasedUsers += "、"+colValuesArray[1] ;
+					}
+				}
+			});
+			if(hasedUsers == ""){
+				userFromRole.showMsg('设置成功！','1') ;
+			} else {
+				if(newAdd){
+					userFromRole.showMsg('设置成功，但是其中【'+hasedUsers+'】已经存在，不能重复设置！','1') ;
+				} else {
+					userFromRole.showMsg('设置失败，其中【'+hasedUsers+'】已经存在，不能重复设置！','3') ;
+				}
+			}
+			$("#forwardToUsersDiv").attr('userIds', userIds);
+		}
+};
+$(document).ready(function() {
+	$("#userGrid").flexigrid({url :$.appClient.generateUrl({ESTransferFlow: 'getSelectUserList',key:'2'}, 'x'),
+		dataType : 'json',
+		colModel : [ 
+			{display : '',name : 'num',width : 30,align : 'center'},
+			{display : '<input type="checkbox" id="users">',name : 'ids',width : 30,align : 'center'}, 
+			{display : 'ID',name : 'ID',metadata:'ID',hide : true,width : 50,align: 'right'}, 
+			{display: '用户名', name : 'userid', metadata : 'userid',width : 200, align: 'left'},
+			{display: '姓名', name : 'name', metadata : 'name',width : 200, align: 'left'}		  
+		],
+		buttons:[{
+			name : '选择',
+			bclass : 'add',
+			onpress : function(){userFromRole.addUsers();}
+		}],
+		singleSelect:true,
+		usepager : true,
+		useRp : true,
+		rp : 20,
+		nomsg : "没有数据",
+		showTableToggleBtn : false,
+		pagetext : '第',
+		outof : '页 /共',
+		width : 'auto',
+		height : 'auto',
+		pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条' 
+	});
+	
+	function sizeChanged(tabelName, h){
+		if($.browser.msie && $.browser.version==='6.0'){
+			$("html").css({overflow:"hidden"});
+		}
+		var flex = $("#"+tabelName).closest("div.flexigrid");
+		var bDiv = flex.find('.bDiv');
+	    var contentHeight = bDiv.height();
+	    var headflootHeight = flex.height() - contentHeight; 
+	    bDiv.height(h - headflootHeight);
+		flex.height(h);
+		// 修改IE表格宽度兼容
+		if($.browser.msie && $.browser.version==='6.0'){
+			flex.css({width:"-=3px"});
+		}
+	};
+	$('#userGridDiv div[class="tDiv2"]').append('<div class="find-dialog"><input id="userQuery" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="keyWord" value="请输入关键字" /><span onclick="userFromRole.userQuery()"></span></div>');
+	sizeChanged('userGrid', 250);
+
+	//全选
+	$("#users").die().live('click',function(){
+		$("#userGrid input[name='checkbox']").attr('checked',$(this).is(':checked'));
+		$("#users").attr('checked',$(this).is(':checked'));
+	});
+	$("#roleGrid").flexigrid({url :$.appClient.generateUrl({ESTransferFlow: 'findRoleList'}, 'x'),
+		dataType : 'json',
+		colModel : [ 
+			{display : '',name : 'num',width : 30,align : 'center'},
+			{display : 'ID',name : 'ID',hide : true,metadata:'ID',width : 50,align: 'right'}, 
+		    {display : '角色标识',name : 'roleId',metadata : 'roleId',width : 150, align : 'left'},
+		    {display : '角色名称',name : 'roleName',metadata : 'roleName',width : 150,  align : 'left'},
+		    {display : '描述',name : 'roleRemark',metadata : 'roleRemark',hide : true,width : 250,align : 'left'}
+		],
+		buttons : [],
+		singleSelect:true,
+		usepager : true,
+		useRp : true,
+		rp : 20,
+		nomsg : "没有数据",
+		showTableToggleBtn : false,
+		pagetext : '第',
+		outof : '页 /共',
+		width : 'auto',
+		height : 'auto',
+		pagestat : ' 显示 {from} 到 {to}条 / 共{total} 条' 
+	});
+	$('#roleGridDiv div[class="tDiv"]').css("border-top","1px solid #ccc");
+	$('#roleGridDiv div[class="tDiv2"]').append('<span style="float:left;margin-bottom:5px;">&nbsp;</span><div class="find-dialog"><input id="roleQuery" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="keyWord" value="请输入关键字" /><span onclick="userFromRole.roleQuery()"></span></div>');
+	sizeChanged('roleGrid', 250);
+
+	$("#roleGrid tbody tr").die().live('click',function(){
+		var columns = ['ID'];
+		var roleId = $("#roleGrid").flexGetColumnValue($(this),columns);
+		$("#roleId").val(roleId);
+		$("#userGrid").flexOptions({url:$.appClient.generateUrl({ESTransferFlow: 'getSelectUserList',key:'2',ids:roleId}, 'x')}).flexReload();
+	});
+
+	$(document).keydown(function(event){
+		if(event.keyCode == 13) {
+			if(document.activeElement.id == 'roleQuery') {
+				userFromRole.roleQuery();
+			} else if(document.activeElement.id == 'userQuery'){
+				userFromRole.userQuery();
+			}
+		}
+	});
+});
+</script>

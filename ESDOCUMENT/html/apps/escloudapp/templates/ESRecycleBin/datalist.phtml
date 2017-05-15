@@ -1,0 +1,128 @@
+<table id = "flexme"></table>
+<script type="text/javascript">
+$("#flexme").flexigrid({
+		url: $.appClient.generateUrl({ESRecycleBin:'getDataList',path:'<?php echo $type["path"];?>'}),
+		dataType: 'json',
+		colModel : [
+			{display: '序号', name : 'num', width : 20, align: 'center'},
+			{display: '<input type="checkbox" name="path" onclick=selectAll(checked,name,"#flexme")>', name : 'ids', width : 20, align: 'center'},
+			{display: '操作', name : 'operate', width : 60, align: 'center'},
+			<?php echo $fields;?>
+			],
+			buttons : [
+						{name: '数据恢复', bclass: 'add',onpress:revertData},
+						{name: '删除', bclass: 'delete',onpress:perDelData},
+						{name: '清空', bclass: 'delete',onpress:perEmptyData},
+						{name: '筛选', bclass: 'filter',onpress:commomFilter},
+						{name: '还原', bclass: 'refresh',tooltip:'将数据还原到筛选前的状态',onpress:flexmeReset},//wanghongchen 20140716 增加还原功能
+						{name: '查看日志', bclass: 'note',onpress:showLog}
+						],
+			usepager: true,
+			title: '回收站',
+			useRp: true,
+			query:'',
+			width: width,
+			height:height
+	});
+$('div[class="tDiv2"]').append('<div class="find-dialog"><input id="recycleKeyWord" onblur="if($(this).val()==\'\')$(this).val(\'请输入关键字\')" onfocus="if($(this).val()==\'请输入关键字\')$(this).val(\'\')" type="text" name="recycleKeyWord" value="请输入关键字" /><span id="recycleQuery"></span></div>');
+//数据恢复
+function revertData(){
+	var obj=$('#flexme');
+	var path=check_selected('恢复的','path',obj);
+		if(!path)return;
+		$.dialog({
+				content:'确定要将数据恢复吗?',
+				icon:'warning',
+				ok:true,
+				okVal:'确定',
+				cancel:true,
+				cancelVal:'取消',
+				ok:function()
+				{
+					var url=$.appClient.generateUrl({ESRecycleBin:'revertData'},'x');
+					$.post(url,{path:path},function(data){
+						if(data){
+							$("input[name='path']").attr("checked",false);
+							$.dialog.notice({width: 150,content: '数据恢复成功',icon: 'success',time: 3});
+							obj.flexReload();
+						} else {
+							$.dialog.notice({width: 150,content: '数据恢复失败',icon: 'error',time: 3});
+						}
+						});
+				}
+
+			})
+}
+//删除
+function perDelData(){
+	var obj=$('#flexme');
+	var id=check_selected('删除的','path',obj);
+		if(!id)return;
+		$.dialog({
+				content:'删除的数据将不可恢复！',
+				icon:'warning',
+				ok:true,
+				okVal:'确定',
+				cancel:true,
+				cancelVal:'取消',
+				ok:function()
+				{
+					var url=$.appClient.generateUrl({ESRecycleBin:'perDelData'},'x');
+					$.post(url,{path:id},function(data){
+						if(data){
+							$("input[name='path']").attr("checked",false);
+							$.dialog.notice({width: 150,content: '数据删除成功',icon: 'success',time: 3});
+							obj.flexReload();
+						} else {
+							$.dialog.notice({width: 150,content: '数据删除失败',icon: 'error',time: 3});
+						}
+						});
+				}
+
+			})
+}
+//清空
+function perEmptyData(){
+	$.dialog({
+			content:'删除的数据将不可恢复！',
+			icon:'warning',
+			ok:true,
+			okVal:'确定',
+			cancel:true,
+			cancelVal:'取消',
+			ok:function()
+			{
+				var url=$.appClient.generateUrl({ESRecycleBin:'perEmptyData'},'x');
+				$.post(url,{path:nodePath},function(data){
+					if(data){
+						$("input[name='path']").attr("checked",false);
+						$.dialog.notice({width: 150,content: '数据删除成功',icon: 'success',time: 3});
+						$('#flexme').flexReload();
+					} else {
+						$.dialog.notice({width: 150,content: '数据删除失败',icon: 'error',time: 3});
+					}
+					});
+			}
+
+			})
+}
+//增加模糊查询 wanghongchen 20140716
+$(document).keydown(function(event){
+	if(event.keyCode == 13 && document.activeElement.id == 'recycleKeyWord') {
+		recycleQuery();
+	}
+});
+
+$("#recycleQuery").die().live("click",function(){
+	recycleQuery();
+});
+
+function recycleQuery(){
+	var keyword = $.trim($('#recycleKeyWord').val());
+	if(keyword == '' || keyword=='请输入关键字') {
+		keyword = '';
+	}
+	var recycleurl = $.appClient.generateUrl({ESRecycleBin:'getDataList',path:'<?php echo $type["path"];?>',keyWord:keyword});
+	$("#flexme").flexOptions({newp : 1, url:recycleurl}).flexReload();
+}
+</script>
